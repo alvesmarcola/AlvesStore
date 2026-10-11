@@ -50,11 +50,11 @@ export function CatalogPage({ title, description, products, breadcrumb, initialT
     if (sort === "lancamentos") result.sort((a, b) => Number(b.tag === "Lançamento") - Number(a.tag === "Lançamento"));
     return result;
   }, [products, type, uniform, club, league, size, season, color, maxPrice, discountOnly, sort]);
-  const clubOptions = Array.from(new Map(products.map((product) => [product.clubeSlug, product.clube])).entries());
+  const clubOptions = Array.from(new Map(products.filter((product) => product.clubeSlug !== "revisar").map((product) => [product.clubeSlug, product.clube])).entries());
   const sizeOptions = Array.from(new Set(products.flatMap((product) => product.tamanhos))).sort();
-  const seasonOptions = Array.from(new Set(products.map((product) => product.temporada)));
-  const colorOptions = Array.from(new Set(products.map((product) => product.cor)));
-  const leagueOptions = Array.from(new Set(products.map((product) => product.liga)));
+  const seasonOptions = Array.from(new Set(products.map((product) => product.temporada).filter((value) => value !== "revisar")));
+  const colorOptions = Array.from(new Set(products.map((product) => product.cor).filter((value) => value !== "revisar")));
+  const leagueOptions = Array.from(new Set(products.map((product) => product.liga).filter((value) => value !== "revisar")));
   const clearFilters = () => {
     setClub("");
     setLeague("");

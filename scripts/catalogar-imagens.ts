@@ -81,12 +81,26 @@ const leagueAliases: Record<string, string[]> = {
 const explicitQualifiers = [
   "goleiro", "goleira", "keeper", "treino", "training", "pre jogo", "pre match",
   "retro", "titular", "reserva", "terceiro", "third", "home", "away",
-  "cropped", "regata", "manga longa", "comemorativa", "100 anos", "patch campeao",
+  "cropped", "regata", "manga longa", "comemorativa", "100 anos", "patch campeao", "dior", "edicao especial",
 ];
 const unmodeledCompetitionAliases = [
   "campeonato argentino", "liga argentina", "campeonato colombiano", "campeonato da colombia",
   "liga mexicana", "campeonato mexicano", "campeonato turco", "liga turca",
 ];
+const clubAliases: Record<string, string[]> = {
+  "vasco da gama": ["vasco"],
+  "bayern munich": ["bayer de munique", "bayern de munique"],
+  "paris saint germain": ["psg"],
+  "inter miami": ["inter de miami"],
+  "newcastle united": ["newcastle"],
+  "tottenham hotspur": ["tottenham"],
+  "aston villa": ["aston vila"],
+  "real betis": ["betis", "bétis"],
+  "atletico madrid": ["atletico de madrid"],
+  "atletico de madrid": ["atletico madrid"],
+  "coreia do sul": ["korea do sul", "koreia do sul", "south korea"],
+  "al hilal": ["al hillal"],
+};
 
 function normalize(value: string) {
   return value
@@ -128,10 +142,16 @@ function seasonFrom(value: string) {
 
 function clubCandidates(clubs: ClubRef[], value: string) {
   const text = normalize(value);
-  return clubs.filter((club) => {
+  const matches = clubs.flatMap((club) => {
     const clubName = normalize(club.nome).replace(/\b(fc|cf|sc|afc|ac)\b/g, "").replace(/\s+/g, " ").trim();
-    return clubName.length > 2 && includesWords(text, clubName);
+    const aliases = clubAliases[clubName] ?? [];
+    const matchedNames = [clubName, ...aliases.map(normalize)].filter((name) => name.length > 2 && includesWords(text, name));
+    return matchedNames.length ? [{ club, matchedLength: Math.max(...matchedNames.map((name) => name.length)) }] : [];
   });
+  if (!matches.length) return [];
+  const longestMatch = Math.max(...matches.map((match) => match.matchedLength));
+  const longestClubs = matches.filter((match) => match.matchedLength === longestMatch).map((match) => match.club);
+  return [...new Map(longestClubs.map((club) => [club.slug, club])).values()];
 }
 
 function findLeague(leagues: LeagueData[], directory: string, filename: string) {
