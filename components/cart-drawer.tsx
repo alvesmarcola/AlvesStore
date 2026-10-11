@@ -5,7 +5,7 @@ import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Minus, Plus, ShoppingBag, Trash2, X } from "lucide-react";
 import { storeConfig } from "@/config";
-import { formatCurrency, productImage } from "@/lib/catalog";
+import { formatCurrency, productImageAsset } from "@/lib/catalog";
 import { useCart } from "@/store/cart";
 import { getCartPricing } from "@/lib/commerce";
 
@@ -25,7 +25,7 @@ export function CartDrawer() {
           <div className="flex-1 overflow-y-auto px-5">
             <p className="my-4 rounded bg-paper p-3 text-xs font-semibold text-ink">{subtotal >= storeConfig.freeShippingMinimum ? "Você ganhou frete grátis!" : `Faltam ${formatCurrency(storeConfig.freeShippingMinimum - subtotal)} para ganhar frete grátis.`}</p>
             {items.map(({ lineId, product, size, quantity, customization }) => <div key={lineId} className="flex gap-3 border-b py-4">
-              <div className="relative h-24 w-20 shrink-0 overflow-hidden rounded bg-paper"><Image src={productImage(product.imageSeed)} alt={product.nome} fill sizes="80px" className="object-cover" /></div>
+              <div className="relative h-24 w-20 shrink-0 overflow-hidden rounded bg-paper"><Image src={productImageAsset(product).src} alt={product.nome} fill sizes="80px" className="object-cover" /></div>
               <div className="min-w-0 flex-1"><p className="line-clamp-2 text-xs font-bold">{product.nome}</p><p className="mt-1 text-xs text-muted">Tamanho: {size}{customization ? ` · ${customization.name} ${customization.number}` : ""}</p>{product.estoque < quantity && <p role="alert" className="mt-1 text-xs font-bold text-danger">{product.estoque <= 0 ? "Produto esgotado. Remova-o para continuar." : `Estoque disponível: ${product.estoque} unidade(s).`}</p>}<p className="mt-1 text-sm font-black">{formatCurrency(product.preco + (customization ? storeConfig.customizationPrice : 0))}</p>
                 <div className="mt-2 flex items-center gap-3"><button aria-label="Diminuir quantidade" onClick={() => updateQuantity(lineId, quantity - 1)}><Minus size={14} /></button><span className="text-sm">{quantity}</span><button aria-label="Aumentar quantidade" onClick={() => updateQuantity(lineId, quantity + 1)}><Plus size={14} /></button><button className="ml-auto text-muted" aria-label="Remover produto" onClick={() => removeItem(lineId)}><Trash2 size={15} /></button></div>
               </div>

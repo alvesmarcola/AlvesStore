@@ -4,10 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { Check, ShoppingBag } from "lucide-react";
-import { discountPercent, formatCurrency, productImage } from "@/lib/catalog";
+import { discountPercent, formatCurrency, productImageAsset } from "@/lib/catalog";
 import type { Product } from "@/lib/types";
 import { storeConfig } from "@/config";
-import { images } from "@/data/images";
 import { useCart } from "@/store/cart";
 import { flyThumbnailToCart } from "@/lib/fly-to-cart";
 
@@ -17,6 +16,8 @@ export function ProductCard({ product }: { product: Product }) {
   const addItem = useCart((state) => state.addItem);
   const soldOut = product.estoque <= 0;
   const pix = product.preco * (1 - storeConfig.pixDiscount);
+  const primaryImage = productImageAsset(product);
+  const alternateImage = productImageAsset(product, true);
 
   function add() {
     if (!size || soldOut) return;
@@ -37,10 +38,10 @@ export function ProductCard({ product }: { product: Product }) {
   }} onMouseLeave={(event) => {
     event.currentTarget.style.transform = "";
   }}>
-    <div className="product-image relative aspect-[.79] overflow-hidden rounded-lg bg-paper">
+    <div className="product-image relative aspect-[4/5] overflow-hidden rounded-lg bg-paper">
       <Link href={`/produto/${product.slug}`} aria-label={`Ver ${product.nome}`} className="relative block h-full w-full">
-        <Image src={productImage(product.imageSeed)} alt={product.nome} fill sizes="(max-width: 640px) 48vw, (max-width: 1024px) 30vw, 240px" placeholder="blur" blurDataURL={images.products.primary.blurDataURL} className="product-photo object-cover transition-opacity duration-500 group-hover:opacity-0" />
-        <Image src={productImage(product.imageSeed, true)} alt="" aria-hidden="true" fill sizes="(max-width: 640px) 48vw, (max-width: 1024px) 30vw, 240px" placeholder="blur" blurDataURL={images.products.alternate.blurDataURL} className="product-photo absolute inset-0 object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+        <Image src={primaryImage.src} alt={primaryImage.alt} fill sizes="(max-width: 640px) 48vw, (max-width: 1024px) 30vw, 240px" placeholder="blur" blurDataURL={primaryImage.blurDataURL} className="product-photo object-cover transition-opacity duration-500 group-hover:opacity-0" style={{ objectPosition: `${primaryImage.focalPoint.x}% ${primaryImage.focalPoint.y}%` }} />
+        <Image src={alternateImage.src} alt="" aria-hidden="true" fill sizes="(max-width: 640px) 48vw, (max-width: 1024px) 30vw, 240px" placeholder="blur" blurDataURL={alternateImage.blurDataURL} className="product-photo absolute inset-0 object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100" style={{ objectPosition: `${alternateImage.focalPoint.x}% ${alternateImage.focalPoint.y}%` }} />
       </Link>
       <span className="discount-badge absolute left-2 top-2 rounded-lg bg-action px-2 py-1 text-[10px] font-black text-white">-{discountPercent(product)}% OFF</span>
       {product.estoque <= 3 && product.estoque > 0 && <span className="absolute bottom-2 left-2 rounded bg-white/95 px-2 py-1 text-[10px] font-bold text-ink">Últimas peças!</span>}

@@ -11,6 +11,7 @@ export const storeConfig = {
   firstPurchaseDiscount: 0.1,
   bundleDiscount: 0.08,
   minimumOrder: 49.9,
+  mockProductPrices: [179.9, 189.9, 199.9, 219.9, 239.9, 259.9, 279.9],
   email: "atendimento@alvesstore.com.br",
   city: "Brasil",
 } as const;

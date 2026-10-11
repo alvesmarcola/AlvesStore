@@ -1,6 +1,7 @@
 import productsData from "@/data/products.json";
 import leaguesData from "@/data/leagues.json";
 import { images } from "@/data/images";
+import type { ImageAsset } from "@/data/images";
 import type { League, Product } from "@/lib/types";
 
 export const products = productsData as Product[];
@@ -22,8 +23,13 @@ export function discountPercent(product: Product) {
   return Math.round((1 - product.preco / product.precoAnterior) * 100);
 }
 
-export function productImage(seed: string, alternate = false) {
-  if (seed.includes("retro")) return images.retro.cover.src;
-  const image = alternate ? images.products.alternate : images.products.primary;
-  return image.src;
+export function productImageAsset(product: Pick<Product, "images" | "imageSeed" | "tipo">, alternate = false): ImageAsset {
+  const image = product.images?.[alternate ? 1 : 0] ?? product.images?.[0];
+  if (image) return image;
+  if (product.tipo === "retro") return images.retro.cover;
+  return alternate ? images.products.alternate : images.products.primary;
+}
+
+export function productImage(product: Pick<Product, "images" | "imageSeed" | "tipo">, alternate = false) {
+  return productImageAsset(product, alternate).src;
 }

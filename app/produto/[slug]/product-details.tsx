@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { Check, Heart, Ruler, ShieldCheck, Truck } from "lucide-react";
 import { ProductGrid } from "@/components/product-grid";
-import { discountPercent, formatCurrency, productImage, products } from "@/lib/catalog";
+import { discountPercent, formatCurrency, productImageAsset, products } from "@/lib/catalog";
 import type { Product } from "@/lib/types";
 import { storeConfig } from "@/config";
 import { useCart } from "@/store/cart";
@@ -19,10 +19,12 @@ export function ProductDetails({ product }: { product: Product }) {
   const [shipping, setShipping] = useState("");
   const [cepError, setCepError] = useState("");
   const [added, setAdded] = useState(false);
-  const [activeImage, setActiveImage] = useState(false);
+  const [activeImage, setActiveImage] = useState(0);
   const [sizeGuideOpen, setSizeGuideOpen] = useState(false);
   const addItem = useCart((state) => state.addItem);
-  const related = products.filter((item) => item.id !== product.id && (item.clubeSlug === product.clubeSlug || item.liga === product.liga)).slice(0, 4);
+  const related = products.filter((item) => item.id !== product.id && ((product.clubeSlug !== "revisar" && item.clubeSlug === product.clubeSlug) || (product.liga !== "revisar" && item.liga === product.liga))).slice(0, 4);
+  const gallery = product.images?.length ? product.images : [productImageAsset(product), productImageAsset(product, true)];
+  const selectedImage = gallery[Math.min(activeImage, gallery.length - 1)];
   const price = product.preco + (personalize ? storeConfig.customizationPrice : 0);
   const soldOut = product.estoque <= 0;
 
@@ -57,11 +59,11 @@ export function ProductDetails({ product }: { product: Product }) {
   }
 
   return <main className="mx-auto max-w-7xl px-4 py-7 pb-24 lg:px-8 lg:pb-10">
-    <nav className="mb-6 text-xs text-muted"><Link href="/">Início</Link> / <Link href={`/ligas/${product.liga}`}>{product.liga.replaceAll("-", " ")}</Link> / {product.clube}</nav>
+    <nav className="mb-6 text-xs text-muted"><Link href="/">Início</Link> / {product.liga === "revisar" ? <span>Liga a confirmar</span> : <Link href={`/ligas/${product.liga}`}>{product.liga.replaceAll("-", " ")}</Link>} / {product.clube}</nav>
     <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
       <div className="grid grid-cols-[58px_1fr] gap-3 sm:grid-cols-[76px_1fr]">
-        <div className="flex flex-col gap-3"><button onClick={() => setActiveImage(false)} className={`relative aspect-[.8] overflow-hidden rounded border ${!activeImage ? "border-pitch" : "border-transparent"}`}><Image src={productImage(product.imageSeed)} alt={`Frente de ${product.nome}`} fill sizes="76px" priority className="object-cover" /></button><button onClick={() => setActiveImage(true)} className={`relative aspect-[.8] overflow-hidden rounded border ${activeImage ? "border-pitch" : "border-transparent"}`}><Image src={productImage(product.imageSeed, true)} alt={`Detalhe de ${product.nome}`} fill sizes="76px" className="object-cover" /></button></div>
-        <button type="button" onClick={() => setActiveImage(!activeImage)} aria-label="Ampliar e alternar imagem do produto" className="group relative aspect-[.82] overflow-hidden rounded-xl bg-paper"><Image src={productImage(product.imageSeed, activeImage)} alt={product.nome} fill priority sizes="(max-width: 1024px) 80vw, 50vw" className="object-cover transition-transform duration-300 group-hover:scale-110" /><span className="absolute left-3 top-3 rounded-lg bg-action px-2 py-1 text-xs font-black text-white">-{discountPercent(product)}% OFF</span><span className="absolute bottom-3 right-3 rounded-full bg-white/90 px-3 py-1 text-[10px] font-bold text-ink">Toque para ampliar</span></button>
+        <div className="flex flex-col gap-3">{gallery.map((image, index) => <button key={`${image.src}-${index}`} type="button" aria-label={`Ver foto ${index + 1} de ${gallery.length}`} aria-pressed={activeImage === index} onClick={() => setActiveImage(index)} className={`relative aspect-[4/5] overflow-hidden rounded border ${activeImage === index ? "border-pitch" : "border-transparent"}`}><Image src={image.src} alt={image.alt} fill sizes="76px" placeholder="blur" blurDataURL={image.blurDataURL} className="object-cover" style={{ objectPosition: `${image.focalPoint.x}% ${image.focalPoint.y}%` }} /></button>)}</div>
+        <button type="button" onClick={() => setActiveImage((activeImage + 1) % gallery.length)} aria-label="Ampliar e ver próxima imagem do produto" className="group relative aspect-[4/5] overflow-hidden rounded-xl bg-paper"><Image src={selectedImage.src} alt={selectedImage.alt} fill priority sizes="(max-width: 1024px) 80vw, 50vw" placeholder="blur" blurDataURL={selectedImage.blurDataURL} className="object-cover transition-transform duration-300 group-hover:scale-110" style={{ objectPosition: `${selectedImage.focalPoint.x}% ${selectedImage.focalPoint.y}%` }} /><span className="absolute left-3 top-3 rounded-lg bg-action px-2 py-1 text-xs font-black text-white">-{discountPercent(product)}% OFF</span><span className="absolute bottom-3 right-3 rounded-full bg-white/90 px-3 py-1 text-[10px] font-bold text-ink">Toque para ampliar · {activeImage + 1}/{gallery.length}</span></button>
       </div>
       <div>
         <p className="text-[10px] font-black uppercase tracking-[.2em] text-blue-600">{product.clube} · Temporada {product.temporada}</p>
@@ -86,6 +88,6 @@ export function ProductDetails({ product }: { product: Product }) {
     <section className="mt-14 rounded-xl bg-paper p-6"><h2 className="text-xl font-black">Quem já vestiu, recomenda</h2><div className="mt-5 grid gap-5 sm:grid-cols-3">{["Caimento muito confortável e cores lindas!", "Chegou antes do prazo. Já vou usar no próximo jogo.", "O tecido é leve e o tamanho ficou certinho."].map((review, index) => <blockquote key={review} className="rounded bg-white p-4"><span className="text-amber-500">★★★★★</span><p className="mt-2 text-sm">{review}</p><cite className="mt-2 block text-xs not-italic text-muted">Torcedor(a) verificado(a) · {["Marina", "Rafael", "Lucas"][index]}</cite></blockquote>)}</div></section>
     {sizeGuideOpen && <div className="fixed inset-0 z-[80] grid place-items-center bg-black/60 p-4" onClick={() => setSizeGuideOpen(false)}><section role="dialog" aria-modal="true" aria-labelledby="size-guide-title" className="max-h-[90dvh] w-full max-w-2xl overflow-y-auto rounded-xl bg-white p-5 shadow-xl sm:p-7" onClick={(event) => event.stopPropagation()}><div className="flex items-start justify-between gap-3"><div><h2 id="size-guide-title" className="text-xl font-black">Guia rápido de medidas</h2><p className="mt-1 text-xs text-muted">Medidas aproximadas do corpo em centímetros.</p></div><button type="button" onClick={() => setSizeGuideOpen(false)} aria-label="Fechar guia de medidas" className="rounded-lg border border-border px-3 py-2 text-sm font-bold">Fechar</button></div><div className="mt-5 overflow-x-auto"><table className="w-full min-w-[440px] text-left text-xs"><thead className="bg-paper"><tr>{["Tamanho", "Peito", "Cintura", "Quadril"].map((item) => <th key={item} className="px-3 py-3">{item} (cm)</th>)}</tr></thead><tbody>{[["P", "88–96", "72–80", "88–96"], ["M", "96–104", "80–88", "96–104"], ["G", "104–112", "88–96", "104–112"], ["GG", "112–120", "96–104", "112–120"], ["2GG", "120–128", "104–112", "120–128"], ["3GG", "128–136", "112–120", "128–136"]].map((row) => <tr key={row[0]} className="border-t border-border">{row.map((value) => <td key={value} className="px-3 py-3">{value}</td>)}</tr>)}</tbody></table></div><Link href="/guia-de-medidas" onClick={() => setSizeGuideOpen(false)} className="mt-4 inline-block text-xs font-bold text-blue-700 underline">Ver guia completo (masculino, feminino e infantil)</Link></section></div>}
     <button disabled={!size || soldOut || (personalize && (!name.trim() || !number.trim()))} onClick={buy} className="fixed bottom-0 left-0 right-0 z-30 flex items-center justify-center gap-2 bg-action py-4 text-sm font-black uppercase shadow-lg disabled:bg-gray-300 sm:hidden">{added ? "Adicionado ao carrinho!" : `Comprar · ${formatCurrency(price)}`}</button>
-    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "Product", name: product.nome, image: [productImage(product.imageSeed)], description: `Camisa ${product.clube}, temporada ${product.temporada}.`, offers: { "@type": "Offer", priceCurrency: "BRL", price: product.preco, availability: product.estoque > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock" } }).replace(/</g, "\\u003c") }} />
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "Product", name: product.nome, image: gallery.map((image) => image.src), description: `Camisa ${product.clube}, temporada ${product.temporada}.`, offers: { "@type": "Offer", priceCurrency: "BRL", price: product.preco, availability: product.estoque > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock" } }).replace(/</g, "\\u003c") }} />
   </main>;
 }

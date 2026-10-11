@@ -48,7 +48,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 ::selection { background: var(--brand-blue-soft); color: var(--brand-black); }
 
 .arena-hero { min-height: 100svh; }
-.arena-hero-shade { background: linear-gradient(90deg, rgb(3 5 10 / 95%) 0%, rgb(3 5 10 / 82%) 35%, rgb(3 5 10 / 20%) 78%, rgb(3 5 10 / 32%) 100%), linear-gradient(0deg, rgb(3 5 10 / 75%) 0%, transparent 40%); }
+.arena-hero-photo { filter: saturate(.7) contrast(1.1) brightness(.82); }
+.arena-hero-shade { background: linear-gradient(90deg, rgb(3 5 10 / 95%) 0%, rgb(3 5 10 / 82%) 35%, rgb(3 5 10 / 20%) 78%, rgb(3 5 10 / 32%) 100%), linear-gradient(135deg, rgb(37 99 235 / 24%), transparent 60%), linear-gradient(0deg, rgb(3 5 10 / 75%) 0%, transparent 40%); }
 .arena-hero-shade::after, .category-hero-overlay::after { position: absolute; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.24'/%3E%3C/svg%3E"); content: ""; opacity: .16; pointer-events: none; }
 .arena-pitch-lines::before { position: absolute; right: -18%; bottom: -45%; width: 80vw; height: 65vw; border: 1px solid rgb(147 197 253 / 15%); border-radius: 50%; content: ""; }
 .arena-pitch-lines::after { position: absolute; right: -7%; bottom: -33%; width: 61vw; height: 45vw; border: 1px solid rgb(147 197 253 / 10%); border-radius: 50%; content: ""; }
@@ -77,8 +78,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .league-rail-card:hover .league-cover { transform: scale(1.06); }
 
 .category-hero { clip-path: polygon(0 0, 100% 0, 100% 89%, 96% 100%, 0 100%); }
-.category-hero-image { filter: saturate(.65) contrast(1.1); }
-.category-hero-overlay { background: linear-gradient(90deg, rgb(3 5 10 / 91%) 0%, rgb(3 5 10 / 74%) 42%, rgb(3 5 10 / 20%) 100%), linear-gradient(0deg, rgb(3 5 10 / 66%) 0%, transparent 60%); }
+.category-hero-image { filter: saturate(.58) contrast(1.16) brightness(.86); }
+.category-hero-overlay { background: linear-gradient(90deg, rgb(3 5 10 / 91%) 0%, rgb(3 5 10 / 74%) 42%, rgb(3 5 10 / 20%) 100%), linear-gradient(135deg, rgb(37 99 235 / 26%), transparent 60%), linear-gradient(0deg, rgb(3 5 10 / 66%) 0%, transparent 60%); }
 .category-hero-overlay::after { opacity: .1; }
 
 .product-card { position: relative; transform-style: preserve-3d; transition: transform .22s ease; }

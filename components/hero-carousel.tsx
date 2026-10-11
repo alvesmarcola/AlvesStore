@@ -59,7 +59,7 @@ export function HeroCarousel() {
           sizes="100vw"
           placeholder="blur"
           blurDataURL={hero.blurDataURL}
-          className="object-cover"
+          className="arena-hero-photo object-cover"
           style={{ objectPosition: `${hero.focalPoint.x}% ${hero.focalPoint.y}%` }}
         />
       </motion.div>

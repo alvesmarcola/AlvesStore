@@ -62,7 +62,7 @@ export default function HomePage() {
   const bestSellers = products.filter((product) => product.tag === "Mais vendido").slice(0, 4);
   const newArrivals = products.filter((product) => product.tag === "Lançamento" || product.tag === "Novidade").slice(0, 4);
   const retros = products.filter((product) => product.tipo === "retro").slice(0, 4);
-  const clubLinks = Array.from(new Map(products.map((product) => [
+  const clubLinks = Array.from(new Map(products.filter((product) => product.liga !== "revisar" && product.clubeSlug !== "revisar").map((product) => [
     `${product.liga}-${product.clubeSlug}`,
     { name: product.clube, league: product.liga, slug: product.clubeSlug },
   ])).values()).slice(0, 18);
