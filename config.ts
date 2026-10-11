@@ -1,0 +1,16 @@
+export const storeConfig = {
+  name: "alves store",
+  tagline: "Vista seu time. Leve o jogo com você.",
+  whatsapp: "5511999999999",
+  whatsappMessage: "Olá! Preciso de ajuda com a minha compra.",
+  pixDiscount: 0.03,
+  installments: 12,
+  freeShippingMinimum: 299,
+  customizationPrice: 29.9,
+  firstPurchaseCoupon: "PRIMEIRACOMPRA",
+  firstPurchaseDiscount: 0.1,
+  bundleDiscount: 0.08,
+  minimumOrder: 49.9,
+  email: "atendimento@alvesstore.com.br",
+  city: "Brasil",
+} as const;

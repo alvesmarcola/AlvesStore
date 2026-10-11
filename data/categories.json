@@ -1,0 +1,4 @@
+[
+  { "slug": "masculino", "name": "Masculino", "subcategories": ["Versão Torcedor", "Versão Jogador", "Retrô", "Conjunto de Treino", "Corta-vento / Inverno", "Regatas"] },
+  { "slug": "feminino", "name": "Feminino", "subcategories": ["Camisas Femininas", "Versão Jogadora", "Cropped", "Vestidos", "Retrô", "Conjuntos"] }
+]
