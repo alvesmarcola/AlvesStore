@@ -1,5 +1,6 @@
 import productsData from "@/data/products.json";
 import leaguesData from "@/data/leagues.json";
+import { images } from "@/data/images";
 import type { League, Product } from "@/lib/types";
 
 export const products = productsData as Product[];
@@ -22,5 +23,7 @@ export function discountPercent(product: Product) {
 }
 
 export function productImage(seed: string, alternate = false) {
-  return `https://picsum.photos/seed/${seed}${alternate ? "-detail" : ""}/720/900`;
+  if (seed.includes("retro")) return images.retro.cover.src;
+  const image = alternate ? images.products.alternate : images.products.primary;
+  return image.src;
 }

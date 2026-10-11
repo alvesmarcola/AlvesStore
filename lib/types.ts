@@ -1,3 +1,5 @@
+import type { LeagueImageSlot } from "@/data/images";
+
 export type Audience = "masculino" | "feminino" | "unissex";
 export type ProductType = "torcedor" | "jogador" | "retro" | "treino" | "cropped" | "regata" | "inverno" | "vestido";
 export type Uniform = "titular" | "reserva" | "terceiro";
@@ -25,9 +27,15 @@ export interface Product {
 
 export interface League {
   slug: string;
-  name: string;
-  competition: string;
-  clubs: { slug: string; name: string }[];
+  nome: string;
+  pais: string;
+  competicao: string;
+  corDestaque: string;
+  imagemCapa: LeagueImageSlot;
+  clubesVerificados?: boolean;
+  notaClubes?: string;
+  fontes?: string[];
+  clubes: { slug: string; nome: string; continente?: string }[];
 }
 
 export interface CartItem {

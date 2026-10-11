@@ -4,33 +4,172 @@ import { ArrowRight, HeartHandshake, ShieldCheck, Truck, WalletCards } from "luc
 import { ProductGrid } from "@/components/product-grid";
 import { NewsletterForm } from "@/components/newsletter-form";
 import { HeroCarousel } from "@/components/hero-carousel";
+import { AnimatedCounter, Reveal } from "@/components/motion-effects";
+import { StickyLeagueRail } from "@/components/sticky-league-rail";
+import { images } from "@/data/images";
 import { leagues, products } from "@/lib/catalog";
 
 const features = [
   { icon: Truck, title: "Frete grátis", text: "para todo o Brasil" },
   { icon: WalletCards, title: "Até 12x", text: "no cartão de crédito" },
-  { icon: ShieldCheck, title: "Compra segura", text: "devolução em até 7 dias" },
+  { icon: ShieldCheck, title: "7 dias", text: "para devolver" },
   { icon: HeartHandshake, title: "Torcida atendida", text: "a gente está no WhatsApp" },
 ];
+
+const collections = [
+  { title: "MASCULINO", sub: "Do estádio ao dia a dia", href: "/masculino", image: images.categories.male, size: "collection-men" },
+  { title: "FEMININO", sub: "Torça do seu jeito", href: "/feminino", image: images.categories.female, size: "collection-women" },
+  { title: "LIGAS", sub: "Paixão sem fronteiras", href: "/ligas/brasileirao-serie-a", image: images.categories.leagues, size: "collection-leagues" },
+];
+
+const differentials = [
+  { title: "Qualidade que entra em campo", body: "Materiais leves e resistentes para acompanhar a torcida em qualquer momento." },
+  { title: "Conforto do primeiro ao último minuto", body: "Toque macio e liberdade de movimento para vestir a paixão no seu ritmo." },
+  { title: "Caimento para todo torcedor", body: "Modelos e tamanhos para você viver o futebol do seu jeito." },
+];
+
+function ProductSection({
+  title,
+  kicker,
+  href,
+  items,
+  dark = false,
+}: {
+  title: string;
+  kicker: string;
+  href: string;
+  items: typeof products;
+  dark?: boolean;
+}) {
+  return (
+    <section className={`product-showcase ${dark ? "bg-ink text-white" : "bg-white text-ink"}`}>
+      <div className="mx-auto max-w-7xl px-5 py-14 lg:px-8 lg:py-20">
+        <Reveal className="mb-7 flex items-end justify-between gap-4 sm:mb-9">
+          <div>
+            <p className="text-[10px] font-black uppercase tracking-[.2em] text-action">{kicker}</p>
+            <h2 className="mt-2 text-3xl font-black uppercase tracking-tight sm:text-5xl">{title}</h2>
+          </div>
+          <Link className="mb-1 flex shrink-0 items-center gap-1 text-[10px] font-black uppercase tracking-wide hover:text-action" href={href}>Ver tudo <ArrowRight size={15} /></Link>
+        </Reveal>
+        <ProductGrid items={items} />
+      </div>
+    </section>
+  );
+}
 
 export default function HomePage() {
   const offers = products.filter((product) => product.tag === "Oferta" || product.tag === "Mais vendido").slice(0, 4);
   const bestSellers = products.filter((product) => product.tag === "Mais vendido").slice(0, 4);
   const newArrivals = products.filter((product) => product.tag === "Lançamento" || product.tag === "Novidade").slice(0, 4);
   const retros = products.filter((product) => product.tipo === "retro").slice(0, 4);
-  return <main>
-    <HeroCarousel />
-    <section className="border-b bg-white"><div className="mx-auto grid max-w-7xl grid-cols-2 gap-4 px-5 py-6 sm:grid-cols-4 lg:px-8">{features.map(({ icon: Icon, title, text }) => <div className="flex items-center gap-3" key={title}><span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-lime/30 text-pitch"><Icon size={19} /></span><div><h2 className="text-xs font-black">{title}</h2><p className="mt-1 text-[10px] text-muted sm:text-xs">{text}</p></div></div>)}</div></section>
-    <section className="mx-auto grid max-w-7xl gap-4 px-5 py-12 sm:grid-cols-3 lg:px-8">
-      {[{ title: "MASCULINO", sub: "Do estádio ao dia a dia", href: "/masculino", seed: "fan-male" }, { title: "FEMININO", sub: "Torça do seu jeito", href: "/feminino", seed: "fan-female" }, { title: "LIGAS", sub: "Paixão sem fronteiras", href: "/ligas/brasileirao", seed: "football-league" }].map((item) => <Link href={item.href} key={item.title} className="group relative isolate flex min-h-52 items-end overflow-hidden rounded-xl bg-pitch p-6 text-white"><Image src={`https://picsum.photos/seed/${item.seed}/700/400`} alt="" fill sizes="(max-width: 640px) 90vw, 30vw" className="absolute inset-0 -z-10 object-cover opacity-55 transition duration-500 group-hover:scale-105 group-hover:opacity-70" /><div><h2 className="text-3xl font-black">{item.title}</h2><p className="mt-1 text-sm text-white/80">{item.sub}</p><span className="mt-4 inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-wider text-lime">Ver coleção <ArrowRight size={14} /></span></div></Link>)}
-    </section>
-    <section className="mx-auto max-w-7xl px-5 py-7 lg:px-8"><div className="mb-5 flex items-end justify-between"><div><p className="text-[10px] font-black uppercase tracking-[.2em] text-blue-600">Não perca o apito</p><h2 className="mt-1 text-2xl font-black sm:text-3xl">Ofertas da semana</h2></div><Link className="flex items-center gap-1 text-xs font-bold" href="/busca?q=oferta">Ver tudo <ArrowRight size={15} /></Link></div><ProductGrid items={offers} /></section>
-    <section className="mt-12 bg-paper py-12"><div className="mx-auto max-w-7xl px-5 lg:px-8"><div className="mb-5 flex items-end justify-between"><div><p className="text-[10px] font-black uppercase tracking-[.2em] text-blue-600">A escolha da torcida</p><h2 className="mt-1 text-2xl font-black sm:text-3xl">Mais vendidas</h2></div><Link className="flex items-center gap-1 text-xs font-bold" href="/busca?q=mais%20vendidas">Ver tudo <ArrowRight size={15} /></Link></div><ProductGrid items={bestSellers} /></div></section>
-    <section className="mx-auto max-w-7xl px-5 py-12 lg:px-8"><div className="mb-5 flex items-end justify-between"><div><p className="text-[10px] font-black uppercase tracking-[.2em] text-blue-600">Chegaram agora</p><h2 className="mt-1 text-2xl font-black sm:text-3xl">Lançamentos</h2></div><Link className="flex items-center gap-1 text-xs font-bold" href="/busca?q=lançamento">Ver tudo <ArrowRight size={15} /></Link></div><ProductGrid items={newArrivals} /></section>
-    <section className="mt-5 bg-pitch py-12 text-white"><div className="mx-auto max-w-7xl px-5 lg:px-8"><div className="mb-5 flex items-end justify-between"><div><p className="text-[10px] font-black uppercase tracking-[.2em] text-lime">Para quem vive de história</p><h2 className="mt-1 text-2xl font-black sm:text-3xl">Clássicos retrô</h2></div><Link className="flex items-center gap-1 text-xs font-bold" href="/busca?q=retro">Ver tudo <ArrowRight size={15} /></Link></div><ProductGrid items={retros} /></div></section>
-    <section className="mx-auto max-w-7xl px-5 py-12 lg:px-8"><div className="mb-5"><p className="text-[10px] font-black uppercase tracking-[.2em] text-blue-600">Da arquibancada para o mundo</p><h2 className="mt-1 text-2xl font-black sm:text-3xl">Navegue por liga</h2></div><div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">{leagues.map((league, index) => <Link key={league.slug} href={`/ligas/${league.slug}`} className={`rounded-lg p-4 transition hover:-translate-y-1 ${index % 2 ? "bg-paper" : "bg-lime/35"}`}><span className="grid h-9 w-9 place-items-center rounded-full bg-pitch text-sm font-black text-lime">{league.name.slice(0, 1)}</span><h3 className="mt-3 text-sm font-black">{league.name}</h3><p className="mt-1 text-[10px] text-muted">{league.competition}</p></Link>)}</div></section>
-    <section className="bg-paper py-12"><div className="mx-auto max-w-7xl px-5 lg:px-8"><h2 className="text-2xl font-black sm:text-3xl">Clubes que vestem a nossa história</h2><p className="mt-2 text-sm text-muted">Encontre as cores que fazem parte da sua torcida.</p><div className="mt-6 grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-6">{Array.from(new Map(products.slice(0, 24).map((product) => [product.clubeSlug, { name: product.clube, liga: product.liga }])).entries()).map(([slug, club]) => <Link key={slug} href={`/ligas/${club.liga}/${slug}`} className="rounded border border-black/5 bg-white p-3 text-xs font-bold hover:border-emerald-700">{club.name}<span className="mt-1 block text-[10px] font-normal text-muted">Ver camisas <ArrowRight className="inline" size={11} /></span></Link>)}</div></div></section>
-    <section className="mx-auto grid max-w-7xl gap-8 px-5 py-14 sm:grid-cols-3 lg:px-8">{[{ title: "Qualidade que entra em campo", body: "Materiais leves e resistentes para acompanhar a torcida em qualquer momento." }, { title: "Conforto do primeiro ao último minuto", body: "Tecnologia e toque macio em peças pensadas para o seu ritmo." }, { title: "Caimento para todo torcedor", body: "Modelos e tamanhos para você vestir sua paixão do seu jeito." }].map((item) => <div key={item.title} className="border-l-2 border-lime pl-4"><h2 className="text-sm font-black">{item.title}</h2><p className="mt-2 text-xs leading-5 text-muted">{item.body}</p></div>)}</section>
-    <section className="bg-lime/35 px-5 py-12"><div className="mx-auto max-w-7xl rounded-xl bg-pitch px-6 py-9 text-white sm:flex sm:items-center sm:justify-between sm:px-10"><div><p className="text-[10px] font-black uppercase tracking-[.2em] text-lime">Faça parte do time</p><h2 className="mt-2 text-2xl font-black">Novidades direto no seu e-mail</h2><p className="mt-2 text-sm text-white/70">Receba lançamentos e vantagens exclusivas.</p></div><NewsletterForm /></div></section>
-  </main>;
+  const clubLinks = Array.from(new Map(products.map((product) => [
+    `${product.liga}-${product.clubeSlug}`,
+    { name: product.clube, league: product.liga, slug: product.clubeSlug },
+  ])).values()).slice(0, 18);
+  const marqueeText = [...leagues.map((league) => league.nome), "O jogo é de todos", ...leagues.map((league) => league.nome)];
+
+  return (
+    <main className="overflow-hidden">
+      <HeroCarousel />
+
+      <section className="league-marquee bg-action py-4 text-white" aria-label="Ligas disponíveis">
+        <div className="league-marquee-track flex w-max items-center gap-8 whitespace-nowrap">
+          {marqueeText.map((label, index) => <span className="flex items-center gap-8" key={`${label}-${index}`}><span className="text-[11px] font-black uppercase tracking-[.22em] sm:text-sm">{label}</span><span className="text-lg text-white/50" aria-hidden="true">✳</span></span>)}
+        </div>
+      </section>
+
+      <section className="benefits-strip bg-[#F5F5F5]">
+        <div className="mx-auto grid max-w-7xl grid-cols-2 gap-4 px-5 py-7 sm:grid-cols-4 lg:px-8">
+          {features.map(({ icon: Icon, title, text }, index) => (
+            <Reveal key={title} delay={index * 0.06} className="flex items-center gap-3">
+              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-ink text-action"><Icon size={19} /></span>
+              <div><h2 className="text-xs font-black uppercase">{index === 1 ? <>Até <AnimatedCounter value={12} suffix="x" /></> : index === 2 ? <><AnimatedCounter value={7} suffix=" dias" /></> : title}</h2><p className="mt-1 text-[10px] text-muted sm:text-xs">{text}</p></div>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-5 py-14 lg:px-8 lg:py-20" aria-label="Explore coleções">
+        <Reveal className="mb-7 flex items-end justify-between gap-4">
+          <div><p className="text-[10px] font-black uppercase tracking-[.2em] text-action">Escolha o seu lado</p><h2 className="mt-2 text-3xl font-black uppercase sm:text-5xl">O jogo é seu</h2></div>
+          <span className="hidden text-[10px] font-bold uppercase tracking-widest text-muted sm:block">Três formas de viver o futebol</span>
+        </Reveal>
+        <div className="collection-bento grid gap-4 sm:grid-cols-12">
+          {collections.map((item, index) => (
+            <Reveal className={item.size} delay={index * 0.08} key={item.title}>
+              <Link href={item.href} className={`collection-tile group relative isolate flex h-full min-h-[245px] flex-col justify-end overflow-hidden rounded-lg border border-black/10 p-5 text-white sm:min-h-[310px] sm:p-7 ${item.size}`}>
+                <Image
+                  src={item.image.src}
+                  alt={item.image.alt}
+                  fill
+                  sizes={index === 0 ? "(max-width: 640px) 100vw, 58vw" : "(max-width: 640px) 100vw, 38vw"}
+                  placeholder="blur"
+                  blurDataURL={item.image.blurDataURL}
+                  className="collection-photo -z-20 object-cover"
+                  style={{ objectPosition: `${item.image.focalPoint.x}% ${item.image.focalPoint.y}%` }}
+                />
+                <span className="collection-shade absolute inset-0 -z-10" />
+                <span aria-hidden="true" className="collection-outline pointer-events-none absolute right-[-.04em] top-0 -z-10 text-[5rem] font-black uppercase leading-none tracking-tighter text-transparent sm:text-[8rem]">{item.title}</span>
+                <span className="text-[10px] font-black uppercase tracking-[.2em] text-blue-200">{item.sub}</span>
+                <span className="mt-2 flex items-end justify-between gap-3">
+                  <span className="text-3xl font-black uppercase leading-none sm:text-5xl">{item.title}</span>
+                  <span className="collection-cta inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-wide text-white">Explorar <ArrowRight size={15} /></span>
+                </span>
+              </Link>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      <ProductSection title="Ofertas da semana" kicker="Não perca o apito" href="/busca?q=oferta" items={offers} />
+      <ProductSection title="Mais vendidas" kicker="A escolha da torcida" href="/busca?q=mais%20vendidas" items={bestSellers} dark />
+      <ProductSection title="Lançamentos" kicker="Chegaram agora" href="/busca?q=lançamento" items={newArrivals} />
+      <ProductSection title="Clássicos retrô" kicker="Para quem vive de história" href="/busca?q=retro" items={retros} dark />
+
+      <StickyLeagueRail leagues={leagues} />
+
+      <section className="bg-[#F5F5F5] py-14 sm:py-20">
+        <div className="mx-auto max-w-7xl px-5 lg:px-8">
+          <Reveal>
+            <p className="text-[10px] font-black uppercase tracking-[.2em] text-action">As cores que moram na arquibancada</p>
+            <h2 className="mt-2 text-3xl font-black uppercase sm:text-5xl">Clubes populares</h2>
+            <p className="mt-3 max-w-xl text-sm text-muted">Descubra camisas de clubes de várias ligas. Só nomes em texto — sem escudos ou logos oficiais.</p>
+          </Reveal>
+          <div className="mt-7 grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 lg:grid-cols-6">
+            {clubLinks.map((club, index) => (
+              <Reveal key={`${club.league}-${club.slug}`} delay={(index % 6) * 0.04}>
+                <Link href={`/ligas/${club.league}/${club.slug}`} className="club-text-card group flex min-h-20 items-center justify-between gap-2 rounded-lg border border-border bg-white p-3 transition hover:border-action hover:bg-ink hover:text-white">
+                  <span className="min-w-0 text-xs font-black uppercase leading-tight">{club.name}</span>
+                  <ArrowRight size={14} className="shrink-0 text-action transition group-hover:translate-x-1" />
+                </Link>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto grid max-w-7xl gap-4 px-5 py-14 sm:grid-cols-3 lg:px-8 lg:py-20">
+        {differentials.map((item, index) => (
+          <Reveal key={item.title} delay={index * 0.08} className="h-full">
+            <div className="differential-card h-full rounded-lg border border-border bg-white p-6 sm:p-7">
+              <span className="mb-5 block h-1 w-10 bg-action" />
+              <h2 className="text-lg font-black uppercase leading-tight">{item.title}</h2>
+              <p className="mt-3 text-sm leading-6 text-muted">{item.body}</p>
+            </div>
+          </Reveal>
+        ))}
+      </section>
+
+      <section className="newsletter-arena bg-action px-5 py-12 sm:py-16">
+        <Reveal className="mx-auto max-w-7xl rounded-lg bg-ink px-6 py-9 text-white sm:flex sm:items-center sm:justify-between sm:gap-8 sm:px-10">
+          <div className="max-w-xl">
+            <p className="text-[10px] font-black uppercase tracking-[.2em] text-blue-300">Faça parte do time</p>
+            <h2 className="mt-2 text-3xl font-black uppercase">Novidades direto no seu e-mail</h2>
+            <p className="mt-2 text-sm text-white/65">Receba lançamentos e vantagens exclusivas da alves store.</p>
+          </div>
+          <NewsletterForm />
+        </Reveal>
+      </section>
+    </main>
+  );
 }

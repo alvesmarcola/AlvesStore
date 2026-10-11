@@ -6,6 +6,8 @@ import { ChevronRight, SlidersHorizontal } from "lucide-react";
 import { ProductGrid } from "@/components/product-grid";
 import { formatCurrency, leagues } from "@/lib/catalog";
 import type { Product } from "@/lib/types";
+import { CategoryHero } from "@/components/category-hero";
+import type { ImageAsset } from "@/data/images";
 
 interface CatalogPageProps {
   title: string;
@@ -13,9 +15,12 @@ interface CatalogPageProps {
   products: Product[];
   breadcrumb: { name: string; href?: string }[];
   initialType?: string;
+  heroImage?: ImageAsset;
+  heroEyebrow?: string;
+  quickLinks?: { name: string; href: string }[];
 }
 
-export function CatalogPage({ title, description, products, breadcrumb, initialType = "" }: CatalogPageProps) {
+export function CatalogPage({ title, description, products, breadcrumb, initialType = "", heroImage, heroEyebrow = "Coleção alves store", quickLinks }: CatalogPageProps) {
   const [sort, setSort] = useState("relevancia");
   const [type, setType] = useState(initialType);
   const [uniform, setUniform] = useState("");
@@ -63,7 +68,7 @@ export function CatalogPage({ title, description, products, breadcrumb, initialT
   };
   const filterFields = <>
     <label className="filter-label">Clube<select className="filter-select" value={club} onChange={(event) => setClub(event.target.value)}><option value="">Todos os clubes</option>{clubOptions.map(([slug, name]) => <option key={slug} value={slug}>{name}</option>)}</select></label>
-    <label className="filter-label">Liga<select className="filter-select" value={league} onChange={(event) => setLeague(event.target.value)}><option value="">Todas</option>{leagueOptions.map((slug) => <option key={slug} value={slug}>{leagues.find((item) => item.slug === slug)?.name ?? slug}</option>)}</select></label>
+    <label className="filter-label">Liga<select className="filter-select" value={league} onChange={(event) => setLeague(event.target.value)}><option value="">Todas</option>{leagueOptions.map((slug) => <option key={slug} value={slug}>{leagues.find((item) => item.slug === slug)?.nome ?? slug}</option>)}</select></label>
     <label className="filter-label">Tamanho<select className="filter-select" value={size} onChange={(event) => setSize(event.target.value)}><option value="">Todos</option>{sizeOptions.map((item) => <option key={item} value={item}>{item}</option>)}</select></label>
     <label className="filter-label">Tipo<select className="filter-select" value={type} onChange={(event) => setType(event.target.value)}><option value="">Todos</option><option value="torcedor">Torcedor</option><option value="jogador">Jogador</option><option value="retro">Retrô</option><option value="treino">Treino</option><option value="cropped">Cropped</option><option value="regata">Regata</option><option value="inverno">Corta-vento</option></select></label>
     <label className="filter-label">Uniforme<select className="filter-select" value={uniform} onChange={(event) => setUniform(event.target.value)}><option value="">Todos</option><option value="titular">Titular</option><option value="reserva">Reserva</option><option value="terceiro">Terceiro</option></select></label>
@@ -74,9 +79,13 @@ export function CatalogPage({ title, description, products, breadcrumb, initialT
     <button className="mt-4 text-xs font-bold text-blue-700 underline" onClick={clearFilters}>Limpar filtros</button>
   </>;
 
-  return <main className="mx-auto max-w-7xl px-4 py-7 lg:px-8">
-    <nav className="mb-5 flex flex-wrap items-center gap-2 text-xs text-muted" aria-label="Breadcrumb"><Link href="/">Início</Link>{breadcrumb.map((item, index) => <span key={item.name} className="flex items-center gap-2"><ChevronRight size={13} />{item.href && index !== breadcrumb.length - 1 ? <Link href={item.href}>{item.name}</Link> : <span>{item.name}</span>}</span>)}</nav>
-    <div className="mb-7"><p className="text-[10px] font-black uppercase tracking-[.2em] text-blue-600">ALVES STORE · COLEÇÃO</p><h1 className="mt-1 text-3xl font-black tracking-tight sm:text-4xl">{title}</h1><p className="mt-2 max-w-2xl text-sm leading-6 text-muted">{description}</p></div>
+  return <>
+    {heroImage && <CategoryHero image={heroImage} eyebrow={heroEyebrow} title={title} description={description} breadcrumbs={breadcrumb} quickLinks={quickLinks} />}
+    <main className={`mx-auto max-w-7xl px-4 py-7 lg:px-8 ${heroImage ? "min-h-[55vh]" : ""}`}>
+    {!heroImage && <>
+      <nav className="mb-5 flex flex-wrap items-center gap-2 text-xs text-muted" aria-label="Breadcrumb"><Link href="/">Início</Link>{breadcrumb.map((item, index) => <span key={item.name} className="flex items-center gap-2"><ChevronRight size={13} />{item.href && index !== breadcrumb.length - 1 ? <Link href={item.href}>{item.name}</Link> : <span>{item.name}</span>}</span>)}</nav>
+      <div className="mb-7"><p className="text-[10px] font-black uppercase tracking-[.2em] text-blue-600">ALVES STORE · COLEÇÃO</p><h1 className="mt-1 text-3xl font-black tracking-tight sm:text-4xl">{title}</h1><p className="mt-2 max-w-2xl text-sm leading-6 text-muted">{description}</p></div>
+    </>}
     <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-y py-3">
       <span className="text-xs text-muted">{filtered.length} produtos encontrados</span>
       <div className="flex items-center gap-3"><button className="flex items-center gap-1 text-xs font-bold lg:hidden" onClick={() => setFiltersOpen(true)}><SlidersHorizontal size={15} />Filtros</button><label className="flex items-center gap-2 text-xs">Ordenar por <select value={sort} onChange={(event) => setSort(event.target.value)} className="rounded-lg border border-border bg-white px-2 py-2 text-xs"><option value="relevancia">Relevância</option><option value="menor">Menor preço</option><option value="maior">Maior preço</option><option value="desconto">Maior desconto</option><option value="lancamentos">Lançamentos</option></select></label></div>
@@ -85,7 +94,7 @@ export function CatalogPage({ title, description, products, breadcrumb, initialT
       <aside className="hidden h-fit rounded-lg border border-border p-4 lg:block">
         <h2 className="mb-4 text-sm font-black">Filtrar produtos</h2>
         {filterFields}
-        <div className="mt-6 border-t pt-4"><h3 className="mb-2 text-xs font-black uppercase">Explore ligas</h3>{leagues.slice(0, 6).map((league) => <Link className="block py-1.5 text-xs text-muted hover:text-ink" key={league.slug} href={`/ligas/${league.slug}`}>{league.name}</Link>)}</div>
+        <div className="mt-6 border-t pt-4"><h3 className="mb-2 text-xs font-black uppercase">Explore ligas</h3>{leagues.slice(0, 6).map((league) => <Link className="block py-1.5 text-xs text-muted hover:text-ink" key={league.slug} href={`/ligas/${league.slug}`}>{league.nome}</Link>)}</div>
       </aside>
       <div>
         <ProductGrid items={filtered.slice(0, visibleCount)} />
@@ -99,5 +108,6 @@ export function CatalogPage({ title, description, products, breadcrumb, initialT
         <button onClick={() => setFiltersOpen(false)} className="primary-button mt-5 w-full py-3 text-sm font-black uppercase">Ver {filtered.length} produtos</button>
       </section>
     </div>}
-  </main>;
+    </main>
+  </>;
 }

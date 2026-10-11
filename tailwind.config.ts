@@ -7,7 +7,6 @@ const config: Config = {
       colors: {
         ink: "#0A0A0A",
         pitch: "#0A0A0A",
-        lime: "#2563EB",
         paper: "#F5F5F5",
         muted: "#525252",
         graphite: { DEFAULT: "#171717", hover: "#262626" },

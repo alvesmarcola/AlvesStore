@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1200" fill="none">
+  <defs>
+    <linearGradient id="sky" x1="185" y1="70" x2="1700" y2="1150" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#05070C"/>
+      <stop offset=".53" stop-color="#111827"/>
+      <stop offset="1" stop-color="#07152C"/>
+    </linearGradient>
+    <linearGradient id="beam" x1="1500" y1="150" x2="1420" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#60A5FA" stop-opacity=".7"/>
+      <stop offset="1" stop-color="#2563EB" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="pitch" x1="920" y1="750" x2="920" y2="1200" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#123057"/>
+      <stop offset="1" stop-color="#080B12"/>
+    </linearGradient>
+    <pattern id="seats" width="56" height="33" patternUnits="userSpaceOnUse">
+      <path d="M4 5h39v8H4z" fill="#64748B" fill-opacity=".18"/>
+      <path d="M12 20h39v8H12z" fill="#94A3B8" fill-opacity=".09"/>
+    </pattern>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="58"/>
+    </filter>
+  </defs>
+  <path fill="url(#sky)" d="M0 0h1920v1200H0z"/>
+  <ellipse cx="1450" cy="440" rx="490" ry="260" fill="#2563EB" fill-opacity=".27" filter="url(#glow)"/>
+  <path fill="url(#seats)" d="M0 135h1920v650H0z"/>
+  <path stroke="#93C5FD" stroke-opacity=".12" stroke-width="2" d="M0 270h1920M0 450h1920M0 630h1920"/>
+  <path fill="url(#beam)" d="m1500 110 110 20-384 660-76-34z"/>
+  <path fill="url(#pitch)" d="M0 790h1920v410H0z"/>
+  <path stroke="#93C5FD" stroke-opacity=".35" stroke-width="4" d="M-30 1195h1980M970 790v410m-300-410c0 168 134 280 300 280s300-112 300-280M485 790v133h-515m1465-133v133h515"/>
+  <path fill="#030712" fill-opacity=".58" d="M0 830h1920v370H0z"/>
+  <g fill="#0A0A0A" stroke="#A5C9FF" stroke-opacity=".4" stroke-width="8">
+    <circle cx="1326" cy="334" r="83"/>
+    <path d="m1262 421 171 19 113 194-120 76-71-102-8 216-205-2 73-233-82 117-139-73 144-176 124-36Z"/>
+    <path d="m1260 790 186 4 62 321-125 20-99-230-114 225-124-47 115-289Z"/>
+    <path d="m1421 470 92-22 119 97-44 63-99-67-58 81-77-57Z"/>
+  </g>
+  <circle cx="1114" cy="975" r="51" fill="#DCEBFF" fill-opacity=".88"/>
+  <path stroke="#334155" stroke-width="4" d="m1080 945 66 60m-36-79-36 99m43-91 51 42"/>
+</svg>
