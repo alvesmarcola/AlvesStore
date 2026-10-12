@@ -1,10 +1,15 @@
 import productsData from "@/data/products.json";
 import leaguesData from "@/data/leagues.json";
+import { storeConfig } from "@/config";
 import { images } from "@/data/images";
 import type { ImageAsset } from "@/data/images";
 import type { League, Product } from "@/lib/types";
 
-export const products = productsData as Product[];
+export const products = (productsData as Product[]).map((product) => ({
+  ...product,
+  preco: storeConfig.shirtPrice,
+  precoAnterior: storeConfig.shirtPrice,
+}));
 export const leagues = leaguesData as League[];
 
 export function getProduct(slug: string) {
@@ -17,10 +22,6 @@ export function getLeague(slug: string) {
 
 export function formatCurrency(value: number) {
   return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(value);
-}
-
-export function discountPercent(product: Product) {
-  return Math.round((1 - product.preco / product.precoAnterior) * 100);
 }
 
 export function productImageAsset(product: Pick<Product, "images" | "imageSeed" | "tipo">, alternate = false): ImageAsset {

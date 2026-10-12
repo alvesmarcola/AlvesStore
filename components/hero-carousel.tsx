@@ -78,8 +78,7 @@ export function HeroCarousel() {
             transition={{ duration: reducedMotion ? 0 : 0.45, ease: "easeOut" }}
           >
             <span className="inline-flex items-center gap-3 text-[10px] font-black uppercase tracking-[.26em] text-blue-200 sm:text-xs"><span className="h-px w-8 bg-action" />{slide.eyebrow}</span>
-            <h1 className="mt-7 max-w-full text-[clamp(3rem,9vw,8.3rem)] font-black uppercase leading-[.88] tracking-[-.055em]">
-              <span className="sr-only">{slide.title.join(" ")}</span>
+            <h1 aria-label={slide.title.join(" ")} className="mt-7 max-w-full text-[clamp(3rem,9vw,8.3rem)] font-black uppercase leading-[.88] tracking-[-.055em]">
               {slide.title.map((line, index) => (
                 <motion.span
                   key={`${active}-${line}`}

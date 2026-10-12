@@ -290,10 +290,8 @@ function titleFor(group: ProductGroup) {
   return `Camisa ${club}${uniform}${season}${type}${audience}`.replace(/\s+/g, " ").trim();
 }
 
-function priceFor(slug: string) {
-  const prices = storeConfig.mockProductPrices;
-  const digest = createHash("sha256").update(slug).digest();
-  return prices[digest.readUInt32BE(0) % prices.length];
+function priceFor() {
+  return storeConfig.shirtPrice;
 }
 
 function makeProductSlug(group: ProductGroup, used: Set<string>) {
@@ -533,7 +531,7 @@ async function main() {
   for (const group of [...groups.values()].sort((a, b) => a.key.localeCompare(b.key, "en", { numeric: true }))) {
     group.files.sort((a, b) => a.relativePath.localeCompare(b.relativePath, "en", { numeric: true }));
     const slug = makeProductSlug(group, usedSlugs);
-    const price = priceFor(slug);
+    const price = priceFor();
     const sizesForAudience = group.audience === "feminino" ? ["PP", "P", "M", "G", "GG", "2GG"] : ["P", "M", "G", "GG", "2GG", "3GG"];
     const product: Product = {
       id: `catalog-${slug}`,
@@ -547,7 +545,7 @@ async function main() {
       uniforme: group.uniform,
       nome: titleFor(group),
       preco: price,
-      precoAnterior: Math.round(price * 1.35 * 10) / 10,
+      precoAnterior: price,
       estoque: 5 + Number.parseInt(createHash("sha1").update(slug).digest("hex").slice(0, 2), 16) % 16,
       tamanhos: sizesForAudience,
       esgotados: [],

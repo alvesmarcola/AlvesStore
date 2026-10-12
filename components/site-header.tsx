@@ -47,9 +47,8 @@ export function SiteHeader() {
       <header className="site-header sticky top-0 z-40 border-b border-white/10 bg-ink text-white">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 lg:px-8">
           <button className="header-icon lg:hidden" aria-label="Abrir menu" onClick={() => setMenuOpen(true)}><Menu size={23} /></button>
-          <Link href="/" className="shrink-0 leading-none" aria-label="alves store - início">
-            <span className="block text-[22px] font-black lowercase tracking-tighter text-white sm:text-[27px]">alves <span className="text-action">store</span></span>
-            <span className="mt-1 block text-[8px] font-bold uppercase tracking-[.2em] text-white/55">Vista seu time. Leve o jogo.</span>
+          <Link href="/" className="shrink-0 leading-none" aria-label="ALVES STORE - início">
+            <span className="block text-[22px] font-black uppercase tracking-tighter text-white sm:text-[27px]">ALVES <span className="text-action">STORE</span></span>
           </Link>
           <div className="relative hidden max-w-xl flex-1 md:block">
             <form onSubmit={search} role="search" className="flex items-center rounded-full border border-white/10 bg-graphite px-4 py-2.5 focus-within:border-action">

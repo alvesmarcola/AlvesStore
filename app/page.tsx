@@ -4,15 +4,16 @@ import { ArrowRight, HeartHandshake, ShieldCheck, Truck, WalletCards } from "luc
 import { ProductGrid } from "@/components/product-grid";
 import { NewsletterForm } from "@/components/newsletter-form";
 import { HeroCarousel } from "@/components/hero-carousel";
-import { AnimatedCounter, Reveal } from "@/components/motion-effects";
+import { Reveal } from "@/components/motion-effects";
 import { StickyLeagueRail } from "@/components/sticky-league-rail";
 import { images } from "@/data/images";
-import { leagues, products } from "@/lib/catalog";
+import { formatCurrency, leagues, products } from "@/lib/catalog";
+import { storeConfig } from "@/config";
 
 const features = [
-  { icon: Truck, title: "Frete grátis", text: "para todo o Brasil" },
-  { icon: WalletCards, title: "Até 12x", text: "no cartão de crédito" },
-  { icon: ShieldCheck, title: "7 dias", text: "para devolver" },
+  { icon: Truck, title: "Frete grátis", text: "na compra de 3 camisas" },
+  { icon: WalletCards, title: `Até ${storeConfig.installments}x`, text: "no cartão de crédito" },
+  { icon: ShieldCheck, title: `${storeConfig.returnPeriodDays} dias`, text: "para devolver" },
   { icon: HeartHandshake, title: "Torcida atendida", text: "a gente está no WhatsApp" },
 ];
 
@@ -34,12 +35,14 @@ function ProductSection({
   href,
   items,
   dark = false,
+  showBundleOffers = false,
 }: {
   title: string;
   kicker: string;
   href: string;
   items: typeof products;
   dark?: boolean;
+  showBundleOffers?: boolean;
 }) {
   return (
     <section className={`product-showcase ${dark ? "bg-ink text-white" : "bg-white text-ink"}`}>
@@ -51,6 +54,23 @@ function ProductSection({
           </div>
           <Link className="mb-1 flex shrink-0 items-center gap-1 text-[10px] font-black uppercase tracking-wide hover:text-action" href={href}>Ver tudo <ArrowRight size={15} /></Link>
         </Reveal>
+        {showBundleOffers && (
+          <div className="mb-8 grid gap-3 sm:grid-cols-3" aria-label="Ofertas por quantidade">
+            <div className="rounded-lg border border-border bg-paper p-4 text-ink">
+              <p className="text-[10px] font-black uppercase tracking-wider text-muted">1 camisa</p>
+              <p className="mt-1 text-xl font-black">{formatCurrency(storeConfig.shirtPrice)} <span className="text-xs font-semibold">+ frete</span></p>
+            </div>
+            <div className="rounded-lg border border-border bg-paper p-4 text-ink">
+              <p className="text-[10px] font-black uppercase tracking-wider text-muted">2 camisas</p>
+              <p className="mt-1 text-xl font-black">{formatCurrency(storeConfig.twoShirtPrice)} <span className="text-xs font-semibold">+ frete</span></p>
+            </div>
+            <div className="rounded-lg border border-action/40 bg-action/5 p-4 text-ink">
+              <p className="flex items-center gap-2 text-[10px] font-black uppercase tracking-wider text-action">3 camisas <span className="rounded-full bg-action px-2 py-1 text-[9px] text-white">Frete grátis</span></p>
+              <p className="mt-1 text-xl font-black">{formatCurrency(storeConfig.threeShirtPrice)}</p>
+            </div>
+            <p className={`text-[10px] sm:col-span-3 ${dark ? "text-white/60" : "text-muted"}`}>Personalização: +{formatCurrency(storeConfig.customizationPrice)} por camisa.</p>
+          </div>
+        )}
         <ProductGrid items={items} />
       </div>
     </section>
@@ -62,10 +82,24 @@ export default function HomePage() {
   const bestSellers = products.filter((product) => product.tag === "Mais vendido").slice(0, 4);
   const newArrivals = products.filter((product) => product.tag === "Lançamento" || product.tag === "Novidade").slice(0, 4);
   const retros = products.filter((product) => product.tipo === "retro").slice(0, 4);
-  const clubLinks = Array.from(new Map(products.filter((product) => product.liga !== "revisar" && product.clubeSlug !== "revisar").map((product) => [
-    `${product.liga}-${product.clubeSlug}`,
-    { name: product.clube, league: product.liga, slug: product.clubeSlug },
-  ])).values()).slice(0, 18);
+  const nationalTeamSlugs = new Set(leagues.find((league) => league.slug === "selecoes")?.clubes.map((team) => team.slug) ?? []);
+  const destinations = new Map<string, { name: string; league: string; slug: string; popularity: number }>();
+  products
+    .filter((product) => product.liga !== "revisar" && product.clubeSlug !== "revisar")
+    .forEach((product) => {
+      const league = nationalTeamSlugs.has(product.clubeSlug)
+        ? "selecoes"
+        : leagues.find((candidate) => candidate.slug !== "selecoes" && candidate.clubes.some((club) => club.slug === product.clubeSlug))?.slug ?? product.liga;
+      const key = `${league}-${product.clubeSlug}`;
+      const destination = destinations.get(key);
+      if (destination) destination.popularity += 1;
+      else destinations.set(key, { name: product.clube, league, slug: product.clubeSlug, popularity: 1 });
+    });
+  const allDestinations = [...destinations.values()];
+  const clubLinks = allDestinations
+    .filter((destination) => destination.league !== "selecoes")
+    .sort((a, b) => b.popularity - a.popularity)
+    .slice(0, 10);
   const marqueeText = [...leagues.map((league) => league.nome), "O jogo é de todos", ...leagues.map((league) => league.nome)];
 
   return (
@@ -83,7 +117,7 @@ export default function HomePage() {
           {features.map(({ icon: Icon, title, text }, index) => (
             <Reveal key={title} delay={index * 0.06} className="flex items-center gap-3">
               <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-ink text-action"><Icon size={19} /></span>
-              <div><h2 className="text-xs font-black uppercase">{index === 1 ? <>Até <AnimatedCounter value={12} suffix="x" /></> : index === 2 ? <><AnimatedCounter value={7} suffix=" dias" /></> : title}</h2><p className="mt-1 text-[10px] text-muted sm:text-xs">{text}</p></div>
+              <div><h2 className="text-xs font-black uppercase">{title}</h2><p className="mt-1 text-[10px] text-muted sm:text-xs">{text}</p></div>
             </Reveal>
           ))}
         </div>
@@ -121,7 +155,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <ProductSection title="Ofertas da semana" kicker="Não perca o apito" href="/busca?q=oferta" items={offers} />
+      <ProductSection title="Ofertas da semana" kicker="Não perca o apito" href="/busca?q=oferta" items={offers} showBundleOffers />
       <ProductSection title="Mais vendidas" kicker="A escolha da torcida" href="/busca?q=mais%20vendidas" items={bestSellers} dark />
       <ProductSection title="Lançamentos" kicker="Chegaram agora" href="/busca?q=lançamento" items={newArrivals} />
       <ProductSection title="Clássicos retrô" kicker="Para quem vive de história" href="/busca?q=retro" items={retros} dark />

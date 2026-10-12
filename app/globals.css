@@ -71,9 +71,9 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .collection-cta { transition: transform .2s ease, opacity .2s ease; }
 .collection-tile:hover .collection-cta { transform: translateX(-3px); }
 
-.league-scroll-section { min-height: 220svh; }
-.league-scroll-sticky { position: sticky; top: 8rem; display: flex; height: calc(100svh - 8rem); flex-direction: column; justify-content: center; overflow: hidden; }
-.league-rail-card { box-shadow: 0 20px 60px rgb(0 0 0 / 28%); }
+.league-rail { scrollbar-color: var(--brand-blue) var(--graphite); scrollbar-width: thin; }
+.league-rail-card { border-color: rgb(255 255 255 / 16%); background: var(--graphite); box-shadow: 0 20px 60px rgb(0 0 0 / 38%); transition: border-color .2s ease, box-shadow .2s ease; }
+.league-rail-card:hover { border-color: rgb(37 99 235 / 75%); box-shadow: 0 24px 68px rgb(0 0 0 / 48%); }
 .league-cover { filter: saturate(.62) contrast(1.1); transition: transform .65s cubic-bezier(.2,.7,.25,1); }
 .league-rail-card:hover .league-cover { transform: scale(1.06); }
 
@@ -82,11 +82,15 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .category-hero-overlay { background: linear-gradient(90deg, rgb(3 5 10 / 91%) 0%, rgb(3 5 10 / 74%) 42%, rgb(3 5 10 / 20%) 100%), linear-gradient(135deg, rgb(37 99 235 / 26%), transparent 60%), linear-gradient(0deg, rgb(3 5 10 / 66%) 0%, transparent 60%); }
 .category-hero-overlay::after { opacity: .1; }
 
-.product-card { position: relative; transform-style: preserve-3d; transition: transform .22s ease; }
+.product-card { position: relative; overflow: hidden; border: 1px solid var(--border); border-radius: 12px; background: #fff; box-shadow: 0 8px 24px rgb(10 10 10 / 6%); padding: 9px; transform-style: preserve-3d; transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease; }
+.product-card:hover { border-color: rgb(37 99 235 / 45%); box-shadow: 0 14px 34px rgb(10 10 10 / 12%); }
+.product-showcase.bg-ink .product-card { border-color: #303030; background: var(--graphite); box-shadow: 0 8px 24px rgb(0 0 0 / 22%); }
+.product-showcase.bg-ink .product-card:hover { border-color: rgb(37 99 235 / 70%); box-shadow: 0 14px 34px rgb(0 0 0 / 38%); }
+.product-showcase.bg-ink .product-card .text-ink { color: #f5f5f5; }
+.product-showcase.bg-ink .product-card .text-muted { color: #a3a3a3; }
 .product-card::before { position: absolute; z-index: 5; inset: 0; border-radius: 10px; background: radial-gradient(340px circle at var(--spot-x, 50%) var(--spot-y, 20%), rgb(37 99 235 / 13%), transparent 58%); content: ""; opacity: 0; pointer-events: none; transition: opacity .22s ease; }
 .product-card:hover::before { opacity: 1; }
-.product-photo { filter: saturate(.78) contrast(1.05); }
-.product-image::after { position: absolute; z-index: 1; inset: 0; background: linear-gradient(145deg, rgb(10 10 10 / 3%), rgb(37 99 235 / 15%) 55%, rgb(10 10 10 / 22%)); content: ""; mix-blend-mode: color; pointer-events: none; }
+.product-photo { filter: saturate(.94) contrast(1.02); }
 .product-image .discount-badge, .product-image span { z-index: 2; }
 .discount-badge { animation: badge-pulse 3.8s ease-in-out infinite; }
 @keyframes badge-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(.97); } }
@@ -115,8 +119,6 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 }
 
 @media (max-width: 767px) {
-  .league-scroll-section { min-height: 180svh; }
-  .league-scroll-sticky { top: 7rem; height: calc(100svh - 7rem); }
   .category-hero { clip-path: polygon(0 0, 100% 0, 100% 94%, 96% 100%, 0 100%); }
   .arena-hero-shade { background: linear-gradient(90deg, rgb(3 5 10 / 88%) 0%, rgb(3 5 10 / 58%) 66%, rgb(3 5 10 / 35%) 100%), linear-gradient(0deg, rgb(3 5 10 / 78%) 0%, transparent 55%); }
   .hero-outline { font-size: 26vw; }

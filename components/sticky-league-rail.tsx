@@ -2,39 +2,16 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { images } from "@/data/images";
 import type { League } from "@/lib/types";
 
 export function StickyLeagueRail({ leagues }: { leagues: League[] }) {
-  const sectionRef = useRef<HTMLElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
-  const [travelDistance, setTravelDistance] = useState(0);
-  const reducedMotion = useReducedMotion();
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end end"] });
-  const x = useTransform(scrollYProgress, [0, 1], [0, -travelDistance]);
-
-  useEffect(() => {
-    const section = sectionRef.current;
-    const track = trackRef.current;
-    if (!section || !track || reducedMotion) return;
-
-    const updateDistance = () => setTravelDistance(Math.max(0, track.scrollWidth - section.clientWidth));
-    updateDistance();
-    const observer = new ResizeObserver(updateDistance);
-    observer.observe(section);
-    observer.observe(track);
-    return () => observer.disconnect();
-  }, [reducedMotion, leagues.length]);
-
   return (
     <section
-      ref={sectionRef}
       aria-label="Ligas e competições"
-      className={reducedMotion ? "bg-ink py-14 text-white" : "league-scroll-section bg-ink text-white"}
+      className="bg-ink py-14 text-white"
     >
-      <div className={reducedMotion ? "mx-auto max-w-7xl px-5 lg:px-8" : "league-scroll-sticky mx-auto max-w-7xl px-5 lg:px-8"}>
+      <div className="mx-auto max-w-7xl px-5 lg:px-8">
         <div className="mb-7 flex items-end justify-between gap-6">
           <div>
             <p className="text-[10px] font-black uppercase tracking-[.2em] text-action">A paixão não tem fronteiras</p>
@@ -42,18 +19,14 @@ export function StickyLeagueRail({ leagues }: { leagues: League[] }) {
           </div>
           <span className="hidden text-xs font-bold uppercase tracking-widest text-white/50 sm:block">Deslize para explorar <span aria-hidden="true">→</span></span>
         </div>
-        <motion.div
-          ref={trackRef}
-          style={reducedMotion ? undefined : { x }}
-          className={reducedMotion ? "flex snap-x snap-mandatory gap-4 overflow-x-auto pb-3" : "flex w-max gap-4"}
-        >
+        <div className="league-rail flex snap-x snap-mandatory gap-4 overflow-x-auto overflow-y-hidden pb-12" tabIndex={0} aria-label="Navegue pelos cards de ligas na horizontal">
           {leagues.map((league, index) => {
             const cover = images.leagues[league.imagemCapa];
             return (
               <Link
                 key={league.slug}
                 href={`/ligas/${league.slug}`}
-                className={`league-rail-card group relative isolate flex h-[52vh] min-h-[320px] max-h-[520px] w-[76vw] max-w-[410px] snap-start items-end overflow-hidden rounded-lg border border-white/10 p-5 sm:w-[36vw] sm:p-7 lg:w-[30vw] ${index % 2 ? "sm:translate-y-10" : ""}`}
+                className={`league-rail-card group relative isolate flex h-[52vh] min-h-[320px] max-h-[520px] w-[76vw] max-w-[410px] shrink-0 snap-start items-end overflow-hidden rounded-lg border p-5 sm:w-[36vw] sm:p-7 lg:w-[30vw] ${index % 2 ? "sm:translate-y-10" : ""}`}
               >
                 <Image
                   src={cover.src}
@@ -76,7 +49,7 @@ export function StickyLeagueRail({ leagues }: { leagues: League[] }) {
               </Link>
             );
           })}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

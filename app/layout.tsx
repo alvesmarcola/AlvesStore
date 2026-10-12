@@ -6,9 +6,9 @@ import { StoreShell } from "@/components/store-shell";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: { default: "alves store | Vista seu time", template: "%s | alves store" },
+  title: { default: "ALVES STORE | Vista seu time", template: "%s | ALVES STORE" },
   description: "Camisas de futebol para vestir seu time. Encontre modelos masculinos, femininos, retrô e seleções.",
-  openGraph: { title: "alves store", description: "Vista seu time. Leve o jogo com você.", type: "website", locale: "pt_BR" },
+  openGraph: { title: "ALVES STORE", description: "Vista seu time. Leve o jogo com você.", type: "website", locale: "pt_BR" },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
