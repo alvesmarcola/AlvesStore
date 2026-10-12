@@ -25,7 +25,14 @@ export function SiteHeader() {
   const suggestions = query.trim()
     ? products.filter((product) => {
       const league = leagues.find((item) => item.slug === product.liga);
-      return `${product.nome} ${product.clube} ${league?.nome ?? ""} ${league?.competicao ?? ""}`.toLocaleLowerCase("pt-BR").includes(query.toLocaleLowerCase("pt-BR"));
+      const fields = [
+        product.nome,
+        product.clube !== "revisar" ? product.clube : "",
+        league?.nome ?? "",
+        league?.competicao ?? "",
+        product.temporada !== "revisar" ? product.temporada : "",
+      ];
+      return fields.join(" ").toLocaleLowerCase("pt-BR").includes(query.toLocaleLowerCase("pt-BR"));
     }).slice(0, 5)
     : [];
 
@@ -41,9 +48,6 @@ export function SiteHeader() {
 
   return (
     <>
-      <div className="bg-ink px-4 py-2 text-center text-[10px] font-bold uppercase tracking-[.13em] text-white sm:text-xs">
-        Primeira compra? Use <span className="font-black text-blue-300">PRIMEIRACOMPRA</span> e ganhe 10% off
-      </div>
       <header className="site-header sticky top-0 z-40 border-b border-white/10 bg-ink text-white">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 lg:px-8">
           <button className="header-icon lg:hidden" aria-label="Abrir menu" onClick={() => setMenuOpen(true)}><Menu size={23} /></button>
@@ -98,8 +102,8 @@ export function SiteHeader() {
                 </motion.div>)}
               </motion.div>}</AnimatePresence>
             </div>
-            <Link className="nav-link" href="/busca?q=oferta">Ofertas</Link>
-            <Link className="nav-link" href="/busca?q=lançamento">Lançamentos</Link>
+            <Link className="nav-link" href="/busca?q=oferta">Ofertas por quantidade</Link>
+            <Link className="nav-link" href="/ligas/selecoes">Seleções nacionais</Link>
             <Link className="nav-link" href="/rastreio">Rastreio</Link>
           </div>
         </nav>
@@ -115,7 +119,7 @@ export function SiteHeader() {
             {categoryOpen === "feminino" && <div className="mb-3 pl-4"><Link href="/feminino" className="block py-2 text-xs font-black">Ver tudo</Link>{femaleCategories.map(([name, type], index) => <Link key={`${type}-${index}`} href={`/feminino?tipo=${type}`} className="block py-2 text-xs text-muted">{name}</Link>)}</div>}
             <button className="mobile-nav-link flex w-full items-center justify-between" aria-expanded={leagueOpen} onClick={() => setLeagueOpen(!leagueOpen)}>Ligas <ChevronDown size={16} /></button>
             {leagueOpen && <div className="mb-3 pl-4">{leagues.map((league) => <div key={league.slug} className="border-b border-border py-2"><Link href={`/ligas/${league.slug}`} className="text-xs font-black text-ink">{league.nome}</Link><div className="mt-1 flex flex-wrap gap-x-3">{league.clubes.slice(0, 4).map((club) => <Link key={club.slug} className="py-1 text-[10px] text-muted" href={`/ligas/${league.slug}/${club.slug}`}>{club.nome}</Link>)}</div></div>)}</div>}
-            <Link className="mobile-nav-link" href="/busca?q=oferta">Ofertas da semana</Link><Link className="mobile-nav-link" href="/busca?q=lançamento">Lançamentos</Link><Link className="mobile-nav-link" href="/rastreio">Rastreio de pedido</Link><Link className="mobile-nav-link" href="/login">Entre ou cadastre-se</Link>
+            <Link className="mobile-nav-link" href="/busca?q=oferta">Ofertas por quantidade</Link><Link className="mobile-nav-link" href="/ligas/selecoes">Seleções nacionais</Link><Link className="mobile-nav-link" href="/rastreio">Rastreio de pedido</Link><Link className="mobile-nav-link" href="/login">Entre ou cadastre-se</Link>
           </motion.aside>
         </motion.div>}
       </AnimatePresence>

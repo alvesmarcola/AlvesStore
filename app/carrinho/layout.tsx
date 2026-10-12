@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Sua sacola",
-  description: "Confira as camisas da sua sacola, aplique um cupom e simule o frete.",
+  description: "Confira os produtos, os pacotes e o frete da sua sacola.",
 };
 
 export default function CartLayout({ children }: Readonly<{ children: React.ReactNode }>) {

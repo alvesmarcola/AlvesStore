@@ -1,7 +1,7 @@
 import type { LeagueImageSlot } from "@/data/images";
 
-export type Audience = "masculino" | "feminino" | "unissex" | "revisar";
-export type ProductType = "torcedor" | "jogador" | "retro" | "treino" | "cropped" | "regata" | "inverno" | "vestido" | "revisar";
+export type Audience = "masculino" | "feminino" | "unissex" | "infantil" | "revisar";
+export type ProductType = "torcedor" | "jogador" | "goleiro" | "retro" | "treino" | "cropped" | "regata" | "inverno" | "vestido" | "revisar";
 export type Uniform = "titular" | "reserva" | "terceiro" | "revisar";
 
 export interface ProductImage {
@@ -25,12 +25,8 @@ export interface Product {
   uniforme: Uniform;
   nome: string;
   preco: number;
-  precoAnterior: number;
-  estoque: number;
   tamanhos: string[];
-  esgotados: string[];
   cor: string;
-  tag: string;
   imageSeed: string;
   images?: ProductImage[];
 }

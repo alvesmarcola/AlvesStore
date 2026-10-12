@@ -6,10 +6,23 @@ export const metadata = { title: "Buscar camisas", description: "Busque camisas 
 export default async function SearchPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
   const { q = "" } = await searchParams;
   const term = q.toLocaleLowerCase("pt-BR").trim();
+  const isOfferQuery = term.includes("oferta");
+  const isClubQuery = term === "clube" || term === "clubes";
   const results = term ? products.filter((product) => {
+    if (isOfferQuery) return true;
+    if (isClubQuery) return product.liga !== "selecoes" && product.liga !== "revisar" && product.clubeSlug !== "revisar";
     const league = getLeague(product.liga);
-    const searchText = `${product.nome} ${product.clube} ${league?.nome ?? product.liga} ${league?.competicao ?? ""} ${league?.pais ?? ""} ${product.tipo} ${product.tag}`.toLocaleLowerCase("pt-BR");
-    return searchText.includes(term) || (term.includes("vendid") && product.tag.toLocaleLowerCase("pt-BR").includes("mais vendido"));
+    const fields = [
+      product.nome,
+      product.clube !== "revisar" ? product.clube : "",
+      league?.nome ?? "",
+      league?.competicao ?? "",
+      league?.pais ?? "",
+      product.tipo !== "revisar" ? product.tipo : "",
+      product.temporada !== "revisar" ? product.temporada : "",
+      product.uniforme !== "revisar" ? product.uniforme : "",
+    ];
+    return fields.join(" ").toLocaleLowerCase("pt-BR").includes(term);
   }) : products;
   return <CatalogPage title={term ? `Resultados para “${q}”` : "Todas as camisas"} description="Use os filtros para encontrar sua próxima camisa de futebol." products={results} breadcrumb={[{ name: "Busca" }]} />;
 }

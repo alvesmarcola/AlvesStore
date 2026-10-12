@@ -8,12 +8,10 @@ import type { CartItem, Product } from "@/lib/types";
 interface CartState {
   items: CartItem[];
   drawerOpen: boolean;
-  coupon: string;
   addItem: (product: Product, size: string, customization?: CartItem["customization"]) => void;
   removeItem: (lineId: string) => void;
   updateQuantity: (lineId: string, quantity: number) => void;
   setDrawerOpen: (open: boolean) => void;
-  setCoupon: (coupon: string) => void;
   clearCart: () => void;
 }
 
@@ -21,8 +19,8 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
 }
 
-function migratePersistedCart(value: unknown): Pick<CartState, "items" | "coupon"> {
-  if (!isRecord(value)) return { items: [], coupon: "" };
+function migratePersistedCart(value: unknown): Pick<CartState, "items"> {
+  if (!isRecord(value)) return { items: [] };
 
   const items = Array.isArray(value.items)
     ? value.items.flatMap((entry): CartItem[] => {
@@ -46,7 +44,7 @@ function migratePersistedCart(value: unknown): Pick<CartState, "items" | "coupon
     })
     : [];
 
-  return { items, coupon: typeof value.coupon === "string" ? value.coupon : "" };
+  return { items };
 }
 
 export const useCart = create<CartState>()(
@@ -54,7 +52,6 @@ export const useCart = create<CartState>()(
     (set) => ({
       items: [],
       drawerOpen: false,
-      coupon: "",
       addItem: (product, size, customization) =>
         set((state) => {
           const lineId = `${product.id}-${size}-${customization?.name ?? ""}-${customization?.number ?? ""}`;
@@ -63,7 +60,7 @@ export const useCart = create<CartState>()(
             items: existing
               ? state.items.map((item) =>
                   item.lineId === lineId
-                    ? { ...item, quantity: Math.min(item.quantity + 1, item.product.estoque) }
+                    ? { ...item, quantity: item.quantity + 1 }
                     : item,
                 )
               : [...state.items, { lineId, product, size, quantity: 1, customization }],
@@ -75,20 +72,19 @@ export const useCart = create<CartState>()(
         set((state) => ({
           items: state.items.map((item) =>
             item.lineId === lineId
-              ? { ...item, quantity: Math.min(item.product.estoque, Math.max(1, quantity)) }
+              ? { ...item, quantity: Math.max(1, Math.floor(quantity)) }
               : item,
           ),
         })),
       setDrawerOpen: (drawerOpen) => set({ drawerOpen }),
-      setCoupon: (coupon) => set({ coupon }),
-      clearCart: () => set({ items: [], coupon: "" }),
+      clearCart: () => set({ items: [] }),
     }),
     {
       name: "arquibancada90-cart",
-      version: 1,
+      version: 2,
       migrate: migratePersistedCart,
       skipHydration: true,
-      partialize: (state) => ({ items: state.items, coupon: state.coupon }),
+      partialize: (state) => ({ items: state.items }),
     },
   ),
 );

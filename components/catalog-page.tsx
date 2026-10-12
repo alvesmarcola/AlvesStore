@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { ChevronRight, SlidersHorizontal } from "lucide-react";
 import { ProductGrid } from "@/components/product-grid";
 import { formatCurrency, leagues } from "@/lib/catalog";
+import { storeConfig } from "@/config";
 import type { Product } from "@/lib/types";
 import { CategoryHero } from "@/components/category-hero";
 import type { ImageAsset } from "@/data/images";
@@ -30,31 +31,31 @@ export function CatalogPage({ title, description, products, breadcrumb, initialT
   const [season, setSeason] = useState("");
   const [color, setColor] = useState("");
   const [maxPrice, setMaxPrice] = useState("600");
-  const [discountOnly, setDiscountOnly] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [visibleCount, setVisibleCount] = useState(12);
   useEffect(() => setType(initialType), [initialType]);
-  useEffect(() => setVisibleCount(12), [products, type, uniform, club, league, size, season, color, maxPrice, discountOnly, sort]);
+  useEffect(() => setVisibleCount(12), [products, type, uniform, club, league, size, season, color, maxPrice, sort]);
   const filtered = useMemo(() => {
     const result = products.filter((product) =>
       (!type || product.tipo === type) && (!uniform || product.uniforme === uniform) &&
       (!club || product.clubeSlug === club) && (!league || product.liga === league) &&
-      (!size || (product.tamanhos.includes(size) && !product.esgotados.includes(size))) &&
+      (!size || product.tamanhos.includes(size)) &&
       (!season || product.temporada === season) && (!color || product.cor === color) &&
-      product.preco <= Number(maxPrice) &&
-      (!discountOnly || product.preco < product.precoAnterior),
+      product.preco <= Number(maxPrice),
     );
     if (sort === "menor") result.sort((a, b) => a.preco - b.preco);
     if (sort === "maior") result.sort((a, b) => b.preco - a.preco);
-    if (sort === "desconto") result.sort((a, b) => (1 - b.preco / b.precoAnterior) - (1 - a.preco / a.precoAnterior));
-    if (sort === "lancamentos") result.sort((a, b) => Number(b.tag === "Lançamento") - Number(a.tag === "Lançamento"));
     return result;
-  }, [products, type, uniform, club, league, size, season, color, maxPrice, discountOnly, sort]);
+  }, [products, type, uniform, club, league, size, season, color, maxPrice, sort]);
   const clubOptions = Array.from(new Map(products.filter((product) => product.clubeSlug !== "revisar").map((product) => [product.clubeSlug, product.clube])).entries());
   const sizeOptions = Array.from(new Set(products.flatMap((product) => product.tamanhos))).sort();
   const seasonOptions = Array.from(new Set(products.map((product) => product.temporada).filter((value) => value !== "revisar")));
   const colorOptions = Array.from(new Set(products.map((product) => product.cor).filter((value) => value !== "revisar")));
   const leagueOptions = Array.from(new Set(products.map((product) => product.liga).filter((value) => value !== "revisar")));
+  const typeLabels: Record<string, string> = { torcedor: "Torcedor", jogador: "Jogador", goleiro: "Goleiro", retro: "Retrô", treino: "Treino", cropped: "Cropped", regata: "Regata", inverno: "Manga longa", vestido: "Vestido" };
+  const typeOptions = Array.from(new Set(products.map((product) => product.tipo).filter((value) => value !== "revisar")));
+  const uniformLabels: Record<string, string> = { titular: "Casa (Home)", reserva: "Fora (Away)", terceiro: "Terceira camisa (Third)" };
+  const uniformOptions = Array.from(new Set(products.map((product) => product.uniforme).filter((value) => value !== "revisar")));
   const clearFilters = () => {
     setClub("");
     setLeague("");
@@ -64,18 +65,16 @@ export function CatalogPage({ title, description, products, breadcrumb, initialT
     setType("");
     setUniform("");
     setMaxPrice("600");
-    setDiscountOnly(false);
   };
   const filterFields = <>
     <label className="filter-label">Clube<select className="filter-select" value={club} onChange={(event) => setClub(event.target.value)}><option value="">Todos os clubes</option>{clubOptions.map(([slug, name]) => <option key={slug} value={slug}>{name}</option>)}</select></label>
     <label className="filter-label">Liga<select className="filter-select" value={league} onChange={(event) => setLeague(event.target.value)}><option value="">Todas</option>{leagueOptions.map((slug) => <option key={slug} value={slug}>{leagues.find((item) => item.slug === slug)?.nome ?? slug}</option>)}</select></label>
-    <label className="filter-label">Tamanho<select className="filter-select" value={size} onChange={(event) => setSize(event.target.value)}><option value="">Todos</option>{sizeOptions.map((item) => <option key={item} value={item}>{item}</option>)}</select></label>
-    <label className="filter-label">Tipo<select className="filter-select" value={type} onChange={(event) => setType(event.target.value)}><option value="">Todos</option><option value="torcedor">Torcedor</option><option value="jogador">Jogador</option><option value="retro">Retrô</option><option value="treino">Treino</option><option value="cropped">Cropped</option><option value="regata">Regata</option><option value="inverno">Corta-vento</option></select></label>
-    <label className="filter-label">Uniforme<select className="filter-select" value={uniform} onChange={(event) => setUniform(event.target.value)}><option value="">Todos</option><option value="titular">Titular</option><option value="reserva">Reserva</option><option value="terceiro">Terceiro</option></select></label>
+    <label className="filter-label">Tamanho (a confirmar)<select className="filter-select" value={size} onChange={(event) => setSize(event.target.value)}><option value="">Todos</option>{sizeOptions.map((item) => <option key={item} value={item}>{item}</option>)}</select></label>
+    <label className="filter-label">Tipo<select className="filter-select" value={type} onChange={(event) => setType(event.target.value)}><option value="">Todos</option>{typeOptions.map((item) => <option key={item} value={item}>{typeLabels[item] ?? item}</option>)}</select></label>
+    <label className="filter-label">Uniforme<select className="filter-select" value={uniform} onChange={(event) => setUniform(event.target.value)}><option value="">Todos</option>{uniformOptions.map((item) => <option key={item} value={item}>{uniformLabels[item] ?? item}</option>)}</select></label>
     <label className="filter-label">Temporada<select className="filter-select" value={season} onChange={(event) => setSeason(event.target.value)}><option value="">Todas</option>{seasonOptions.map((item) => <option key={item}>{item}</option>)}</select></label>
     <label className="filter-label">Cor<select className="filter-select" value={color} onChange={(event) => setColor(event.target.value)}><option value="">Todas</option>{colorOptions.map((item) => <option key={item}>{item}</option>)}</select></label>
-    <label className="filter-label">Faixa de preço<select className="filter-select" value={maxPrice} onChange={(event) => setMaxPrice(event.target.value)}><option value="600">Todos os preços</option><option value="180">Até {formatCurrency(180)}</option><option value="220">Até {formatCurrency(220)}</option><option value="300">Até {formatCurrency(300)}</option></select></label>
-    <label className="mt-4 flex items-center gap-2 text-xs"><input type="checkbox" checked={discountOnly} onChange={(event) => setDiscountOnly(event.target.checked)} />Somente com desconto</label>
+    <label className="filter-label">Faixa de preço<select className="filter-select" value={maxPrice} onChange={(event) => setMaxPrice(event.target.value)}><option value="600">Todos os preços</option><option value={storeConfig.shirtPrice}>Até {formatCurrency(storeConfig.shirtPrice)}</option></select></label>
     <button className="mt-4 text-xs font-bold text-blue-700 underline" onClick={clearFilters}>Limpar filtros</button>
   </>;
 
@@ -88,7 +87,7 @@ export function CatalogPage({ title, description, products, breadcrumb, initialT
     </>}
     <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-y py-3">
       <span className="text-xs text-muted">{filtered.length} produtos encontrados</span>
-      <div className="flex items-center gap-3"><button className="flex items-center gap-1 text-xs font-bold lg:hidden" onClick={() => setFiltersOpen(true)}><SlidersHorizontal size={15} />Filtros</button><label className="flex items-center gap-2 text-xs">Ordenar por <select value={sort} onChange={(event) => setSort(event.target.value)} className="rounded-lg border border-border bg-white px-2 py-2 text-xs"><option value="relevancia">Relevância</option><option value="menor">Menor preço</option><option value="maior">Maior preço</option><option value="desconto">Maior desconto</option><option value="lancamentos">Lançamentos</option></select></label></div>
+      <div className="flex items-center gap-3"><button className="flex items-center gap-1 text-xs font-bold lg:hidden" onClick={() => setFiltersOpen(true)}><SlidersHorizontal size={15} />Filtros</button><label className="flex items-center gap-2 text-xs">Ordenar por <select value={sort} onChange={(event) => setSort(event.target.value)} className="rounded-lg border border-border bg-white px-2 py-2 text-xs"><option value="relevancia">Relevância</option><option value="menor">Menor preço</option><option value="maior">Maior preço</option></select></label></div>
     </div>
     <div className="grid gap-6 lg:grid-cols-[205px_1fr]">
       <aside className="hidden h-fit rounded-lg border border-border p-4 lg:block">

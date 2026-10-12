@@ -15,7 +15,7 @@ type LeagueData = {
 };
 type ClubRef = { slug: string; nome: string; league: LeagueData };
 type ReviewField = "clube" | "liga" | "publico" | "tipo" | "temporada" | "uniforme";
-type ReviewRow = Record<ReviewField | "slug" | "arquivos" | "campos_revisar", string>;
+type ReviewRow = Record<ReviewField | "imagem" | "cor" | "tamanhos" | "slug" | "arquivos" | "campos_revisar", string>;
 type ProductGroup = {
   key: string;
   files: ValidImage[];
@@ -57,8 +57,8 @@ const minWidth = 200;
 const minHeight = 250;
 const sizes = [400, 800, 1600] as const;
 const reviewFields: ReviewField[] = ["clube", "liga", "publico", "tipo", "temporada", "uniforme"];
-const audiences = new Set<Audience>(["masculino", "feminino", "unissex", "revisar"]);
-const productTypes = new Set<ProductType>(["torcedor", "jogador", "retro", "treino", "cropped", "regata", "inverno", "vestido", "revisar"]);
+const audiences = new Set<Audience>(["masculino", "feminino", "unissex", "infantil", "revisar"]);
+const productTypes = new Set<ProductType>(["torcedor", "jogador", "goleiro", "retro", "treino", "cropped", "regata", "inverno", "vestido", "revisar"]);
 const uniforms = new Set<Uniform>(["titular", "reserva", "terceiro", "revisar"]);
 
 const leagueAliases: Record<string, string[]> = {
@@ -100,6 +100,10 @@ const clubAliases: Record<string, string[]> = {
   "atletico de madrid": ["atletico madrid"],
   "coreia do sul": ["korea do sul", "koreia do sul", "south korea"],
   "al hilal": ["al hillal"],
+};
+const unmodeledClubNames: Record<string, string[]> = {
+  santos: ["santos laguna"],
+  mexico: ["america do mexico"],
 };
 
 function normalize(value: string) {
@@ -165,6 +169,7 @@ function findLeague(leagues: LeagueData[], directory: string, filename: string) 
 
 function audienceFrom(category: string): Audience {
   const folder = normalize(category);
+  if (folder.includes("kits infantis")) return "infantil";
   if (folder.includes("feminina")) return "feminino";
   if (folder.includes("camisa jogador") || folder.includes("manga longa torcedor")) return "masculino";
   return "revisar";
@@ -172,7 +177,7 @@ function audienceFrom(category: string): Audience {
 
 function typeFrom(category: string, filename: string): ProductType {
   const text = normalize(`${category} ${filename}`);
-  if (text.includes("goleiro") || text.includes("goleira")) return "revisar";
+  if (text.includes("goleiro") || text.includes("goleira") || text.includes("keeper")) return "goleiro";
   if (text.includes("treino") || text.includes("training") || text.includes("pre jogo") || text.includes("pre match")) return "treino";
   if (text.includes("retro")) return "retro";
   if (text.includes("cropped")) return "cropped";
@@ -250,7 +255,7 @@ function csvCell(value: string) {
 }
 
 function makeCsv(rows: ReviewRow[]) {
-  const header = ["slug", "arquivos", "clube", "liga", "publico", "tipo", "temporada", "uniforme", "campos_revisar"];
+  const header = ["slug", "arquivos", "clube", "liga", "publico", "tipo", "temporada", "uniforme", "imagem", "cor", "tamanhos", "campos_revisar"];
   return [header.join(","), ...rows.map((row) => header.map((field) => csvCell(row[field as keyof ReviewRow] ?? "")).join(","))].join("\r\n") + "\r\n";
 }
 
@@ -273,21 +278,39 @@ function bestName(group: ProductGroup) {
   return cleanCopiedName(path.parse(group.files[0].name).name);
 }
 
+function descriptiveQualifiers(group: ProductGroup) {
+  const source = normalize(`${group.directory} ${bestName(group)}`);
+  const labels: [string, string][] = [
+    ["patch copa do mundo", "patch Copa do Mundo"],
+    ["patch campeao", "patch de campeão"],
+    ["comemorativa", "comemorativa"],
+    ["edicao especial", "edição especial"],
+    ["100 anos", "100 anos"],
+    ["dior", "Dior"],
+    ["manga longa", "manga longa"],
+  ];
+  return labels.filter(([qualifier]) => includesWords(source, qualifier)).map(([, label]) => label);
+}
+
 function fallbackProductName(group: ProductGroup) {
   return bestName(group)
     .replace(/(?:^|\s)(?:(?:19|20)\d{2}|\d{2}[_/-]\d{2})(?=\s|$)/g, " ")
-    .replace(/\b(goleiro|goleira|keeper|treino|training|pre jogo|pre match|retro|cropped|regata|manga longa|titular|reserva|terceiro|third|home|away)\b/gi, " ")
+    .replace(/\b(goleiro|goleira|keeper|treino|training|pre jogo|pre match|retro|cropped|regata|manga longa|titular|reserva|terceiro|third|home|away|comemorativa|edicao especial|dior|patch campeao|patch copa do mundo|100 anos)\b/gi, " ")
     .replace(/\s+/g, " ")
     .trim();
 }
 
 function titleFor(group: ProductGroup) {
-  const club = group.club?.nome ?? (fallbackProductName(group) || "Produto a identificar");
+  const club = group.club?.nome ?? (fallbackProductName(group) || "Futebol");
   const uniform = group.uniform === "revisar" ? "" : ` | ${group.uniform[0].toUpperCase()}${group.uniform.slice(1)}`;
   const season = group.season === "revisar" ? "" : ` ${group.season}`;
   const type = group.type === "revisar" ? "" : ` ${group.type}`;
   const audience = group.audience === "revisar" ? "" : ` ${group.audience}`;
-  return `Camisa ${club}${uniform}${season}${type}${audience}`.replace(/\s+/g, " ").trim();
+  const qualifiers = descriptiveQualifiers(group)
+    .filter((qualifier) => qualifier !== "manga longa" || group.type === "retro")
+    .map((qualifier) => ` ${qualifier}`)
+    .join("");
+  return `Camisa ${club}${uniform}${season}${type}${audience}${qualifiers}`.replace(/\s+/g, " ").trim();
 }
 
 function priceFor() {
@@ -496,18 +519,26 @@ async function main() {
   for (const image of validImages) {
     const relativeDirectory = path.relative(sourceRoot, image.directory);
     const cleanName = cleanCopiedName(path.parse(image.name).name);
-    const clubOptions = clubCandidates(clubsSorted, cleanName);
+    const blockedAliases = new Set(
+      clubsSorted.flatMap((candidate) => (unmodeledClubNames[candidate.slug] ?? [])
+        .filter((alias) => includesWords(normalize(cleanName), alias))
+        .map(() => candidate.slug)),
+    );
+    const clubOptions = clubCandidates(clubsSorted, cleanName).filter((candidate) => !blockedAliases.has(candidate.slug));
     const leagueHint = findLeague(leagues, relativeDirectory, cleanName);
     const club = clubOptions.find((candidate) => candidate.league.slug === leagueHint?.slug) ?? (clubOptions.length === 1 ? clubOptions[0] : undefined);
     const directoryText = normalize(relativeDirectory);
+    const rootCategory = image.rootCategory;
     const hasUnmodeledCompetition = unmodeledCompetitionAliases.some((alias) => includesWords(directoryText, normalize(alias)));
-    const league = leagueHint ?? (hasUnmodeledCompetition ? undefined : club?.league);
+    const isRetroCollection = normalize(rootCategory).includes("retro");
+    const league = (isRetroCollection && club ? club.league : undefined)
+      ?? leagueHint
+      ?? (hasUnmodeledCompetition ? undefined : club?.league);
     const season = seasonFrom(cleanName);
     const qualifiers = qualifiersFrom(cleanName);
     const groupKey = club && season !== "revisar"
       ? `${relativeDirectory}|${club.slug}|${season}|${qualifiers.join("-")}`
       : `${relativeDirectory}|${normalize(cleanName)}`;
-    const rootCategory = image.rootCategory;
     const group = groups.get(groupKey) ?? {
       key: groupKey,
       files: [],
@@ -532,7 +563,9 @@ async function main() {
     group.files.sort((a, b) => a.relativePath.localeCompare(b.relativePath, "en", { numeric: true }));
     const slug = makeProductSlug(group, usedSlugs);
     const price = priceFor();
-    const sizesForAudience = group.audience === "feminino" ? ["PP", "P", "M", "G", "GG", "2GG"] : ["P", "M", "G", "GG", "2GG", "3GG"];
+    const sizesForAudience = group.audience === "infantil"
+      ? []
+      : group.audience === "feminino" ? ["PP", "P", "M", "G", "GG", "2GG"] : ["P", "M", "G", "GG", "2GG", "3GG"];
     const product: Product = {
       id: `catalog-${slug}`,
       slug,
@@ -545,12 +578,8 @@ async function main() {
       uniforme: group.uniform,
       nome: titleFor(group),
       preco: price,
-      precoAnterior: price,
-      estoque: 5 + Number.parseInt(createHash("sha1").update(slug).digest("hex").slice(0, 2), 16) % 16,
       tamanhos: sizesForAudience,
-      esgotados: [],
       cor: "revisar",
-      tag: ["Oferta", "Mais vendido", "Lançamento"][Number.parseInt(createHash("sha1").update(`${slug}-tag`).digest("hex").slice(0, 2), 16) % 3],
       imageSeed: slug,
       images: [],
     };
@@ -621,7 +650,12 @@ async function main() {
 
   const reviewRows: ReviewRow[] = [];
   for (const product of products) {
-    const pending = reviewFields.filter((field) => fieldValue(product, field) === "revisar");
+    const pending = [
+      ...reviewFields.filter((field) => fieldValue(product, field) === "revisar"),
+      "imagem",
+      ...(product.cor === "revisar" ? ["cor"] : []),
+      "tamanhos",
+    ];
     if (pending.length === 0) continue;
     const group = sourceBySlug.get(product.slug)!;
     const row = {
@@ -633,6 +667,9 @@ async function main() {
       tipo: product.tipo,
       temporada: product.temporada,
       uniforme: product.uniforme,
+      imagem: "revisar",
+      cor: product.cor,
+      tamanhos: "revisar",
       campos_revisar: pending.join("|"),
     };
     reviewRows.push(row);

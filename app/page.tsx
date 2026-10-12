@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, HeartHandshake, ShieldCheck, Truck, WalletCards } from "lucide-react";
+import { ArrowRight, HeartHandshake, ShoppingBag, Truck, WalletCards } from "lucide-react";
 import { ProductGrid } from "@/components/product-grid";
 import { NewsletterForm } from "@/components/newsletter-form";
 import { HeroCarousel } from "@/components/hero-carousel";
@@ -11,10 +11,10 @@ import { formatCurrency, leagues, products } from "@/lib/catalog";
 import { storeConfig } from "@/config";
 
 const features = [
-  { icon: Truck, title: "Frete grátis", text: "na compra de 3 camisas" },
-  { icon: WalletCards, title: `Até ${storeConfig.installments}x`, text: "no cartão de crédito" },
-  { icon: ShieldCheck, title: `${storeConfig.returnPeriodDays} dias`, text: "para devolver" },
-  { icon: HeartHandshake, title: "Torcida atendida", text: "a gente está no WhatsApp" },
+  { icon: ShoppingBag, title: "1 camisa", text: `${formatCurrency(storeConfig.shirtPrice)} + frete` },
+  { icon: WalletCards, title: "2 camisas", text: `${formatCurrency(storeConfig.twoShirtPrice)} + frete` },
+  { icon: Truck, title: "3 camisas", text: `${formatCurrency(storeConfig.threeShirtPrice)} com frete grátis` },
+  { icon: HeartHandshake, title: "Personalização", text: `+${formatCurrency(storeConfig.customizationPrice)} por camisa` },
 ];
 
 const collections = [
@@ -24,9 +24,9 @@ const collections = [
 ];
 
 const differentials = [
-  { title: "Qualidade que entra em campo", body: "Materiais leves e resistentes para acompanhar a torcida em qualquer momento." },
-  { title: "Conforto do primeiro ao último minuto", body: "Toque macio e liberdade de movimento para vestir a paixão no seu ritmo." },
-  { title: "Caimento para todo torcedor", body: "Modelos e tamanhos para você viver o futebol do seu jeito." },
+  { title: "Clubes e seleções", body: "Explore camisas de clubes e seleções nacionais em categorias separadas." },
+  { title: "Ofertas por quantidade", body: `Leve 2 camisas por ${formatCurrency(storeConfig.twoShirtPrice)} + frete ou 3 por ${formatCurrency(storeConfig.threeShirtPrice)} com frete grátis.` },
+  { title: "Personalização opcional", body: `Adicione nome e número por ${formatCurrency(storeConfig.customizationPrice)} a cada camisa personalizada.` },
 ];
 
 function ProductSection({
@@ -78,9 +78,9 @@ function ProductSection({
 }
 
 export default function HomePage() {
-  const offers = products.filter((product) => product.tag === "Oferta" || product.tag === "Mais vendido").slice(0, 4);
-  const bestSellers = products.filter((product) => product.tag === "Mais vendido").slice(0, 4);
-  const newArrivals = products.filter((product) => product.tag === "Lançamento" || product.tag === "Novidade").slice(0, 4);
+  const offers = products.slice(0, 4);
+  const clubProducts = products.filter((product) => product.liga !== "selecoes" && product.liga !== "revisar" && product.clubeSlug !== "revisar").slice(0, 4);
+  const nationalSelections = products.filter((product) => product.liga === "selecoes").slice(0, 4);
   const retros = products.filter((product) => product.tipo === "retro").slice(0, 4);
   const nationalTeamSlugs = new Set(leagues.find((league) => league.slug === "selecoes")?.clubes.map((team) => team.slug) ?? []);
   const destinations = new Map<string, { name: string; league: string; slug: string; popularity: number }>();
@@ -155,9 +155,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      <ProductSection title="Ofertas da semana" kicker="Não perca o apito" href="/busca?q=oferta" items={offers} showBundleOffers />
-      <ProductSection title="Mais vendidas" kicker="A escolha da torcida" href="/busca?q=mais%20vendidas" items={bestSellers} dark />
-      <ProductSection title="Lançamentos" kicker="Chegaram agora" href="/busca?q=lançamento" items={newArrivals} />
+      <ProductSection title="Ofertas por quantidade" kicker="Preços claros para cada pacote" href="/busca?q=oferta" items={offers} showBundleOffers />
+      <ProductSection title="Camisas de clubes" kicker="Explore o catálogo" href="/busca?q=clubes" items={clubProducts} dark />
+      <ProductSection title="Seleções nacionais" kicker="Camisas de seleções" href="/ligas/selecoes" items={nationalSelections} />
       <ProductSection title="Clássicos retrô" kicker="Para quem vive de história" href="/busca?q=retro" items={retros} dark />
 
       <StickyLeagueRail leagues={leagues} />
@@ -199,7 +199,7 @@ export default function HomePage() {
           <div className="max-w-xl">
             <p className="text-[10px] font-black uppercase tracking-[.2em] text-blue-300">Faça parte do time</p>
             <h2 className="mt-2 text-3xl font-black uppercase">Novidades direto no seu e-mail</h2>
-            <p className="mt-2 text-sm text-white/65">Receba lançamentos e vantagens exclusivas da alves store.</p>
+            <p className="mt-2 text-sm text-white/65">Receba novidades da ALVES STORE.</p>
           </div>
           <NewsletterForm />
         </Reveal>
