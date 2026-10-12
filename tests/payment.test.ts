@@ -8,6 +8,7 @@ import { getShippingQuotes } from "@/lib/server/correios";
 import { isValidMercadoPagoSignature, normalizedPaymentStatus } from "@/lib/server/webhook-signature";
 import { products } from "@/lib/catalog";
 import { POST as createCheckout } from "@/app/api/checkout/route";
+import { POST as receiveWebhook } from "@/app/api/mercado-pago/webhook/route";
 import { POST as quoteShipping } from "@/app/api/shipping/quote/route";
 
 const product = products.find((entry) => entry.tamanhos.length > 0);
@@ -236,4 +237,20 @@ test("valida assinatura do webhook e mapeia status reais", () => {
   assert.equal(normalizedPaymentStatus("rejected"), "rejected");
   assert.equal(normalizedPaymentStatus("refunded"), "refunded");
   assert.equal(normalizedPaymentStatus("unrecognized"), undefined);
+});
+
+test("reconhece notificações de pagamento no formato legado do painel", async () => {
+  const originalSecret = process.env.MERCADO_PAGO_WEBHOOK_SECRET;
+  process.env.MERCADO_PAGO_WEBHOOK_SECRET = "webhook-test-secret";
+  try {
+    const response = await receiveWebhook(new Request(
+      "https://loja.test/api/mercado-pago/webhook?topic=payment&id=998877",
+      { method: "POST", headers: { "content-type": "application/json" }, body: "{}" },
+    ));
+    assert.equal(response.status, 401);
+    assert.equal((await response.json()).error, "Assinatura de webhook inválida.");
+  } finally {
+    if (originalSecret === undefined) delete process.env.MERCADO_PAGO_WEBHOOK_SECRET;
+    else process.env.MERCADO_PAGO_WEBHOOK_SECRET = originalSecret;
+  }
 });

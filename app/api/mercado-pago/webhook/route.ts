@@ -20,7 +20,7 @@ export async function POST(request: Request) {
   const event = asRecord(body);
   const data = asRecord(event?.data);
   const query = new URL(request.url).searchParams;
-  const eventType = String(query.get("type") ?? event?.type ?? "");
+  const eventType = String(query.get("type") ?? query.get("topic") ?? event?.type ?? "");
   const paymentId = String(query.get("data.id") ?? query.get("id") ?? data?.id ?? "");
   if (eventType !== "payment" || !/^\d{1,30}$/.test(paymentId)) {
     return NextResponse.json({ received: true });
