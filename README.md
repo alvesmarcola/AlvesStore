@@ -1,6 +1,6 @@
 # alves store
 
-Loja demonstrativa de camisas de futebol com Next.js App Router, TypeScript, Tailwind CSS, Framer Motion, Zustand, React Hook Form e Zod. O catálogo, login e checkout são mockados; nenhum pedido ou pagamento é enviado para um serviço externo.
+Loja de camisas de futebol com Next.js App Router, TypeScript, Tailwind CSS, Framer Motion, Zustand, React Hook Form e Zod. O checkout integra Mercado Pago Checkout Pro em modo de teste; o login permanece demonstrativo.
 
 ## Requisitos e execução
 
@@ -11,6 +11,18 @@ Loja demonstrativa de camisas de futebol com Next.js App Router, TypeScript, Tai
 npm install
 npm run dev
 ```
+
+## Pagamentos de teste
+
+O checkout cria preferências no servidor, consulta o frete dos Correios e persiste pedidos em PostgreSQL. Antes de testar:
+
+1. Configure as variáveis de `.env.example` localmente em `.env.local` e no ambiente de servidor da Vercel. Use somente credenciais de teste do Mercado Pago; nunca exponha o Access Token ao frontend.
+2. Configure `DATABASE_URL` e execute `npm run db:migrate` contra esse banco.
+3. Cadastre na aplicação de teste o webhook `https://SEU_DOMINIO/api/mercado-pago/webhook`, habilite Pagamentos e salve a assinatura secreta em `MERCADO_PAGO_WEBHOOK_SECRET`.
+4. Configure credenciais dos Correios, CEP de origem, serviços e medidas/pesos reais dos pacotes em `CORREIOS_*` para cotar 1 ou 2 camisas. Não configure frete grátis além da regra de 3 camisas.
+5. Faça deploy do código e valide a preferência, retorno e notificação com um comprador de teste. O retorno do navegador não confirma aprovação; somente o webhook validado atualiza o pedido.
+
+A integração exige `PAYMENT_ENVIRONMENT=test`; o servidor rejeita tokens que não sejam de teste.
 
 Acesse [http://localhost:3000](http://localhost:3000).
 

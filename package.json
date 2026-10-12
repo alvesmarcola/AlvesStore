@@ -7,13 +7,17 @@
     "catalogar": "tsx scripts/catalogar-imagens.ts",
     "build": "next build",
     "start": "next start",
+    "db:migrate": "tsx scripts/migrate-orders.ts",
+    "test": "tsx --test tests/payment.test.ts",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.9.1",
+    "@neondatabase/serverless": "^1.0.2",
     "framer-motion": "^14.1.0",
     "lucide-react": "^0.468.0",
+    "mercadopago": "^3.6.1",
     "next": "^15.1.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

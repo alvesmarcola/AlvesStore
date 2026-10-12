@@ -33,7 +33,6 @@ export const checkoutSchema = z.object({
   neighborhood: z.string().trim().min(2, "Informe o bairro."),
   city: z.string().trim().min(2, "Informe a cidade."),
   state: z.string().trim().length(2, "Informe a UF com 2 letras."),
-  payment: z.enum(["pix", "card", "boleto"]),
 });
 
 export type CheckoutValues = z.infer<typeof checkoutSchema>;

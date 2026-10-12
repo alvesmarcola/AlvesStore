@@ -15,7 +15,6 @@ export function ProductCard({ product }: { product: Product }) {
   const [added, setAdded] = useState(false);
   const addItem = useCart((state) => state.addItem);
   const soldOut = product.estoque <= 0;
-  const pix = product.preco * (1 - storeConfig.pixDiscount);
   const primaryImage = productImageAsset(product);
   const alternateImage = productImageAsset(product, true);
 
@@ -49,10 +48,9 @@ export function ProductCard({ product }: { product: Product }) {
     <div className="pt-3">
       <Link href={`/produto/${product.slug}`} className="line-clamp-2 min-h-10 text-xs font-medium leading-5 text-ink hover:underline sm:text-sm">{product.nome}</Link>
       <div className="mt-2 flex items-baseline gap-2"><span className="text-base font-black text-ink">{formatCurrency(storeConfig.shirtPrice)}</span></div>
-      <p className="mt-0.5 text-xs font-bold text-blue-600">{formatCurrency(pix)} no Pix</p>
+      <p className="mt-1 text-[10px] leading-4 text-muted">1 camisa: {formatCurrency(storeConfig.shirtPrice)} + frete</p>
       <p className="mt-1 text-[10px] leading-4 text-muted">2 camisas por {formatCurrency(storeConfig.twoShirtPrice)} · 3 por {formatCurrency(storeConfig.threeShirtPrice)} com frete grátis</p>
       <p className="mt-1 text-[10px] text-muted">Personalização: +{formatCurrency(storeConfig.customizationPrice)} por camisa</p>
-      <p className="mt-1 text-[10px] text-muted">ou 12x de {formatCurrency(product.preco / 12)} sem juros</p>
       <div className="mt-3 flex flex-wrap gap-1" aria-label="Selecione um tamanho">
         {product.tamanhos.slice(0, 6).map((itemSize) => <button key={itemSize} disabled={product.esgotados.includes(itemSize) || soldOut} onClick={() => setSize(itemSize)} aria-label={`Tamanho ${itemSize}${product.esgotados.includes(itemSize) ? ", esgotado" : ""}`} className={`grid h-7 min-w-7 place-items-center rounded-lg border px-1 text-[10px] font-bold ${size === itemSize ? "border-pitch bg-pitch text-white" : "border-border text-ink"} disabled:cursor-not-allowed disabled:text-secondary disabled:line-through`}>{itemSize}</button>)}
       </div>
