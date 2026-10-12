@@ -15,10 +15,6 @@ export function ProductDetails({ product }: { product: Product }) {
   const [personalize, setPersonalize] = useState(false);
   const [name, setName] = useState("");
   const [number, setNumber] = useState("");
-  const [cep, setCep] = useState("");
-  const [shippingQuotes, setShippingQuotes] = useState<{ serviceCode: string; label: string; priceCents: number }[]>([]);
-  const [shippingLoading, setShippingLoading] = useState(false);
-  const [cepError, setCepError] = useState("");
   const [added, setAdded] = useState(false);
   const [activeImage, setActiveImage] = useState(0);
   const [sizeGuideOpen, setSizeGuideOpen] = useState(false);
@@ -28,41 +24,6 @@ export function ProductDetails({ product }: { product: Product }) {
   const selectedImage = gallery[Math.min(activeImage, gallery.length - 1)];
   const price = product.preco + (personalize ? storeConfig.customizationPrice : 0);
   const soldOut = product.estoque <= 0;
-
-  async function calculateShipping(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setShippingQuotes([]);
-    setCepError("");
-    const normalized = cep.replace(/\D/g, "");
-    if (normalized.length !== 8) {
-      setCepError("Digite um CEP válido com 8 números.");
-      return;
-    }
-    if (!size) {
-      setCepError("Selecione um tamanho para consultar o frete.");
-      return;
-    }
-
-    setShippingLoading(true);
-    try {
-      const response = await fetch("/api/shipping/quote", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ cep: normalized, items: [{ productId: product.id, size, quantity: 1 }] }),
-      });
-      const result = await response.json() as {
-        quotes?: { serviceCode: string; label: string; priceCents: number }[];
-        error?: string;
-      };
-      if (!response.ok) throw new Error(result.error ?? "Não foi possível consultar o frete agora.");
-      if (!result.quotes?.length) throw new Error("Os Correios não retornaram opções de frete para este CEP.");
-      setShippingQuotes(result.quotes);
-    } catch (error) {
-      setCepError(error instanceof Error ? error.message : "Não foi possível consultar o frete neste momento.");
-    } finally {
-      setShippingLoading(false);
-    }
-  }
 
   function buy() {
     if (!size || soldOut || (personalize && (!name.trim() || !number.trim()))) return;
@@ -82,7 +43,7 @@ export function ProductDetails({ product }: { product: Product }) {
         <p className="text-[10px] font-black uppercase tracking-[.2em] text-blue-600">{product.clube} · Temporada {product.temporada}</p>
         <h1 className="mt-2 text-2xl font-black leading-tight sm:text-3xl">{product.nome}</h1>
         <div className="mt-5 flex items-baseline gap-3"><span className="text-3xl font-black">{formatCurrency(price)}</span></div>
-        <p className="mt-1 text-xs text-muted">2 camisas por {formatCurrency(storeConfig.twoShirtPrice)} + frete · 3 por {formatCurrency(storeConfig.threeShirtPrice)} com frete grátis</p>
+        <p className="mt-1 text-xs text-muted">Frete: {formatCurrency(storeConfig.oneShirtShippingPriceCents / 100)} para 1 camisa · {formatCurrency(storeConfig.twoShirtShippingPriceCents / 100)} para 2 · Frete grátis (R$ 0,00) a partir de 3.</p>
         {personalize && <p className="mt-1 text-xs text-muted">Personalização: +{formatCurrency(storeConfig.customizationPrice)} por camisa</p>}
         {product.estoque <= 3 && product.estoque > 0 && <p className="mt-4 text-xs font-bold text-orange-700">Últimas peças disponíveis!</p>}
         <div className="mt-6 flex items-center justify-between"><h2 className="text-sm font-black">Tamanho</h2><button type="button" onClick={() => setSizeGuideOpen(true)} className="flex items-center gap-1 text-xs font-bold text-blue-700 underline"><Ruler size={14} /> Guia de medidas</button></div>
@@ -90,8 +51,8 @@ export function ProductDetails({ product }: { product: Product }) {
         {!size && <p className="mt-2 text-[11px] text-muted">Selecione um tamanho para continuar.</p>}
         <div className="mt-6 rounded-lg border p-4"><label className="flex items-center gap-2 text-sm font-bold"><input type="checkbox" checked={personalize} onChange={(event) => setPersonalize(event.target.checked)} />Quero personalizar (+{formatCurrency(storeConfig.customizationPrice)} por camisa)</label>{personalize && <div className="mt-3 grid grid-cols-2 gap-3"><label className="text-xs font-semibold">Nome<input maxLength={12} value={name} onChange={(event) => setName(event.target.value)} placeholder="Ex.: ALEX" className="mt-1 w-full rounded border px-3 py-2 text-sm uppercase" /></label><label className="text-xs font-semibold">Número<input inputMode="numeric" maxLength={2} value={number} onChange={(event) => setNumber(event.target.value.replace(/\D/g, ""))} placeholder="10" className="mt-1 w-full rounded border px-3 py-2 text-sm" /></label></div>}</div>
         <button disabled={!size || soldOut || (personalize && (!name.trim() || !number.trim()))} onClick={buy} className="mt-5 hidden w-full items-center justify-center gap-2 rounded bg-action py-4 text-sm font-black uppercase tracking-wide hover:bg-[#b6e351] disabled:bg-gray-200 disabled:text-gray-500 sm:flex">{added ? <><Check size={18} /> Adicionado ao carrinho!</> : soldOut ? "Esgotado" : "Comprar agora"}</button>
-        <div className="mt-6 rounded-lg bg-paper p-4"><form onSubmit={calculateShipping} className="flex gap-2"><label htmlFor="product-cep" className="sr-only">Calcular frete pelo CEP</label><input id="product-cep" inputMode="numeric" maxLength={9} value={cep} onChange={(event) => setCep(event.target.value.replace(/[^\d-]/g, ""))} placeholder="Digite seu CEP" className="min-w-0 flex-1 rounded border bg-white px-3 py-2.5 text-sm" /><button disabled={shippingLoading} className="rounded bg-pitch px-4 text-xs font-black text-white disabled:opacity-50">{shippingLoading ? "..." : "CALCULAR"}</button></form>{cepError && <p role="alert" className="mt-2 text-xs text-red-600">{cepError}</p>}{shippingQuotes.map((quote) => <p key={quote.serviceCode} className="mt-2 text-xs leading-5">{quote.label}: {formatCurrency(quote.priceCents / 100)}</p>)}<Link href="https://www.correios.com.br/" target="_blank" className="mt-2 inline-block text-[10px] text-muted underline">Consulte informações sobre CEP</Link></div>
-        <div className="mt-5 grid gap-3 text-xs text-muted"><p className="flex items-center gap-2"><Truck size={17} />Frete grátis na compra de {storeConfig.freeShippingQuantity} camisas</p><p className="flex items-center gap-2"><ShieldCheck size={17} />Compra protegida e troca em até 7 dias</p><p className="flex items-center gap-2"><Heart size={17} />Produzida para torcer com conforto</p></div>
+        <div className="mt-6 rounded-lg bg-paper p-4 text-xs leading-5 text-muted"><p>Frete fixo calculado pelo total de camisas no carrinho, independentemente dos modelos:</p><p className="mt-2">1 camisa: {formatCurrency(storeConfig.oneShirtShippingPriceCents / 100)} · 2 camisas: {formatCurrency(storeConfig.twoShirtShippingPriceCents / 100)} · 3 ou mais: Frete grátis (R$ 0,00).</p></div>
+        <div className="mt-5 grid gap-3 text-xs text-muted"><p className="flex items-center gap-2"><Truck size={17} />Frete grátis (R$ 0,00) a partir de {storeConfig.freeShippingQuantity} camisas</p><p className="flex items-center gap-2"><ShieldCheck size={17} />Compra protegida e troca em até 7 dias</p><p className="flex items-center gap-2"><Heart size={17} />Produzida para torcer com conforto</p></div>
         <details className="mt-6 border-t py-4"><summary className="cursor-pointer text-sm font-black">Descrição e informações</summary><p className="mt-3 text-sm leading-6 text-muted">Vista as cores de {product.clube}. Modelo {product.tipo === "jogador" ? "jogador, com tecido leve e caimento mais ajustado" : "torcedor, com caimento confortável para o dia a dia"}. Temporada {product.temporada}, uniforme {product.uniforme}.</p></details>
         <details className="border-t py-4"><summary className="cursor-pointer text-sm font-black">Torcedor ou jogador: qual escolher?</summary><p className="mt-3 text-sm leading-6 text-muted">A versão torcedor prioriza conforto e versatilidade. A versão jogador tem tecido mais leve e modelagem ajustada ao corpo.</p></details>
       </div>

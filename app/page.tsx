@@ -11,7 +11,7 @@ import { formatCurrency, leagues, products } from "@/lib/catalog";
 import { storeConfig } from "@/config";
 
 const features = [
-  { icon: Truck, title: "Frete grátis", text: "na compra de 3 camisas" },
+  { icon: Truck, title: "Frete grátis (R$ 0,00)", text: "na compra de 3 camisas" },
   { icon: WalletCards, title: `Até ${storeConfig.installments}x`, text: "no cartão de crédito" },
   { icon: ShieldCheck, title: `${storeConfig.returnPeriodDays} dias`, text: "para devolver" },
   { icon: HeartHandshake, title: "Torcida atendida", text: "a gente está no WhatsApp" },
@@ -58,14 +58,14 @@ function ProductSection({
           <div className="mb-8 grid gap-3 sm:grid-cols-3" aria-label="Ofertas por quantidade">
             <div className="rounded-lg border border-border bg-paper p-4 text-ink">
               <p className="text-[10px] font-black uppercase tracking-wider text-muted">1 camisa</p>
-              <p className="mt-1 text-xl font-black">{formatCurrency(storeConfig.shirtPrice)} <span className="text-xs font-semibold">+ frete</span></p>
+              <p className="mt-1 text-xl font-black">{formatCurrency(storeConfig.shirtPrice)} <span className="text-xs font-semibold">+ {formatCurrency(storeConfig.oneShirtShippingPriceCents / 100)} de frete</span></p>
             </div>
             <div className="rounded-lg border border-border bg-paper p-4 text-ink">
               <p className="text-[10px] font-black uppercase tracking-wider text-muted">2 camisas</p>
-              <p className="mt-1 text-xl font-black">{formatCurrency(storeConfig.twoShirtPrice)} <span className="text-xs font-semibold">+ frete</span></p>
+              <p className="mt-1 text-xl font-black">{formatCurrency(storeConfig.twoShirtPrice)} <span className="text-xs font-semibold">+ {formatCurrency(storeConfig.twoShirtShippingPriceCents / 100)} de frete</span></p>
             </div>
             <div className="rounded-lg border border-action/40 bg-action/5 p-4 text-ink">
-              <p className="flex items-center gap-2 text-[10px] font-black uppercase tracking-wider text-action">3 camisas <span className="rounded-full bg-action px-2 py-1 text-[9px] text-white">Frete grátis</span></p>
+              <p className="flex items-center gap-2 text-[10px] font-black uppercase tracking-wider text-action">3 camisas <span className="rounded-full bg-action px-2 py-1 text-[9px] text-white">Frete grátis (R$ 0,00)</span></p>
               <p className="mt-1 text-xl font-black">{formatCurrency(storeConfig.threeShirtPrice)}</p>
             </div>
             <p className={`text-[10px] sm:col-span-3 ${dark ? "text-white/60" : "text-muted"}`}>Personalização: +{formatCurrency(storeConfig.customizationPrice)} por camisa.</p>

@@ -13,6 +13,11 @@ export function qualifiesForFreeShipping(items: CartItem[]) {
   return items.reduce((sum, item) => sum + item.quantity, 0) >= storeConfig.freeShippingQuantity;
 }
 
+export function getShippingPriceCents(quantity: number) {
+  if (!Number.isInteger(quantity) || quantity <= 0 || quantity >= storeConfig.freeShippingQuantity) return 0;
+  return quantity === 1 ? storeConfig.oneShirtShippingPriceCents : storeConfig.twoShirtShippingPriceCents;
+}
+
 export function getCartPricing(items: CartItem[]) {
   const units = items.reduce((sum, item) => sum + item.quantity, 0);
   const customizationTotal = items.reduce(
@@ -22,5 +27,7 @@ export function getCartPricing(items: CartItem[]) {
   const packagePrice = getPackagePrice(units);
   const subtotal = units * storeConfig.shirtPrice + customizationTotal;
   const bundleDiscount = subtotal - customizationTotal - packagePrice;
-  return { subtotal, bundleDiscount, total: subtotal - bundleDiscount };
+  const shippingCents = getShippingPriceCents(units);
+  const total = subtotal - bundleDiscount + shippingCents / 100;
+  return { subtotal, bundleDiscount, shippingCents, total };
 }

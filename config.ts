@@ -7,6 +7,8 @@ export const storeConfig = {
   twoShirtPrice: 300,
   threeShirtPrice: 450,
   freeShippingQuantity: 3,
+  oneShirtShippingPriceCents: 2_000,
+  twoShirtShippingPriceCents: 3_000,
   pixDiscount: 0.03,
   installments: 12,
   returnPeriodDays: 7,

@@ -1,8 +1,8 @@
 import assert from "node:assert/strict";
 import { createHmac } from "node:crypto";
 import { test } from "node:test";
-import { getPackagePrice } from "@/lib/commerce";
-import { orderLinesSchema, validateOrderLines, calculateOrderTotals } from "@/lib/payment/order";
+import { getCartPricing, getPackagePrice, getShippingPriceCents } from "@/lib/commerce";
+import { orderLinesSchema, paymentRequestSchema, validateOrderLines, calculateOrderTotals } from "@/lib/payment/order";
 import { buildPreferenceItems } from "@/lib/payment/preference-items";
 import { getShippingQuotes } from "@/lib/server/correios";
 import { isValidMercadoPagoSignature, normalizedPaymentStatus } from "@/lib/server/webhook-signature";
@@ -20,6 +20,32 @@ test("calcula os pacotes sem personalização", () => {
   assert.ok(products.every((entry) => entry.preco === 160 && entry.precoAnterior === 160));
 });
 
+test("calcula frete e total por quantidade somada entre produtos", () => {
+  const productsWithSizes = products.filter((entry) => entry.tamanhos.length > 0).slice(0, 3);
+  assert.equal(productsWithSizes.length, 3, "O catálogo precisa ter três produtos disponíveis para testar linhas distintas.");
+  const expectedShipping = [2_000, 3_000, 0, 0];
+
+  for (const quantity of [1, 2, 3, 4]) {
+    const lines = productsWithSizes.slice(0, Math.min(quantity, 3)).map((entry, index) => ({
+      lineId: `line-${index}`,
+      product: entry,
+      size: entry.tamanhos[0],
+      quantity: quantity === 4 && index === 0 ? 2 : 1,
+    }));
+    const orderLines = lines.map(({ product: entry, size, quantity: lineQuantity }) => ({
+      productId: entry.id,
+      size,
+      quantity: lineQuantity,
+    }));
+    const totals = calculateOrderTotals(validateOrderLines(orderLines));
+    assert.equal(totals.quantity, quantity);
+    assert.equal(getShippingPriceCents(quantity), expectedShipping[quantity - 1]);
+    assert.equal(totals.shippingCents, expectedShipping[quantity - 1]);
+    assert.equal(totals.totalCents, getPackagePrice(quantity) * 100 + expectedShipping[quantity - 1]);
+    assert.equal(getCartPricing(lines).total, getPackagePrice(quantity) + expectedShipping[quantity - 1] / 100);
+  }
+});
+
 test("valida produto e tamanho no catálogo do servidor", () => {
   assert.equal(validateOrderLines([validLine])[0].product.id, product.id);
   assert.throws(() => validateOrderLines([{ ...validLine, productId: "produto-inexistente" }]), /não está mais disponível/);
@@ -27,6 +53,12 @@ test("valida produto e tamanho no catálogo do servidor", () => {
   assert.equal(orderLinesSchema.safeParse([{ ...validLine, price: 1 }]).success, false);
   assert.equal(orderLinesSchema.safeParse([{ ...validLine, quantity: -1 }]).success, false);
   assert.equal(orderLinesSchema.safeParse([{ ...validLine, quantity: 1.5 }]).success, false);
+});
+
+test("não aceita valores ou serviços de frete fornecidos pelo navegador", () => {
+  assert.equal(paymentRequestSchema.shape.shipping.safeParse({ quotedPriceCents: 1 }).success, false);
+  assert.equal(paymentRequestSchema.shape.shipping.safeParse({ serviceCode: "PAC" }).success, false);
+  assert.equal(paymentRequestSchema.shape.shipping.safeParse({}).success, true);
 });
 
 test("calcula desconto do pacote e personalização por camisa", () => {
@@ -210,7 +242,7 @@ test("endpoint de pagamento não cria checkout sem banco persistente configurado
           city: "São Paulo",
           state: "SP",
         },
-        shipping: { quotedPriceCents: 0 },
+        shipping: {},
       }),
     }));
     assert.equal(response.status, 503);

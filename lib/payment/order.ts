@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { storeConfig } from "@/config";
 import { products } from "@/lib/catalog";
-import { getPackagePrice } from "@/lib/commerce";
+import { getPackagePrice, getShippingPriceCents } from "@/lib/commerce";
 import { checkoutSchema } from "@/lib/validation";
 import type { Product } from "@/lib/types";
 
@@ -24,10 +24,7 @@ export const paymentRequestSchema = z.object({
   idempotencyKey: z.string().uuid(),
   items: orderLinesSchema,
   customer: checkoutSchema.strict(),
-  shipping: z.object({
-    serviceCode: z.string().min(1).max(12).optional(),
-    quotedPriceCents: z.number().int().nonnegative().max(100_000).optional(),
-  }).strict(),
+  shipping: z.object({}).strict(),
 }).strict();
 
 export type OrderLineInput = z.infer<typeof orderLinesSchema>[number];
@@ -73,6 +70,7 @@ export function calculateOrderTotals(lines: VerifiedOrderLine[]) {
   const customizationCents = personalizedQuantity * storeConfig.customizationPrice * 100;
   const shirtsCents = getPackagePrice(quantity) * 100;
   const bundleDiscountCents = baseSubtotalCents - shirtsCents;
+  const shippingCents = getShippingPriceCents(quantity);
 
   return {
     quantity,
@@ -82,6 +80,8 @@ export function calculateOrderTotals(lines: VerifiedOrderLine[]) {
     shirtsCents,
     bundleDiscountCents,
     productsTotalCents: shirtsCents + customizationCents,
+    shippingCents,
+    totalCents: shirtsCents + customizationCents + shippingCents,
   };
 }
 

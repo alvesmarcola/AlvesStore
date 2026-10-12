@@ -2,7 +2,6 @@ import { createHash, randomUUID } from "node:crypto";
 import { NextResponse } from "next/server";
 import { InvalidOrderError, paymentRequestSchema, validateOrderLines, calculateOrderTotals, calculateOrderFingerprint } from "@/lib/payment/order";
 import { getDatabasePool } from "@/lib/server/database";
-import { getShippingQuotes, ShippingConfigurationError, ShippingProviderError } from "@/lib/server/correios";
 import { getPreferenceClient, getSiteUrl, PaymentConfigurationError } from "@/lib/server/mercado-pago";
 import { buildPreferenceItems } from "@/lib/payment/preference-items";
 import { storeConfig } from "@/config";
@@ -73,23 +72,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "O pedido está sendo preparado. Aguarde alguns segundos e tente novamente." }, { status: 409 });
     }
 
-    const shippingCents = totals.quantity >= 3 ? 0 : requestData.shipping.quotedPriceCents;
-    let shippingLabel = "Frete grátis";
-    if (totals.quantity < 3) {
-      if (!requestData.shipping.serviceCode || shippingCents === undefined) {
-        return NextResponse.json({ error: "Escolha uma opção de frete antes de pagar." }, { status: 400 });
-      }
-      const quotes = await getShippingQuotes(lines, requestData.customer.cep.replace(/\D/g, ""));
-      const currentQuote = quotes.find((quote) => quote.serviceCode === requestData.shipping.serviceCode);
-      if (!currentQuote) return NextResponse.json({ error: "A opção de frete selecionada não está mais disponível. Consulte novamente." }, { status: 409 });
-      if (currentQuote.priceCents !== shippingCents) {
-        return NextResponse.json({ error: "O preço do frete mudou. Atualize a cotação antes de pagar." }, { status: 409 });
-      }
-      shippingLabel = currentQuote.label;
-    }
-
-    const finalShippingCents = shippingCents ?? 0;
-    const totalCents = totals.productsTotalCents + finalShippingCents;
+    const finalShippingCents = totals.shippingCents;
+    const shippingLabel = finalShippingCents === 0 ? "Frete grátis" : "Frete fixo";
+    const totalCents = totals.totalCents;
     const siteUrl = getSiteUrl();
     const transaction = await pool.connect();
     try {
@@ -118,14 +103,12 @@ export async function POST(request: Request) {
 
       const orderId = locked.rows[0]?.id ?? randomUUID();
       if (!locked.rows[0]) {
-        const shippingDetails = totals.quantity >= 3
-          ? { cep: requestData.customer.cep.replace(/\D/g, ""), serviceCode: null, label: shippingLabel, priceCents: 0 }
-          : {
-              cep: requestData.customer.cep.replace(/\D/g, ""),
-              serviceCode: requestData.shipping.serviceCode,
-              label: shippingLabel,
-              priceCents: finalShippingCents,
-            };
+        const shippingDetails = {
+          cep: requestData.customer.cep.replace(/\D/g, ""),
+          serviceCode: null,
+          label: shippingLabel,
+          priceCents: finalShippingCents,
+        };
         const savedLines = lines.map(({ product, ...line }) => ({
           productId: product.id,
           slug: product.slug,
@@ -209,13 +192,6 @@ export async function POST(request: Request) {
       transaction.release();
     }
   } catch (error) {
-    if (error instanceof ShippingConfigurationError) {
-      return NextResponse.json({ error: error.message }, { status: 503 });
-    }
-    if (error instanceof ShippingProviderError) {
-      console.error("Falha ao revalidar o frete antes do pagamento:", error.message);
-      return NextResponse.json({ error: "Não foi possível confirmar o frete. Consulte as opções novamente." }, { status: 502 });
-    }
     if (error instanceof PaymentConfigurationError) {
       console.error("Configuração do Mercado Pago incompleta:", error.message);
       return NextResponse.json({ error: "O checkout de teste ainda não está configurado no servidor." }, { status: 503 });

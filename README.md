@@ -14,12 +14,12 @@ npm run dev
 
 ## Pagamentos de teste
 
-O checkout cria preferências no servidor, consulta o frete dos Correios e persiste pedidos em PostgreSQL. Antes de testar:
+O checkout calcula o frete fixo no servidor e persiste pedidos em PostgreSQL. Antes de testar:
 
 1. Configure as variáveis de `.env.example` localmente em `.env.local` e no ambiente de servidor da Vercel. Use somente credenciais de teste do Mercado Pago; nunca exponha o Access Token ao frontend.
 2. Configure `DATABASE_URL` e execute `npm run db:migrate` contra esse banco.
 3. Cadastre na aplicação de teste o webhook `https://SEU_DOMINIO/api/mercado-pago/webhook`, habilite Pagamentos e salve a assinatura secreta em `MERCADO_PAGO_WEBHOOK_SECRET`.
-4. Configure credenciais dos Correios, CEP de origem, serviços e medidas/pesos reais dos pacotes em `CORREIOS_*` para cotar 1 ou 2 camisas. Não configure frete grátis além da regra de 3 camisas.
+4. O frete é calculado pelo total de camisas: R$ 20,00 para 1, R$ 30,00 para 2 e grátis (R$ 0,00) para 3 ou mais. As configurações `CORREIOS_*` permanecem disponíveis, mas não participam do cálculo do carrinho ou checkout.
 5. Faça deploy do código e valide a preferência, retorno e notificação com um comprador de teste. O retorno do navegador não confirma aprovação; somente o webhook validado atualiza o pedido.
 
 A integração exige `PAYMENT_ENVIRONMENT=test`; o servidor rejeita tokens que não sejam de teste.

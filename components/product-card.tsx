@@ -48,8 +48,8 @@ export function ProductCard({ product }: { product: Product }) {
     <div className="pt-3">
       <Link href={`/produto/${product.slug}`} className="line-clamp-2 min-h-10 text-xs font-medium leading-5 text-ink hover:underline sm:text-sm">{product.nome}</Link>
       <div className="mt-2 flex items-baseline gap-2"><span className="text-base font-black text-ink">{formatCurrency(storeConfig.shirtPrice)}</span></div>
-      <p className="mt-1 text-[10px] leading-4 text-muted">1 camisa: {formatCurrency(storeConfig.shirtPrice)} + frete</p>
-      <p className="mt-1 text-[10px] leading-4 text-muted">2 camisas por {formatCurrency(storeConfig.twoShirtPrice)} · 3 por {formatCurrency(storeConfig.threeShirtPrice)} com frete grátis</p>
+      <p className="mt-1 text-[10px] leading-4 text-muted">1 camisa: {formatCurrency(storeConfig.shirtPrice)} + {formatCurrency(storeConfig.oneShirtShippingPriceCents / 100)} de frete</p>
+      <p className="mt-1 text-[10px] leading-4 text-muted">2 camisas: {formatCurrency(storeConfig.twoShirtPrice)} + {formatCurrency(storeConfig.twoShirtShippingPriceCents / 100)} de frete · 3: {formatCurrency(storeConfig.threeShirtPrice)} com frete grátis (R$ 0,00)</p>
       <p className="mt-1 text-[10px] text-muted">Personalização: +{formatCurrency(storeConfig.customizationPrice)} por camisa</p>
       <div className="mt-3 flex flex-wrap gap-1" aria-label="Selecione um tamanho">
         {product.tamanhos.slice(0, 6).map((itemSize) => <button key={itemSize} disabled={product.esgotados.includes(itemSize) || soldOut} onClick={() => setSize(itemSize)} aria-label={`Tamanho ${itemSize}${product.esgotados.includes(itemSize) ? ", esgotado" : ""}`} className={`grid h-7 min-w-7 place-items-center rounded-lg border px-1 text-[10px] font-bold ${size === itemSize ? "border-pitch bg-pitch text-white" : "border-border text-ink"} disabled:cursor-not-allowed disabled:text-secondary disabled:line-through`}>{itemSize}</button>)}
