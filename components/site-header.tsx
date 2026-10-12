@@ -8,8 +8,8 @@ import { Menu, Search, ShoppingBag, UserRound, X, ChevronDown, ArrowUpRight } fr
 import { leagues, products } from "@/lib/catalog";
 import { useCart } from "@/store/cart";
 
-const maleCategories = [["Versão Torcedor", "torcedor"], ["Versão Jogador", "jogador"], ["Retrô", "retro"], ["Conjunto de Treino", "treino"], ["Corta-vento / Inverno", "inverno"], ["Regatas", "regata"]];
-const femaleCategories = [["Camisas Femininas", "torcedor"], ["Versão Jogadora", "jogador"], ["Cropped", "cropped"], ["Vestidos", "vestido"], ["Retrô", "retro"], ["Conjuntos", "treino"]];
+const maleCategories = [["Versão Torcedor", "torcedor"], ["Versão Jogador", "jogador"], ["Retrô", "retro"], ["Conjunto de Treino", "treino"], ["Mangas compridas", "inverno"], ["Regatas", "regata"]];
+const femaleCategories = [["Camisas Femininas", "torcedor"], ["Conjuntos", "treino"]];
 const dropdownTransition = { duration: 0.18, ease: "easeOut" as const };
 
 export function SiteHeader() {
@@ -102,7 +102,6 @@ export function SiteHeader() {
                 </motion.div>)}
               </motion.div>}</AnimatePresence>
             </div>
-            <Link className="nav-link" href="/busca?q=oferta">Ofertas por quantidade</Link>
             <Link className="nav-link" href="/ligas/selecoes">Seleções nacionais</Link>
             <Link className="nav-link" href="/rastreio">Rastreio</Link>
           </div>
@@ -119,7 +118,7 @@ export function SiteHeader() {
             {categoryOpen === "feminino" && <div className="mb-3 pl-4"><Link href="/feminino" className="block py-2 text-xs font-black">Ver tudo</Link>{femaleCategories.map(([name, type], index) => <Link key={`${type}-${index}`} href={`/feminino?tipo=${type}`} className="block py-2 text-xs text-muted">{name}</Link>)}</div>}
             <button className="mobile-nav-link flex w-full items-center justify-between" aria-expanded={leagueOpen} onClick={() => setLeagueOpen(!leagueOpen)}>Ligas <ChevronDown size={16} /></button>
             {leagueOpen && <div className="mb-3 pl-4">{leagues.map((league) => <div key={league.slug} className="border-b border-border py-2"><Link href={`/ligas/${league.slug}`} className="text-xs font-black text-ink">{league.nome}</Link><div className="mt-1 flex flex-wrap gap-x-3">{league.clubes.slice(0, 4).map((club) => <Link key={club.slug} className="py-1 text-[10px] text-muted" href={`/ligas/${league.slug}/${club.slug}`}>{club.nome}</Link>)}</div></div>)}</div>}
-            <Link className="mobile-nav-link" href="/busca?q=oferta">Ofertas por quantidade</Link><Link className="mobile-nav-link" href="/ligas/selecoes">Seleções nacionais</Link><Link className="mobile-nav-link" href="/rastreio">Rastreio de pedido</Link><Link className="mobile-nav-link" href="/login">Entre ou cadastre-se</Link>
+            <Link className="mobile-nav-link" href="/ligas/selecoes">Seleções nacionais</Link><Link className="mobile-nav-link" href="/rastreio">Rastreio de pedido</Link><Link className="mobile-nav-link" href="/login">Entre ou cadastre-se</Link>
           </motion.aside>
         </motion.div>}
       </AnimatePresence>

@@ -6,10 +6,8 @@ export const metadata = { title: "Buscar camisas", description: "Busque camisas 
 export default async function SearchPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
   const { q = "" } = await searchParams;
   const term = q.toLocaleLowerCase("pt-BR").trim();
-  const isOfferQuery = term.includes("oferta");
   const isClubQuery = term === "clube" || term === "clubes";
   const results = term ? products.filter((product) => {
-    if (isOfferQuery) return true;
     if (isClubQuery) return product.liga !== "selecoes" && product.liga !== "revisar" && product.clubeSlug !== "revisar";
     const league = getLeague(product.liga);
     const fields = [

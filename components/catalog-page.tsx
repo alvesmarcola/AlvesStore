@@ -23,6 +23,7 @@ interface CatalogPageProps {
 
 export function CatalogPage({ title, description, products, breadcrumb, initialType = "", heroImage, heroEyebrow = "Coleção alves store", quickLinks }: CatalogPageProps) {
   const [sort, setSort] = useState("relevancia");
+  const [search, setSearch] = useState("");
   const [type, setType] = useState(initialType);
   const [uniform, setUniform] = useState("");
   const [club, setClub] = useState("");
@@ -36,23 +37,37 @@ export function CatalogPage({ title, description, products, breadcrumb, initialT
   useEffect(() => setType(initialType), [initialType]);
   useEffect(() => setVisibleCount(12), [products, type, uniform, club, league, size, season, color, maxPrice, sort]);
   const filtered = useMemo(() => {
-    const result = products.filter((product) =>
-      (!type || product.tipo === type) && (!uniform || product.uniforme === uniform) &&
-      (!club || product.clubeSlug === club) && (!league || product.liga === league) &&
-      (!size || product.tamanhos.includes(size)) &&
-      (!season || product.temporada === season) && (!color || product.cor === color) &&
-      product.preco <= Number(maxPrice),
-    );
+    const normalizedSearch = search.trim().toLocaleLowerCase("pt-BR");
+    const result = products.filter((product) => {
+      const leagueName = leagues.find((item) => item.slug === product.liga)?.nome ?? "";
+      const haystack = [
+        product.nome,
+        product.clube,
+        product.clubeSlug,
+        leagueName,
+        product.liga,
+        product.tipo,
+        product.temporada,
+        product.uniforme,
+        product.cor,
+      ].filter(Boolean).join(" ").toLocaleLowerCase("pt-BR");
+      return (!type || product.tipo === type) && (!uniform || product.uniforme === uniform) &&
+        (!club || product.clubeSlug === club) && (!league || product.liga === league) &&
+        (!size || product.tamanhos.includes(size)) &&
+        (!season || product.temporada === season) && (!color || product.cor === color) &&
+        product.preco <= Number(maxPrice) &&
+        (!normalizedSearch || haystack.includes(normalizedSearch));
+    });
     if (sort === "menor") result.sort((a, b) => a.preco - b.preco);
     if (sort === "maior") result.sort((a, b) => b.preco - a.preco);
     return result;
-  }, [products, type, uniform, club, league, size, season, color, maxPrice, sort]);
+  }, [products, type, uniform, club, league, size, season, color, maxPrice, search, sort]);
   const clubOptions = Array.from(new Map(products.filter((product) => product.clubeSlug !== "revisar").map((product) => [product.clubeSlug, product.clube])).entries());
   const sizeOptions = Array.from(new Set(products.flatMap((product) => product.tamanhos))).sort();
   const seasonOptions = Array.from(new Set(products.map((product) => product.temporada).filter((value) => value !== "revisar")));
   const colorOptions = Array.from(new Set(products.map((product) => product.cor).filter((value) => value !== "revisar")));
   const leagueOptions = Array.from(new Set(products.map((product) => product.liga).filter((value) => value !== "revisar")));
-  const typeLabels: Record<string, string> = { torcedor: "Torcedor", jogador: "Jogador", goleiro: "Goleiro", retro: "Retrô", treino: "Treino", cropped: "Cropped", regata: "Regata", inverno: "Manga longa", vestido: "Vestido" };
+  const typeLabels: Record<string, string> = { torcedor: "Torcedor", jogador: "Jogador", goleiro: "Goleiro", retro: "Retrô", treino: "Treino", cropped: "Cropped", regata: "Regata", inverno: "Mangas compridas", vestido: "Vestido" };
   const typeOptions = Array.from(new Set(products.map((product) => product.tipo).filter((value) => value !== "revisar")));
   const uniformLabels: Record<string, string> = { titular: "Casa (Home)", reserva: "Fora (Away)", terceiro: "Terceira camisa (Third)" };
   const uniformOptions = Array.from(new Set(products.map((product) => product.uniforme).filter((value) => value !== "revisar")));
@@ -64,6 +79,7 @@ export function CatalogPage({ title, description, products, breadcrumb, initialT
     setColor("");
     setType("");
     setUniform("");
+    setSearch("");
     setMaxPrice("600");
   };
   const filterFields = <>
@@ -87,7 +103,14 @@ export function CatalogPage({ title, description, products, breadcrumb, initialT
     </>}
     <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-y py-3">
       <span className="text-xs text-muted">{filtered.length} produtos encontrados</span>
-      <div className="flex items-center gap-3"><button className="flex items-center gap-1 text-xs font-bold lg:hidden" onClick={() => setFiltersOpen(true)}><SlidersHorizontal size={15} />Filtros</button><label className="flex items-center gap-2 text-xs">Ordenar por <select value={sort} onChange={(event) => setSort(event.target.value)} className="rounded-lg border border-border bg-white px-2 py-2 text-xs"><option value="relevancia">Relevância</option><option value="menor">Menor preço</option><option value="maior">Maior preço</option></select></label></div>
+      <div className="flex flex-wrap items-center gap-3">
+        <label className="flex items-center gap-2 rounded-lg border border-border bg-white px-3 py-2 text-xs text-muted">
+          <span className="font-bold text-ink">Buscar camisa</span>
+          <input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Ex.: Flamengo, retro, 26/27..." className="w-44 bg-transparent text-xs text-ink outline-none placeholder:text-muted" aria-label="Buscar camisa" />
+        </label>
+        <button className="flex items-center gap-1 text-xs font-bold lg:hidden" onClick={() => setFiltersOpen(true)}><SlidersHorizontal size={15} />Filtros</button>
+        <label className="flex items-center gap-2 text-xs">Ordenar por <select value={sort} onChange={(event) => setSort(event.target.value)} className="rounded-lg border border-border bg-white px-2 py-2 text-xs"><option value="relevancia">Relevância</option><option value="menor">Menor preço</option><option value="maior">Maior preço</option></select></label>
+      </div>
     </div>
     <div className="grid gap-6 lg:grid-cols-[205px_1fr]">
       <aside className="hidden h-fit rounded-lg border border-border p-4 lg:block">

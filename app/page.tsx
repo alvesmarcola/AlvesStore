@@ -25,7 +25,6 @@ const collections = [
 
 const differentials = [
   { title: "Clubes e seleções", body: "Explore camisas de clubes e seleções nacionais em categorias separadas." },
-  { title: "Ofertas por quantidade", body: `Leve 2 camisas por ${formatCurrency(storeConfig.twoShirtPrice)} + frete ou 3 por ${formatCurrency(storeConfig.threeShirtPrice)} com frete grátis.` },
   { title: "Personalização opcional", body: `Adicione nome e número por ${formatCurrency(storeConfig.customizationPrice)} a cada camisa personalizada.` },
 ];
 
@@ -35,14 +34,12 @@ function ProductSection({
   href,
   items,
   dark = false,
-  showBundleOffers = false,
 }: {
   title: string;
   kicker: string;
   href: string;
   items: typeof products;
   dark?: boolean;
-  showBundleOffers?: boolean;
 }) {
   return (
     <section className={`product-showcase ${dark ? "bg-ink text-white" : "bg-white text-ink"}`}>
@@ -54,23 +51,6 @@ function ProductSection({
           </div>
           <Link className="mb-1 flex shrink-0 items-center gap-1 text-[10px] font-black uppercase tracking-wide hover:text-action" href={href}>Ver tudo <ArrowRight size={15} /></Link>
         </Reveal>
-        {showBundleOffers && (
-          <div className="mb-8 grid gap-3 sm:grid-cols-3" aria-label="Ofertas por quantidade">
-            <div className="rounded-lg border border-border bg-paper p-4 text-ink">
-              <p className="text-[10px] font-black uppercase tracking-wider text-muted">1 camisa</p>
-              <p className="mt-1 text-xl font-black">{formatCurrency(storeConfig.shirtPrice)} <span className="text-xs font-semibold">+ frete</span></p>
-            </div>
-            <div className="rounded-lg border border-border bg-paper p-4 text-ink">
-              <p className="text-[10px] font-black uppercase tracking-wider text-muted">2 camisas</p>
-              <p className="mt-1 text-xl font-black">{formatCurrency(storeConfig.twoShirtPrice)} <span className="text-xs font-semibold">+ frete</span></p>
-            </div>
-            <div className="rounded-lg border border-action/40 bg-action/5 p-4 text-ink">
-              <p className="flex items-center gap-2 text-[10px] font-black uppercase tracking-wider text-action">3 camisas <span className="rounded-full bg-action px-2 py-1 text-[9px] text-white">Frete grátis</span></p>
-              <p className="mt-1 text-xl font-black">{formatCurrency(storeConfig.threeShirtPrice)}</p>
-            </div>
-            <p className={`text-[10px] sm:col-span-3 ${dark ? "text-white/60" : "text-muted"}`}>Personalização: +{formatCurrency(storeConfig.customizationPrice)} por camisa.</p>
-          </div>
-        )}
         <ProductGrid items={items} />
       </div>
     </section>
@@ -78,7 +58,6 @@ function ProductSection({
 }
 
 export default function HomePage() {
-  const offers = products.slice(0, 4);
   const clubProducts = products.filter((product) => product.liga !== "selecoes" && product.liga !== "revisar" && product.clubeSlug !== "revisar").slice(0, 4);
   const nationalSelections = products.filter((product) => product.liga === "selecoes").slice(0, 4);
   const retros = products.filter((product) => product.tipo === "retro").slice(0, 4);
@@ -155,7 +134,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      <ProductSection title="Ofertas por quantidade" kicker="Preços claros para cada pacote" href="/busca?q=oferta" items={offers} showBundleOffers />
       <ProductSection title="Camisas de clubes" kicker="Explore o catálogo" href="/busca?q=clubes" items={clubProducts} dark />
       <ProductSection title="Seleções nacionais" kicker="Camisas de seleções" href="/ligas/selecoes" items={nationalSelections} />
       <ProductSection title="Clássicos retrô" kicker="Para quem vive de história" href="/busca?q=retro" items={retros} dark />

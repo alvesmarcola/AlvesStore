@@ -27,7 +27,7 @@ export function ProductDetails({ product }: { product: Product }) {
   const selectedImage = gallery[Math.min(activeImage, gallery.length - 1)];
   const price = product.preco + (personalize ? storeConfig.customizationPrice : 0);
   const audienceLabels = { masculino: "masculino", feminino: "feminino", unissex: "unissex", infantil: "infantil", revisar: "" };
-  const typeLabels = { torcedor: "versão torcedor", jogador: "versão jogador", goleiro: "goleiro", retro: "retrô", treino: "treino", cropped: "cropped", regata: "regata", inverno: "manga longa", vestido: "vestido", revisar: "" };
+  const typeLabels = { torcedor: "versão torcedor", jogador: "versão jogador", goleiro: "goleiro", retro: "retrô", treino: "treino", cropped: "cropped", regata: "regata", inverno: "mangas compridas", vestido: "vestido", revisar: "" };
   const uniformLabels = { titular: "casa (Home)", reserva: "fora (Away)", terceiro: "terceira camisa (Third)", revisar: "" };
   const verifiedMetadata = [
     audienceLabels[product.publico] ? `Público: ${audienceLabels[product.publico]}` : "",
