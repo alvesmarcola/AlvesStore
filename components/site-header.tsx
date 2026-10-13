@@ -7,6 +7,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Menu, Search, ShoppingBag, X, ChevronDown, ArrowUpRight } from "lucide-react";
 import { leagues, products } from "@/lib/catalog";
 import { useCart } from "@/store/cart";
+import { searchProducts } from "@/lib/smart-search";
 
 const maleCategories = [["Versão Torcedor", "torcedor"], ["Versão Jogador", "jogador"], ["Retrô", "retro"], ["Conjunto de Treino", "treino"], ["Mangas compridas", "inverno"], ["Regatas", "regata"]];
 const femaleCategories = [["Camisas Femininas", "torcedor"], ["Conjuntos", "treino"]];
@@ -22,19 +23,8 @@ export function SiteHeader() {
   const reducedMotion = useReducedMotion();
   const count = useCart((state) => state.items.reduce((sum, item) => sum + item.quantity, 0));
   const setDrawerOpen = useCart((state) => state.setDrawerOpen);
-  const suggestions = query.trim()
-    ? products.filter((product) => {
-      const league = leagues.find((item) => item.slug === product.liga);
-      const fields = [
-        product.nome,
-        product.clube !== "revisar" ? product.clube : "",
-        league?.nome ?? "",
-        league?.competicao ?? "",
-        product.temporada !== "revisar" ? product.temporada : "",
-      ];
-      return fields.join(" ").toLocaleLowerCase("pt-BR").includes(query.toLocaleLowerCase("pt-BR"));
-    }).slice(0, 5)
-    : [];
+  const searchResults = query.trim() ? searchProducts(products, query) : { results: [], alternatives: [] };
+  const suggestions = (searchResults.results.length ? searchResults.results : searchResults.alternatives).slice(0, 5);
 
   function search(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -61,6 +51,7 @@ export function SiteHeader() {
               <button className="text-[10px] font-black uppercase tracking-wider text-blue-200">Buscar</button>
             </form>
             {suggestionsOpen && suggestions.length > 0 && <div id="search-suggestions" role="listbox" className="absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-lg border border-border bg-white p-2 text-ink shadow-card">
+              {searchResults.results.length === 0 && <p className="px-3 py-2 text-[10px] leading-4 text-muted">Alternativas relacionadas; versão ou uniforme ainda não confirmados.</p>}
               {suggestions.map((product) => <Link role="option" aria-selected="false" href={`/produto/${product.slug}`} key={product.id} onClick={() => { setQuery(""); setSuggestionsOpen(false); }} className="block rounded px-3 py-2 text-xs hover:bg-paper">{product.nome}<span className="mt-1 block text-muted">{product.clube} · {product.temporada}</span></Link>)}
               <Link href={`/busca?q=${encodeURIComponent(query)}`} className="block border-t border-border px-3 py-3 text-xs font-bold text-blue-700">Ver todos os resultados</Link>
             </div>}

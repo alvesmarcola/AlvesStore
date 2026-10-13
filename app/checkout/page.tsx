@@ -8,6 +8,8 @@ import { ChevronLeft, ChevronRight, LockKeyhole, MapPin } from "lucide-react";
 import { storeConfig } from "@/config";
 import { formatCurrency } from "@/lib/catalog";
 import { getCartPricing } from "@/lib/commerce";
+import { classifyProduct } from "@/lib/product-classification";
+import { getAvailablePatches } from "@/lib/patch-compatibility";
 import { useCart } from "@/store/cart";
 import { checkoutSchema, type CheckoutValues } from "@/lib/validation";
 import { useIsTestPayment } from "./payment-env-context";
@@ -55,7 +57,7 @@ export default function CheckoutPage() {
   const [cepLoading, setCepLoading] = useState(false);
   const [checkoutError, setCheckoutError] = useState("");
   const idempotencyKey = useRef<string | null>(null);
-  const { subtotal, bundleDiscount, shipping, grandTotal } = getCartPricing(items);
+  const { subtotal, bundleDiscount, shipping, grandTotal, needsReview } = getCartPricing(items);
   const { register, handleSubmit, trigger, watch, setValue, setError, formState: { errors, isSubmitting } } = useForm<CheckoutValues>({
     resolver: zodResolver(checkoutSchema),
     mode: "onTouched",
@@ -114,6 +116,7 @@ export default function CheckoutPage() {
             size: item.size,
             quantity: item.quantity,
             ...(item.customization ? { customization: item.customization } : {}),
+            ...(item.patches?.length ? { patches: item.patches } : {}),
           })),
           customer: values,
         }),
@@ -130,6 +133,7 @@ export default function CheckoutPage() {
   }
 
   if (!items.length) return <main className="mx-auto max-w-3xl px-5 py-20 text-center"><h1 className="text-2xl font-black">Sua sacola está vazia</h1><p className="mt-2 text-sm text-muted">Adicione uma camisa antes de continuar.</p><Link href="/masculino" className="primary-button mt-5 inline-block px-6 py-3 text-xs font-black uppercase">Explorar camisas</Link></main>;
+  if (needsReview) return <main className="mx-auto max-w-3xl px-5 py-20 text-center"><h1 className="text-2xl font-black">Há um preço para confirmar</h1><p className="mt-3 text-sm leading-6 text-muted">Um produto da sacola ainda está em revisão. Remova-o ou escolha outro modelo para continuar.</p><Link href="/carrinho" className="primary-button mt-5 inline-block px-6 py-3 text-xs font-black uppercase">Revisar sacola</Link></main>;
 
   return <main className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
     <div className="mb-7"><p className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-blue-700"><LockKeyhole size={14} />Checkout seguro · Mercado Pago</p><h1 className="mt-2 text-3xl font-black">Finalizar compra</h1><p className="mt-1 text-sm text-muted">Informe seus dados e conclua o pagamento no ambiente seguro do Mercado Pago.</p>{isTestPayment && <p className="mt-2 text-xs font-semibold text-amber-700">Ambiente de teste: as transações não são cobranças reais.</p>}</div>
@@ -160,7 +164,7 @@ export default function CheckoutPage() {
           <div className="mt-6 flex gap-2"><button type="button" onClick={() => setStep(1)} disabled={isSubmitting} className="flex items-center gap-2 rounded-lg border border-ink px-5 py-3 text-xs font-black uppercase disabled:opacity-50"><ChevronLeft size={15} /> Voltar</button><button type="submit" disabled={isSubmitting} className="primary-button flex items-center gap-2 px-5 py-3 text-xs font-black uppercase disabled:opacity-50">{isSubmitting ? "Preparando pagamento..." : "Ir ao Mercado Pago"} {!isSubmitting && <ChevronRight size={15} />}</button></div>
         </section>
       </div>
-      <aside className="h-fit rounded-xl border border-border p-5"><h2 className="text-lg font-black">Resumo do pedido</h2>{items.map((item) => <div key={item.lineId} className="mt-4 flex justify-between gap-3 text-xs"><span className="flex-1">{item.product.nome} · tam. {item.size} × {item.quantity}{item.customization ? " · personalizada" : ""}</span><span>{formatCurrency((item.product.preco + (item.customization ? storeConfig.customizationPrice : 0)) * item.quantity)}</span></div>)}<div className="mt-5 space-y-2 border-t border-border pt-4 text-sm"><div className="flex justify-between"><span>Subtotal</span><span>{formatCurrency(subtotal)}</span></div>{bundleDiscount > 0 && <div className="flex justify-between text-success"><span>Oferta por quantidade</span><span>-{formatCurrency(bundleDiscount)}</span></div>}<div className="flex justify-between"><span>Frete</span><span>{shipping === 0 ? "Grátis" : formatCurrency(shipping)}</span></div><div className="flex justify-between border-t border-border pt-3 text-lg font-black"><span>Total</span><span>{formatCurrency(grandTotal)}</span></div></div><p className="mt-4 text-[10px] leading-4 text-muted">O servidor confere os produtos, preços e frete antes de criar o pagamento.</p></aside>
+      <aside className="h-fit rounded-xl border border-border p-5"><h2 className="text-lg font-black">Resumo do pedido</h2>{items.map((item) => { const unitPrice = classifyProduct(item.product).price ?? 0; const patchPrice = (item.patches ?? []).reduce((sum, selected) => sum + (getAvailablePatches(item.product).find((patch) => patch.id === selected.id)?.priceCents ?? 0), 0) / 100; return <div key={item.lineId} className="mt-4 flex justify-between gap-3 text-xs"><span className="flex-1">{item.product.nome} · tam. {item.size} × {item.quantity}{item.customization ? " · personalizada" : ""}{item.patches?.length ? ` · ${item.patches.length} patch(es)` : ""}</span><span>{formatCurrency((unitPrice + patchPrice + (item.customization ? storeConfig.customizationPrice : 0)) * item.quantity)}</span></div>; })}<div className="mt-5 space-y-2 border-t border-border pt-4 text-sm"><div className="flex justify-between"><span>Subtotal</span><span>{formatCurrency(subtotal)}</span></div>{bundleDiscount > 0 && <div className="flex justify-between text-success"><span>Oferta por quantidade</span><span>-{formatCurrency(bundleDiscount)}</span></div>}<div className="flex justify-between"><span>Frete</span><span>{shipping === 0 ? "Grátis" : formatCurrency(shipping)}</span></div><div className="flex justify-between border-t border-border pt-3 text-lg font-black"><span>Total</span><span>{formatCurrency(grandTotal)}</span></div></div><p className="mt-4 text-[10px] leading-4 text-muted">O servidor confere produtos, patches, preços e frete antes de criar o pagamento.</p></aside>
     </form>
   </main>;
 }

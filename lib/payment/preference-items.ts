@@ -1,11 +1,13 @@
 import type { VerifiedOrderLine } from "@/lib/payment/order";
 import { storeConfig } from "@/config";
+import { classifyProduct } from "@/lib/product-classification";
 
 type OrderTotals = {
   quantity: number;
   shirtsCents: number;
   standardQuantity: number;
   standardShirtsCents: number;
+  patchesCents: number;
   customizationCents: number;
 };
 
@@ -18,17 +20,18 @@ export function buildPreferenceItems(orderId: string, lines: VerifiedOrderLine[]
   let remainingHigherPricedUnits = totals.standardQuantity > 0 ? totals.standardShirtsCents % totals.standardQuantity : 0;
 
   return lines.flatMap((line, index) => {
-    const retro = line.product.tipo === "retro";
-    const higherPricedQuantity = retro ? 0 : Math.min(line.quantity, remainingHigherPricedUnits);
-    if (!retro) remainingHigherPricedUnits -= higherPricedQuantity;
-    const regularPricedQuantity = retro ? 0 : line.quantity - higherPricedQuantity;
+    const facts = classifyProduct(line.product);
+    const packageEligible = facts.version === "fan" && !facts.fullPatch;
+    const higherPricedQuantity = packageEligible ? Math.min(line.quantity, remainingHigherPricedUnits) : 0;
+    if (packageEligible) remainingHigherPricedUnits -= higherPricedQuantity;
+    const regularPricedQuantity = packageEligible ? line.quantity - higherPricedQuantity : 0;
     const items = [
-      ...(retro ? [{
-        id: `${orderId}-retro-shirt-${index}`,
+      ...(!packageEligible ? [{
+        id: `${orderId}-shirt-${index}`,
         title: `${line.product.nome} (tamanho ${line.size})`,
         quantity: line.quantity,
         currency_id: "BRL",
-        unit_price: storeConfig.retroShirtPrice,
+        unit_price: facts.price ?? 0,
       }] : []),
       ...(regularPricedQuantity > 0 ? [{
         id: `${orderId}-shirt-${index}-regular`,
@@ -51,6 +54,13 @@ export function buildPreferenceItems(orderId: string, lines: VerifiedOrderLine[]
         currency_id: "BRL",
         unit_price: storeConfig.customizationPrice,
       }] : []),
+      ...line.patchOptions.map((patch, patchIndex) => ({
+        id: `${orderId}-patch-${index}-${patchIndex}`,
+        title: `${patch.name} - ${line.patches?.[patchIndex]?.position ?? "posição confirmada"} (${line.product.nome})`,
+        quantity: line.quantity,
+        currency_id: "BRL",
+        unit_price: toPrice(patch.priceCents),
+      })),
     ];
     return items;
   });

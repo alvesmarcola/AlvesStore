@@ -9,12 +9,16 @@ import { formatCurrency, getLeague, productImageAsset, products } from "@/lib/ca
 import type { Product } from "@/lib/types";
 import { storeConfig } from "@/config";
 import { useCart } from "@/store/cart";
+import { classifyProduct } from "@/lib/product-classification";
+import { getAvailablePatches } from "@/lib/patch-compatibility";
+import type { PatchPosition } from "@/data/patches";
 
 export function ProductDetails({ product }: { product: Product }) {
   const [size, setSize] = useState("");
   const [personalize, setPersonalize] = useState(false);
   const [name, setName] = useState("");
   const [number, setNumber] = useState("");
+  const [selectedPatches, setSelectedPatches] = useState<{ id: string; position: PatchPosition }[]>([]);
   const [added, setAdded] = useState(false);
   const [activeImage, setActiveImage] = useState(0);
   const [sizeGuideOpen, setSizeGuideOpen] = useState(false);
@@ -24,15 +28,18 @@ export function ProductDetails({ product }: { product: Product }) {
     .filter((image, index, all) => all.findIndex((candidate) => candidate.src === image.src) === index)
     .map((image, index) => ({ ...image, alt: `${product.nome} – ${index === 0 ? "frente" : `detalhe ${index + 1}`}` }));
   const selectedImage = gallery[Math.min(activeImage, gallery.length - 1)];
-  const price = product.preco + (personalize ? storeConfig.customizationPrice : 0);
+  const classification = classifyProduct(product);
+  const price = (classification.price ?? 0) + (personalize ? storeConfig.customizationPrice : 0);
+  const compatiblePatches = getAvailablePatches(product);
+  const selectedPatchTotal = compatiblePatches.filter((patch) => selectedPatches.some((selected) => selected.id === patch.id)).reduce((sum, patch) => sum + patch.priceCents, 0) / 100;
   const audienceLabels = { masculino: "masculino", feminino: "feminino", unissex: "unissex", infantil: "infantil", revisar: "" };
-  const typeLabels = { torcedor: "versão torcedor", jogador: "versão jogador", goleiro: "goleiro", retro: "retrô", treino: "treino", cropped: "cropped", regata: "regata", inverno: "mangas compridas", vestido: "vestido", revisar: "" };
-  const uniformLabels = { titular: "casa (Home)", reserva: "fora (Away)", terceiro: "terceira camisa (Third)", revisar: "" };
+  const uniformLabels = { titular: "casa (Home)", reserva: "fora (Away)", terceiro: "terceira camisa (Third)", quarto: "quarta camisa (Fourth)", revisar: "" };
   const verifiedMetadata = [
     audienceLabels[product.publico] ? `Público: ${audienceLabels[product.publico]}` : "",
-    typeLabels[product.tipo] ? `Tipo: ${typeLabels[product.tipo]}` : "",
+    classification.version !== "unknown" ? `Versão: ${classification.version}` : "",
+    classification.sleeve !== "unknown" ? `Manga: ${classification.sleeve === "long" ? "longa" : "curta"}` : "",
     product.temporada !== "revisar" ? `Temporada: ${product.temporada}` : "",
-    uniformLabels[product.uniforme] ? `Uniforme: ${uniformLabels[product.uniforme]}` : "",
+    uniformLabels[classification.uniform] ? `Uniforme: ${uniformLabels[classification.uniform]}` : "",
     product.cor !== "revisar" ? `Cor: ${product.cor}` : "",
   ].filter(Boolean);
   const productContext = [
@@ -41,8 +48,8 @@ export function ProductDetails({ product }: { product: Product }) {
   ].filter(Boolean).join(" · ");
 
   function buy() {
-    if (!size || (personalize && (!name.trim() || !number.trim()))) return;
-    addItem(product, size, personalize ? { name: name.trim(), number: number.trim() } : undefined);
+    if (!size || classification.reviewRequired || (personalize && (!name.trim() || !number.trim()))) return;
+    addItem(product, size, personalize ? { name: name.trim(), number: number.trim() } : undefined, selectedPatches);
     setAdded(true);
     window.setTimeout(() => setAdded(false), 1800);
   }
@@ -52,19 +59,22 @@ export function ProductDetails({ product }: { product: Product }) {
     <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
       <div className="grid grid-cols-[58px_1fr] gap-3 sm:grid-cols-[76px_1fr]">
         <div className="flex flex-col gap-3">{gallery.map((image, index) => <button key={`${image.src}-${index}`} type="button" aria-label={`Ver foto ${index + 1} de ${gallery.length}`} aria-pressed={activeImage === index} onClick={() => setActiveImage(index)} className={`relative aspect-[4/5] overflow-hidden rounded border ${activeImage === index ? "border-pitch" : "border-transparent"}`}><Image src={image.src} alt={image.alt} fill sizes="76px" placeholder="blur" blurDataURL={image.blurDataURL} className="object-cover" style={{ objectPosition: `${image.focalPoint.x}% ${image.focalPoint.y}%` }} /></button>)}</div>
-        <button type="button" onClick={() => setActiveImage((activeImage + 1) % gallery.length)} aria-label="Ampliar e ver próxima imagem do produto" className="group relative aspect-[4/5] overflow-hidden rounded-xl bg-paper"><Image src={selectedImage.src} alt={selectedImage.alt} fill priority sizes="(max-width: 1024px) 80vw, 50vw" placeholder="blur" blurDataURL={selectedImage.blurDataURL} className="object-cover transition-transform duration-300 group-hover:scale-110" style={{ objectPosition: `${selectedImage.focalPoint.x}% ${selectedImage.focalPoint.y}%` }} /><span className="absolute bottom-3 right-3 rounded-full bg-white/90 px-3 py-1 text-[10px] font-bold text-ink">Toque para ampliar · {activeImage + 1}/{gallery.length}</span></button>
+        <button type="button" onClick={() => setActiveImage((activeImage + 1) % gallery.length)} aria-label="Ampliar e ver próxima imagem do produto" className="group relative aspect-[4/5] overflow-hidden rounded-xl bg-paper"><Image src={selectedImage.src} alt={selectedImage.alt} fill priority sizes="(max-width: 1024px) 80vw, 50vw" placeholder="blur" blurDataURL={selectedImage.blurDataURL} className="object-cover transition-transform duration-300 group-hover:scale-110" style={{ objectPosition: `${selectedImage.focalPoint.x}% ${selectedImage.focalPoint.y}%` }} />{selectedPatches.map((selected) => { const patch = compatiblePatches.find((item) => item.id === selected.id); if (!patch) return null; const positionClass = selected.position === "manga-esquerda" ? "left-[12%] top-[62%]" : selected.position === "manga-direita" ? "right-[12%] top-[62%]" : "left-[28%] top-[30%]"; return <Image key={patch.id} src={patch.image} alt={`Prévia ilustrativa: ${patch.name}`} width={44} height={44} className={`pointer-events-none absolute z-10 h-10 w-10 object-contain drop-shadow ${positionClass}`} />; })}<span className="absolute bottom-3 right-3 rounded-full bg-white/90 px-3 py-1 text-[10px] font-bold text-ink">Prévia ilustrativa · toque para ampliar · {activeImage + 1}/{gallery.length}</span></button>
       </div>
       <div>
         {productContext && <p className="text-[10px] font-black uppercase tracking-[.2em] text-blue-600">{productContext}</p>}
         <h1 className="mt-2 text-2xl font-black leading-tight sm:text-3xl">{product.nome}</h1>
-        <div className="mt-5 flex items-baseline gap-3"><span className="text-3xl font-black">{formatCurrency(price)}</span></div>
+        <div className="mt-5 flex items-baseline gap-3"><span className="text-3xl font-black">{classification.reviewRequired ? classification.priceLabel : formatCurrency(price + selectedPatchTotal)}</span></div>
+        {classification.reviewRequired && <p role="status" className="mt-2 rounded bg-amber-50 p-3 text-sm text-amber-950">A versão e o preço deste produto precisam de confirmação antes da venda.</p>}
         <p className="mt-1 text-xs text-muted">{storeConfig.shippingOfferText}</p>
         {personalize && <p className="mt-1 text-xs text-muted">Personalização: +{formatCurrency(storeConfig.customizationPrice)} por camisa</p>}
         <div className="mt-6 flex items-center justify-between"><h2 className="text-sm font-black">Tamanho</h2><button type="button" onClick={() => setSizeGuideOpen(true)} className="flex items-center gap-1 text-xs font-bold text-blue-700 underline"><Ruler size={14} /> Guia de medidas</button></div>
         <div className="mt-3 flex flex-wrap gap-2">{product.tamanhos.map((itemSize) => <button key={itemSize} onClick={() => setSize(itemSize)} className={`grid h-11 min-w-12 place-items-center rounded border px-3 text-xs font-bold ${size === itemSize ? "border-pitch bg-pitch text-white" : "border-black/15"}`}>{itemSize}</button>)}</div>
         {!size && product.tamanhos.length > 0 && <p className="mt-2 text-[11px] text-muted">Selecione um tamanho para continuar.</p>}
         <div className="mt-6 rounded-lg border p-4"><label className="flex items-center gap-2 text-sm font-bold"><input type="checkbox" checked={personalize} onChange={(event) => setPersonalize(event.target.checked)} />Quero personalizar (+{formatCurrency(storeConfig.customizationPrice)} por camisa)</label>{personalize && <div className="mt-3 grid grid-cols-2 gap-3"><label className="text-xs font-semibold">Nome<input maxLength={12} value={name} onChange={(event) => setName(event.target.value)} placeholder="Ex.: ALEX" className="mt-1 w-full rounded border px-3 py-2 text-sm uppercase" /></label><label className="text-xs font-semibold">Número<input inputMode="numeric" maxLength={2} value={number} onChange={(event) => setNumber(event.target.value.replace(/\D/g, ""))} placeholder="10" className="mt-1 w-full rounded border px-3 py-2 text-sm" /></label></div>}</div>
-        <button disabled={!size || (personalize && (!name.trim() || !number.trim()))} onClick={buy} className="mt-5 hidden w-full items-center justify-center gap-2 rounded bg-action py-4 text-sm font-black uppercase tracking-wide hover:bg-[#b6e351] disabled:bg-gray-200 disabled:text-gray-500 sm:flex">{added ? <><Check size={18} /> Adicionado ao carrinho!</> : "Comprar agora"}</button>
+        <section className="mt-5 rounded-lg border p-4"><h2 className="text-sm font-black">Patches disponíveis</h2>{compatiblePatches.length === 0 ? <p className="mt-2 text-xs leading-5 text-muted">Ainda não há patches com compatibilidade e disponibilidade comercial confirmadas para este modelo e temporada.</p> : <div className="mt-3 grid gap-3">{compatiblePatches.map((patch) => { const selected = selectedPatches.find((item) => item.id === patch.id); return <div key={patch.id} className="flex gap-3 rounded border p-3"><label className="flex min-w-0 flex-1 cursor-pointer items-start gap-3"><input type="checkbox" checked={Boolean(selected)} onChange={(event) => setSelectedPatches((items) => event.target.checked ? [...items, { id: patch.id, position: patch.positions[0] }] : items.filter((item) => item.id !== patch.id))} /><Image src={patch.image} alt={patch.name} width={52} height={52} className="h-12 w-12 object-contain" /><span className="text-xs font-bold">{patch.name}<span className="mt-1 block font-normal text-muted">{patch.priceCents ? formatCurrency(patch.priceCents / 100) : "Sem custo adicional"}</span></span></label>{selected && <label className="text-[10px] font-semibold">Posição<select value={selected.position} onChange={(event) => setSelectedPatches((items) => items.map((item) => item.id === patch.id ? { ...item, position: event.target.value as PatchPosition } : item))} className="mt-1 block max-w-32 rounded border px-2 py-2">{patch.positions.map((position) => <option key={position} value={position}>{position.replaceAll("-", " ")}</option>)}</select></label>}</div>; })}</div>}</section>
+        {selectedPatches.length > 0 && <p className="mt-3 rounded bg-paper p-3 text-xs">Resumo: {product.nome}{personalize ? ` · nome ${name} · número ${number}` : ""} · {selectedPatches.length} patch(es) · adicionais {formatCurrency(selectedPatchTotal + (personalize ? storeConfig.customizationPrice : 0))} por camisa.</p>}
+        <button disabled={!size || classification.reviewRequired || (personalize && (!name.trim() || !number.trim()))} onClick={buy} className="mt-5 hidden w-full items-center justify-center gap-2 rounded bg-action py-4 text-sm font-black uppercase tracking-wide hover:bg-[#b6e351] disabled:bg-gray-200 disabled:text-gray-500 sm:flex">{added ? <><Check size={18} /> Adicionado ao carrinho!</> : "Comprar agora"}</button>
         <p className="mt-5 rounded-lg bg-paper p-4 text-xs leading-5 text-muted">{storeConfig.shippingOfferText}</p>
         <div className="mt-5 grid gap-3 text-xs text-muted"><p className="flex items-center gap-2"><Truck size={17} />Frete grátis no pacote de {storeConfig.freeShippingQuantity} camisas</p><p className="flex items-center gap-2"><Heart size={17} />Personalização opcional por {formatCurrency(storeConfig.customizationPrice)} por camisa</p></div>
         {verifiedMetadata.length > 0 && <details className="mt-6 border-t py-4"><summary className="cursor-pointer text-sm font-black">Informações do produto</summary><ul className="mt-3 space-y-1 text-sm leading-6 text-muted">{verifiedMetadata.map((item) => <li key={item}>{item}</li>)}</ul></details>}
@@ -72,7 +82,7 @@ export function ProductDetails({ product }: { product: Product }) {
     </div>
     {related.length > 0 && <section className="mt-14"><h2 className="mb-5 text-2xl font-black">{product.clube !== "revisar" ? `Mais camisas de ${product.clube}` : "Mais produtos desta categoria"}</h2><ProductGrid items={related} /></section>}
     {sizeGuideOpen && <div className="fixed inset-0 z-[80] grid place-items-center bg-black/60 p-4" onClick={() => setSizeGuideOpen(false)}><section role="dialog" aria-modal="true" aria-labelledby="size-guide-title" className="max-h-[90dvh] w-full max-w-2xl overflow-y-auto rounded-xl bg-white p-5 shadow-xl sm:p-7" onClick={(event) => event.stopPropagation()}><div className="flex items-start justify-between gap-3"><div><h2 id="size-guide-title" className="text-xl font-black">Guia de tamanhos</h2><p className="mt-2 text-sm leading-6 text-muted">A tabela de medidas específica dos produtos ainda não foi fornecida. Confirme o tamanho com o fornecedor antes da compra.</p></div><button type="button" onClick={() => setSizeGuideOpen(false)} aria-label="Fechar guia de medidas" className="rounded-lg border border-border px-3 py-2 text-sm font-bold">Fechar</button></div><Link href="/guia-de-medidas" onClick={() => setSizeGuideOpen(false)} className="mt-4 inline-block text-xs font-bold text-blue-700 underline">Ver informações sobre tamanhos</Link></section></div>}
-    <button disabled={!size || (personalize && (!name.trim() || !number.trim()))} onClick={buy} className="fixed bottom-0 left-0 right-0 z-30 flex items-center justify-center gap-2 bg-action py-4 text-sm font-black uppercase shadow-lg disabled:bg-gray-300 sm:hidden">{added ? "Adicionado ao carrinho!" : `Comprar · ${formatCurrency(price)}`}</button>
-    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "Product", name: product.nome, image: gallery.map((image) => new URL(image.src, "https://alves-store-green.vercel.app").toString()), offers: { "@type": "Offer", url: `https://alves-store-green.vercel.app/produto/${product.slug}`, priceCurrency: "BRL", price: product.preco, availability: product.tamanhos.length ? "https://schema.org/InStock" : "https://schema.org/OutOfStock" } }).replace(/</g, "\\u003c") }} />
+    <button disabled={!size || classification.reviewRequired || (personalize && (!name.trim() || !number.trim()))} onClick={buy} className="fixed bottom-0 left-0 right-0 z-30 flex items-center justify-center gap-2 bg-action py-4 text-sm font-black uppercase shadow-lg disabled:bg-gray-300 sm:hidden">{added ? "Adicionado ao carrinho!" : classification.reviewRequired ? "Preço em revisão" : `Comprar · ${formatCurrency(price + selectedPatchTotal)}`}</button>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "Product", name: product.nome, image: gallery.map((image) => new URL(image.src, "https://alves-store-green.vercel.app").toString()), ...(classification.price === null ? {} : { offers: { "@type": "Offer", url: `https://alves-store-green.vercel.app/produto/${product.slug}`, priceCurrency: "BRL", price: classification.price, availability: product.tamanhos.length ? "https://schema.org/InStock" : "https://schema.org/OutOfStock" } }) }).replace(/</g, "\\u003c") }} />
   </main>;
 }

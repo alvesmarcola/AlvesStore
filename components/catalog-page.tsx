@@ -8,6 +8,7 @@ import { formatCurrency, leagues } from "@/lib/catalog";
 import { storeConfig } from "@/config";
 import type { Product } from "@/lib/types";
 import { searchProducts } from "@/lib/smart-search";
+import { classifyProduct, getProductUnitPrice } from "@/lib/product-classification";
 import { CategoryHero } from "@/components/category-hero";
 import type { ImageAsset } from "@/data/images";
 
@@ -56,15 +57,18 @@ export function CatalogPage({ title, description, products, breadcrumb, initialT
   const filtered = useMemo(() => {
     const matchingProducts = search.trim() ? new Set(searchProducts(products, search).results.map((product) => product.id)) : null;
     const result = products.filter((product) => {
-      return (!type || product.tipo === type) && (!uniform || product.uniforme === uniform) &&
+      const price = getProductUnitPrice(product);
+      const verifiedUniform = classifyProduct(product).uniform;
+      const priceMatches = maxPrice === "600" || (price !== null && price <= Number(maxPrice));
+      return (!type || product.tipo === type) && (!uniform || verifiedUniform === uniform) &&
         (!club || product.clubeSlug === club) && (!league || product.liga === league) &&
         (!size || product.tamanhos.includes(size)) &&
         (!season || product.temporada === season) && (!color || product.cor === color) &&
-        product.preco <= Number(maxPrice) &&
+        priceMatches &&
         (!matchingProducts || matchingProducts.has(product.id));
     });
-    if (sort === "menor") result.sort((a, b) => a.preco - b.preco);
-    if (sort === "maior") result.sort((a, b) => b.preco - a.preco);
+    if (sort === "menor") result.sort((a, b) => (getProductUnitPrice(a) ?? Infinity) - (getProductUnitPrice(b) ?? Infinity));
+    if (sort === "maior") result.sort((a, b) => (getProductUnitPrice(b) ?? -Infinity) - (getProductUnitPrice(a) ?? -Infinity));
     return result;
   }, [products, type, uniform, club, league, size, season, color, maxPrice, search, sort]);
   const clubOptions = Array.from(new Map(products.filter((product) => product.clubeSlug !== "revisar").map((product) => [product.clubeSlug, product.clube])).entries());
@@ -74,8 +78,8 @@ export function CatalogPage({ title, description, products, breadcrumb, initialT
   const leagueOptions = Array.from(new Set(products.map((product) => product.liga).filter((value) => value !== "revisar")));
   const typeLabels: Record<string, string> = { torcedor: "Torcedor", jogador: "Jogador", goleiro: "Goleiro", retro: "Retrô", treino: "Treino", cropped: "Cropped", regata: "Regata", inverno: "Mangas compridas", vestido: "Vestido" };
   const typeOptions = Array.from(new Set(products.map((product) => product.tipo).filter((value) => value !== "revisar")));
-  const uniformLabels: Record<string, string> = { titular: "Casa (Home)", reserva: "Fora (Away)", terceiro: "Terceira camisa (Third)" };
-  const uniformOptions = Array.from(new Set(products.map((product) => product.uniforme).filter((value) => value !== "revisar")));
+  const uniformLabels: Record<string, string> = { titular: "Casa (Home)", reserva: "Fora (Away)", terceiro: "Terceira camisa (Third)", quarto: "Quarta camisa (Fourth)" };
+  const uniformOptions = Array.from(new Set(products.map((product) => classifyProduct(product).uniform).filter((value) => value !== "revisar")));
   const clearFilters = () => {
     setClub("");
     setLeague("");
@@ -95,7 +99,7 @@ export function CatalogPage({ title, description, products, breadcrumb, initialT
     {uniformOptions.length > 0 && <label className="filter-label">Uniforme<select className="filter-select" value={uniform} onChange={(event) => setUniform(event.target.value)}><option value="">Todos</option>{uniformOptions.map((item) => <option key={item} value={item}>{uniformLabels[item] ?? item}</option>)}</select></label>}
     <label className="filter-label">Temporada<select className="filter-select" value={season} onChange={(event) => setSeason(event.target.value)}><option value="">Todas</option>{seasonOptions.map((item) => <option key={item}>{item}</option>)}</select></label>
     {colorOptions.length > 0 && <label className="filter-label">Cor<select className="filter-select" value={color} onChange={(event) => setColor(event.target.value)}><option value="">Todas</option>{colorOptions.map((item) => <option key={item}>{item}</option>)}</select></label>}
-    <label className="filter-label">Faixa de preço<select className="filter-select" value={maxPrice} onChange={(event) => setMaxPrice(event.target.value)}><option value="600">Todos os preços</option><option value={storeConfig.shirtPrice}>Até {formatCurrency(storeConfig.shirtPrice)}</option></select></label>
+    <label className="filter-label">Faixa de preço<select className="filter-select" value={maxPrice} onChange={(event) => setMaxPrice(event.target.value)}><option value="600">Todos os preços</option><option value={storeConfig.fanCommonPrice}>Até {formatCurrency(storeConfig.fanCommonPrice)}</option><option value={storeConfig.retroShortSleevePrice}>Até {formatCurrency(storeConfig.retroShortSleevePrice)}</option><option value={storeConfig.fanFullPatchPrice}>Até {formatCurrency(storeConfig.fanFullPatchPrice)}</option><option value={storeConfig.retroLongSleevePrice}>Até {formatCurrency(storeConfig.retroLongSleevePrice)}</option></select></label>
     <button className="mt-4 text-xs font-bold text-blue-700 underline" onClick={clearFilters}>Limpar filtros</button>
   </>;
 

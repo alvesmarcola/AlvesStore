@@ -55,7 +55,7 @@ export async function POST(request: Request) {
     const transaction = await pool.connect();
     try {
       await transaction.query("BEGIN");
-      const orderResult = await transaction.query<{ total_cents: number; status: string; customer: Record<string, string>; item_lines: { title: string; size: string; quantity: number; customization?: { name: string; number: string } }[]; shipping_cents: number }>(
+      const orderResult = await transaction.query<{ total_cents: number; status: string; customer: Record<string, string>; item_lines: { title: string; size: string; quantity: number; customization?: { name: string; number: string }; patches?: { name: string; position: string }[] }[]; shipping_cents: number }>(
         "SELECT total_cents, status, customer, item_lines, shipping_cents FROM store_orders WHERE id = $1 FOR UPDATE",
         [payment.external_reference],
       );
@@ -98,7 +98,7 @@ export async function POST(request: Request) {
         const apiKey = process.env.RESEND_API_KEY;
         const from = process.env.ORDER_EMAIL_FROM;
         if (apiKey && from) {
-          const list = order.item_lines.map((item) => `${item.title} · tamanho ${item.size} · ${item.quantity} un.${item.customization ? ` · personalizado ${item.customization.name} ${item.customization.number}` : ""}`).join("\n");
+          const list = order.item_lines.map((item) => `${item.title} · tamanho ${item.size} · ${item.quantity} un.${item.customization ? ` · personalizado ${item.customization.name} ${item.customization.number}` : ""}${item.patches?.length ? ` · patches: ${item.patches.map((patch) => `${patch.name} (${patch.position})`).join(", ")}` : ""}`).join("\n");
           const amount = (cents: number) => `R$ ${(cents / 100).toFixed(2).replace(".", ",")}`;
           try {
             const response = await fetch("https://api.resend.com/emails", { method: "POST", headers: { authorization: `Bearer ${apiKey}`, "content-type": "application/json" }, body: JSON.stringify({ from, to: [order.customer.email], subject: "Pagamento aprovado — Alves Store", text: `Olá, ${order.customer.fullName}! Seu pedido foi aprovado.\n\n${list}\nFrete: ${amount(Number(order.shipping_cents))}\nTotal: ${amount(Number(order.total_cents))}\n\nAcompanhe em ${getSiteUrl()}/rastreio` }), signal: AbortSignal.timeout(5_000) });

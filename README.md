@@ -4,7 +4,7 @@ Loja de camisas de futebol feita com Next.js 15, TypeScript, Zustand, Neon/Postg
 
 ## Preços e frete
 
-`config.ts` define os pacotes das camisas comuns: uma por R$ 160,00; duas por R$ 300,00; três por R$ 450,00. Camisas retrô custam R$ 185,00 cada e não entram nos pacotes. Personalização adiciona R$ 20,00 por camisa.
+`config.ts` define os pacotes das camisas comuns (R$ 160,00 / R$ 300,00 / R$ 450,00), retro manga curta por R$ 185,00, retro manga longa por R$ 220,00 e torcedor full patch por R$ 180,00. Personalizacao adiciona R$ 20,00 por camisa.
 
 O frete é calculado pelo servidor pela quantidade total de unidades de todas as linhas do pedido: uma camisa R$ 20,00, duas R$ 30,00 e três ou mais grátis. O navegador não envia preço ou escolha de frete. O valor salvo no pedido, enviado ao Checkout Pro e conferido no webhook é recalculado no servidor.
 
@@ -29,7 +29,7 @@ Configure as variáveis abaixo na Vercel para o ambiente desejado. `PAYMENT_ENVI
 
 ## Banco de pedidos
 
-Execute `npm run db:migrate` com `DATABASE_URL` apontando ao banco pretendido. A ordem é `db/migrations/001_store_orders.sql` (pedidos e pagamentos) e depois `002_order_tracking.sql` (código de rastreio). Ambas usam operações idempotentes; a segunda adiciona a coluna com `IF NOT EXISTS`.
+Execute `npm run db:migrate` com `DATABASE_URL` apontando ao banco. A ordem e `001_store_orders.sql`, `002_order_tracking.sql` e `003_order_patches.sql`; as migracoes usam `IF NOT EXISTS` e podem ser reaplicadas.
 
 ## Operação
 
@@ -47,3 +47,10 @@ Execute `npm run db:migrate` com `DATABASE_URL` apontando ao banco pretendido. A
 - `npm run build`
 
 Antes da publicação, o responsável pela loja deve completar os itens `TODO(dono)` nas páginas institucionais, como razão social, CNPJ, endereço, WhatsApp, prazo real e canais de privacidade e devolução. O conteúdo jurídico precisa ser revisado para a operação concreta da loja.
+## Catálogo, preços e patches
+
+A busca interpreta termos locais em português e inglês, abreviações de uniforme, versão, manga e temporada. Não usa IA nem serviço externo; quando a versão não está confirmada, mostra alternativas sem afirmar que são o modelo exato.
+
+Preços classificados: torcedor comum R$ 160,00; torcedor full patch R$ 180,00; retrô manga curta R$ 185,00; retrô manga longa R$ 220,00. Versões sem preço confirmado aparecem para revisão e não podem seguir para pagamento. Corrija a classificação em `data/product-overrides.json`, registrando fonte e responsável. O comando local `npm run catalog:override -- <product-id-ou-slug> --version retro --sleeve long --price 220 --source URL --verified-by Nome` registra uma correção; revise o JSON e publique um deploy para ativá-la.
+
+Patches só aparecem quando `data/patches.ts` registra imagem, preço, fonte, temporada, produto compatível, posições confirmadas e disponibilidade comercial. A lista começa vazia porque o catálogo atual não confirma estoque/venda nem compatibilidade desses itens. Não inclua uma opção até verificar essas informações.

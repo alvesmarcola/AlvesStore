@@ -5,7 +5,7 @@ import { getDatabasePool } from "../lib/server/database";
 async function main() {
   const pool = getDatabasePool();
   try {
-    for (const file of ["001_store_orders.sql", "002_order_tracking.sql"]) {
+    for (const file of ["001_store_orders.sql", "002_order_tracking.sql", "003_order_patches.sql"]) {
       const migration = await readFile(path.join(process.cwd(), "db", "migrations", file), "utf8");
       for (const statement of migration.split(";").map((part) => part.trim()).filter(Boolean)) {
         await pool.query(statement);

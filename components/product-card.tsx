@@ -9,6 +9,7 @@ import type { Product } from "@/lib/types";
 import { storeConfig } from "@/config";
 import { useCart } from "@/store/cart";
 import { flyThumbnailToCart } from "@/lib/fly-to-cart";
+import { classifyProduct } from "@/lib/product-classification";
 
 export function ProductCard({ product }: { product: Product }) {
   const [size, setSize] = useState("");
@@ -16,6 +17,7 @@ export function ProductCard({ product }: { product: Product }) {
   const addItem = useCart((state) => state.addItem);
   const primaryImage = productImageAsset(product);
   const alternateImage = productImageAsset(product, true);
+  const classification = classifyProduct(product);
 
   function add() {
     if (!size) return;
@@ -44,13 +46,13 @@ export function ProductCard({ product }: { product: Product }) {
     </div>
     <div className="pt-3">
       <p className="line-clamp-2 min-h-10 text-xs font-medium leading-5 text-ink sm:text-sm">{product.nome}</p>
-      <div className="mt-2 flex items-baseline gap-2"><span className="text-base font-black text-ink">{formatCurrency(product.preco)}</span></div>
+      <div className="mt-2 flex items-baseline gap-2"><span className="text-base font-black text-ink">{classification.price === null ? classification.priceLabel : formatCurrency(classification.price)}</span></div>
       <p className="mt-1 text-[10px] leading-4 text-muted">{storeConfig.shippingOfferText}</p>
       <p className="mt-1 text-[10px] text-muted">Personalização: +{formatCurrency(storeConfig.customizationPrice)} por camisa</p>
       <div className="mt-3 flex flex-wrap gap-1" aria-label="Selecione um tamanho">
         {product.tamanhos.slice(0, 6).map((itemSize) => <button key={itemSize} onClick={() => setSize(itemSize)} aria-label={`Tamanho ${itemSize}`} className={`grid h-7 min-w-7 place-items-center rounded-lg border px-1 text-[10px] font-bold ${size === itemSize ? "border-pitch bg-pitch text-white" : "border-border text-ink"}`}>{itemSize}</button>)}
       </div>
-      <button onClick={add} disabled={!size} aria-label={`Comprar ${product.nome}`} className="product-buy mt-3 flex w-full items-center justify-center gap-2 rounded-lg bg-action py-2.5 text-[11px] font-black uppercase tracking-wide text-white transition hover:bg-action-hover disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-500">{added ? <><Check size={15} /> Adicionado!</> : <><ShoppingBag size={15} />Comprar</>}</button>
+      <button onClick={add} disabled={!size || classification.reviewRequired} aria-label={`Comprar ${product.nome}`} className="product-buy mt-3 flex w-full items-center justify-center gap-2 rounded-lg bg-action py-2.5 text-[11px] font-black uppercase tracking-wide text-white transition hover:bg-action-hover disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-500">{added ? <><Check size={15} /> Adicionado!</> : classification.reviewRequired ? "Em revisão" : <><ShoppingBag size={15} />Comprar</>}</button>
     </div>
   </article>;
 }

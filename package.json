@@ -8,6 +8,7 @@
     "build": "next build",
     "start": "next start",
     "db:migrate": "tsx scripts/migrate-orders.ts",
+    "catalog:override": "tsx scripts/set-product-override.ts",
     "test": "tsx --test tests/payment.test.ts",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit"

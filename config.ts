@@ -1,7 +1,6 @@
 export const storeConfig = {
   name: "ALVES STORE",
   shirtPrice: 160,
-  retroShirtPrice: 185,
   fanCommonPrice: 160,
   fanFullPatchPrice: 180,
   retroShortSleevePrice: 185,
@@ -11,7 +10,7 @@ export const storeConfig = {
   freeShippingQuantity: 3,
   shippingOneShirt: 20,
   shippingTwoShirts: 30,
-  shippingOfferText: "Camisas comuns: 1 por R$ 160,00, 2 por R$ 300,00 ou 3 por R$ 450,00. Camisas retrô: R$ 185,00 cada. Frete: R$ 20,00 (1 camisa), R$ 30,00 (2) ou grátis (3+).",
+  shippingOfferText: "Torcedor comum: R$ 160,00 (pacotes de 2 por R$ 300,00 ou 3 por R$ 450,00). Torcedor full patch: R$ 180,00. Retrô manga curta: R$ 185,00. Retrô manga longa: R$ 220,00. Frete: R$ 20,00 (1 camisa), R$ 30,00 (2) ou grátis (3+).",
   customizationPrice: 20,
   email: "atendimento@alvesstore.com.br",
 } as const;

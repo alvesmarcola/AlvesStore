@@ -128,12 +128,19 @@ export async function POST(request: Request) {
           size: line.size,
           quantity: line.quantity,
           customization: line.customization ?? null,
+          patches: line.patchOptions.map((patch, index) => ({
+            id: patch.id,
+            name: patch.name,
+            image: patch.image,
+            position: line.patches?.[index]?.position,
+            priceCents: patch.priceCents,
+          })),
         }));
         await transaction.query(
           `INSERT INTO store_orders
             (id, idempotency_key, request_hash, item_lines, customer, shipping,
-             shirt_quantity, shirts_cents, customization_cents, shipping_cents, total_cents)
-           VALUES ($1, $2, $3, $4::jsonb, $5::jsonb, $6::jsonb, $7, $8, $9, $10, $11)`,
+             shirt_quantity, shirts_cents, customization_cents, patches_cents, shipping_cents, total_cents)
+           VALUES ($1, $2, $3, $4::jsonb, $5::jsonb, $6::jsonb, $7, $8, $9, $10, $11, $12)`,
           [
             orderId,
             requestData.idempotencyKey,
@@ -144,6 +151,7 @@ export async function POST(request: Request) {
             totals.quantity,
             totals.shirtsCents,
             totals.customizationCents,
+            totals.patchesCents,
             finalShippingCents,
             totalCents,
           ],
@@ -199,7 +207,7 @@ export async function POST(request: Request) {
       const emailKey = process.env.RESEND_API_KEY;
       const emailFrom = process.env.ORDER_EMAIL_FROM;
       if (emailKey && emailFrom) {
-        const itemSummary = lines.map((line) => `${line.product.nome} · tamanho ${line.size} · ${line.quantity} un.${line.customization ? ` · personalizado ${line.customization.name} ${line.customization.number}` : ""}`).join("\n");
+        const itemSummary = lines.map((line) => `${line.product.nome} · tamanho ${line.size} · ${line.quantity} un.${line.customization ? ` · personalizado ${line.customization.name} ${line.customization.number}` : ""}${line.patchOptions.length ? ` · patches: ${line.patchOptions.map((patch) => patch.name).join(", ")}` : ""}`).join("\n");
         try {
           const emailResponse = await fetch("https://api.resend.com/emails", {
             method: "POST", headers: { authorization: `Bearer ${emailKey}`, "content-type": "application/json" },

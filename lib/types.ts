@@ -1,4 +1,5 @@
 import type { LeagueImageSlot } from "@/data/images";
+import type { PatchPosition } from "@/data/patches";
 
 export type Audience = "masculino" | "feminino" | "unissex" | "infantil" | "revisar";
 export type ProductType = "torcedor" | "jogador" | "goleiro" | "retro" | "treino" | "cropped" | "regata" | "inverno" | "vestido" | "revisar";
@@ -52,5 +53,13 @@ export interface CartItem {
   size: string;
   quantity: number;
   customization?: { name: string; number: string };
-  patchIds?: string[];
+  patches?: { id: string; position: PatchPosition }[];
+}
+
+export interface SelectedPatch {
+  id: string;
+  name: string;
+  image: string;
+  position: PatchPosition;
+  priceCents: number;
 }

@@ -11,6 +11,7 @@ export interface ProductClassification {
   priceLabel: string;
   reviewRequired: boolean;
   source: "correção administrativa" | "catálogo" | "revisão necessária";
+  evidence: string[];
 }
 
 export function classifyProduct(product: Product): ProductClassification {
@@ -22,29 +23,33 @@ export function classifyProduct(product: Product): ProductClassification {
       ? "player"
       : product.tipo === "goleiro" || /\b(goleiro|goalkeeper|keeper|gk)\b/.test(evidence)
         ? "goalkeeper"
-        : product.tipo === "torcedor" || /manga-longa-torcedor|\b(fan version|versao torcedor)\b/.test(evidence)
+      : product.tipo === "torcedor" || /manga-longa-torcedor|\b(fan|supporter|versao torcedor|torcedor)\b/.test(evidence)
           ? "fan"
           : "unknown";
   const inferredSleeve: SleeveType = /manga longa|manga-longa|long sleeve|\bls\b/.test(evidence)
     ? "long"
-    : inferredVersion === "retro" ? "short" : "unknown";
+    : /manga curta|short sleeve|\bss\b/.test(evidence) ? "short"
+      : inferredVersion === "retro" ? "short" : "unknown";
   const inferredUniform: Uniform = product.uniforme !== "revisar"
     ? product.uniforme
     : /\b(home|titular)\b/.test(evidence) ? "titular"
-      : /\b(away|reserva)\b/.test(evidence) ? "reserva"
-        : /\b(third|terceiro|terceira)\b/.test(evidence) ? "terceiro"
-          : /\b(fourth|quarto|quarta)\b/.test(evidence) ? "quarto" : "revisar";
+    : /\b(away|reserva|resrva|visitante)\b/.test(evidence) ? "reserva"
+        : /\b(third|3rd|terceiro|terceira)\b/.test(evidence) ? "terceiro"
+          : /\b(fourth|4th|quarto|quarta)\b/.test(evidence) ? "quarto" : "revisar";
   const version = override?.version ?? inferredVersion;
   const sleeve = override?.sleeve ?? inferredSleeve;
   const uniform = override?.uniform ?? inferredUniform;
   const fullPatch = override?.fullPatch ?? (version === "fan" && /full.?patch|patch completo/.test(evidence));
-  const price = override?.price ?? (
+  const overridePrice = ([storeConfig.fanCommonPrice, storeConfig.fanFullPatchPrice, storeConfig.retroShortSleevePrice, storeConfig.retroLongSleevePrice] as number[]).includes(override?.price ?? -1)
+    ? override?.price : undefined;
+  const price = overridePrice ?? (
     version === "retro" && sleeve === "long" ? storeConfig.retroLongSleevePrice
       : version === "retro" && sleeve === "short" ? storeConfig.retroShortSleevePrice
         : version === "fan" && !fullPatch ? storeConfig.fanCommonPrice
           : version === "fan" && fullPatch ? storeConfig.fanFullPatchPrice : null
   );
-  const label = price === null ? "Preço em revisão" : `R$ ${price.toFixed(2).replace(".", ",")}`;
+  const reviewRequired = price === null || version === "unknown";
+  const label = reviewRequired ? "Preço em revisão" : `R$ ${price.toFixed(2).replace(".", ",")}`;
   return {
     version,
     sleeve,
@@ -52,8 +57,9 @@ export function classifyProduct(product: Product): ProductClassification {
     fullPatch,
     price,
     priceLabel: label,
-    reviewRequired: price === null,
-    source: override ? "correção administrativa" : price === null ? "revisão necessária" : "catálogo",
+    reviewRequired,
+    source: override ? "correção administrativa" : reviewRequired ? "revisão necessária" : "catálogo",
+    evidence: override?.source ? [override.source] : [product.tipo !== "revisar" ? `tipo:${product.tipo}` : "", /manga-longa|manga longa|long sleeve|\bls\b/.test(evidence) ? "indicação de manga no nome/slug/fonte da imagem" : ""].filter(Boolean),
   };
 }
 

@@ -4,6 +4,8 @@ import { products } from "@/lib/catalog";
 import { getPackagePrice, getShippingCents } from "@/lib/commerce";
 import { checkoutSchema } from "@/lib/validation";
 import type { Product } from "@/lib/types";
+import { classifyProduct } from "@/lib/product-classification";
+import { getAvailablePatches } from "@/lib/patch-compatibility";
 
 export const orderLinesSchema = z.array(z.object({
   productId: z.string().min(1).max(100),
@@ -13,6 +15,7 @@ export const orderLinesSchema = z.array(z.object({
     name: z.string().trim().min(1).max(12),
     number: z.string().trim().regex(/^\d{1,2}$/),
   }).strict().optional(),
+  patches: z.array(z.object({ id: z.string().min(1).max(80), position: z.enum(["manga-esquerda", "manga-direita", "peito"]) }).strict()).max(4).optional(),
 }).strict()).min(1).max(20);
 
 export const paymentRequestSchema = z.object({
@@ -24,7 +27,7 @@ export const paymentRequestSchema = z.object({
 export type OrderLineInput = z.infer<typeof orderLinesSchema>[number];
 export type CheckoutCustomer = z.infer<typeof paymentRequestSchema>["customer"];
 export type PaymentRequest = z.infer<typeof paymentRequestSchema>;
-export type VerifiedOrderLine = OrderLineInput & { product: Product };
+export type VerifiedOrderLine = OrderLineInput & { product: Product; patchOptions: ReturnType<typeof getAvailablePatches> };
 
 export class InvalidOrderError extends Error {}
 
@@ -36,17 +39,29 @@ export function validateOrderLines(lines: OrderLineInput[]): VerifiedOrderLine[]
     const product = products.find((candidate) => candidate.id === line.productId);
     if (!product) throw new InvalidOrderError("Um dos produtos não está mais disponível.");
     if (!product.tamanhos.includes(line.size)) throw new InvalidOrderError("Um dos tamanhos selecionados não está disponível.");
+    const facts = classifyProduct(product);
+    if (facts.reviewRequired || facts.price === null) throw new InvalidOrderError("O preço deste produto está em revisão. Escolha outro modelo ou tente novamente mais tarde.");
+    const availablePatches = getAvailablePatches(product);
+    const selectedPatches = line.patches ?? [];
+    if (new Set(selectedPatches.map((patch) => patch.id)).size !== selectedPatches.length) throw new InvalidOrderError("Remova opções de patch repetidas.");
+    const resolvedPatches = selectedPatches.map((selected) => {
+      const option = availablePatches.find((patch) => patch.id === selected.id && patch.positions.includes(selected.position));
+      if (!option) throw new InvalidOrderError("Um dos patches não está confirmado para este modelo, temporada ou posição.");
+      return option;
+    });
 
-    const key = JSON.stringify([line.productId, line.size, line.customization?.name ?? "", line.customization?.number ?? ""]);
+    const key = JSON.stringify([line.productId, line.size, line.customization?.name ?? "", line.customization?.number ?? "", [...(line.patches ?? [])].sort((a, b) => a.id.localeCompare(b.id))]);
     if (seen.has(key)) throw new InvalidOrderError("O carrinho contém linhas repetidas. Atualize a página e tente novamente.");
     seen.add(key);
     quantityTotal += line.quantity;
     return {
       ...line,
+      patches: selectedPatches,
       ...(line.customization
         ? { customization: { name: line.customization.name.trim(), number: line.customization.number.trim() } }
         : {}),
       product,
+      patchOptions: resolvedPatches,
     };
   });
 
@@ -60,11 +75,15 @@ export function calculateOrderTotals(lines: VerifiedOrderLine[]) {
     (sum, line) => sum + (line.customization ? line.quantity : 0),
     0,
   );
-  const standardQuantity = lines.reduce((sum, line) => sum + (line.product.tipo === "retro" ? 0 : line.quantity), 0);
-  const retroQuantity = quantity - standardQuantity;
-  const baseSubtotalCents = lines.reduce((sum, line) => sum + line.product.preco * line.quantity * 100, 0);
+  const packageQuantity = lines.reduce((sum, line) => {
+    const facts = classifyProduct(line.product);
+    return sum + (facts.version === "fan" && !facts.fullPatch ? line.quantity : 0);
+  }, 0);
+  const baseSubtotalCents = lines.reduce((sum, line) => sum + (classifyProduct(line.product).price ?? 0) * line.quantity * 100, 0);
+  const pricedOutsidePackagesCents = baseSubtotalCents - packageQuantity * storeConfig.fanCommonPrice * 100;
   const customizationCents = personalizedQuantity * storeConfig.customizationPrice * 100;
-  const shirtsCents = (getPackagePrice(standardQuantity) + retroQuantity * storeConfig.retroShirtPrice) * 100;
+  const shirtsCents = getPackagePrice(packageQuantity) * 100 + pricedOutsidePackagesCents;
+  const patchesCents = lines.reduce((sum, line) => sum + line.quantity * line.patchOptions.reduce((patchSum, patch) => patchSum + patch.priceCents, 0), 0);
   const bundleDiscountCents = baseSubtotalCents - shirtsCents;
   const shippingCents = getShippingCents(quantity);
 
@@ -74,12 +93,13 @@ export function calculateOrderTotals(lines: VerifiedOrderLine[]) {
     baseSubtotalCents,
     customizationCents,
     shirtsCents,
-    standardQuantity,
-    standardShirtsCents: getPackagePrice(standardQuantity) * 100,
+    standardQuantity: packageQuantity,
+    standardShirtsCents: getPackagePrice(packageQuantity) * 100,
     bundleDiscountCents,
-    productsTotalCents: shirtsCents + customizationCents,
+    patchesCents,
+    productsTotalCents: shirtsCents + customizationCents + patchesCents,
     shippingCents,
-    totalCents: shirtsCents + customizationCents + shippingCents,
+    totalCents: shirtsCents + customizationCents + patchesCents + shippingCents,
   };
 }
 
@@ -92,6 +112,7 @@ export function calculateOrderFingerprint(request: PaymentRequest) {
       customization: line.customization
         ? { name: line.customization.name.trim(), number: line.customization.number.trim() }
         : null,
+      patches: (line.patches ?? []).map((patch) => ({ id: patch.id, position: patch.position })).sort((a, b) => a.id.localeCompare(b.id)),
     })),
     customer: Object.fromEntries(Object.entries(request.customer).map(([key, value]) => [
       key,
