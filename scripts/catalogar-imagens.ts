@@ -5,6 +5,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import sharp from "sharp";
 import { storeConfig } from "../config";
+import { inferProductTypeFromSource } from "../lib/catalog-source-classification";
 import type { Audience, Product, ProductImage, ProductType, Uniform } from "../lib/types";
 
 type LeagueData = {
@@ -59,7 +60,7 @@ const sizes = [400, 800, 1600] as const;
 const reviewFields: ReviewField[] = ["clube", "liga", "publico", "tipo", "temporada", "uniforme"];
 const audiences = new Set<Audience>(["masculino", "feminino", "unissex", "infantil", "revisar"]);
 const productTypes = new Set<ProductType>(["torcedor", "jogador", "goleiro", "retro", "treino", "cropped", "regata", "inverno", "vestido", "revisar"]);
-const uniforms = new Set<Uniform>(["titular", "reserva", "terceiro", "revisar"]);
+const uniforms = new Set<Uniform>(["titular", "reserva", "terceiro", "quarto", "revisar"]);
 
 const leagueAliases: Record<string, string[]> = {
   "brasileirao-serie-a": ["brasileirao", "campeonato brasileiro", "serie a brasil", "serie a brasileira"],
@@ -167,26 +168,16 @@ function findLeague(leagues: LeagueData[], directory: string, filename: string) 
   return undefined;
 }
 
-function audienceFrom(category: string): Audience {
-  const folder = normalize(category);
+function audienceFrom(category: string, names = ""): Audience {
+  const folder = normalize(`${category} ${names}`);
   if (folder.includes("kits infantis")) return "infantil";
   if (folder.includes("feminina")) return "feminino";
-  if (folder.includes("camisa jogador") || folder.includes("manga longa torcedor")) return "masculino";
+  if (folder.includes("camisa jogador") || folder.includes("torcedor") || folder.includes("ultrapass")) return "masculino";
   return "revisar";
 }
 
 function typeFrom(category: string, filename: string): ProductType {
-  const text = normalize(`${category} ${filename}`);
-  if (text.includes("goleiro") || text.includes("goleira") || text.includes("keeper")) return "goleiro";
-  if (text.includes("treino") || text.includes("training") || text.includes("pre jogo") || text.includes("pre match")) return "treino";
-  if (text.includes("retro")) return "retro";
-  if (text.includes("cropped")) return "cropped";
-  if (text.includes("regata")) return "regata";
-  if (text.includes("vestido")) return "vestido";
-  if (text.includes("manga longa")) return "inverno";
-  if (normalize(category).includes("camisa jogador")) return "jogador";
-  if (normalize(category).includes("torcedor")) return "torcedor";
-  return "revisar";
+  return inferProductTypeFromSource(category, filename);
 }
 
 function uniformFrom(value: string): Uniform {
@@ -194,6 +185,7 @@ function uniformFrom(value: string): Uniform {
   if (/\b(titular|home|1st)\b/.test(text)) return "titular";
   if (/\b(reserva|away|2nd)\b/.test(text)) return "reserva";
   if (/\b(terceiro|terceira|third|3rd)\b/.test(text)) return "terceiro";
+  if (/\b(quarto|quarta|fourth|4th)\b/.test(text)) return "quarto";
   return "revisar";
 }
 
@@ -313,8 +305,23 @@ function titleFor(group: ProductGroup) {
   return `Camisa ${club}${uniform}${season}${type}${audience}${qualifiers}`.replace(/\s+/g, " ").trim();
 }
 
-function priceFor() {
-  return storeConfig.shirtPrice;
+function priceFor(group: ProductGroup, previousProduct?: Product) {
+  const sourceDescription = normalize(`${group.rootCategory} ${group.files.map((file) => `${file.directory} ${file.name}`).join(" ")}`);
+  const longSleeve = /\b(manga longa|long sleeve|ls)\b/.test(sourceDescription);
+  const shortSleeve = /\b(manga curta|short sleeve|ss)\b/.test(sourceDescription);
+  const fullPatch = /\b(full patches?|patches completos?|full sponsor|all sponsors)\b/.test(sourceDescription);
+  if (group.type === "retro" || /\b(retro|vintage)\b/.test(sourceDescription)) {
+    if (longSleeve) return storeConfig.retroLongSleevePrice;
+    if (shortSleeve) return storeConfig.retroShortSleevePrice;
+    return previousProduct?.preco ?? 0;
+  }
+  if (group.type === "jogador") return longSleeve ? storeConfig.playerLongSleevePrice : previousProduct?.preco && previousProduct.preco !== storeConfig.fanCommonPrice ? previousProduct.preco : 0;
+  if (group.type === "torcedor") {
+    if (fullPatch) return storeConfig.fanFullPatchPrice;
+    if (longSleeve && previousProduct?.preco && previousProduct.preco !== storeConfig.fanCommonPrice) return previousProduct.preco;
+    return storeConfig.fanCommonPrice;
+  }
+  return previousProduct?.preco ?? 0;
 }
 
 function makeProductSlug(group: ProductGroup, used: Set<string>) {
@@ -546,7 +553,7 @@ async function main() {
       directory: image.directory,
       club,
       league,
-      audience: audienceFrom(rootCategory),
+      audience: audienceFrom(rootCategory, image.name),
       type: typeFrom(rootCategory, cleanName),
       season,
       uniform: uniformFrom(cleanName),
@@ -562,7 +569,8 @@ async function main() {
   for (const group of [...groups.values()].sort((a, b) => a.key.localeCompare(b.key, "en", { numeric: true }))) {
     group.files.sort((a, b) => a.relativePath.localeCompare(b.relativePath, "en", { numeric: true }));
     const slug = makeProductSlug(group, usedSlugs);
-    const price = priceFor();
+    const previousProduct = oldBySlug.get(slug);
+    const price = priceFor(group, previousProduct);
     const sizesForAudience = group.audience === "infantil"
       ? []
       : group.audience === "feminino" ? ["PP", "P", "M", "G", "GG", "2GG"] : ["P", "M", "G", "GG", "2GG", "3GG"];
@@ -584,7 +592,6 @@ async function main() {
       images: [],
     };
 
-    const previousProduct = oldBySlug.get(slug);
     const previousFocalPoints = new Map((previousProduct?.images ?? []).map((image) => [image.source, image.focalPoint]));
     const outputImages: ProductImage[] = [];
     for (const [index, sourceImage] of group.files.entries()) {
@@ -648,6 +655,23 @@ async function main() {
     sourceBySlug.set(slug, group);
   }
 
+  const generatedSlugs = new Set(products.map((product) => product.slug));
+  for (const previousProduct of oldProducts) {
+    if (generatedSlugs.has(previousProduct.slug)) continue;
+    products.push(previousProduct);
+    sourceBySlug.set(previousProduct.slug, {
+      key: previousProduct.slug,
+      files: [],
+      rootCategory: "",
+      directory: "",
+      audience: previousProduct.publico,
+      type: previousProduct.tipo,
+      season: previousProduct.temporada,
+      uniform: previousProduct.uniforme,
+    });
+    generatedSlugs.add(previousProduct.slug);
+  }
+
   const reviewRows: ReviewRow[] = [];
   for (const product of products) {
     const pending = [
@@ -660,7 +684,7 @@ async function main() {
     const group = sourceBySlug.get(product.slug)!;
     const row = {
       slug: product.slug,
-      arquivos: group.files.map((file) => file.relativePublicPath).join(" | "),
+      arquivos: group.files.map((file) => file.relativePublicPath).join(" | ") || (product.images ?? []).map((image) => image.source).join(" | "),
       clube: product.clube,
       liga: product.liga,
       publico: product.publico,

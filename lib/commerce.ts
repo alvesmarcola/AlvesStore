@@ -1,6 +1,6 @@
 import { storeConfig } from "@/config";
 import type { CartItem } from "@/lib/types";
-import { classifyProduct } from "@/lib/product-classification";
+import { classifyProduct, isPackageEligible } from "@/lib/product-classification";
 import { getAvailablePatches } from "@/lib/patch-compatibility";
 
 export function getPackagePrice(units: number) {
@@ -25,7 +25,7 @@ export function getShippingCents(units: number) {
 export function getCartPricing(items: CartItem[]) {
   const units = items.reduce((sum, item) => sum + item.quantity, 0);
   const classified = items.map((item) => ({ item, facts: classifyProduct(item.product) }));
-  const packageUnits = classified.reduce((sum, row) => sum + (row.facts.version === "fan" && !row.facts.fullPatch ? row.item.quantity : 0), 0);
+  const packageUnits = classified.reduce((sum, row) => sum + (isPackageEligible(row.item.product) ? row.item.quantity : 0), 0);
   const baseShirtsTotal = classified.reduce((sum, row) => sum + (row.facts.price ?? 0) * row.item.quantity, 0);
   const packageEligibleBase = packageUnits * storeConfig.fanCommonPrice;
   const customizationTotal = items.reduce(
@@ -43,4 +43,27 @@ export function getCartPricing(items: CartItem[]) {
   const needsReview = classified.some((row) => row.facts.reviewRequired);
   const patchCount = items.reduce((sum, item) => sum + (item.patches?.length ?? 0), 0);
   return { subtotal, bundleDiscount, total: productsTotal, shipping, grandTotal: productsTotal + shipping, needsReview, patchCount };
+}
+
+export function getProductCategoryKey(product: CartItem["product"]) {
+  const facts = classifyProduct(product);
+  if (facts.fullPatch) return "full-patch";
+  if (facts.version === "fan") return "torcedor";
+  if (facts.version === "player") return "jogador";
+  if (facts.version === "retro") return "retro";
+  if (facts.version === "goalkeeper") return "goleiro";
+  return product.tipo;
+}
+
+export function getProductOfferText(product: CartItem["product"]) {
+  const facts = classifyProduct(product);
+  const shipping = "Frete: R$ 20,00 (1 camisa), R$ 30,00 (2) ou grátis (3+).";
+  if (isPackageEligible(product)) {
+    return `Torcedor comum: 1 por R$ ${storeConfig.fanCommonPrice}, 2 por R$ ${storeConfig.twoShirtPrice} ou 3 por R$ ${storeConfig.threeShirtPrice}. ${shipping}`;
+  }
+  if (facts.price !== null) {
+    const category = facts.fullPatch ? "Full Patches" : facts.version === "retro" ? "Retrô" : facts.version === "player" ? "Jogador" : facts.version === "fan" ? "Torcedor manga longa" : "Produto";
+    return `${category}: ${new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(facts.price)} por camisa; sem oferta por quantidade. ${shipping}`;
+  }
+  return `Preço em revisão. ${shipping}`;
 }

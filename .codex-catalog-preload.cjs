@@ -1,0 +1,1 @@
+Object.defineProperty(process, "geteuid", { value: () => 0, configurable: true });

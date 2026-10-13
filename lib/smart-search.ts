@@ -6,6 +6,7 @@ export interface SearchIntent {
   uniform?: Exclude<Uniform, "revisar">;
   version?: Exclude<ShirtVersion, "unknown">;
   sleeve?: Exclude<SleeveType, "unknown">;
+  fullPatch?: boolean;
   season?: string;
   terms: string[];
 }
@@ -50,19 +51,20 @@ export function parseSearchIntent(query: string): SearchIntent {
   }
   if (/manga longa|long sleeve|\bls\b/.test(normalized)) intent.sleeve = "long";
   else if (/manga curta|short sleeve|\bss\b/.test(normalized)) intent.sleeve = "short";
+  if (/\b(full ?patch(?:es)?|patch completo|patches completos|full sponsor|all sponsors)\b/.test(normalized)) intent.fullPatch = true;
   const season = normalized.match(/\b(?:19|20)?\d{2}\s*[/-]\s*(?:\d{2}|\d{4})\b/);
   if (season) {
     const [start, end] = season[0].split(/[/-]/).map((part) => part.trim());
     intent.season = `${start.slice(-2)}/${end.slice(-2)}`;
   }
   const remove = new Set("camisa camisas shirt shirts jersey jerseys kit uniform uniforme de do da dos das com e modelo versao versão version masculine masculino feminina feminine feminino manga longa curta sleeve short ss ls".split(" "));
-  intent.terms = tokens.filter((token) => !remove.has(token) && !Object.hasOwn(uniformAliases, token) && !Object.hasOwn(versionAliases, token));
+  intent.terms = tokens.filter((token) => !remove.has(token) && !["full", "patch", "patches", "completo", "completos"].includes(token) && !Object.hasOwn(uniformAliases, token) && !Object.hasOwn(versionAliases, token));
   return intent;
 }
 
 function productText(product: Product) {
   const league = getLeague(product.liga);
-  return normalize([product.nome, product.clube, product.clubeSlug.replaceAll("-", " "), product.temporada, product.tipo, product.uniforme, product.imageSeed, league?.nome ?? "", league?.competicao ?? ""].join(" "));
+  return normalize([product.nome, product.clube, product.clubeSlug.replaceAll("-", " "), product.temporada, product.tipo, product.uniforme, product.imageSeed, ...(product.images ?? []).map((image) => image.source), league?.nome ?? "", league?.competicao ?? ""].join(" "));
 }
 
 function basicScore(product: Product, intent: SearchIntent) {
@@ -90,7 +92,8 @@ function facetsMatch(product: Product, intent: SearchIntent) {
   const facts = classifyProduct(product);
   return (!intent.uniform || facts.uniform === intent.uniform)
     && (!intent.version || facts.version === intent.version)
-    && (!intent.sleeve || facts.sleeve === intent.sleeve);
+    && (!intent.sleeve || facts.sleeve === intent.sleeve)
+    && (!intent.fullPatch || facts.fullPatch);
 }
 
 export function searchProducts(products: Product[], query: string) {

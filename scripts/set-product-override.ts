@@ -17,7 +17,7 @@ async function main() {
     if (!valid[field] && !["price", "source", "verified-by"].includes(field)) throw new Error(`Campo desconhecido: ${field}.`);
     if (field === "price") {
       const parsed = Number(value);
-      if (![160, 180, 185, 220].includes(parsed)) throw new Error("Use um dos preços cadastrados: 160, 180, 185 ou 220.");
+      if (!Number.isFinite(parsed) || parsed <= 0 || parsed > 2000) throw new Error("Informe um preço maior que zero e de até R$ 2.000,00.");
       override.price = parsed;
     } else if (field === "full-patch") override.fullPatch = value === "true";
     else if (field === "version") override.version = value;

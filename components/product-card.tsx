@@ -10,6 +10,7 @@ import { storeConfig } from "@/config";
 import { useCart } from "@/store/cart";
 import { flyThumbnailToCart } from "@/lib/fly-to-cart";
 import { classifyProduct } from "@/lib/product-classification";
+import { getProductOfferText } from "@/lib/commerce";
 
 export function ProductCard({ product }: { product: Product }) {
   const [size, setSize] = useState("");
@@ -46,8 +47,8 @@ export function ProductCard({ product }: { product: Product }) {
     </div>
     <div className="pt-3">
       <p className="line-clamp-2 min-h-10 text-xs font-medium leading-5 text-ink sm:text-sm">{product.nome}</p>
-      <div className="mt-2 flex items-baseline gap-2"><span className="text-base font-black text-ink">{classification.price === null ? classification.priceLabel : formatCurrency(classification.price)}</span></div>
-      <p className="mt-1 text-[10px] leading-4 text-muted">{storeConfig.shippingOfferText}</p>
+      <div className="mt-2 flex items-baseline gap-2"><span className="text-base font-black text-ink">{classification.reviewRequired ? classification.priceLabel : formatCurrency(classification.price!)}</span></div>
+      <p className="mt-1 text-[10px] leading-4 text-muted">{getProductOfferText(product)}</p>
       <p className="mt-1 text-[10px] text-muted">Personalização: +{formatCurrency(storeConfig.customizationPrice)} por camisa</p>
       <div className="mt-3 flex flex-wrap gap-1" aria-label="Selecione um tamanho">
         {product.tamanhos.slice(0, 6).map((itemSize) => <button key={itemSize} onClick={() => setSize(itemSize)} aria-label={`Tamanho ${itemSize}`} className={`grid h-7 min-w-7 place-items-center rounded-lg border px-1 text-[10px] font-bold ${size === itemSize ? "border-pitch bg-pitch text-white" : "border-border text-ink"}`}>{itemSize}</button>)}

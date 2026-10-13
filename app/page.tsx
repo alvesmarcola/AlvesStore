@@ -9,6 +9,8 @@ import { images } from "@/data/images";
 import { formatCurrency, leagues, products } from "@/lib/catalog";
 import { storeConfig } from "@/config";
 import type { Metadata } from "next";
+import { classifyProduct } from "@/lib/product-classification";
+import { editorialPriorities, prioritizeClubs, prioritizeEditorialProducts, sortCatalogProducts } from "@/lib/catalog-order";
 
 export const metadata: Metadata = { alternates: { canonical: "/" } };
 
@@ -60,10 +62,19 @@ function ProductSection({
 }
 
 export default function HomePage() {
-  const clubProducts = products.filter((product) => product.liga !== "selecoes" && product.liga !== "revisar" && product.clubeSlug !== "revisar").slice(0, 4);
-  const nationalSelections = products.filter((product) => product.liga === "selecoes").slice(0, 4);
-  const retros = products.filter((product) => product.tipo === "retro").slice(0, 4);
   const nationalTeamSlugs = new Set(leagues.find((league) => league.slug === "selecoes")?.clubes.map((team) => team.slug) ?? []);
+  const sellableProducts = products.filter((product) => product.tamanhos.length > 0 && !classifyProduct(product).reviewRequired);
+  const clubProducts = prioritizeEditorialProducts(
+    sellableProducts.filter((product) => product.liga !== "selecoes" && !nationalTeamSlugs.has(product.clubeSlug) && product.clubeSlug !== "revisar"),
+    editorialPriorities.clubs,
+    4,
+  );
+  const nationalSelections = prioritizeEditorialProducts(
+    sellableProducts.filter((product) => product.liga === "selecoes" || nationalTeamSlugs.has(product.clubeSlug)),
+    editorialPriorities.selections,
+    4,
+  );
+  const retros = sortCatalogProducts(sellableProducts.filter((product) => classifyProduct(product).version === "retro")).slice(0, 4);
   const destinations = new Map<string, { name: string; league: string; slug: string; popularity: number }>();
   products
     .filter((product) => product.liga !== "revisar" && product.clubeSlug !== "revisar")
@@ -77,10 +88,7 @@ export default function HomePage() {
       else destinations.set(key, { name: product.clube, league, slug: product.clubeSlug, popularity: 1 });
     });
   const allDestinations = [...destinations.values()];
-  const clubLinks = allDestinations
-    .filter((destination) => destination.league !== "selecoes")
-    .sort((a, b) => b.popularity - a.popularity)
-    .slice(0, 10);
+  const clubLinks = prioritizeClubs(allDestinations.filter((destination) => destination.league !== "selecoes")).slice(0, 10);
   const marqueeText = [...leagues.map((league) => league.nome), "O jogo é de todos", ...leagues.map((league) => league.nome)];
 
   return (
@@ -146,7 +154,7 @@ export default function HomePage() {
         <div className="mx-auto max-w-7xl px-5 lg:px-8">
           <Reveal>
             <p className="text-[10px] font-black uppercase tracking-[.2em] text-action">As cores que moram na arquibancada</p>
-            <h2 className="mt-2 text-3xl font-black uppercase sm:text-5xl">Clubes populares</h2>
+            <h2 className="mt-2 text-3xl font-black uppercase sm:text-5xl">Clubes em destaque</h2>
             <p className="mt-3 max-w-xl text-sm text-muted">Descubra camisas de clubes de várias ligas.</p>
           </Reveal>
           <div className="mt-7 grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 lg:grid-cols-6">

@@ -1,6 +1,6 @@
 import type { VerifiedOrderLine } from "@/lib/payment/order";
 import { storeConfig } from "@/config";
-import { classifyProduct } from "@/lib/product-classification";
+import { classifyProduct, isPackageEligible } from "@/lib/product-classification";
 
 type OrderTotals = {
   quantity: number;
@@ -21,7 +21,7 @@ export function buildPreferenceItems(orderId: string, lines: VerifiedOrderLine[]
 
   return lines.flatMap((line, index) => {
     const facts = classifyProduct(line.product);
-    const packageEligible = facts.version === "fan" && !facts.fullPatch;
+    const packageEligible = isPackageEligible(line.product);
     const higherPricedQuantity = packageEligible ? Math.min(line.quantity, remainingHigherPricedUnits) : 0;
     if (packageEligible) remainingHigherPricedUnits -= higherPricedQuantity;
     const regularPricedQuantity = packageEligible ? line.quantity - higherPricedQuantity : 0;

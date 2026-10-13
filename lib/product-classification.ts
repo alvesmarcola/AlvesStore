@@ -16,20 +16,20 @@ export interface ProductClassification {
 
 export function classifyProduct(product: Product): ProductClassification {
   const override = productOverrides[product.id] ?? productOverrides[product.slug];
-  const evidence = `${product.nome} ${product.slug} ${product.imageSeed} ${(product.images ?? []).map((image) => image.source).join(" ")}`.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("pt-BR");
+  const evidence = `${product.nome} ${product.slug} ${product.imageSeed} ${product.tipo} ${(product.images ?? []).map((image) => image.source).join(" ")}`.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("pt-BR").replace(/[^a-z0-9]+/g, " ").trim().replace(/\s+/g, " ");
+  const fullPatchEvidence = /\b(full ?patch(?:es)?|patch completo|patches completos|full sponsor|all sponsors)\b/.test(evidence);
   const inferredVersion: ShirtVersion = product.tipo === "retro" || /\b(retro|vintage)\b/.test(evidence)
     ? "retro"
-    : product.tipo === "jogador" || /\b(player version|versao jogador)\b/.test(evidence)
+    : product.tipo === "jogador" || /\b(player|player version|versao jogador|jogador)\b/.test(evidence)
       ? "player"
       : product.tipo === "goleiro" || /\b(goleiro|goalkeeper|keeper|gk)\b/.test(evidence)
         ? "goalkeeper"
-      : product.tipo === "torcedor" || /manga-longa-torcedor|\b(fan|supporter|versao torcedor|torcedor)\b/.test(evidence)
+      : product.tipo === "torcedor" || fullPatchEvidence || /\b(fan|supporter|versao torcedor|torcedor)\b/.test(evidence) || /\bultra ?pass(?: ?o| ?os)?\b/.test(evidence)
           ? "fan"
           : "unknown";
-  const inferredSleeve: SleeveType = /manga longa|manga-longa|long sleeve|\bls\b/.test(evidence)
+  const inferredSleeve: SleeveType = /\b(manga longa|long sleeve|ls)\b/.test(evidence)
     ? "long"
-    : /manga curta|short sleeve|\bss\b/.test(evidence) ? "short"
-      : inferredVersion === "retro" ? "short" : "unknown";
+    : /\b(manga curta|short sleeve|ss)\b/.test(evidence) ? "short" : "unknown";
   const inferredUniform: Uniform = product.uniforme !== "revisar"
     ? product.uniforme
     : /\b(home|titular)\b/.test(evidence) ? "titular"
@@ -39,17 +39,25 @@ export function classifyProduct(product: Product): ProductClassification {
   const version = override?.version ?? inferredVersion;
   const sleeve = override?.sleeve ?? inferredSleeve;
   const uniform = override?.uniform ?? inferredUniform;
-  const fullPatch = override?.fullPatch ?? (version === "fan" && /full.?patch|patch completo/.test(evidence));
-  const overridePrice = ([storeConfig.fanCommonPrice, storeConfig.fanFullPatchPrice, storeConfig.retroShortSleevePrice, storeConfig.retroLongSleevePrice] as number[]).includes(override?.price ?? -1)
+  const fullPatch = override?.fullPatch ?? (version === "fan" && fullPatchEvidence);
+  const overridePrice = Number.isFinite(override?.price) && (override?.price ?? 0) > 0 && (override?.price ?? Infinity) <= 2000
     ? override?.price : undefined;
-  const price = overridePrice ?? (
+  const categoryPrice = (
     version === "retro" && sleeve === "long" ? storeConfig.retroLongSleevePrice
       : version === "retro" && sleeve === "short" ? storeConfig.retroShortSleevePrice
-        : version === "fan" && !fullPatch ? storeConfig.fanCommonPrice
-          : version === "fan" && fullPatch ? storeConfig.fanFullPatchPrice : null
+        : version === "player" && sleeve === "long" ? storeConfig.playerLongSleevePrice
+          : version === "fan" && fullPatch ? storeConfig.fanFullPatchPrice
+            : version === "fan" && sleeve === "long" && product.preco > 0 && product.preco !== storeConfig.fanCommonPrice ? product.preco
+              : version === "fan" ? storeConfig.fanCommonPrice : null
   );
-  const reviewRequired = price === null || version === "unknown";
-  const label = reviewRequired ? "Preço em revisão" : `R$ ${price.toFixed(2).replace(".", ",")}`;
+  const registeredPrice = Number.isFinite(product.preco) && product.preco > 0 && !(product.preco === storeConfig.fanCommonPrice && version !== "fan");
+  const price = overridePrice ?? categoryPrice ?? (
+    registeredPrice && ((version === "retro" && sleeve === "unknown") || !["fan", "player"].includes(version))
+      ? product.preco : null
+  );
+  const verifiedOverride = Boolean(override?.source && override?.verifiedBy);
+  const reviewRequired = price === null || version === "unknown" || (version === "player" && sleeve !== "long" && !verifiedOverride);
+  const label = price === null ? "Preço em revisão" : `R$ ${price.toFixed(2).replace(".", ",")}${reviewRequired ? " · classificação em revisão" : ""}`;
   return {
     version,
     sleeve,
@@ -59,10 +67,15 @@ export function classifyProduct(product: Product): ProductClassification {
     priceLabel: label,
     reviewRequired,
     source: override ? "correção administrativa" : reviewRequired ? "revisão necessária" : "catálogo",
-    evidence: override?.source ? [override.source] : [product.tipo !== "revisar" ? `tipo:${product.tipo}` : "", /manga-longa|manga longa|long sleeve|\bls\b/.test(evidence) ? "indicação de manga no nome/slug/fonte da imagem" : ""].filter(Boolean),
+    evidence: override?.source ? [override.source] : [product.tipo !== "revisar" ? `tipo:${product.tipo}` : "", /\b(manga longa|long sleeve|ls)\b/.test(evidence) ? "indicação de manga no nome/slug/fonte da imagem" : ""].filter(Boolean),
   };
 }
 
 export function getProductUnitPrice(product: Product) {
   return classifyProduct(product).price;
+}
+
+export function isPackageEligible(product: Product) {
+  const facts = classifyProduct(product);
+  return facts.version === "fan" && !facts.fullPatch && facts.price === storeConfig.fanCommonPrice;
 }

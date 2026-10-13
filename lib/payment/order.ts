@@ -4,7 +4,7 @@ import { products } from "@/lib/catalog";
 import { getPackagePrice, getShippingCents } from "@/lib/commerce";
 import { checkoutSchema } from "@/lib/validation";
 import type { Product } from "@/lib/types";
-import { classifyProduct } from "@/lib/product-classification";
+import { classifyProduct, isPackageEligible } from "@/lib/product-classification";
 import { getAvailablePatches } from "@/lib/patch-compatibility";
 
 export const orderLinesSchema = z.array(z.object({
@@ -76,8 +76,7 @@ export function calculateOrderTotals(lines: VerifiedOrderLine[]) {
     0,
   );
   const packageQuantity = lines.reduce((sum, line) => {
-    const facts = classifyProduct(line.product);
-    return sum + (facts.version === "fan" && !facts.fullPatch ? line.quantity : 0);
+    return sum + (isPackageEligible(line.product) ? line.quantity : 0);
   }, 0);
   const baseSubtotalCents = lines.reduce((sum, line) => sum + (classifyProduct(line.product).price ?? 0) * line.quantity * 100, 0);
   const pricedOutsidePackagesCents = baseSubtotalCents - packageQuantity * storeConfig.fanCommonPrice * 100;
