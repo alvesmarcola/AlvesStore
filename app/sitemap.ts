@@ -1,10 +1,10 @@
 import type { MetadataRoute } from "next";
 import { leagues, products } from "@/lib/catalog";
 
-const baseUrl = "https://alvesstore.com.br";
+const baseUrl = "https://alves-store-green.vercel.app";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const staticPaths = ["", "/masculino", "/feminino", "/carrinho", "/checkout", "/login", "/rastreio", "/guia-de-medidas", "/quem-somos", "/privacidade", "/envios-e-prazos", "/compra-segura", "/como-comprar", "/contato", "/busca"];
+  const staticPaths = ["", "/masculino", "/feminino", "/quem-somos", "/privacidade", "/politica-de-troca", "/termos-de-uso", "/politica-de-personalizacao", "/envios-e-prazos", "/compra-segura", "/como-comprar", "/contato", "/rastreio"];
   const leaguePaths = leagues.flatMap((league) => [
     `/ligas/${league.slug}`,
     ...league.clubes.map((club) => `/ligas/${league.slug}/${club.slug}`),

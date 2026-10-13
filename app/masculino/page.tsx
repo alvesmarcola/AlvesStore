@@ -2,7 +2,7 @@ import { CatalogPage } from "@/components/catalog-page";
 import { images } from "@/data/images";
 import { products } from "@/lib/catalog";
 
-export const metadata = { title: "Camisas masculinas", description: "Encontre camisas masculinas de futebol, versões torcedor, jogador e retrô." };
+export const metadata = { title: "Camisas masculinas", description: "Encontre camisas masculinas de futebol, versões torcedor, jogador e retrô.", alternates: { canonical: "/masculino" } };
 
 export default async function MasculinoPage({ searchParams }: { searchParams: Promise<{ tipo?: string }> }) {
   const { tipo = "" } = await searchParams;

@@ -8,6 +8,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: { default: "ALVES STORE | Vista seu time", template: "%s | ALVES STORE" },
   description: "Camisas de futebol para vestir seu time. Encontre modelos masculinos, femininos, retrô e seleções.",
+  metadataBase: new URL("https://alves-store-green.vercel.app"),
   openGraph: { title: "ALVES STORE", description: "Vista seu time. Leve o jogo com você.", type: "website", locale: "pt_BR" },
 };
 

@@ -37,15 +37,6 @@ export const checkoutSchema = z.object({
 
 export type CheckoutValues = z.infer<typeof checkoutSchema>;
 
-export const loginSchema = z.object({
-  email: z.string().trim().email("Informe um e-mail válido."),
-  password: z.string().min(6, "A senha deve ter ao menos 6 caracteres."),
-});
-
-export const registerSchema = loginSchema.extend({
-  name: z.string().trim().min(3, "Informe seu nome completo."),
-});
-
 export const trackingSchema = z.object({
   code: z.string().trim().min(5, "Digite um código de pedido válido."),
 });

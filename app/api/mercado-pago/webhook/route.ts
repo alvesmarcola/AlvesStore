@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getPaymentClient } from "@/lib/server/mercado-pago";
+import { getPaymentClient, getSiteUrl, isProductionPaymentEnvironment } from "@/lib/server/mercado-pago";
 import { getDatabasePool } from "@/lib/server/database";
 import { isValidMercadoPagoSignature, normalizedPaymentStatus } from "@/lib/server/webhook-signature";
 
@@ -39,7 +39,7 @@ export async function POST(request: Request) {
 
   try {
     const payment = await getPaymentClient().get({ id: paymentId });
-    if (payment.live_mode !== false || payment.currency_id !== "BRL"
+    if (payment.live_mode !== isProductionPaymentEnvironment() || payment.currency_id !== "BRL"
       || !payment.external_reference || !/^[0-9a-f-]{36}$/i.test(payment.external_reference)) {
       return NextResponse.json({ received: true });
     }
@@ -55,8 +55,8 @@ export async function POST(request: Request) {
     const transaction = await pool.connect();
     try {
       await transaction.query("BEGIN");
-      const orderResult = await transaction.query<{ total_cents: number }>(
-        "SELECT total_cents FROM store_orders WHERE id = $1 FOR UPDATE",
+      const orderResult = await transaction.query<{ total_cents: number; status: string; customer: Record<string, string>; item_lines: { title: string; size: string; quantity: number; customization?: { name: string; number: string } }[]; shipping_cents: number }>(
+        "SELECT total_cents, status, customer, item_lines, shipping_cents FROM store_orders WHERE id = $1 FOR UPDATE",
         [payment.external_reference],
       );
       const order = orderResult.rows[0];
@@ -68,12 +68,12 @@ export async function POST(request: Request) {
 
       const savedPayment = await transaction.query(
         `INSERT INTO store_order_payments (payment_id, order_id, status, amount_cents, currency, live_mode)
-         VALUES ($1, $2, $3, $4, $5, FALSE)
+         VALUES ($1, $2, $3, $4, $5, $6)
          ON CONFLICT (payment_id) DO UPDATE
            SET status = EXCLUDED.status, amount_cents = EXCLUDED.amount_cents,
-               currency = EXCLUDED.currency, updated_at = NOW()
+               currency = EXCLUDED.currency, live_mode = EXCLUDED.live_mode, updated_at = NOW()
            WHERE store_order_payments.order_id = EXCLUDED.order_id`,
-        [paymentId, payment.external_reference, status, amountCents, payment.currency_id],
+        [paymentId, payment.external_reference, status, amountCents, payment.currency_id, payment.live_mode],
       );
       if (savedPayment.rowCount !== 1) {
         await transaction.query("ROLLBACK");
@@ -94,6 +94,18 @@ export async function POST(request: Request) {
         [payment.external_reference],
       );
       await transaction.query("COMMIT");
+      if (status === "approved" && order.status !== "approved") {
+        const apiKey = process.env.RESEND_API_KEY;
+        const from = process.env.ORDER_EMAIL_FROM;
+        if (apiKey && from) {
+          const list = order.item_lines.map((item) => `${item.title} · tamanho ${item.size} · ${item.quantity} un.${item.customization ? ` · personalizado ${item.customization.name} ${item.customization.number}` : ""}`).join("\n");
+          const amount = (cents: number) => `R$ ${(cents / 100).toFixed(2).replace(".", ",")}`;
+          try {
+            const response = await fetch("https://api.resend.com/emails", { method: "POST", headers: { authorization: `Bearer ${apiKey}`, "content-type": "application/json" }, body: JSON.stringify({ from, to: [order.customer.email], subject: "Pagamento aprovado — Alves Store", text: `Olá, ${order.customer.fullName}! Seu pedido foi aprovado.\n\n${list}\nFrete: ${amount(Number(order.shipping_cents))}\nTotal: ${amount(Number(order.total_cents))}\n\nAcompanhe em ${getSiteUrl()}/rastreio` }), signal: AbortSignal.timeout(5_000) });
+            if (!response.ok) console.error("E-mail transacional não enviado:", response.status);
+          } catch (error) { console.error("Falha no e-mail transacional:", error instanceof Error ? error.message : "erro desconhecido"); }
+        }
+      }
     } catch (error) {
       await transaction.query("ROLLBACK").catch(() => undefined);
       throw error;

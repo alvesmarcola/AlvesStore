@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ChevronRight, SlidersHorizontal } from "lucide-react";
 import { ProductGrid } from "@/components/product-grid";
 import { formatCurrency, leagues } from "@/lib/catalog";
 import { storeConfig } from "@/config";
 import type { Product } from "@/lib/types";
+import { searchProducts } from "@/lib/smart-search";
 import { CategoryHero } from "@/components/category-hero";
 import type { ImageAsset } from "@/data/images";
 
@@ -19,9 +20,11 @@ interface CatalogPageProps {
   heroImage?: ImageAsset;
   heroEyebrow?: string;
   quickLinks?: { name: string; href: string }[];
+  initialSearch?: string;
+  notice?: string;
 }
 
-export function CatalogPage({ title, description, products, breadcrumb, initialType = "", heroImage, heroEyebrow = "Coleção alves store", quickLinks }: CatalogPageProps) {
+export function CatalogPage({ title, description, products, breadcrumb, initialType = "", heroImage, heroEyebrow = "Coleção alves store", quickLinks, initialSearch = "", notice }: CatalogPageProps) {
   const [sort, setSort] = useState("relevancia");
   const [search, setSearch] = useState("");
   const [type, setType] = useState(initialType);
@@ -34,29 +37,31 @@ export function CatalogPage({ title, description, products, breadcrumb, initialT
   const [maxPrice, setMaxPrice] = useState("600");
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [visibleCount, setVisibleCount] = useState(12);
-  useEffect(() => setType(initialType), [initialType]);
+  const urlReady = useRef(false);
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setSearch(initialSearch !== undefined ? initialSearch : params.get("q") ?? ""); setType(params.get("tipo") ?? initialType);
+    setUniform(params.get("uniforme") ?? ""); setClub(params.get("clube") ?? ""); setLeague(params.get("liga") ?? "");
+    setSize(params.get("tamanho") ?? ""); setSeason(params.get("temporada") ?? ""); setColor(params.get("cor") ?? "");
+    setMaxPrice(params.get("preco") ?? "600"); setSort(params.get("ordem") ?? "relevancia"); urlReady.current = true;
+  }, [initialType, initialSearch]);
+  useEffect(() => {
+    if (!urlReady.current) return;
+    const params = new URLSearchParams();
+    const values: Record<string, string> = { q: search, tipo: type, uniforme: uniform, clube: club, liga: league, tamanho: size, temporada: season, cor: color, preco: maxPrice === "600" ? "" : maxPrice, ordem: sort === "relevancia" ? "" : sort };
+    for (const [key, value] of Object.entries(values)) if (value) params.set(key, value);
+    const query = params.toString(); window.history.replaceState(null, "", `${window.location.pathname}${query ? `?${query}` : ""}`);
+  }, [search, type, uniform, club, league, size, season, color, maxPrice, sort]);
   useEffect(() => setVisibleCount(12), [products, type, uniform, club, league, size, season, color, maxPrice, sort]);
   const filtered = useMemo(() => {
-    const normalizedSearch = search.trim().toLocaleLowerCase("pt-BR");
+    const matchingProducts = search.trim() ? new Set(searchProducts(products, search).results.map((product) => product.id)) : null;
     const result = products.filter((product) => {
-      const leagueName = leagues.find((item) => item.slug === product.liga)?.nome ?? "";
-      const haystack = [
-        product.nome,
-        product.clube,
-        product.clubeSlug,
-        leagueName,
-        product.liga,
-        product.tipo,
-        product.temporada,
-        product.uniforme,
-        product.cor,
-      ].filter(Boolean).join(" ").toLocaleLowerCase("pt-BR");
       return (!type || product.tipo === type) && (!uniform || product.uniforme === uniform) &&
         (!club || product.clubeSlug === club) && (!league || product.liga === league) &&
         (!size || product.tamanhos.includes(size)) &&
         (!season || product.temporada === season) && (!color || product.cor === color) &&
         product.preco <= Number(maxPrice) &&
-        (!normalizedSearch || haystack.includes(normalizedSearch));
+        (!matchingProducts || matchingProducts.has(product.id));
     });
     if (sort === "menor") result.sort((a, b) => a.preco - b.preco);
     if (sort === "maior") result.sort((a, b) => b.preco - a.preco);
@@ -85,11 +90,11 @@ export function CatalogPage({ title, description, products, breadcrumb, initialT
   const filterFields = <>
     <label className="filter-label">Clube<select className="filter-select" value={club} onChange={(event) => setClub(event.target.value)}><option value="">Todos os clubes</option>{clubOptions.map(([slug, name]) => <option key={slug} value={slug}>{name}</option>)}</select></label>
     <label className="filter-label">Liga<select className="filter-select" value={league} onChange={(event) => setLeague(event.target.value)}><option value="">Todas</option>{leagueOptions.map((slug) => <option key={slug} value={slug}>{leagues.find((item) => item.slug === slug)?.nome ?? slug}</option>)}</select></label>
-    <label className="filter-label">Tamanho (a confirmar)<select className="filter-select" value={size} onChange={(event) => setSize(event.target.value)}><option value="">Todos</option>{sizeOptions.map((item) => <option key={item} value={item}>{item}</option>)}</select></label>
+    <label className="filter-label">Tamanho<select className="filter-select" value={size} onChange={(event) => setSize(event.target.value)}><option value="">Todos</option>{sizeOptions.map((item) => <option key={item} value={item}>{item}</option>)}</select></label>
     <label className="filter-label">Tipo<select className="filter-select" value={type} onChange={(event) => setType(event.target.value)}><option value="">Todos</option>{typeOptions.map((item) => <option key={item} value={item}>{typeLabels[item] ?? item}</option>)}</select></label>
-    <label className="filter-label">Uniforme<select className="filter-select" value={uniform} onChange={(event) => setUniform(event.target.value)}><option value="">Todos</option>{uniformOptions.map((item) => <option key={item} value={item}>{uniformLabels[item] ?? item}</option>)}</select></label>
+    {uniformOptions.length > 0 && <label className="filter-label">Uniforme<select className="filter-select" value={uniform} onChange={(event) => setUniform(event.target.value)}><option value="">Todos</option>{uniformOptions.map((item) => <option key={item} value={item}>{uniformLabels[item] ?? item}</option>)}</select></label>}
     <label className="filter-label">Temporada<select className="filter-select" value={season} onChange={(event) => setSeason(event.target.value)}><option value="">Todas</option>{seasonOptions.map((item) => <option key={item}>{item}</option>)}</select></label>
-    <label className="filter-label">Cor<select className="filter-select" value={color} onChange={(event) => setColor(event.target.value)}><option value="">Todas</option>{colorOptions.map((item) => <option key={item}>{item}</option>)}</select></label>
+    {colorOptions.length > 0 && <label className="filter-label">Cor<select className="filter-select" value={color} onChange={(event) => setColor(event.target.value)}><option value="">Todas</option>{colorOptions.map((item) => <option key={item}>{item}</option>)}</select></label>}
     <label className="filter-label">Faixa de preço<select className="filter-select" value={maxPrice} onChange={(event) => setMaxPrice(event.target.value)}><option value="600">Todos os preços</option><option value={storeConfig.shirtPrice}>Até {formatCurrency(storeConfig.shirtPrice)}</option></select></label>
     <button className="mt-4 text-xs font-bold text-blue-700 underline" onClick={clearFilters}>Limpar filtros</button>
   </>;
@@ -100,6 +105,7 @@ export function CatalogPage({ title, description, products, breadcrumb, initialT
     {!heroImage && <>
       <nav className="mb-5 flex flex-wrap items-center gap-2 text-xs text-muted" aria-label="Breadcrumb"><Link href="/">Início</Link>{breadcrumb.map((item, index) => <span key={item.name} className="flex items-center gap-2"><ChevronRight size={13} />{item.href && index !== breadcrumb.length - 1 ? <Link href={item.href}>{item.name}</Link> : <span>{item.name}</span>}</span>)}</nav>
       <div className="mb-7"><p className="text-[10px] font-black uppercase tracking-[.2em] text-blue-600">ALVES STORE · COLEÇÃO</p><h1 className="mt-1 text-3xl font-black tracking-tight sm:text-4xl">{title}</h1><p className="mt-2 max-w-2xl text-sm leading-6 text-muted">{description}</p></div>
+      {notice && <p role="status" className="mb-5 rounded-lg border border-amber-300 bg-amber-50 p-4 text-sm leading-6 text-amber-950">{notice}</p>}
     </>}
     <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-y py-3">
       <span className="text-xs text-muted">{filtered.length} produtos encontrados</span>

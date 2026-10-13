@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { storeConfig } from "@/config";
 import { products } from "@/lib/catalog";
-import { getPackagePrice } from "@/lib/commerce";
+import { getPackagePrice, getShippingCents } from "@/lib/commerce";
 import { checkoutSchema } from "@/lib/validation";
 import type { Product } from "@/lib/types";
 
@@ -15,19 +15,10 @@ export const orderLinesSchema = z.array(z.object({
   }).strict().optional(),
 }).strict()).min(1).max(20);
 
-export const shippingQuoteRequestSchema = z.object({
-  items: orderLinesSchema,
-  cep: z.string().transform((value) => value.replace(/\D/g, "")).pipe(z.string().regex(/^\d{8}$/)),
-}).strict();
-
 export const paymentRequestSchema = z.object({
   idempotencyKey: z.string().uuid(),
   items: orderLinesSchema,
   customer: checkoutSchema.strict(),
-  shipping: z.object({
-    serviceCode: z.string().min(1).max(12).optional(),
-    quotedPriceCents: z.number().int().nonnegative().max(100_000).optional(),
-  }).strict(),
 }).strict();
 
 export type OrderLineInput = z.infer<typeof orderLinesSchema>[number];
@@ -69,10 +60,13 @@ export function calculateOrderTotals(lines: VerifiedOrderLine[]) {
     (sum, line) => sum + (line.customization ? line.quantity : 0),
     0,
   );
-  const baseSubtotalCents = quantity * storeConfig.shirtPrice * 100;
+  const standardQuantity = lines.reduce((sum, line) => sum + (line.product.tipo === "retro" ? 0 : line.quantity), 0);
+  const retroQuantity = quantity - standardQuantity;
+  const baseSubtotalCents = lines.reduce((sum, line) => sum + line.product.preco * line.quantity * 100, 0);
   const customizationCents = personalizedQuantity * storeConfig.customizationPrice * 100;
-  const shirtsCents = getPackagePrice(quantity) * 100;
+  const shirtsCents = (getPackagePrice(standardQuantity) + retroQuantity * storeConfig.retroShirtPrice) * 100;
   const bundleDiscountCents = baseSubtotalCents - shirtsCents;
+  const shippingCents = getShippingCents(quantity);
 
   return {
     quantity,
@@ -80,8 +74,12 @@ export function calculateOrderTotals(lines: VerifiedOrderLine[]) {
     baseSubtotalCents,
     customizationCents,
     shirtsCents,
+    standardQuantity,
+    standardShirtsCents: getPackagePrice(standardQuantity) * 100,
     bundleDiscountCents,
     productsTotalCents: shirtsCents + customizationCents,
+    shippingCents,
+    totalCents: shirtsCents + customizationCents + shippingCents,
   };
 }
 
@@ -99,6 +97,5 @@ export function calculateOrderFingerprint(request: PaymentRequest) {
       key,
       key === "cpf" || key === "phone" || key === "cep" ? String(value).replace(/\D/g, "") : String(value).trim(),
     ])),
-    shipping: request.shipping,
   });
 }

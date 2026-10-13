@@ -10,7 +10,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ liga: string }> }) {
   const { liga } = await params;
   const league = getLeague(liga);
-  return { title: league ? `Camisas ${league.nome}` : "Ligas", description: league ? `Explore camisas de ${league.nome} e encontre seu clube.` : undefined };
+  return { title: league ? `Camisas ${league.nome}` : "Ligas", description: league ? `Explore camisas de ${league.nome} e encontre seu clube.` : undefined, alternates: { canonical: `/ligas/${liga}` } };
 }
 
 export default async function LeaguePage({ params }: { params: Promise<{ liga: string }> }) {

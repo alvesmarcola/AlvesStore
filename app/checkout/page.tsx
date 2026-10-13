@@ -1,24 +1,23 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useForm, type FieldErrors, type Path, type UseFormRegister } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronLeft, ChevronRight, LockKeyhole, MapPin } from "lucide-react";
 import { storeConfig } from "@/config";
 import { formatCurrency } from "@/lib/catalog";
-import { getCartPricing, qualifiesForFreeShipping } from "@/lib/commerce";
+import { getCartPricing } from "@/lib/commerce";
 import { useCart } from "@/store/cart";
 import { checkoutSchema, type CheckoutValues } from "@/lib/validation";
-
-type ShippingQuote = { serviceCode: string; label: string; priceCents: number };
+import { useIsTestPayment } from "./payment-env-context";
 
 const stepFields: Path<CheckoutValues>[][] = [
   ["fullName", "email", "cpf", "phone"],
   ["cep", "street", "number", "complement", "neighborhood", "city", "state"],
 ];
 
-const stepTitles = ["Identificação", "Endereço e frete", "Pagamento"];
+const stepTitles = ["Identificação", "Endereço", "Pagamento"];
 
 function CheckoutInput({
   label,
@@ -50,75 +49,24 @@ function CheckoutInput({
 }
 
 export default function CheckoutPage() {
+  const isTestPayment = useIsTestPayment();
   const { items } = useCart();
   const [step, setStep] = useState(0);
   const [cepLoading, setCepLoading] = useState(false);
-  const [shippingOptions, setShippingOptions] = useState<ShippingQuote[]>([]);
-  const [selectedService, setSelectedService] = useState("");
-  const [shippingError, setShippingError] = useState("");
   const [checkoutError, setCheckoutError] = useState("");
   const idempotencyKey = useRef<string | null>(null);
-  const { subtotal, bundleDiscount, total } = getCartPricing(items);
+  const { subtotal, bundleDiscount, shipping, grandTotal } = getCartPricing(items);
   const { register, handleSubmit, trigger, watch, setValue, setError, formState: { errors, isSubmitting } } = useForm<CheckoutValues>({
     resolver: zodResolver(checkoutSchema),
     mode: "onTouched",
     defaultValues: { fullName: "", email: "", cpf: "", phone: "", cep: "", street: "", number: "", complement: "", neighborhood: "", city: "", state: "" },
   });
   const cep = watch("cep");
-  const freeShipping = qualifiesForFreeShipping(items);
-  const cartSignature = items.map((item) => `${item.product.id}:${item.size}:${item.quantity}`).join("|");
-  const chosenShipping = shippingOptions.find((option) => option.serviceCode === selectedService);
-  const shippingCents = freeShipping ? 0 : chosenShipping?.priceCents ?? 0;
-
-  useEffect(() => {
-    setShippingOptions([]);
-    setSelectedService("");
-    setShippingError("");
-  }, [cep, cartSignature]);
-
-  async function quoteShipping(destinationCep: string) {
-    setCepLoading(true);
-    setShippingError("");
-    setShippingOptions([]);
-    setSelectedService("");
-    try {
-      const response = await fetch("/api/shipping/quote", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          cep: destinationCep,
-          items: items.map((item) => ({
-            productId: item.product.id,
-            size: item.size,
-            quantity: item.quantity,
-            ...(item.customization ? { customization: item.customization } : {}),
-          })),
-        }),
-      });
-      const result = await response.json() as { quotes?: ShippingQuote[]; error?: string };
-      if (!response.ok) throw new Error(result.error ?? "Não foi possível consultar o frete.");
-      if (!result.quotes?.length) throw new Error("Os Correios não retornaram opções de frete para este CEP.");
-      setShippingOptions(result.quotes);
-    } catch (error) {
-      setShippingError(error instanceof Error ? error.message : "Não foi possível consultar o frete.");
-    } finally {
-      setCepLoading(false);
-    }
-  }
 
   async function nextStep() {
     const valid = await trigger(stepFields[step] ?? [], { shouldFocus: true });
     if (!valid) return;
-    if (step === 1 && !freeShipping && !chosenShipping) {
-      if (!shippingOptions.length) {
-        await quoteShipping(cep.replace(/\D/g, ""));
-      } else {
-        setShippingError("Selecione uma opção de frete para continuar.");
-      }
-      return;
-    }
     setStep((current) => Math.min(current + 1, stepTitles.length - 1));
-    setShippingError("");
   }
 
   async function lookupCep() {
@@ -129,7 +77,6 @@ export default function CheckoutPage() {
     }
 
     setCepLoading(true);
-    setShippingError("");
     try {
       const response = await fetch(`https://viacep.com.br/ws/${normalizedCep}/json/`);
       if (!response.ok) throw new Error("Consulta indisponível.");
@@ -148,17 +95,10 @@ export default function CheckoutPage() {
     } finally {
       setCepLoading(false);
     }
-    if (!freeShipping) await quoteShipping(normalizedCep);
   }
 
   async function placeOrder(values: CheckoutValues) {
     setCheckoutError("");
-    if (!freeShipping && !chosenShipping) {
-      setStep(1);
-      setShippingError("Consulte e selecione uma opção de frete antes de pagar.");
-      return;
-    }
-
     idempotencyKey.current ??= globalThis.crypto.randomUUID();
     try {
       const response = await fetch("/api/checkout", {
@@ -176,10 +116,6 @@ export default function CheckoutPage() {
             ...(item.customization ? { customization: item.customization } : {}),
           })),
           customer: values,
-          shipping: {
-            ...(chosenShipping ? { serviceCode: chosenShipping.serviceCode } : {}),
-            quotedPriceCents: shippingCents,
-          },
         }),
       });
       const result = await response.json() as { checkoutUrl?: string; error?: string };
@@ -196,7 +132,7 @@ export default function CheckoutPage() {
   if (!items.length) return <main className="mx-auto max-w-3xl px-5 py-20 text-center"><h1 className="text-2xl font-black">Sua sacola está vazia</h1><p className="mt-2 text-sm text-muted">Adicione uma camisa antes de continuar.</p><Link href="/masculino" className="primary-button mt-5 inline-block px-6 py-3 text-xs font-black uppercase">Explorar camisas</Link></main>;
 
   return <main className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
-    <div className="mb-7"><p className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-blue-700"><LockKeyhole size={14} />Checkout seguro · teste Mercado Pago</p><h1 className="mt-2 text-3xl font-black">Finalizar compra</h1><p className="mt-1 text-sm text-muted">Informe seus dados e conclua o pagamento no ambiente seguro do Mercado Pago.</p></div>
+    <div className="mb-7"><p className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-blue-700"><LockKeyhole size={14} />Checkout seguro · Mercado Pago</p><h1 className="mt-2 text-3xl font-black">Finalizar compra</h1><p className="mt-1 text-sm text-muted">Informe seus dados e conclua o pagamento no ambiente seguro do Mercado Pago.</p>{isTestPayment && <p className="mt-2 text-xs font-semibold text-amber-700">Ambiente de teste: as transações não são cobranças reais.</p>}</div>
     <div className="mb-6 grid grid-cols-3 gap-2" aria-label="Etapas do checkout">
       {stepTitles.map((title, index) => <div key={title} className={`border-t-2 pt-2 text-xs font-bold ${index <= step ? "border-action text-ink" : "border-border text-muted"}`} aria-current={step === index ? "step" : undefined}>{index + 1}. {title}</div>)}
     </div>
@@ -209,7 +145,7 @@ export default function CheckoutPage() {
           <CheckoutInput label="Celular com DDD" name="phone" register={register} errors={errors} autoComplete="tel" inputMode="tel" maxLength={15} placeholder="(00) 00000-0000" />
         </div><button type="button" onClick={nextStep} className="primary-button mt-6 flex items-center gap-2 px-5 py-3 text-xs font-black uppercase">Continuar <ChevronRight size={15} /></button></section>
         <section hidden={step !== 1} className="rounded-xl border border-border p-5 sm:p-7"><h2 className="text-lg font-black">2. Endereço e frete</h2><div className="mt-4 grid gap-4 sm:grid-cols-2">
-          <div className="flex items-end gap-2"><div className="flex-1"><CheckoutInput label="CEP" name="cep" register={register} errors={errors} autoComplete="postal-code" inputMode="numeric" maxLength={9} placeholder="00000-000" /></div><button type="button" onClick={lookupCep} disabled={cepLoading} aria-label="Consultar CEP e frete" className="mb-[1px] grid h-11 w-11 shrink-0 place-items-center rounded-lg border border-border disabled:opacity-50">{cepLoading ? <span className="animate-spin">◌</span> : <MapPin size={17} />}</button></div>
+          <div className="flex items-end gap-2"><div className="flex-1"><CheckoutInput label="CEP" name="cep" register={register} errors={errors} autoComplete="postal-code" inputMode="numeric" maxLength={9} placeholder="00000-000" /></div><button type="button" onClick={lookupCep} disabled={cepLoading} aria-label="Buscar endereço pelo CEP" className="mb-[1px] grid h-11 w-11 shrink-0 place-items-center rounded-lg border border-border disabled:opacity-50">{cepLoading ? <span className="animate-spin">◌</span> : <MapPin size={17} />}</button></div>
           <CheckoutInput label="Estado (UF)" name="state" register={register} errors={errors} autoComplete="address-level1" maxLength={2} placeholder="SP" />
           <div className="sm:col-span-2"><CheckoutInput label="Endereço" name="street" register={register} errors={errors} autoComplete="street-address" placeholder="Rua, avenida..." /></div>
           <CheckoutInput label="Número" name="number" register={register} errors={errors} placeholder="Número" />
@@ -217,22 +153,14 @@ export default function CheckoutPage() {
           <CheckoutInput label="Bairro" name="neighborhood" register={register} errors={errors} placeholder="Bairro" />
           <CheckoutInput label="Cidade" name="city" register={register} errors={errors} autoComplete="address-level2" placeholder="Cidade" />
         </div>
-        <h3 className="mt-6 text-sm font-black">Frete</h3>
-        {freeShipping ? <p className="mt-3 rounded bg-action-soft p-3 text-xs leading-5 text-blue-900">Frete grátis para este pedido, com 3 ou mais camisas.</p> : <div className="mt-3 space-y-2">
-          <p className="rounded bg-paper p-3 text-xs leading-5 text-muted">Consulte os serviços e valores atuais diretamente nos Correios para o CEP informado.</p>
-          {!shippingOptions.length && <button type="button" onClick={() => quoteShipping(cep.replace(/\D/g, ""))} disabled={cepLoading} className="rounded-lg border border-ink px-4 py-2 text-xs font-black uppercase disabled:opacity-50">{cepLoading ? "Consultando..." : "Consultar frete"}</button>}
-          {shippingOptions.map((option) => <label key={option.serviceCode} className={`flex cursor-pointer items-center justify-between gap-3 rounded-lg border p-3 text-sm ${selectedService === option.serviceCode ? "border-action bg-action-soft" : "border-border"}`}>
-            <span className="flex items-center gap-2"><input type="radio" name="shipping-service" value={option.serviceCode} checked={selectedService === option.serviceCode} onChange={() => { setSelectedService(option.serviceCode); setShippingError(""); }} />{option.label}</span><strong>{formatCurrency(option.priceCents / 100)}</strong>
-          </label>)}
-          {shippingError && <p role="alert" className="text-xs text-red-600">{shippingError}</p>}
-        </div>}
+        <p className="mt-4 rounded bg-action-soft p-3 text-xs leading-5 text-blue-900">Frete: {shipping === 0 ? "Grátis" : formatCurrency(shipping)}. A busca do CEP serve apenas para preencher o endereço.</p>
         <div className="mt-6 flex gap-2"><button type="button" onClick={() => setStep(0)} className="flex items-center gap-2 rounded-lg border border-ink px-5 py-3 text-xs font-black uppercase"><ChevronLeft size={15} /> Voltar</button><button type="button" onClick={nextStep} disabled={cepLoading} className="primary-button flex items-center gap-2 px-5 py-3 text-xs font-black uppercase disabled:opacity-50">Continuar <ChevronRight size={15} /></button></div></section>
-        <section hidden={step !== 2} className="rounded-xl border border-border p-5 sm:p-7"><h2 className="text-lg font-black">3. Pagamento</h2><div className="mt-4 rounded-lg border border-action/30 bg-action-soft p-4"><p className="text-sm font-black">Checkout Pro Mercado Pago</p><p className="mt-1 text-xs leading-5 text-muted">Você será redirecionado ao ambiente seguro do Mercado Pago. Os meios de pagamento disponíveis serão exibidos lá.</p><p className="mt-2 text-xs font-bold text-blue-900">Integração em modo de teste; nenhuma credencial de produção é aceita.</p></div>
+        <section hidden={step !== 2} className="rounded-xl border border-border p-5 sm:p-7"><h2 className="text-lg font-black">3. Pagamento</h2><div className="mt-4 rounded-lg border border-action/30 bg-action-soft p-4"><p className="text-sm font-black">Checkout Pro Mercado Pago</p><p className="mt-1 text-xs leading-5 text-muted">Você será redirecionado ao ambiente seguro do Mercado Pago. Os meios de pagamento disponíveis serão exibidos lá.</p>{isTestPayment && <p className="mt-2 text-xs font-bold text-blue-900">Integração em modo de teste; nenhuma cobrança real será realizada.</p>}</div>
           {checkoutError && <p role="alert" className="mt-4 rounded bg-red-50 p-3 text-sm text-red-700">{checkoutError}</p>}
           <div className="mt-6 flex gap-2"><button type="button" onClick={() => setStep(1)} disabled={isSubmitting} className="flex items-center gap-2 rounded-lg border border-ink px-5 py-3 text-xs font-black uppercase disabled:opacity-50"><ChevronLeft size={15} /> Voltar</button><button type="submit" disabled={isSubmitting} className="primary-button flex items-center gap-2 px-5 py-3 text-xs font-black uppercase disabled:opacity-50">{isSubmitting ? "Preparando pagamento..." : "Ir ao Mercado Pago"} {!isSubmitting && <ChevronRight size={15} />}</button></div>
         </section>
       </div>
-      <aside className="h-fit rounded-xl border border-border p-5"><h2 className="text-lg font-black">Resumo do pedido</h2>{items.map((item) => <div key={item.lineId} className="mt-4 flex justify-between gap-3 text-xs"><span className="flex-1">{item.product.nome} · tam. {item.size} × {item.quantity}{item.customization ? " · personalizada" : ""}</span><span>{formatCurrency((storeConfig.shirtPrice + (item.customization ? storeConfig.customizationPrice : 0)) * item.quantity)}</span></div>)}<div className="mt-5 space-y-2 border-t border-border pt-4 text-sm"><div className="flex justify-between"><span>Subtotal</span><span>{formatCurrency(subtotal)}</span></div>{bundleDiscount > 0 && <div className="flex justify-between text-success"><span>Oferta por quantidade</span><span>-{formatCurrency(bundleDiscount)}</span></div>}<div className="flex justify-between"><span>Frete</span><span>{freeShipping ? "Grátis" : chosenShipping ? formatCurrency(chosenShipping.priceCents / 100) : "A calcular"}</span></div><div className="flex justify-between border-t border-border pt-3 text-lg font-black"><span>Total</span><span>{formatCurrency(total + shippingCents / 100)}</span></div></div><p className="mt-4 text-[10px] leading-4 text-muted">O servidor confere os produtos, preços e frete antes de criar o pagamento.</p></aside>
+      <aside className="h-fit rounded-xl border border-border p-5"><h2 className="text-lg font-black">Resumo do pedido</h2>{items.map((item) => <div key={item.lineId} className="mt-4 flex justify-between gap-3 text-xs"><span className="flex-1">{item.product.nome} · tam. {item.size} × {item.quantity}{item.customization ? " · personalizada" : ""}</span><span>{formatCurrency((item.product.preco + (item.customization ? storeConfig.customizationPrice : 0)) * item.quantity)}</span></div>)}<div className="mt-5 space-y-2 border-t border-border pt-4 text-sm"><div className="flex justify-between"><span>Subtotal</span><span>{formatCurrency(subtotal)}</span></div>{bundleDiscount > 0 && <div className="flex justify-between text-success"><span>Oferta por quantidade</span><span>-{formatCurrency(bundleDiscount)}</span></div>}<div className="flex justify-between"><span>Frete</span><span>{shipping === 0 ? "Grátis" : formatCurrency(shipping)}</span></div><div className="flex justify-between border-t border-border pt-3 text-lg font-black"><span>Total</span><span>{formatCurrency(grandTotal)}</span></div></div><p className="mt-4 text-[10px] leading-4 text-muted">O servidor confere os produtos, preços e frete antes de criar o pagamento.</p></aside>
     </form>
   </main>;
 }

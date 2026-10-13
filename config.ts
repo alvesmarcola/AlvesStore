@@ -1,9 +1,17 @@
 export const storeConfig = {
   name: "ALVES STORE",
   shirtPrice: 160,
+  retroShirtPrice: 185,
+  fanCommonPrice: 160,
+  fanFullPatchPrice: 180,
+  retroShortSleevePrice: 185,
+  retroLongSleevePrice: 220,
   twoShirtPrice: 300,
   threeShirtPrice: 450,
   freeShippingQuantity: 3,
+  shippingOneShirt: 20,
+  shippingTwoShirts: 30,
+  shippingOfferText: "Camisas comuns: 1 por R$ 160,00, 2 por R$ 300,00 ou 3 por R$ 450,00. Camisas retrô: R$ 185,00 cada. Frete: R$ 20,00 (1 camisa), R$ 30,00 (2) ou grátis (3+).",
   customizationPrice: 20,
   email: "atendimento@alvesstore.com.br",
 } as const;

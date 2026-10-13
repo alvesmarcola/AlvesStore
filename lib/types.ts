@@ -2,7 +2,9 @@ import type { LeagueImageSlot } from "@/data/images";
 
 export type Audience = "masculino" | "feminino" | "unissex" | "infantil" | "revisar";
 export type ProductType = "torcedor" | "jogador" | "goleiro" | "retro" | "treino" | "cropped" | "regata" | "inverno" | "vestido" | "revisar";
-export type Uniform = "titular" | "reserva" | "terceiro" | "revisar";
+export type Uniform = "titular" | "reserva" | "terceiro" | "quarto" | "revisar";
+export type ShirtVersion = "fan" | "player" | "retro" | "goalkeeper" | "unknown";
+export type SleeveType = "short" | "long" | "unknown";
 
 export interface ProductImage {
   src: string;
@@ -50,4 +52,5 @@ export interface CartItem {
   size: string;
   quantity: number;
   customization?: { name: string; number: string };
+  patchIds?: string[];
 }

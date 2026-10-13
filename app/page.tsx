@@ -2,18 +2,20 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, HeartHandshake, ShoppingBag, Truck, WalletCards } from "lucide-react";
 import { ProductGrid } from "@/components/product-grid";
-import { NewsletterForm } from "@/components/newsletter-form";
 import { HeroCarousel } from "@/components/hero-carousel";
 import { Reveal } from "@/components/motion-effects";
 import { StickyLeagueRail } from "@/components/sticky-league-rail";
 import { images } from "@/data/images";
 import { formatCurrency, leagues, products } from "@/lib/catalog";
 import { storeConfig } from "@/config";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 const features = [
-  { icon: ShoppingBag, title: "1 camisa", text: `${formatCurrency(storeConfig.shirtPrice)} + frete` },
-  { icon: WalletCards, title: "2 camisas", text: `${formatCurrency(storeConfig.twoShirtPrice)} + frete` },
-  { icon: Truck, title: "3 camisas", text: `${formatCurrency(storeConfig.threeShirtPrice)} com frete grátis` },
+  { icon: ShoppingBag, title: "Condições de envio", text: storeConfig.shippingOfferText },
+  { icon: WalletCards, title: "Pagamento", text: "Finalize seu pedido com segurança pelo Mercado Pago." },
+  { icon: Truck, title: "Envio direto", text: "Seu pedido segue do fornecedor ao endereço informado." },
   { icon: HeartHandshake, title: "Personalização", text: `+${formatCurrency(storeConfig.customizationPrice)} por camisa` },
 ];
 
@@ -24,8 +26,8 @@ const collections = [
 ];
 
 const differentials = [
-  { title: "Clubes e seleções", body: "Explore camisas de clubes e seleções nacionais em categorias separadas." },
-  { title: "Personalização opcional", body: `Adicione nome e número por ${formatCurrency(storeConfig.customizationPrice)} a cada camisa personalizada.` },
+  { title: "Clubes e seleções", body: "Explore camisas de clubes e seleções nacionais em categorias separadas.", links: [{ label: "Ver clubes", href: "/ligas/brasileirao-serie-a" }, { label: "Ver seleções", href: "/ligas/selecoes" }] },
+  { title: "Personalização opcional", body: `Adicione nome e número por ${formatCurrency(storeConfig.customizationPrice)} a cada camisa personalizada.`, links: [{ label: "Escolher uma camisa", href: "/masculino" }] },
 ];
 
 function ProductSection({
@@ -87,7 +89,7 @@ export default function HomePage() {
 
       <section className="league-marquee bg-action py-4 text-white" aria-label="Ligas disponíveis">
         <div className="league-marquee-track flex w-max items-center gap-8 whitespace-nowrap">
-          {marqueeText.map((label, index) => <span className="flex items-center gap-8" key={`${label}-${index}`}><span className="text-[11px] font-black uppercase tracking-[.22em] sm:text-sm">{label}</span><span className="text-lg text-white/50" aria-hidden="true">✳</span></span>)}
+          {marqueeText.map((label, index) => <span className="flex items-center gap-8" key={`${label}-${index}`} aria-hidden={index > leagues.length}><span className="text-[11px] font-black uppercase tracking-[.22em] sm:text-sm">{label}</span><span className="text-lg text-white/50" aria-hidden="true">✳</span></span>)}
         </div>
       </section>
 
@@ -145,7 +147,7 @@ export default function HomePage() {
           <Reveal>
             <p className="text-[10px] font-black uppercase tracking-[.2em] text-action">As cores que moram na arquibancada</p>
             <h2 className="mt-2 text-3xl font-black uppercase sm:text-5xl">Clubes populares</h2>
-            <p className="mt-3 max-w-xl text-sm text-muted">Descubra camisas de clubes de várias ligas. Só nomes em texto — sem escudos ou logos oficiais.</p>
+            <p className="mt-3 max-w-xl text-sm text-muted">Descubra camisas de clubes de várias ligas.</p>
           </Reveal>
           <div className="mt-7 grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 lg:grid-cols-6">
             {clubLinks.map((club, index) => (
@@ -167,21 +169,12 @@ export default function HomePage() {
               <span className="mb-5 block h-1 w-10 bg-action" />
               <h2 className="text-lg font-black uppercase leading-tight">{item.title}</h2>
               <p className="mt-3 text-sm leading-6 text-muted">{item.body}</p>
+              <div className="mt-4 flex flex-wrap gap-4">{item.links.map((link) => <Link key={link.href} href={link.href} className="text-xs font-bold text-blue-700 underline">{link.label}</Link>)}</div>
             </div>
           </Reveal>
         ))}
       </section>
 
-      <section className="newsletter-arena bg-action px-5 py-12 sm:py-16">
-        <Reveal className="mx-auto max-w-7xl rounded-lg bg-ink px-6 py-9 text-white sm:flex sm:items-center sm:justify-between sm:gap-8 sm:px-10">
-          <div className="max-w-xl">
-            <p className="text-[10px] font-black uppercase tracking-[.2em] text-blue-300">Faça parte do time</p>
-            <h2 className="mt-2 text-3xl font-black uppercase">Novidades direto no seu e-mail</h2>
-            <p className="mt-2 text-sm text-white/65">Receba novidades da ALVES STORE.</p>
-          </div>
-          <NewsletterForm />
-        </Reveal>
-      </section>
     </main>
   );
 }

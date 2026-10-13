@@ -3,15 +3,15 @@ import { MercadoPagoConfig, Payment, Preference } from "mercadopago";
 export class PaymentConfigurationError extends Error {}
 
 function getClient() {
-  if (process.env.PAYMENT_ENVIRONMENT !== "test") {
-    throw new PaymentConfigurationError("O backend aceita somente PAYMENT_ENVIRONMENT=test até a loja aprovar a ativação de produção.");
-  }
+  const environment = process.env.PAYMENT_ENVIRONMENT;
+  if (environment !== "test" && environment !== "production") throw new PaymentConfigurationError("Configure PAYMENT_ENVIRONMENT como test ou production.");
   const accessToken = process.env.MERCADO_PAGO_ACCESS_TOKEN;
-  if (!accessToken?.startsWith("TEST-")) {
-    throw new PaymentConfigurationError("Configure um Access Token de teste do Mercado Pago (prefixo TEST-).");
-  }
+  const expectedPrefix = environment === "production" ? "APP_USR-" : "TEST-";
+  if (!accessToken?.startsWith(expectedPrefix)) throw new PaymentConfigurationError(`Configure um Access Token ${environment === "production" ? "de produção (APP_USR-)" : "de teste (TEST-)"} do Mercado Pago.`);
   return new MercadoPagoConfig({ accessToken, options: { timeout: 10_000 } });
 }
+
+export function isProductionPaymentEnvironment() { return process.env.PAYMENT_ENVIRONMENT === "production"; }
 
 export function getPreferenceClient() {
   return new Preference(getClient());

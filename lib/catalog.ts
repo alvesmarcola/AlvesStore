@@ -19,13 +19,16 @@ export function formatCurrency(value: number) {
   return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(value);
 }
 
-export function productImageAsset(product: Pick<Product, "images" | "imageSeed" | "tipo">, alternate = false): ImageAsset {
-  const image = product.images?.[alternate ? 1 : 0] ?? product.images?.[0];
-  if (image) return image;
+export function productImageAsset(product: Pick<Product, "images" | "imageSeed" | "tipo" | "nome">, alternate = false): ImageAsset {
+  const primary = product.images?.[0];
+  const image = alternate
+    ? product.images?.find((candidate) => candidate.src !== primary?.src) ?? primary
+    : primary;
+  if (image) return { ...image, alt: `${product.nome} – ${alternate && image.src !== primary?.src ? "verso" : "frente"}` };
   if (product.tipo === "retro") return images.retro.cover;
   return alternate ? images.products.alternate : images.products.primary;
 }
 
-export function productImage(product: Pick<Product, "images" | "imageSeed" | "tipo">, alternate = false) {
+export function productImage(product: Pick<Product, "images" | "imageSeed" | "tipo" | "nome">, alternate = false) {
   return productImageAsset(product, alternate).src;
 }

@@ -2,7 +2,7 @@ import { CatalogPage } from "@/components/catalog-page";
 import { images } from "@/data/images";
 import { products } from "@/lib/catalog";
 
-export const metadata = { title: "Camisas femininas", description: "Camisas femininas e modelos para torcer do seu jeito." };
+export const metadata = { title: "Camisas femininas", description: "Camisas femininas e modelos para torcer do seu jeito.", alternates: { canonical: "/feminino" } };
 
 export default async function FemininoPage({ searchParams }: { searchParams: Promise<{ tipo?: string }> }) {
   const { tipo = "" } = await searchParams;

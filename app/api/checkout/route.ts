@@ -2,18 +2,34 @@ import { createHash, randomUUID } from "node:crypto";
 import { NextResponse } from "next/server";
 import { InvalidOrderError, paymentRequestSchema, validateOrderLines, calculateOrderTotals, calculateOrderFingerprint } from "@/lib/payment/order";
 import { getDatabasePool } from "@/lib/server/database";
-import { getShippingQuotes, ShippingConfigurationError, ShippingProviderError } from "@/lib/server/correios";
-import { getPreferenceClient, getSiteUrl, PaymentConfigurationError } from "@/lib/server/mercado-pago";
+import { getPreferenceClient, getSiteUrl, PaymentConfigurationError, isProductionPaymentEnvironment } from "@/lib/server/mercado-pago";
 import { buildPreferenceItems } from "@/lib/payment/preference-items";
 import { storeConfig } from "@/config";
 
 export const runtime = "nodejs";
+const requestWindows = new Map<string, { count: number; startedAt: number }>();
+const RATE_WINDOW_MS = 10 * 60 * 1000;
+const RATE_LIMIT = 15;
+
+function isRateLimited(request: Request) {
+  const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+  const now = Date.now();
+  const current = requestWindows.get(ip);
+  if (!current || now - current.startedAt >= RATE_WINDOW_MS) {
+    requestWindows.set(ip, { count: 1, startedAt: now });
+    return false;
+  }
+  current.count += 1;
+  if (requestWindows.size > 2000) for (const [key, window] of requestWindows) if (now - window.startedAt >= RATE_WINDOW_MS) requestWindows.delete(key);
+  return current.count > RATE_LIMIT;
+}
 
 function jsonPrice(cents: number) {
   return Number((cents / 100).toFixed(2));
 }
 
 export async function POST(request: Request) {
+  if (isRateLimited(request)) return NextResponse.json({ error: "Muitas tentativas. Aguarde alguns minutos e tente novamente." }, { status: 429 });
   let rawBody: unknown;
   try {
     rawBody = await request.json();
@@ -73,23 +89,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "O pedido está sendo preparado. Aguarde alguns segundos e tente novamente." }, { status: 409 });
     }
 
-    const shippingCents = totals.quantity >= 3 ? 0 : requestData.shipping.quotedPriceCents;
-    let shippingLabel = "Frete grátis";
-    if (totals.quantity < 3) {
-      if (!requestData.shipping.serviceCode || shippingCents === undefined) {
-        return NextResponse.json({ error: "Escolha uma opção de frete antes de pagar." }, { status: 400 });
-      }
-      const quotes = await getShippingQuotes(lines, requestData.customer.cep.replace(/\D/g, ""));
-      const currentQuote = quotes.find((quote) => quote.serviceCode === requestData.shipping.serviceCode);
-      if (!currentQuote) return NextResponse.json({ error: "A opção de frete selecionada não está mais disponível. Consulte novamente." }, { status: 409 });
-      if (currentQuote.priceCents !== shippingCents) {
-        return NextResponse.json({ error: "O preço do frete mudou. Atualize a cotação antes de pagar." }, { status: 409 });
-      }
-      shippingLabel = currentQuote.label;
-    }
-
-    const finalShippingCents = shippingCents ?? 0;
-    const totalCents = totals.productsTotalCents + finalShippingCents;
+    const finalShippingCents = totals.shippingCents;
+    const totalCents = totals.totalCents;
+    const shippingLabel = finalShippingCents === 0 ? "Frete grátis" : "Frete fixo";
     const siteUrl = getSiteUrl();
     const transaction = await pool.connect();
     try {
@@ -118,14 +120,7 @@ export async function POST(request: Request) {
 
       const orderId = locked.rows[0]?.id ?? randomUUID();
       if (!locked.rows[0]) {
-        const shippingDetails = totals.quantity >= 3
-          ? { cep: requestData.customer.cep.replace(/\D/g, ""), serviceCode: null, label: shippingLabel, priceCents: 0 }
-          : {
-              cep: requestData.customer.cep.replace(/\D/g, ""),
-              serviceCode: requestData.shipping.serviceCode,
-              label: shippingLabel,
-              priceCents: finalShippingCents,
-            };
+        const shippingDetails = { label: shippingLabel, priceCents: finalShippingCents };
         const savedLines = lines.map(({ product, ...line }) => ({
           productId: product.id,
           slug: product.slug,
@@ -159,17 +154,10 @@ export async function POST(request: Request) {
       const preference = await getPreferenceClient().create({
         body: {
           items: buildPreferenceItems(orderId, lines, totals),
-          external_reference: orderId,
-          metadata: { store_order_id: orderId },
-          payer: {
-            name: firstName,
-            surname: surnameParts.join(" ") || firstName,
-            email: requestData.customer.email,
-          },
-          shipments: {
+          ...(finalShippingCents > 0 ? { shipments: {
             mode: "not_specified",
             cost: jsonPrice(finalShippingCents),
-            free_shipping: finalShippingCents === 0,
+            free_shipping: false,
             receiver_address: {
               zip_code: requestData.customer.cep.replace(/\D/g, ""),
               street_name: requestData.customer.street,
@@ -179,6 +167,13 @@ export async function POST(request: Request) {
               state_name: requestData.customer.state.toUpperCase(),
               country_name: "Brasil",
             },
+          } } : { shipments: { mode: "not_specified", cost: 0, free_shipping: true } }),
+          external_reference: orderId,
+          metadata: { store_order_id: orderId },
+          payer: {
+            name: firstName,
+            surname: surnameParts.join(" ") || firstName,
+            email: requestData.customer.email,
           },
           back_urls: {
             success: `${siteUrl}/pedido/retorno?order_id=${orderId}&return=approved`,
@@ -191,9 +186,9 @@ export async function POST(request: Request) {
         },
         requestOptions: { idempotencyKey: requestData.idempotencyKey },
       });
-      const checkoutUrl = preference.sandbox_init_point;
+      const checkoutUrl = isProductionPaymentEnvironment() ? preference.init_point : preference.sandbox_init_point;
       if (!preference.id || !checkoutUrl || !checkoutUrl.startsWith("https://")) {
-        throw new Error("O Mercado Pago não retornou um link seguro do Checkout Pro de teste.");
+        throw new Error("O Mercado Pago não retornou um link seguro do Checkout Pro.");
       }
 
       await transaction.query(
@@ -201,6 +196,19 @@ export async function POST(request: Request) {
         [preference.id, checkoutUrl, orderId],
       );
       await transaction.query("COMMIT");
+      const emailKey = process.env.RESEND_API_KEY;
+      const emailFrom = process.env.ORDER_EMAIL_FROM;
+      if (emailKey && emailFrom) {
+        const itemSummary = lines.map((line) => `${line.product.nome} · tamanho ${line.size} · ${line.quantity} un.${line.customization ? ` · personalizado ${line.customization.name} ${line.customization.number}` : ""}`).join("\n");
+        try {
+          const emailResponse = await fetch("https://api.resend.com/emails", {
+            method: "POST", headers: { authorization: `Bearer ${emailKey}`, "content-type": "application/json" },
+            body: JSON.stringify({ from: emailFrom, to: [requestData.customer.email], subject: "Pedido recebido — Alves Store", text: `Olá, ${requestData.customer.fullName}! Recebemos seu pedido. O pagamento ainda precisa ser concluído no Mercado Pago.\n\n${itemSummary}\nFrete: ${shippingLabel} (${jsonPrice(finalShippingCents).toFixed(2).replace(".", ",")})\nTotal: ${jsonPrice(totalCents).toFixed(2).replace(".", ",")}\n\nAcompanhe o pedido em ${siteUrl}/rastreio` }),
+            signal: AbortSignal.timeout(5_000),
+          });
+          if (!emailResponse.ok) console.error("E-mail de pedido recebido não enviado:", emailResponse.status);
+        } catch (error) { console.error("Falha no e-mail de pedido recebido:", error instanceof Error ? error.message : "erro desconhecido"); }
+      }
       return NextResponse.json({ checkoutUrl, orderId });
     } catch (error) {
       await transaction.query("ROLLBACK").catch(() => undefined);
@@ -209,16 +217,9 @@ export async function POST(request: Request) {
       transaction.release();
     }
   } catch (error) {
-    if (error instanceof ShippingConfigurationError) {
-      return NextResponse.json({ error: error.message }, { status: 503 });
-    }
-    if (error instanceof ShippingProviderError) {
-      console.error("Falha ao revalidar o frete antes do pagamento:", error.message);
-      return NextResponse.json({ error: "Não foi possível confirmar o frete. Consulte as opções novamente." }, { status: 502 });
-    }
     if (error instanceof PaymentConfigurationError) {
       console.error("Configuração do Mercado Pago incompleta:", error.message);
-      return NextResponse.json({ error: "O checkout de teste ainda não está configurado no servidor." }, { status: 503 });
+      return NextResponse.json({ error: "O checkout ainda não está configurado no servidor." }, { status: 503 });
     }
     console.error("Falha ao preparar o Checkout Pro:", error instanceof Error ? error.message : "erro desconhecido");
     return NextResponse.json({ error: "Não foi possível preparar o pagamento. Nenhuma cobrança foi iniciada." }, { status: 502 });

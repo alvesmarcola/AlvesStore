@@ -5,11 +5,13 @@ import { getDatabasePool } from "../lib/server/database";
 async function main() {
   const pool = getDatabasePool();
   try {
-    const migration = await readFile(path.join(process.cwd(), "db", "migrations", "001_store_orders.sql"), "utf8");
-    for (const statement of migration.split(";").map((part) => part.trim()).filter(Boolean)) {
-      await pool.query(statement);
+    for (const file of ["001_store_orders.sql", "002_order_tracking.sql"]) {
+      const migration = await readFile(path.join(process.cwd(), "db", "migrations", file), "utf8");
+      for (const statement of migration.split(";").map((part) => part.trim()).filter(Boolean)) {
+        await pool.query(statement);
+      }
+      console.log(`Migração ${file} aplicada.`);
     }
-    console.log("Migração 001_store_orders aplicada.");
   } finally {
     await pool.end();
   }

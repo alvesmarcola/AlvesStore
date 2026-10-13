@@ -10,7 +10,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ liga: string; clube: string }> }) {
   const { liga, clube } = await params;
   const club = getLeague(liga)?.clubes.find((item) => item.slug === clube);
-  return { title: club ? `Camisas ${club.nome}` : "Clube", description: club ? `Encontre modelos de ${club.nome} na alves store.` : undefined };
+  return { title: club ? `Camisas ${club.nome}` : "Clube", description: club ? `Encontre modelos de ${club.nome} na alves store.` : undefined, alternates: { canonical: `/ligas/${liga}/${clube}` } };
 }
 
 export default async function ClubPage({ params }: { params: Promise<{ liga: string; clube: string }> }) {

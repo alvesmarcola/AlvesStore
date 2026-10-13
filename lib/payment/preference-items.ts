@@ -4,6 +4,8 @@ import { storeConfig } from "@/config";
 type OrderTotals = {
   quantity: number;
   shirtsCents: number;
+  standardQuantity: number;
+  standardShirtsCents: number;
   customizationCents: number;
 };
 
@@ -12,14 +14,22 @@ function toPrice(cents: number) {
 }
 
 export function buildPreferenceItems(orderId: string, lines: VerifiedOrderLine[], totals: OrderTotals) {
-  const baseUnitPrice = Math.floor(totals.shirtsCents / totals.quantity);
-  let remainingHigherPricedUnits = totals.shirtsCents % totals.quantity;
+  const baseUnitPrice = totals.standardQuantity > 0 ? Math.floor(totals.standardShirtsCents / totals.standardQuantity) : 0;
+  let remainingHigherPricedUnits = totals.standardQuantity > 0 ? totals.standardShirtsCents % totals.standardQuantity : 0;
 
   return lines.flatMap((line, index) => {
-    const higherPricedQuantity = Math.min(line.quantity, remainingHigherPricedUnits);
-    remainingHigherPricedUnits -= higherPricedQuantity;
-    const regularPricedQuantity = line.quantity - higherPricedQuantity;
+    const retro = line.product.tipo === "retro";
+    const higherPricedQuantity = retro ? 0 : Math.min(line.quantity, remainingHigherPricedUnits);
+    if (!retro) remainingHigherPricedUnits -= higherPricedQuantity;
+    const regularPricedQuantity = retro ? 0 : line.quantity - higherPricedQuantity;
     const items = [
+      ...(retro ? [{
+        id: `${orderId}-retro-shirt-${index}`,
+        title: `${line.product.nome} (tamanho ${line.size})`,
+        quantity: line.quantity,
+        currency_id: "BRL",
+        unit_price: storeConfig.retroShirtPrice,
+      }] : []),
       ...(regularPricedQuantity > 0 ? [{
         id: `${orderId}-shirt-${index}-regular`,
         title: `${line.product.nome} (tamanho ${line.size})`,
