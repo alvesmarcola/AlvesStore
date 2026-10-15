@@ -1,0 +1,246 @@
+import os
+import re
+import csv
+import json
+import time
+import unicodedata
+import requests
+from bs4 import BeautifulSoup
+from urllib.parse import urljoin, urlparse
+
+def criar_slug(texto):
+    """Cria um slug limpo para URL e pastas do Next.js (ex: flamengo-home-25-26)."""
+    texto = unicodedata.normalize("NFKD", texto).encode("ascii", "ignore").decode("utf-8")
+    texto = re.sub(r"[^\w\s-]", "", texto.lower())
+    return re.sub(r"[-\s]+", "-", texto).strip("-")[:80]
+
+def limpar_titulo(nome):
+    """Remove caracteres inválidos mantendo o nome legível para exibição no site."""
+    nome_limpo = re.sub(r'[\\/*?:"<>|]', "", nome).strip()
+    return nome_limpo.rstrip(".")[:120]
+
+def obter_albuns_da_categoria(url_categoria, session, base_url):
+    """Varre todas as páginas da categoria para pegar os links de cada álbum."""
+    albuns = []
+    pagina = 1
+
+    while True:
+        sep = "&" if "?" in url_categoria else "?"
+        url_pag = f"{url_categoria}{sep}page={pagina}" if pagina > 1 else url_categoria
+        print(f"🔎 Buscando álbuns na página {pagina}...")
+
+        resp = session.get(url_pag, timeout=20)
+        if resp.status_code != 200:
+            break
+
+        soup = BeautifulSoup(resp.text, "html.parser")
+        links_encontrados = 0
+
+        for a in soup.find_all("a", href=True):
+            href = a["href"]
+            if "/albums/" in href:
+                link_completo = urljoin(base_url, href.split("?")[0])
+                titulo = a.get("title") or a.get_text(strip=True)
+
+                if not any(alb["url"] == link_completo for alb in albuns):
+                    albuns.append({"url": link_completo, "titulo": titulo})
+                    links_encontrados += 1
+
+        if links_encontrados == 0:
+            break
+
+        pagina += 1
+        time.sleep(1)
+
+    return albuns
+
+def baixar_album(url_album, titulo_sugerido, categoria, preco_padrao, pasta_public, session, base_url):
+    """Baixa as fotos na estrutura /public/produtos/slug e retorna os dados para o JSON/CSV."""
+    print(f"\n📂 Acessando álbum: {url_album}")
+    resp = session.get(url_album, timeout=20)
+    if resp.status_code != 200:
+        print(f"❌ Erro ao abrir o álbum (Status {resp.status_code})")
+        return None
+
+    soup = BeautifulSoup(resp.text, "html.parser")
+
+    tag_titulo = (
+        soup.find("span", class_="showalbumheader__gallerytitle")
+        or soup.find("h2")
+        or soup.find("title")
+    )
+    if tag_titulo:
+        titulo = tag_titulo.get_text(strip=True).replace(" | Yupoo", "")
+    else:
+        titulo = titulo_sugerido or f"Produto {url_album.split('/')[-1]}"
+
+    nome_exibicao = limpar_titulo(titulo)
+    album_id = url_album.split("/")[-1].split("?")[0]
+    slug = criar_slug(nome_exibicao) or f"produto-{album_id}"
+
+    # Caminho pensado para a pasta public/produtos/ do Next.js
+    caminho_pasta = os.path.join(pasta_public, "produtos", slug)
+    os.makedirs(caminho_pasta, exist_ok=True)
+
+    containers_fotos = soup.select(".image__imagewrap img, .showalbum__children img")
+    if not containers_fotos:
+        containers_fotos = soup.find_all("img")
+
+    urls_fotos = []
+    for img in containers_fotos:
+        src = img.get("data-origin-src") or img.get("data-src") or img.get("src")
+        if not src or "photo.yupoo.com" not in src:
+            continue
+        if src.startswith("//"):
+            src = "https:" + src
+        src = re.sub(r"/(small|medium|thumb)\.", "/big.", src)
+        if src not in urls_fotos:
+            urls_fotos.append(src)
+
+    if not urls_fotos:
+        print(f"⚠️ Nenhuma foto encontrada em: {nome_exibicao}")
+        return None
+
+    print(f"⬇️ Baixando {len(urls_fotos)} fotos em '/public/produtos/{slug}'...")
+
+    caminhos_next = []
+    for idx, img_url in enumerate(urls_fotos, 1):
+        ext = os.path.splitext(urlparse(img_url).path)[1]
+        if not ext or len(ext) > 5:
+            ext = ".jpg"
+
+        nome_arquivo = f"{idx:02d}{ext}"
+        caminho_arquivo = os.path.join(caminho_pasta, nome_arquivo)
+        caminho_web = f"/produtos/{slug}/{nome_arquivo}"
+
+        if os.path.exists(caminho_arquivo):
+            caminhos_next.append(caminho_web)
+            continue
+
+        try:
+            headers_img = {"Referer": base_url}
+            img_resp = session.get(img_url, headers=headers_img, timeout=30)
+            if img_resp.status_code == 200:
+                with open(caminho_arquivo, "wb") as f:
+                    f.write(img_resp.content)
+                caminhos_next.append(caminho_web)
+                print(f"  [{idx}/{len(urls_fotos)}] Salvo: {caminho_web}")
+        except Exception as e:
+            print(f"  [{idx}/{len(urls_fotos)}] Erro: {e}")
+
+    if not caminhos_next:
+        return None
+
+    return {
+        "id": album_id,
+        "nome": nome_exibicao,
+        "slug": slug,
+        "categoria": categoria,
+        "preco": preco_padrao,
+        "tamanhos": ["P", "M", "G", "GG", "2XL"],
+        "imagemCapa": caminhos_next[0],
+        "galeria": caminhos_next,
+        "origemYupoo": url_album
+    }
+
+def salvar_dados_nextjs(lista_produtos, pasta_saida):
+    """Gera o arquivo produtos.json (para o Next.js) e catalogo_produtos.csv (para tabela/Excel)."""
+    caminho_json = os.path.join(pasta_saida, "produtos.json")
+    caminho_csv = os.path.join(pasta_saida, "catalogo_produtos.csv")
+
+    # Se já existir um produtos.json, mescla sem duplicar para você poder rodar várias categorias
+    produtos_existentes = []
+    if os.path.exists(caminho_json):
+        try:
+            with open(caminho_json, "r", encoding="utf-8") as f:
+                produtos_existentes = json.load(f)
+        except Exception:
+            produtos_existentes = []
+
+    mapa_produtos = {p["slug"]: p for p in produtos_existentes}
+    for novo in lista_produtos:
+        mapa_produtos[novo["slug"]] = novo
+
+    lista_final = list(mapa_produtos.values())
+
+    # 1. Salva JSON pronto para importar no Next.js
+    with open(caminho_json, "w", encoding="utf-8") as f:
+        json.dump(lista_final, f, ensure_ascii=False, indent=2)
+
+    # 2. Salva CSV com separador ';' (abre direto no Excel em português com colunas separadas)
+    with open(caminho_csv, "w", encoding="utf-8-sig", newline="") as f:
+        writer = csv.writer(f, delimiter=";")
+        writer.writerow(["ID", "Nome", "Slug", "Categoria", "Preco", "Tamanhos", "Imagem_Capa", "Total_Fotos", "Galeria_JSON"])
+        for p in lista_final:
+            writer.writerow([
+                p["id"],
+                p["nome"],
+                p["slug"],
+                p["categoria"],
+                f"{p['preco']:.2f}".replace(".", ","),
+                ",".join(p["tamanhos"]),
+                p["imagemCapa"],
+                len(p["galeria"]),
+                json.dumps(p["galeria"], ensure_ascii=False)
+            ])
+
+    return caminho_json, caminho_csv, len(lista_final)
+
+def main():
+    print("=" * 60)
+    print("   EXTRATOR YUPOO -> NEXT.JS (IMAGENS + JSON + TABELA CSV)")
+    print("=" * 60)
+
+    url_input = input("\n1. Cole o link da categoria (ex: Brasileirão) ou álbum: ").strip()
+    if not url_input:
+        return
+
+    categoria = input("2. Nome da Categoria para salvar na tabela (ex: Brasileirão): ").strip() or "Geral"
+    preco_str = input("3. Preço padrão das camisas (ex: 149.90): ").strip().replace(",", ".")
+    try:
+        preco_padrao = float(preco_str) if preco_str else 149.90
+    except ValueError:
+        preco_padrao = 149.90
+
+    parsed = urlparse(url_input)
+    base_url = f"{parsed.scheme}://{parsed.netloc}"
+
+    session = requests.Session()
+    session.headers.update({
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+        "Referer": base_url
+    })
+
+    pasta_saida = os.path.join(os.getcwd(), "Saida_NextJS")
+    pasta_public = os.path.join(pasta_saida, "public")
+    os.makedirs(pasta_public, exist_ok=True)
+
+    produtos_coletados = []
+
+    if "/categories/" in url_input or "/collections/" in url_input or ("/albums" in url_input and not re.search(r"/albums/\d+", url_input)):
+        albuns = obter_albuns_da_categoria(url_input, session, base_url)
+        print(f"\n✅ Total de {len(albuns)} álbuns encontrados na categoria '{categoria}'!")
+        for i, alb in enumerate(albuns, 1):
+            print(f"\n--- Progresso: Álbum {i} de {len(albuns)} ---")
+            dados = baixar_album(alb["url"], alb["titulo"], categoria, preco_padrao, pasta_public, session, base_url)
+            if dados:
+                produtos_coletados.append(dados)
+            time.sleep(1)
+    else:
+        dados = baixar_album(url_input, None, categoria, preco_padrao, pasta_public, session, base_url)
+        if dados:
+            produtos_coletados.append(dados)
+
+    if produtos_coletados:
+        arq_json, arq_csv, total = salvar_dados_nextjs(produtos_coletados, pasta_saida)
+        print("\n" + "=" * 60)
+        print(f"🎉 CONCLUÍDO! {total} produtos salvos e catalogados:")
+        print(f"📁 Pasta de imagens (copie para o Next): {os.path.join(pasta_public, 'produtos')}")
+        print(f"📄 Arquivo JSON para o Next.js:          {arq_json}")
+        print(f"📊 Planilha CSV para Excel/Banco:        {arq_csv}")
+        print("=" * 60)
+
+    input("\nPressione ENTER para fechar...")
+
+if __name__ == "__main__":
+    main()

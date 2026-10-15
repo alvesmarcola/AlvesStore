@@ -9,7 +9,7 @@ import { formatCurrency, getLeague, productImageAsset, products } from "@/lib/ca
 import type { Product } from "@/lib/types";
 import { storeConfig } from "@/config";
 import { useCart } from "@/store/cart";
-import { classifyProduct } from "@/lib/product-classification";
+import { classifyProduct, getProductUnitPrice } from "@/lib/product-classification";
 import { getAvailablePatches } from "@/lib/patch-compatibility";
 import { getProductOfferText } from "@/lib/commerce";
 import type { PatchPosition } from "@/data/patches";
@@ -30,7 +30,8 @@ export function ProductDetails({ product }: { product: Product }) {
     .map((image, index) => ({ ...image, alt: `${product.nome} – ${index === 0 ? "frente" : `detalhe ${index + 1}`}` }));
   const selectedImage = gallery[Math.min(activeImage, gallery.length - 1)];
   const classification = classifyProduct(product);
-  const price = (classification.price ?? 0) + (personalize ? storeConfig.customizationPrice : 0);
+  const unitPrice = getProductUnitPrice(product, size) ?? 0;
+  const price = unitPrice + (personalize ? storeConfig.customizationPrice : 0);
   const compatiblePatches = getAvailablePatches(product);
   const selectedPatchTotal = compatiblePatches.filter((patch) => selectedPatches.some((selected) => selected.id === patch.id)).reduce((sum, patch) => sum + patch.priceCents, 0) / 100;
   const audienceLabels = { masculino: "masculino", feminino: "feminino", unissex: "unissex", infantil: "infantil", revisar: "" };

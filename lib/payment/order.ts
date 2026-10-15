@@ -6,6 +6,8 @@ import { checkoutSchema } from "@/lib/validation";
 import type { Product } from "@/lib/types";
 import { classifyProduct, isPackageEligible } from "@/lib/product-classification";
 import { getAvailablePatches } from "@/lib/patch-compatibility";
+import { getSupabaseProducts } from "@/lib/server/supabase-catalog";
+import { getProductSizeSurcharge } from "@/lib/product-classification";
 
 export const orderLinesSchema = z.array(z.object({
   productId: z.string().min(1).max(100),
@@ -31,14 +33,14 @@ export type VerifiedOrderLine = OrderLineInput & { product: Product; patchOption
 
 export class InvalidOrderError extends Error {}
 
-export function validateOrderLines(lines: OrderLineInput[]): VerifiedOrderLine[] {
+export function validateOrderLines(lines: OrderLineInput[], catalog: Product[] = products): VerifiedOrderLine[] {
   const seen = new Set<string>();
   let quantityTotal = 0;
 
   const verified = lines.map((line) => {
-    const product = products.find((candidate) => candidate.id === line.productId);
+    const product = catalog.find((candidate) => candidate.id === line.productId);
     if (!product) throw new InvalidOrderError("Um dos produtos não está mais disponível.");
-    if (!product.tamanhos.includes(line.size)) throw new InvalidOrderError("Um dos tamanhos selecionados não está disponível.");
+    if (line.size === "3GG" || !product.tamanhos.includes(line.size)) throw new InvalidOrderError("Um dos tamanhos selecionados não está disponível.");
     const facts = classifyProduct(product);
     if (facts.reviewRequired || facts.price === null) throw new InvalidOrderError("O preço deste produto está em revisão. Escolha outro modelo ou tente novamente mais tarde.");
     const availablePatches = getAvailablePatches(product);
@@ -69,6 +71,10 @@ export function validateOrderLines(lines: OrderLineInput[]): VerifiedOrderLine[]
   return verified;
 }
 
+export async function validateOrderLinesFromCatalog(lines: OrderLineInput[]) {
+  return validateOrderLines(lines, await getSupabaseProducts());
+}
+
 export function calculateOrderTotals(lines: VerifiedOrderLine[]) {
   const quantity = lines.reduce((sum, line) => sum + line.quantity, 0);
   const personalizedQuantity = lines.reduce(
@@ -78,7 +84,7 @@ export function calculateOrderTotals(lines: VerifiedOrderLine[]) {
   const packageQuantity = lines.reduce((sum, line) => {
     return sum + (isPackageEligible(line.product) ? line.quantity : 0);
   }, 0);
-  const baseSubtotalCents = lines.reduce((sum, line) => sum + (classifyProduct(line.product).price ?? 0) * line.quantity * 100, 0);
+  const baseSubtotalCents = lines.reduce((sum, line) => sum + ((classifyProduct(line.product).price ?? 0) + getProductSizeSurcharge(line.size)) * line.quantity * 100, 0);
   const pricedOutsidePackagesCents = baseSubtotalCents - packageQuantity * storeConfig.fanCommonPrice * 100;
   const customizationCents = personalizedQuantity * storeConfig.customizationPrice * 100;
   const shirtsCents = getPackagePrice(packageQuantity) * 100 + pricedOutsidePackagesCents;

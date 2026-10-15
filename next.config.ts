@@ -2,6 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   outputFileTracingRoot: process.cwd(),
+  images: { remotePatterns: [{ protocol: "https", hostname: "**.supabase.co" }] },
   async redirects() {
     return [{ source: "/login", destination: "/", permanent: true }];
   },

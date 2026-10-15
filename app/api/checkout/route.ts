@@ -1,6 +1,6 @@
 import { createHash, randomUUID } from "node:crypto";
 import { NextResponse } from "next/server";
-import { InvalidOrderError, paymentRequestSchema, validateOrderLines, calculateOrderTotals, calculateOrderFingerprint } from "@/lib/payment/order";
+import { InvalidOrderError, paymentRequestSchema, validateOrderLinesFromCatalog, calculateOrderTotals, calculateOrderFingerprint } from "@/lib/payment/order";
 import { getDatabasePool } from "@/lib/server/database";
 import { getPreferenceClient, getSiteUrl, PaymentConfigurationError, isProductionPaymentEnvironment } from "@/lib/server/mercado-pago";
 import { buildPreferenceItems } from "@/lib/payment/preference-items";
@@ -51,7 +51,7 @@ export async function POST(request: Request) {
   }
   let lines;
   try {
-    lines = validateOrderLines(requestData.items);
+    lines = await validateOrderLinesFromCatalog(requestData.items);
   } catch (error) {
     if (error instanceof InvalidOrderError) {
       return NextResponse.json({ error: error.message }, { status: 400 });

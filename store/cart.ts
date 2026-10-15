@@ -28,7 +28,8 @@ function migratePersistedCart(value: unknown): Pick<CartState, "items"> {
       if (!isRecord(entry) || !isRecord(entry.product) || typeof entry.size !== "string") return [];
       const storedProduct = entry.product;
       if (typeof storedProduct.id !== "string") return [];
-      const product = products.find((item) => item.id === storedProduct.id);
+      const localProduct = products.find((item) => item.id === storedProduct.id);
+      const product = localProduct ?? restoreCatalogProduct(storedProduct);
       if (!product || !product.tamanhos.includes(entry.size)) return [];
 
       const customization = isRecord(entry.customization)
@@ -52,6 +53,13 @@ function migratePersistedCart(value: unknown): Pick<CartState, "items"> {
     : [];
 
   return { items };
+}
+
+function restoreCatalogProduct(value: Record<string, unknown>): Product | undefined {
+  const requiredStrings = ["id", "slug", "clube", "clubeSlug", "liga", "publico", "tipo", "temporada", "uniforme", "nome", "cor", "imageSeed"];
+  if (requiredStrings.some((key) => typeof value[key] !== "string") || typeof value.preco !== "number" ||
+      !Array.isArray(value.tamanhos) || !value.tamanhos.every((size) => typeof size === "string")) return undefined;
+  return { ...(value as unknown as Product), tamanhos: (value.tamanhos as string[]).filter((size) => size !== "3GG") };
 }
 
 export const useCart = create<CartState>()(
@@ -88,7 +96,7 @@ export const useCart = create<CartState>()(
     }),
     {
       name: "arquibancada90-cart",
-      version: 3,
+      version: 4,
       migrate: migratePersistedCart,
       skipHydration: true,
       partialize: (state) => ({ items: state.items }),

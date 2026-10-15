@@ -4,7 +4,7 @@ import { images } from "@/data/images";
 import type { ImageAsset } from "@/data/images";
 import type { League, Product } from "@/lib/types";
 
-export const products = productsData as Product[];
+export const products = (productsData as Product[]).map((product) => ({ ...product, tamanhos: product.tamanhos.filter((size) => size !== "3GG") }));
 export const leagues = leaguesData as League[];
 
 export function getProduct(slug: string) {

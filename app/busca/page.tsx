@@ -1,11 +1,12 @@
 import { CatalogPage } from "@/components/catalog-page";
-import { products } from "@/lib/catalog";
+import { getSupabaseProducts } from "@/lib/server/supabase-catalog";
 import { parseSearchIntent, searchProducts } from "@/lib/smart-search";
 
 export const metadata = { title: "Buscar camisas", description: "Busque camisas por clube, liga ou modelo.", alternates: { canonical: "/busca" } };
 
 export default async function SearchPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
   const { q = "" } = await searchParams;
+  const products = await getSupabaseProducts();
   const query = q.trim();
   const clubsOnly = ["clube", "clubes", "club", "clubs"].includes(query.toLocaleLowerCase("pt-BR"));
   const intent = parseSearchIntent(query);

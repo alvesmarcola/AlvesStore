@@ -5,14 +5,17 @@ import { ProductGrid } from "@/components/product-grid";
 import { HeroCarousel } from "@/components/hero-carousel";
 import { Reveal } from "@/components/motion-effects";
 import { StickyLeagueRail } from "@/components/sticky-league-rail";
+import { FormulaOneShowcase } from "@/components/formula-one-showcase";
 import { images } from "@/data/images";
 import { formatCurrency, leagues, products } from "@/lib/catalog";
 import { storeConfig } from "@/config";
 import type { Metadata } from "next";
 import { classifyProduct } from "@/lib/product-classification";
 import { editorialPriorities, prioritizeClubs, prioritizeEditorialProducts, sortCatalogProducts } from "@/lib/catalog-order";
+import { getSupabaseProducts } from "@/lib/server/supabase-catalog";
 
 export const metadata: Metadata = { alternates: { canonical: "/" } };
+export const revalidate = 300;
 
 const features = [
   { icon: ShoppingBag, title: "Condições de envio", text: storeConfig.shippingOfferText },
@@ -61,7 +64,8 @@ function ProductSection({
   );
 }
 
-export default function HomePage() {
+export default async function HomePage() {
+  const products = await getSupabaseProducts();
   const nationalTeamSlugs = new Set(leagues.find((league) => league.slug === "selecoes")?.clubes.map((team) => team.slug) ?? []);
   const sellableProducts = products.filter((product) => product.tamanhos.length > 0 && !classifyProduct(product).reviewRequired);
   const clubProducts = prioritizeEditorialProducts(
@@ -147,6 +151,8 @@ export default function HomePage() {
       <ProductSection title="Camisas de clubes" kicker="Explore o catálogo" href="/busca?q=clubes" items={clubProducts} dark />
       <ProductSection title="Seleções nacionais" kicker="Camisas de seleções" href="/ligas/selecoes" items={nationalSelections} />
       <ProductSection title="Clássicos retrô" kicker="Para quem vive de história" href="/busca?q=retro" items={retros} dark />
+
+      <FormulaOneShowcase />
 
       <StickyLeagueRail leagues={leagues} />
 

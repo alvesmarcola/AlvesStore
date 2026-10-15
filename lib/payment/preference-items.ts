@@ -1,6 +1,6 @@
 import type { VerifiedOrderLine } from "@/lib/payment/order";
 import { storeConfig } from "@/config";
-import { classifyProduct, isPackageEligible } from "@/lib/product-classification";
+import { classifyProduct, getProductSizeSurcharge, isPackageEligible } from "@/lib/product-classification";
 
 type OrderTotals = {
   quantity: number;
@@ -46,6 +46,13 @@ export function buildPreferenceItems(orderId: string, lines: VerifiedOrderLine[]
         quantity: higherPricedQuantity,
         currency_id: "BRL",
         unit_price: toPrice(baseUnitPrice + 1),
+      }] : []),
+      ...(getProductSizeSurcharge(line.size) > 0 ? [{
+        id: `${orderId}-size-${index}`,
+        title: `Adicional tamanho ${line.size} - ${line.product.nome}`,
+        quantity: line.quantity,
+        currency_id: "BRL",
+        unit_price: getProductSizeSurcharge(line.size),
       }] : []),
       ...(line.customization ? [{
         id: `${orderId}-customization-${index}`,

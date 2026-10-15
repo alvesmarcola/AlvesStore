@@ -12,5 +12,6 @@ export const storeConfig = {
   shippingTwoShirts: 30,
   shippingOfferText: "Oferta de quantidade válida apenas para torcedor comum: 2 por R$ 300,00 ou 3 por R$ 450,00. Torcedor comum: R$ 160,00. Full Patches: R$ 180,00. Retrô manga curta: R$ 185,00. Retrô manga longa e Jogador manga longa: R$ 220,00. Frete: R$ 20,00 (1 camisa), R$ 30,00 (2) ou grátis (3+).",
   customizationPrice: 20,
+  size2GGPrice: 10,
   email: "atendimento@alvesstore.com.br",
 } as const;
