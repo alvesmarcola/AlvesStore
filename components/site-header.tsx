@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Menu, Search, ShoppingBag, X, ChevronDown, ArrowUpRight } from "lucide-react";
+import { Menu, Search, ShoppingBag, X, ChevronDown } from "lucide-react";
 import { leagues, products } from "@/lib/catalog";
 import { useCart } from "@/store/cart";
 import { searchProducts } from "@/lib/smart-search";
@@ -84,11 +84,9 @@ export function SiteHeader() {
             </div>
             <div className="relative" onMouseEnter={() => setLeagueOpen(true)} onMouseLeave={() => setLeagueOpen(false)}>
               <button className="nav-link flex items-center gap-1" onFocus={() => setLeagueOpen(true)} onClick={() => setLeagueOpen(true)} aria-expanded={leagueOpen}>Ligas <ChevronDown size={14} /></button>
-              <AnimatePresence>{leagueOpen && <motion.div {...dropdownMotion} transition={dropdownTransition} style={{ left: "max(1rem, calc((100vw - 1060px) / 2))", top: "10rem", width: "min(1060px, calc(100vw - 2rem))" }} className="fixed z-50 grid max-h-[70svh] grid-cols-2 gap-x-5 gap-y-6 overflow-y-auto rounded-b-xl border border-white/10 bg-graphite p-5 normal-case shadow-2xl sm:grid-cols-3 sm:p-7 xl:grid-cols-4">
-                {leagues.map((league, index) => <motion.div key={league.slug} initial={reducedMotion ? false : { opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: reducedMotion ? 0 : index * 0.025 }}>
-                  <Link href={`/ligas/${league.slug}`} className="group mb-2 flex items-start justify-between gap-2 text-xs font-black uppercase text-white"><span>{league.nome}</span><ArrowUpRight size={13} className="shrink-0 text-action transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5" /></Link>
-                  <span className="mb-2 block text-[9px] font-bold uppercase tracking-wider text-white/40">{league.pais} · {league.slug === "selecoes" ? "seleções" : `${league.clubes.length} clubes`}</span>
-                  {league.clubes.slice(0, 3).map((club) => <Link key={club.slug} className="menu-option mb-1 block rounded px-2 py-1.5 text-[10px] font-medium text-white/65" href={`/ligas/${league.slug}/${club.slug}`}>{club.nome}</Link>)}
+              <AnimatePresence>{leagueOpen && <motion.div {...dropdownMotion} transition={dropdownTransition} className="absolute left-1/2 top-full z-50 mt-2 grid max-h-[70svh] w-[min(42rem,calc(100vw-2rem))] -translate-x-1/2 grid-cols-2 gap-1 overflow-y-auto rounded-xl border border-white/10 bg-graphite p-4 normal-case shadow-2xl sm:grid-cols-3 sm:p-5">
+                {leagues.map((league, index) => <motion.div key={league.slug} initial={reducedMotion ? false : { opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: reducedMotion ? 0 : index * 0.02 }}>
+                  <Link href={`/ligas/${league.slug}`} className="menu-option block rounded px-3 py-3 text-[10px] font-black uppercase tracking-[.08em] text-white/80 hover:text-white sm:text-[11px]">{league.nome}</Link>
                 </motion.div>)}
               </motion.div>}</AnimatePresence>
             </div>
@@ -107,7 +105,7 @@ export function SiteHeader() {
             <button className="mobile-nav-link flex w-full items-center justify-between" aria-expanded={categoryOpen === "feminino"} onClick={() => setCategoryOpen(categoryOpen === "feminino" ? "" : "feminino")}>Feminino <ChevronDown size={16} /></button>
             {categoryOpen === "feminino" && <div className="mb-3 pl-4"><Link href="/feminino" className="block py-2 text-xs font-black">Ver tudo</Link>{femaleCategories.map(([name, type], index) => <Link key={`${type}-${index}`} href={`/feminino?tipo=${type}`} className="block py-2 text-xs text-muted">{name}</Link>)}</div>}
             <button className="mobile-nav-link flex w-full items-center justify-between" aria-expanded={leagueOpen} onClick={() => setLeagueOpen(!leagueOpen)}>Ligas <ChevronDown size={16} /></button>
-            {leagueOpen && <div className="mb-3 pl-4">{leagues.map((league) => <div key={league.slug} className="border-b border-border py-2"><Link href={`/ligas/${league.slug}`} className="text-xs font-black text-ink">{league.nome}</Link><div className="mt-1 flex flex-wrap gap-x-3">{league.clubes.slice(0, 4).map((club) => <Link key={club.slug} className="py-1 text-[10px] text-muted" href={`/ligas/${league.slug}/${club.slug}`}>{club.nome}</Link>)}</div></div>)}</div>}
+            {leagueOpen && <div className="mb-3 pl-4">{leagues.map((league) => <Link key={league.slug} href={`/ligas/${league.slug}`} className="block border-b border-border py-3 text-xs font-bold text-ink transition-colors hover:text-action">{league.nome}</Link>)}</div>}
             <Link className="mobile-nav-link" href="/ligas/selecoes">Seleções nacionais</Link><Link className="mobile-nav-link" href="/rastreio">Rastreio de pedido</Link>
           </motion.aside>
         </motion.div>}

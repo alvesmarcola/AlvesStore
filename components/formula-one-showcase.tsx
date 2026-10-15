@@ -79,8 +79,8 @@ export function FormulaOneShowcase() {
             <p className="mb-3 flex items-center gap-2 text-[10px] font-black uppercase tracking-[.3em] text-[#ff5550]">
               <span className="h-px w-7 bg-[#e10600]" /> Paixão em alta rotação
             </p>
-            <h2 id="f1-title" className="max-w-xl text-[clamp(3.2rem,8vw,6.8rem)] font-black uppercase leading-[.82] tracking-[-.065em]">
-              Sinta a <span className="f1-title-outline block text-transparent">velocidade.</span>
+            <h2 id="f1-title" className="max-w-full text-[clamp(2.75rem,7.2vw,5.75rem)] font-black uppercase leading-[.96] tracking-[-.025em]">
+              Sinta a <span className="f1-title-outline block whitespace-nowrap text-transparent">velocidade.</span>
             </h2>
             <p className="mt-6 max-w-md text-sm leading-6 text-white/60 sm:text-base sm:leading-7">
               O rugido antes da largada. A precisão em cada curva. Uma homenagem a quem vive o esporte no limite.
