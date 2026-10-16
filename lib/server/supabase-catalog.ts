@@ -184,22 +184,34 @@ export async function getSupabaseProducts(): Promise<Product[]> {
 }
 
 export async function getSupabaseProductBySlug(slug: string): Promise<Product | undefined> {
+  const bundledProduct = bundledCatalog.find((product) => product.slug.toLocaleLowerCase("en-US") === slug.toLocaleLowerCase("en-US") && isPublishedProduct(product));
   const config = supabaseConfig();
-  if (!config) return undefined;
+  if (!config) return bundledProduct;
 
-  const query = new URLSearchParams({ select: DETAIL_PRODUCT_COLUMNS, slug: `eq.${slug}`, limit: "1" });
+  const query = new URLSearchParams({ select: DETAIL_PRODUCT_COLUMNS, slug: `ilike.${slug.toLocaleLowerCase("en-US")}`, limit: "1" });
   const response = await fetch(`${config.url}/rest/v1/products?${query}`, {
     cache: "no-store",
+    signal: AbortSignal.timeout(8_000),
     headers: {
       apikey: config.key,
       ...(config.key.startsWith("eyJ") ? { Authorization: `Bearer ${config.key}` } : {}),
     },
+  }).catch((error: unknown) => {
+    console.error("Falha ao consultar produto no Supabase.", error);
+    return null;
   });
+  if (!response) return bundledProduct;
   if (!response.ok) {
     console.error(`Falha ao consultar produto Supabase: HTTP ${response.status}.`);
-    throw new Error("NÃ£o foi possÃ­vel carregar o produto atual da loja.");
+    return bundledProduct;
   }
   const rows = await response.json() as unknown[];
   const product = rows.length ? mapProduct(rows[0]) ?? undefined : undefined;
-  return product && isPublishedProduct(product) ? product : undefined;
+  return product && isPublishedProduct(product) ? product : bundledProduct;
+}
+
+export function getBundledRelatedProducts(product: Product): Product[] {
+  return bundledCatalog.filter((item) => isPublishedProduct(item) && item.id !== product.id &&
+    ((product.clubeSlug !== "revisar" && item.clubeSlug === product.clubeSlug) ||
+      (product.liga !== "revisar" && item.liga === product.liga))).slice(0, 5);
 }
