@@ -3,7 +3,7 @@
 import Image, { type ImageProps } from "next/image";
 import { useState } from "react";
 
-type SafeProductImageProps = ImageProps;
+type SafeProductImageProps = ImageProps & { fallbackSrc?: string };
 
 function isYupooSource(source: string) {
   try {
@@ -13,7 +13,7 @@ function isYupooSource(source: string) {
   }
 }
 
-export function SafeProductImage({ src, onError, ...props }: SafeProductImageProps) {
+export function SafeProductImage({ src, onError, fallbackSrc = "/otimizadas/camisa-jogador-brasileirao-atletico-mineiro-26-27/01-800.webp", ...props }: SafeProductImageProps) {
   const sourceKey = typeof src === "string" ? src : "src" in src ? src.src : src.default.src;
   const isYupooImage = typeof src === "string" && isYupooSource(src);
   const [failedSource, setFailedSource] = useState<string | null>(null);
@@ -21,14 +21,14 @@ export function SafeProductImage({ src, onError, ...props }: SafeProductImagePro
 
   return <Image
     {...props}
-    src={failed ? "/product-placeholder.svg" : src}
+    src={failed ? fallbackSrc : src}
     unoptimized={failed ? false : props.unoptimized ?? isYupooImage}
     alt={props.alt}
-    placeholder={failed ? "empty" : props.placeholder}
-    blurDataURL={failed ? undefined : props.blurDataURL}
+    placeholder={props.placeholder}
+    blurDataURL={props.blurDataURL}
     onError={(event) => {
       onError?.(event);
-      setFailedSource(sourceKey);
+      if (sourceKey !== fallbackSrc) setFailedSource(sourceKey);
     }}
   />;
 }

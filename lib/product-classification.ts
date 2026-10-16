@@ -24,9 +24,7 @@ export function classifyProduct(product: Product): ProductClassification {
       ? "player"
       : product.tipo === "goleiro" || /\b(goleiro|goalkeeper|keeper|gk)\b/.test(evidence)
         ? "goalkeeper"
-      : product.tipo === "torcedor" || fullPatchEvidence || /\b(fan|supporter|versao torcedor|torcedor)\b/.test(evidence) || /\bultra ?pass(?: ?o| ?os)?\b/.test(evidence)
-          ? "fan"
-          : "unknown";
+      : "fan";
   const inferredSleeve: SleeveType = /\b(manga longa|long sleeve|ls)\b/.test(evidence)
     ? "long"
     : /\b(manga curta|short sleeve|ss)\b/.test(evidence) ? "short" : "unknown";
