@@ -88,6 +88,7 @@ export function CatalogPage({ title, description, products, breadcrumb, initialT
   const leagueOptions = Array.from(new Set(products.map((product) => product.liga).filter((value) => value !== "revisar"))).sort((a, b) => catalogLabel(a).localeCompare(catalogLabel(b), "pt-BR"));
   const typeLabels: Record<string, string> = { torcedor: "Torcedor", jogador: "Jogador", goleiro: "Goleiro", retro: "Retrô", treino: "Treino", cropped: "Cropped", regata: "Regata", inverno: "Mangas compridas", vestido: "Vestido" };
   typeLabels["full-patch"] = "Full Patches";
+  typeLabels["formula1"] = "Fórmula 1";
   const typeOptions = Array.from(new Set(products.map((product) => getProductCategoryKey(product).toString()).filter((value) => value !== "revisar")));
   const sleeveOptions = Array.from(new Set(products.map((product) => classifyProduct(product).sleeve).filter((value) => value !== "unknown")));
   const uniformLabels: Record<string, string> = { titular: "Casa (Home)", reserva: "Fora (Away)", terceiro: "Terceira camisa (Third)", quarto: "Quarta camisa (Fourth)" };

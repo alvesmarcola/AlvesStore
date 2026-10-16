@@ -15,6 +15,7 @@ import { deriveCatalogLeagues } from "@/lib/catalog-taxonomy";
 import { editorialPriorities, prioritizeClubs, prioritizeEditorialProducts, sortCatalogProducts } from "@/lib/catalog-order";
 import { classifyProduct } from "@/lib/product-classification";
 import { getSupabaseProducts } from "@/lib/server/supabase-catalog";
+import { isFormulaOneProduct } from "@/lib/formula-one";
 
 export const metadata: Metadata = { alternates: { canonical: "/" } };
 export const revalidate = 300;
@@ -85,8 +86,7 @@ export default async function HomePage() {
   );
   const retros = catalogProducts.filter((product) => classifyProduct(product).version === "retro").slice(0, 8);
   const kidsProducts = catalogProducts.filter((product) => product.publico === "infantil" || /\b(?:kids|junior|youth|infantil|children)\b/i.test(`${product.nome} ${product.imageSeed}`)).slice(0, 8);
-  const formulaOneLeague = leagues.find((league) => /formula|f1/i.test(league.slug));
-  const formulaOneProducts = catalogProducts.filter((product) => product.liga === formulaOneLeague?.slug || /\b(?:f1|formula ?1|formula one)\b/i.test(`${product.nome} ${product.clube}`)).slice(0, 8);
+  const formulaOneProducts = catalogProducts.filter(isFormulaOneProduct).slice(0, 8);
   const destinations = new Map<string, { name: string; league: string; slug: string; popularity: number }>();
   products
     .filter((product) => product.liga !== "revisar" && product.clubeSlug !== "revisar")
@@ -182,8 +182,8 @@ export default async function HomePage() {
 
       {retros.length > 0 && <ProductSection title="Clássicos retrô" kicker="Para quem vive de história" href="/retro" items={retros} />}
 
-      <FormulaOneShowcase href="/retro" />
-      {formulaOneProducts.length > 0 && <ProductSection title="Fórmula 1" kicker="Universo motorsport" href={formulaOneLeague ? `/ligas/${formulaOneLeague.slug}` : "/retro"} items={formulaOneProducts} />}
+      <FormulaOneShowcase href="/f1" />
+      {formulaOneProducts.length > 0 && <ProductSection title="Fórmula 1" kicker="Universo motorsport" href="/f1" items={formulaOneProducts} />}
       {kidsProducts.length > 0 && <ProductSection title="Kits infantis" kicker="A torcida começa cedo" href="/infantil" items={kidsProducts} dark />}
 
       {products.length > 0 && <ProductSection title="Catálogo atualizado" kicker="Produtos importados do Supabase" href="/busca" items={catalogProducts.slice(0, 8)} dark />}

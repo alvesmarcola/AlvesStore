@@ -30,6 +30,7 @@ function normalizeAudience(value: unknown): Product["publico"] {
 
 function normalizeProductType(value: unknown): Product["tipo"] {
   const normalized = typeof value === "string" ? slugifyCatalogValue(value) : "";
+  if (["f1", "formula-1", "formula-one"].includes(normalized)) return "formula1";
   if (["torcedor", "fan", "supporter"].some((term) => normalized.includes(term))) return "torcedor";
   if (["jogador", "player"].some((term) => normalized.includes(term))) return "jogador";
   if (["goleiro", "goalkeeper"].some((term) => normalized.includes(term))) return "goleiro";

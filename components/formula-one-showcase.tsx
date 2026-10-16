@@ -52,7 +52,7 @@ function RacingCarArtwork() {
   );
 }
 
-export function FormulaOneShowcase({ href = "/retro" }: { href?: string }) {
+export function FormulaOneShowcase({ href = "/f1" }: { href?: string }) {
   const reduceMotion = useReducedMotion();
 
   return (
@@ -90,7 +90,7 @@ export function FormulaOneShowcase({ href = "/retro" }: { href?: string }) {
               href={href}
               className="f1-cta mt-8 inline-flex min-h-12 items-center gap-5 rounded-sm bg-[#e10600] px-5 py-3 text-[10px] font-black uppercase tracking-[.14em] text-white transition duration-300 hover:bg-[#ff2019] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#ff514b]"
             >
-              Ver clássicos da torcida <ArrowUpRight size={15} strokeWidth={2.5} />
+              Explorar coleção F1 <ArrowUpRight size={15} strokeWidth={2.5} />
             </Link>
 
             <div className="mt-10 flex max-w-md items-center gap-5 border-t border-white/10 pt-5">
