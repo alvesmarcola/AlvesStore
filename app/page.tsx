@@ -158,17 +158,8 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {products.length > 0 && <ProductSection title="Catálogo atualizado" kicker="Produtos importados do Supabase" href="/busca" items={catalogProducts.slice(0, 8)} dark />}
-      {clubProducts.length > 0 && <ProductSection title="Camisas de clubes" kicker="Explore o catálogo" href="/busca?q=clubes" items={clubProducts} />}
-      {nationalSelections.length > 0 && <ProductSection title="Seleções nacionais" kicker="Camisas de seleções" href="/busca?q=selecoes" items={nationalSelections} dark />}
-      {retros.length > 0 && <ProductSection title="Clássicos retrô" kicker="Para quem vive de história" href="/busca?q=retro" items={retros} />}
-      {kidsProducts.length > 0 && <ProductSection title="Kits infantis" kicker="A torcida começa cedo" href="/infantil" items={kidsProducts} dark />}
-      {formulaOneProducts.length > 0 && <ProductSection title="Fórmula 1" kicker="Universo motorsport" href={formulaOneLeague ? `/ligas/${formulaOneLeague.slug}` : "/busca?q=F1"} items={formulaOneProducts} />}
-
-      <FormulaOneShowcase href={formulaOneLeague ? `/ligas/${formulaOneLeague.slug}` : "/busca?q=F1"} />
-
       <StickyLeagueRail leagues={leagues} />
-
+      {clubProducts.length > 0 && <ProductSection title="Camisas de clubes" kicker="Explore o catálogo" href="/busca?q=clubes" items={clubProducts} />}
       <section className="bg-[#F5F5F5] py-14 sm:py-20">
         <div className="mx-auto max-w-7xl px-5 lg:px-8">
           <Reveal>
@@ -188,6 +179,15 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {retros.length > 0 && <ProductSection title="Clássicos retrô" kicker="Para quem vive de história" href="/busca?q=retro" items={retros} />}
+
+      <FormulaOneShowcase href={formulaOneLeague ? `/ligas/${formulaOneLeague.slug}` : "/busca?q=F1"} />
+      {formulaOneProducts.length > 0 && <ProductSection title="Fórmula 1" kicker="Universo motorsport" href={formulaOneLeague ? `/ligas/${formulaOneLeague.slug}` : "/busca?q=F1"} items={formulaOneProducts} />}
+      {kidsProducts.length > 0 && <ProductSection title="Kits infantis" kicker="A torcida começa cedo" href="/infantil" items={kidsProducts} dark />}
+
+      {products.length > 0 && <ProductSection title="Catálogo atualizado" kicker="Produtos importados do Supabase" href="/busca" items={catalogProducts.slice(0, 8)} dark />}
+      {nationalSelections.length > 0 && <ProductSection title="Seleções nacionais" kicker="Camisas de seleções" href="/busca?q=selecoes" items={nationalSelections} dark />}
 
       <section className="mx-auto grid max-w-7xl gap-4 px-5 py-14 sm:grid-cols-3 lg:px-8 lg:py-20">
         {differentials.map((item, index) => (

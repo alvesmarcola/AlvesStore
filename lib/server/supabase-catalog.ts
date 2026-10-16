@@ -66,6 +66,7 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 }
 
 function mapImage(value: unknown, productName: string, index: number): ProductImage | null {
+  if (typeof value === "string") value = { src: value };
   if (!isRecord(value) || typeof value.src !== "string") return null;
   let imageUrl: URL;
   try {
@@ -101,7 +102,9 @@ function mapProduct(value: unknown): Product | null {
   const rawClubSlug = candidateClubSlug && candidateClubSlug !== "revisar" ? candidateClubSlug : club;
   const clubSlug = slugifyCatalogValue(rawClubSlug);
   const league = normalizeLeague(value.liga);
-  const imageValues = Array.isArray(value.images) ? value.images : [value.cover, value.alternate];
+  const imageValues = Array.isArray(value.images) && value.images.length
+    ? value.images
+    : [value.cover, value.alternate, value.imageSeed];
   const images = imageValues
     .map((image, index) => mapImage(image, name, index))
     .filter((image): image is ProductImage => image !== null);
