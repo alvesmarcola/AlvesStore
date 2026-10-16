@@ -5,7 +5,7 @@ const DEFAULT_PRODUCT_FALLBACK = "/otimizadas/camisa-jogador-brasileirao-atletic
 
 const PAGE_SIZE = 100;
 const PRODUCT_COLUMNS = "id,slug,clube,clubeSlug,liga,publico,tipo,temporada,uniforme,nome,preco,tamanhos,cor,imageSeed";
-const LIST_PRODUCT_COLUMNS = `${PRODUCT_COLUMNS},cover:images->0,alternate:images->1`;
+const LIST_PRODUCT_COLUMNS = `${PRODUCT_COLUMNS},images`;
 const DETAIL_PRODUCT_COLUMNS = `${PRODUCT_COLUMNS},images`;
 
 function supabaseConfig() {
@@ -83,7 +83,7 @@ function productImageValues(value: Record<string, unknown>): unknown[] {
     }
     return raw.split(/,\s*(?=(?:https?:)?\/\/)/i).filter(Boolean);
   }
-  return [value.cover, value.alternate, value.imageSeed];
+  return [value.cover, value.alternate, value.image, value.imageSeed];
 }
 
 function localProductImage(value: Record<string, unknown>, productName: string) {
