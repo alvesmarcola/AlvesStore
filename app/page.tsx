@@ -29,11 +29,11 @@ const features: { icon: typeof ShoppingBag; title: string; text: string; link?: 
 const collections = [
   { title: "MASCULINO", sub: "Do estádio ao dia a dia", href: "/masculino", image: images.categories.male, size: "collection-men" },
   { title: "FEMININO", sub: "Torça do seu jeito", href: "/feminino", image: images.categories.female, size: "collection-women" },
-  { title: "LIGAS", sub: "Paixão sem fronteiras", href: "/busca?q=clubes", image: images.categories.leagues, size: "collection-leagues" },
+  { title: "LIGAS", sub: "Paixão sem fronteiras", href: "/clubes", image: images.categories.leagues, size: "collection-leagues" },
 ];
 
 const differentials = [
-  { title: "Clubes e seleções", body: "Explore camisas de clubes e seleções nacionais em categorias separadas.", links: [{ label: "Ver clubes", href: "/busca?q=clubes" }, { label: "Ver seleções", href: "/busca?q=selecoes" }] },
+  { title: "Clubes e seleções", body: "Explore camisas de clubes e seleções nacionais em categorias separadas.", links: [{ label: "Ver clubes", href: "/clubes" }, { label: "Ver seleções", href: "/selecoes" }] },
   { title: "Personalização opcional", body: `Adicione nome e número por ${formatCurrency(storeConfig.customizationPrice)} a cada camisa personalizada.`, links: [{ label: "Escolher uma camisa", href: "/masculino" }] },
 ];
 
@@ -159,7 +159,7 @@ export default async function HomePage() {
       </section>
 
       <StickyLeagueRail leagues={leagues} />
-      {clubProducts.length > 0 && <ProductSection title="Camisas de clubes" kicker="Explore o catálogo" href="/busca?q=clubes" items={clubProducts} />}
+      {clubProducts.length > 0 && <ProductSection title="Camisas de clubes" kicker="Explore o catálogo" href="/clubes" items={clubProducts} />}
       <section className="bg-[#F5F5F5] py-14 sm:py-20">
         <div className="mx-auto max-w-7xl px-5 lg:px-8">
           <Reveal>
@@ -180,14 +180,14 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {retros.length > 0 && <ProductSection title="Clássicos retrô" kicker="Para quem vive de história" href="/busca?q=retro" items={retros} />}
+      {retros.length > 0 && <ProductSection title="Clássicos retrô" kicker="Para quem vive de história" href="/retro" items={retros} />}
 
-      <FormulaOneShowcase href={formulaOneLeague ? `/ligas/${formulaOneLeague.slug}` : "/busca?q=F1"} />
-      {formulaOneProducts.length > 0 && <ProductSection title="Fórmula 1" kicker="Universo motorsport" href={formulaOneLeague ? `/ligas/${formulaOneLeague.slug}` : "/busca?q=F1"} items={formulaOneProducts} />}
+      <FormulaOneShowcase href="/retro" />
+      {formulaOneProducts.length > 0 && <ProductSection title="Fórmula 1" kicker="Universo motorsport" href={formulaOneLeague ? `/ligas/${formulaOneLeague.slug}` : "/retro"} items={formulaOneProducts} />}
       {kidsProducts.length > 0 && <ProductSection title="Kits infantis" kicker="A torcida começa cedo" href="/infantil" items={kidsProducts} dark />}
 
       {products.length > 0 && <ProductSection title="Catálogo atualizado" kicker="Produtos importados do Supabase" href="/busca" items={catalogProducts.slice(0, 8)} dark />}
-      {nationalSelections.length > 0 && <ProductSection title="Seleções nacionais" kicker="Camisas de seleções" href="/busca?q=selecoes" items={nationalSelections} dark />}
+      {nationalSelections.length > 0 && <ProductSection title="Seleções nacionais" kicker="Camisas de seleções" href="/selecoes" items={nationalSelections} dark />}
 
       <section className="mx-auto grid max-w-7xl gap-4 px-5 py-14 sm:grid-cols-3 lg:px-8 lg:py-20">
         {differentials.map((item, index) => (

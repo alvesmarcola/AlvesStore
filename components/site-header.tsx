@@ -113,7 +113,7 @@ export function SiteHeader({ leagues }: { leagues: Pick<CatalogLeague, "slug" | 
               </motion.div>}</AnimatePresence>
             </div>
             <Link className="nav-link" href="/infantil">Infantil</Link>
-            <Link className="nav-link" href="/busca?q=selecoes">Seleções nacionais</Link>
+            <Link className="nav-link" href="/selecoes">Seleções nacionais</Link>
             <Link className="nav-link" href="/rastreio">Rastreio</Link>
           </div>
         </nav>
@@ -129,7 +129,7 @@ export function SiteHeader({ leagues }: { leagues: Pick<CatalogLeague, "slug" | 
             {categoryOpen === "feminino" && <div className="mb-3 pl-4"><Link href="/feminino" className="block py-2 text-xs font-black">Ver tudo</Link>{femaleCategories.map(([name, type], index) => <Link key={`${type}-${index}`} href={`/feminino?tipo=${type}`} className="block py-2 text-xs text-muted">{name}</Link>)}</div>}
             <button className="mobile-nav-link flex w-full items-center justify-between" aria-expanded={leagueOpen} onClick={() => setLeagueOpen(!leagueOpen)}>Ligas <ChevronDown size={16} /></button>
             {leagueOpen && <div className="mb-3 pl-4">{leagues.map((league) => <Link key={league.slug} href={`/ligas/${league.slug}`} className="block border-b border-border py-3 text-xs font-bold text-ink transition-colors hover:text-action">{league.nome}</Link>)}</div>}
-            <Link className="mobile-nav-link" href="/infantil">Infantil / Kids</Link><Link className="mobile-nav-link" href="/busca?q=selecoes">Seleções nacionais</Link><Link className="mobile-nav-link" href="/rastreio">Rastreio de pedido</Link>
+            <Link className="mobile-nav-link" href="/infantil">Infantil / Kids</Link><Link className="mobile-nav-link" href="/selecoes">Seleções nacionais</Link><Link className="mobile-nav-link" href="/rastreio">Rastreio de pedido</Link>
           </motion.aside>
         </motion.div>}
       </AnimatePresence>

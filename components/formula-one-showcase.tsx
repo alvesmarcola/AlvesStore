@@ -52,7 +52,7 @@ function RacingCarArtwork() {
   );
 }
 
-export function FormulaOneShowcase({ href = "/busca?q=F1" }: { href?: string }) {
+export function FormulaOneShowcase({ href = "/retro" }: { href?: string }) {
   const reduceMotion = useReducedMotion();
 
   return (

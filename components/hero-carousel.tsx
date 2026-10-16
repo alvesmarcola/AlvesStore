@@ -32,7 +32,7 @@ const slides = [
     accent: 2,
     copy: "Clássicos inspirados por outras épocas para quem carrega o futebol no peito.",
     cta: "Ver coleção retrô",
-    href: "/busca?q=retro",
+    href: "/retro",
     label: "CLÁSSICOS RETRÔ",
   },
 ];

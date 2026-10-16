@@ -1,5 +1,5 @@
 const WHATSAPP_URL =
-  "https://wa.me/555499968814?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20Alvis%20Store%20e%20preciso%20de%20ajuda%20com%20um%20produto.";
+  "https://wa.me/555499968814?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20Alves%20Store%20e%20preciso%20de%20ajuda%20com%20um%20produto.";
 
 export function FloatingWhatsApp() {
   return (

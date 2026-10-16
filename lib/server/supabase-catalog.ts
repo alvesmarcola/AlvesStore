@@ -1,9 +1,11 @@
 import type { Product, ProductImage } from "@/lib/types";
+import bundledProducts from "@/data/products.json";
 
 const PAGE_SIZE = 100;
 const PRODUCT_COLUMNS = "id,slug,clube,clubeSlug,liga,publico,tipo,temporada,uniforme,nome,preco,tamanhos,cor,imageSeed";
 const LIST_PRODUCT_COLUMNS = `${PRODUCT_COLUMNS},images`;
 const DETAIL_PRODUCT_COLUMNS = `${PRODUCT_COLUMNS},images`;
+const bundledCatalog = bundledProducts as unknown as Product[];
 
 function supabaseConfig() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
@@ -155,8 +157,7 @@ function isPublishedProduct(product: Product) {
 export async function getSupabaseProducts(): Promise<Product[]> {
   const config = supabaseConfig();
   if (!config) {
-    console.error("Catálogo indisponível: configure NEXT_PUBLIC_SUPABASE_URL e uma chave pública de leitura.");
-    return [];
+    return bundledCatalog.filter(isPublishedProduct);
   }
 
   const products: Product[] = [];
@@ -178,7 +179,8 @@ export async function getSupabaseProducts(): Promise<Product[]> {
     products.push(...rows.map(mapProduct).filter((product): product is Product => product !== null));
     if (rows.length < PAGE_SIZE) break;
   }
-  return products.filter(isPublishedProduct);
+  const published = products.filter(isPublishedProduct);
+  return published.length ? published : bundledCatalog.filter(isPublishedProduct);
 }
 
 export async function getSupabaseProductBySlug(slug: string): Promise<Product | undefined> {

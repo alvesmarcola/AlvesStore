@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "catalogar": "tsx scripts/catalogar-imagens.ts",
+    "prebuild": "tsx scripts/check-catalog-categories.ts",
     "build": "next build",
     "start": "next start",
     "db:migrate": "tsx scripts/migrate-orders.ts",

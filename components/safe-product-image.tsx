@@ -13,7 +13,7 @@ function isYupooSource(source: string) {
   }
 }
 
-export function SafeProductImage({ src, onError, fallbackSrc = "/otimizadas/camisa-jogador-brasileirao-atletico-mineiro-26-27/01-800.webp", ...props }: SafeProductImageProps) {
+export function SafeProductImage({ src, onError, fallbackSrc = "/product-placeholder.svg", ...props }: SafeProductImageProps) {
   const sourceKey = typeof src === "string" ? src : "src" in src ? src.src : src.default.src;
   const isYupooImage = typeof src === "string" && isYupooSource(src);
   const [failedSource, setFailedSource] = useState<string | null>(null);
