@@ -1,6 +1,7 @@
 import type { Product, ProductImage } from "@/lib/types";
 import imageFallbacks from "@/data/catalog-image-fallbacks.json";
-import { images as storeImages } from "@/data/images";
+
+const DEFAULT_PRODUCT_FALLBACK = "/otimizadas/camisa-jogador-brasileirao-atletico-mineiro-26-27/01-800.webp";
 
 const PAGE_SIZE = 100;
 const PRODUCT_COLUMNS = "id,slug,clube,clubeSlug,liga,publico,tipo,temporada,uniforme,nome,preco,tamanhos,cor,imageSeed";
@@ -92,7 +93,7 @@ function localProductImage(value: Record<string, unknown>, productName: string) 
     const fallback = fallbackMap[slugifyCatalogValue(candidate)];
     if (fallback?.startsWith("/otimizadas/")) return fallback;
   }
-  return storeImages.products.primary.src;
+  return DEFAULT_PRODUCT_FALLBACK;
 }
 
 function mapImage(value: unknown, productName: string, index: number): ProductImage | null {
@@ -141,6 +142,7 @@ function mapProduct(value: unknown): Product | null {
   if (images.length === 0) {
     images.push({
       src: localFallback,
+      fallbackSrc: localFallback,
       source: "fallback-local",
       alt: name,
       credit: "Alves Store",
