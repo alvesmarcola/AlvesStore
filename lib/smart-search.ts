@@ -1,6 +1,6 @@
 import type { Product, ShirtVersion, SleeveType, Uniform } from "@/lib/types";
 import { classifyProduct } from "@/lib/product-classification";
-import { getLeague } from "@/lib/catalog";
+import { catalogLabel } from "@/lib/catalog-taxonomy";
 
 export interface SearchIntent {
   uniform?: Exclude<Uniform, "revisar">;
@@ -63,8 +63,7 @@ export function parseSearchIntent(query: string): SearchIntent {
 }
 
 function productText(product: Product) {
-  const league = getLeague(product.liga);
-  return normalize([product.nome, product.clube, product.clubeSlug.replaceAll("-", " "), product.temporada, product.tipo, product.uniforme, product.imageSeed, ...(product.images ?? []).map((image) => image.source), league?.nome ?? "", league?.competicao ?? ""].join(" "));
+  return normalize([product.nome, product.clube, product.clubeSlug.replaceAll("-", " "), product.temporada, product.tipo, product.uniforme, product.imageSeed, ...(product.images ?? []).map((image) => image.source), product.liga, catalogLabel(product.liga)].join(" "));
 }
 
 function basicScore(product: Product, intent: SearchIntent) {

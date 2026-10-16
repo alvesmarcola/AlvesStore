@@ -2,7 +2,6 @@
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { products } from "@/lib/catalog";
 import type { CartItem, Product } from "@/lib/types";
 import { getAvailablePatches } from "@/lib/patch-compatibility";
 
@@ -28,8 +27,7 @@ function migratePersistedCart(value: unknown): Pick<CartState, "items"> {
       if (!isRecord(entry) || !isRecord(entry.product) || typeof entry.size !== "string") return [];
       const storedProduct = entry.product;
       if (typeof storedProduct.id !== "string") return [];
-      const localProduct = products.find((item) => item.id === storedProduct.id);
-      const product = localProduct ?? restoreCatalogProduct(storedProduct);
+      const product = restoreCatalogProduct(storedProduct);
       if (!product || !product.tamanhos.includes(entry.size)) return [];
 
       const customization = isRecord(entry.customization)

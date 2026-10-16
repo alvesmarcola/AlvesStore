@@ -4,7 +4,8 @@ import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ChevronRight, SlidersHorizontal } from "lucide-react";
 import { ProductGrid } from "@/components/product-grid";
-import { formatCurrency, leagues } from "@/lib/catalog";
+import { formatCurrency } from "@/lib/catalog";
+import { catalogLabel } from "@/lib/catalog-taxonomy";
 import { storeConfig } from "@/config";
 import type { Product } from "@/lib/types";
 import { searchProducts } from "@/lib/smart-search";
@@ -38,7 +39,7 @@ export function CatalogPage({ title, description, products, breadcrumb, initialT
   const [size, setSize] = useState("");
   const [season, setSeason] = useState("");
   const [color, setColor] = useState("");
-  const [maxPrice, setMaxPrice] = useState("600");
+  const [maxPrice, setMaxPrice] = useState("all");
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [visibleCount, setVisibleCount] = useState(12);
   const urlReady = useRef(false);
@@ -47,12 +48,12 @@ export function CatalogPage({ title, description, products, breadcrumb, initialT
     setSearch(initialSearch !== undefined ? initialSearch : params.get("q") ?? ""); setType(params.get("tipo") ?? initialType);
     setUniform(params.get("uniforme") ?? ""); setClub(params.get("clube") ?? ""); setLeague(params.get("liga") ?? ""); setSleeve(params.get("manga") ?? "");
     setSize(params.get("tamanho") ?? ""); setSeason(params.get("temporada") ?? ""); setColor(params.get("cor") ?? "");
-    setMaxPrice(params.get("preco") ?? "600"); setSort(params.get("ordem") ?? "relevancia"); urlReady.current = true;
+    setMaxPrice(params.get("preco") ?? "all"); setSort(params.get("ordem") ?? "relevancia"); urlReady.current = true;
   }, [initialType, initialSearch]);
   useEffect(() => {
     if (!urlReady.current) return;
     const params = new URLSearchParams();
-    const values: Record<string, string> = { q: search, tipo: type, uniforme: uniform, manga: sleeve, clube: club, liga: league, tamanho: size, temporada: season, cor: color, preco: maxPrice === "600" ? "" : maxPrice, ordem: sort === "relevancia" ? "" : sort };
+    const values: Record<string, string> = { q: search, tipo: type, uniforme: uniform, manga: sleeve, clube: club, liga: league, tamanho: size, temporada: season, cor: color, preco: maxPrice === "all" ? "" : maxPrice, ordem: sort === "relevancia" ? "" : sort };
     for (const [key, value] of Object.entries(values)) if (value) params.set(key, value);
     const query = params.toString(); window.history.replaceState(null, "", `${window.location.pathname}${query ? `?${query}` : ""}`);
   }, [search, type, uniform, sleeve, club, league, size, season, color, maxPrice, sort]);
@@ -64,7 +65,7 @@ export function CatalogPage({ title, description, products, breadcrumb, initialT
     const result = products.filter((product) => {
       const price = getProductUnitPrice(product);
       const verifiedUniform = classifyProduct(product).uniform;
-      const priceMatches = maxPrice === "600" || (price !== null && price <= Number(maxPrice));
+      const priceMatches = maxPrice === "all" || (price !== null && price <= Number(maxPrice));
       const category = getProductCategoryKey(product);
       const categoryMatches = !type || category === type || (type === "inverno" && classifyProduct(product).sleeve === "long");
       return categoryMatches && (!sleeve || classifyProduct(product).sleeve === sleeve) && (!uniform || verifiedUniform === uniform) &&
@@ -84,10 +85,10 @@ export function CatalogPage({ title, description, products, breadcrumb, initialT
   const sizeOptions = Array.from(new Set(products.flatMap((product) => product.tamanhos))).sort();
   const seasonOptions = Array.from(new Set(products.map((product) => product.temporada).filter((value) => value !== "revisar")));
   const colorOptions = Array.from(new Set(products.map((product) => product.cor).filter((value) => value !== "revisar")));
-  const leagueOptions = Array.from(new Set(products.map((product) => product.liga).filter((value) => value !== "revisar")));
+  const leagueOptions = Array.from(new Set(products.map((product) => product.liga).filter((value) => value !== "revisar"))).sort((a, b) => catalogLabel(a).localeCompare(catalogLabel(b), "pt-BR"));
   const typeLabels: Record<string, string> = { torcedor: "Torcedor", jogador: "Jogador", goleiro: "Goleiro", retro: "Retrô", treino: "Treino", cropped: "Cropped", regata: "Regata", inverno: "Mangas compridas", vestido: "Vestido" };
   typeLabels["full-patch"] = "Full Patches";
-  const typeOptions = Array.from(new Set(["torcedor", "jogador", "retro", "full-patch", ...products.map((product) => getProductCategoryKey(product).toString()).filter((value) => value !== "revisar")]));
+  const typeOptions = Array.from(new Set(products.map((product) => getProductCategoryKey(product).toString()).filter((value) => value !== "revisar")));
   const sleeveOptions = Array.from(new Set(products.map((product) => classifyProduct(product).sleeve).filter((value) => value !== "unknown")));
   const uniformLabels: Record<string, string> = { titular: "Casa (Home)", reserva: "Fora (Away)", terceiro: "Terceira camisa (Third)", quarto: "Quarta camisa (Fourth)" };
   const uniformOptions = Array.from(new Set(products.map((product) => classifyProduct(product).uniform).filter((value) => value !== "revisar")));
@@ -101,18 +102,18 @@ export function CatalogPage({ title, description, products, breadcrumb, initialT
     setUniform("");
     setSleeve("");
     setSearch("");
-    setMaxPrice("600");
+    setMaxPrice("all");
   };
   const filterFields = <>
     <label className="filter-label">Clube<select className="filter-select" value={club} onChange={(event) => setClub(event.target.value)}><option value="">Todos os clubes</option>{clubOptions.map(([slug, name]) => <option key={slug} value={slug}>{name}</option>)}</select></label>
-    <label className="filter-label">Liga<select className="filter-select" value={league} onChange={(event) => setLeague(event.target.value)}><option value="">Todas</option>{leagueOptions.map((slug) => <option key={slug} value={slug}>{leagues.find((item) => item.slug === slug)?.nome ?? slug}</option>)}</select></label>
+    <label className="filter-label">Liga<select className="filter-select" value={league} onChange={(event) => setLeague(event.target.value)}><option value="">Todas</option>{leagueOptions.map((slug) => <option key={slug} value={slug}>{catalogLabel(slug)}</option>)}</select></label>
     <label className="filter-label">Tamanho<select className="filter-select" value={size} onChange={(event) => setSize(event.target.value)}><option value="">Todos</option>{sizeOptions.map((item) => <option key={item} value={item}>{item}</option>)}</select></label>
     <label className="filter-label">Categoria<select className="filter-select" value={type} onChange={(event) => setType(event.target.value)}><option value="">Todas</option>{typeOptions.map((item) => <option key={item} value={item}>{typeLabels[item] ?? item}</option>)}</select></label>
     {sleeveOptions.length > 0 && <label className="filter-label">Manga<select className="filter-select" value={sleeve} onChange={(event) => setSleeve(event.target.value)}><option value="">Todas</option>{sleeveOptions.map((item) => <option key={item} value={item}>{item === "long" ? "Manga longa" : "Manga curta"}</option>)}</select></label>}
     {uniformOptions.length > 0 && <label className="filter-label">Uniforme<select className="filter-select" value={uniform} onChange={(event) => setUniform(event.target.value)}><option value="">Todos</option>{uniformOptions.map((item) => <option key={item} value={item}>{uniformLabels[item] ?? item}</option>)}</select></label>}
     <label className="filter-label">Temporada<select className="filter-select" value={season} onChange={(event) => setSeason(event.target.value)}><option value="">Todas</option>{seasonOptions.map((item) => <option key={item}>{item}</option>)}</select></label>
     {colorOptions.length > 0 && <label className="filter-label">Cor<select className="filter-select" value={color} onChange={(event) => setColor(event.target.value)}><option value="">Todas</option>{colorOptions.map((item) => <option key={item}>{item}</option>)}</select></label>}
-    <label className="filter-label">Faixa de preço<select className="filter-select" value={maxPrice} onChange={(event) => setMaxPrice(event.target.value)}><option value="600">Todos os preços</option><option value={storeConfig.fanCommonPrice}>Até {formatCurrency(storeConfig.fanCommonPrice)}</option><option value={storeConfig.retroShortSleevePrice}>Até {formatCurrency(storeConfig.retroShortSleevePrice)}</option><option value={storeConfig.fanFullPatchPrice}>Até {formatCurrency(storeConfig.fanFullPatchPrice)}</option><option value={storeConfig.retroLongSleevePrice}>Até {formatCurrency(storeConfig.retroLongSleevePrice)}</option></select></label>
+    <label className="filter-label">Faixa de preço<select className="filter-select" value={maxPrice} onChange={(event) => setMaxPrice(event.target.value)}><option value="all">Todos os preços</option><option value={storeConfig.fanCommonPrice}>Até {formatCurrency(storeConfig.fanCommonPrice)}</option><option value={storeConfig.retroShortSleevePrice}>Até {formatCurrency(storeConfig.retroShortSleevePrice)}</option><option value={storeConfig.fanFullPatchPrice}>Até {formatCurrency(storeConfig.fanFullPatchPrice)}</option><option value={storeConfig.retroLongSleevePrice}>Até {formatCurrency(storeConfig.retroLongSleevePrice)}</option></select></label>
     <button className="mt-4 text-xs font-bold text-blue-700 underline" onClick={clearFilters}>Limpar filtros</button>
   </>;
 
@@ -139,7 +140,7 @@ export function CatalogPage({ title, description, products, breadcrumb, initialT
       <aside className="hidden h-fit rounded-lg border border-border p-4 lg:block">
         <h2 className="mb-4 text-sm font-black">Filtrar produtos</h2>
         {filterFields}
-        <div className="mt-6 border-t pt-4"><h3 className="mb-2 text-xs font-black uppercase">Explore ligas</h3>{leagues.slice(0, 6).map((league) => <Link className="block py-1.5 text-xs text-muted hover:text-ink" key={league.slug} href={`/ligas/${league.slug}`}>{league.nome}</Link>)}</div>
+        {leagueOptions.length > 0 && <div className="mt-6 border-t pt-4"><h3 className="mb-2 text-xs font-black uppercase">Explore ligas</h3>{leagueOptions.slice(0, 6).map((slug) => <Link className="block py-1.5 text-xs text-muted hover:text-ink" key={slug} href={`/ligas/${slug}`}>{catalogLabel(slug)}</Link>)}</div>}
       </aside>
       <div>
         <ProductGrid items={filtered.slice(0, visibleCount)} />

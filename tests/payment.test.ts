@@ -2,10 +2,10 @@ import assert from "node:assert/strict";
 import { createHmac } from "node:crypto";
 import { test } from "node:test";
 import { getCartPricing, getPackagePrice, getProductCategoryKey, getProductOfferText, getShippingCents } from "@/lib/commerce";
-import { orderLinesSchema, paymentRequestSchema, validateOrderLines, calculateOrderTotals } from "@/lib/payment/order";
+import { orderLinesSchema, paymentRequestSchema, validateOrderLines as validateOrderLinesWithCatalog, calculateOrderTotals } from "@/lib/payment/order";
 import { buildPreferenceItems } from "@/lib/payment/preference-items";
 import { isValidMercadoPagoSignature, normalizedPaymentStatus } from "@/lib/server/webhook-signature";
-import { products } from "@/lib/catalog";
+import productsData from "@/data/products.json";
 import { classifyProduct, isPackageEligible } from "@/lib/product-classification";
 import { inferProductTypeFromSource } from "@/lib/catalog-source-classification";
 import { prioritizeClubs, prioritizeEditorialProducts, sortCatalogProducts } from "@/lib/catalog-order";
@@ -14,6 +14,8 @@ import { patchOptions } from "@/data/patches";
 import { productOverrides } from "@/data/product-overrides";
 import type { Product } from "@/lib/types";
 
+const products = (productsData as Product[]).map((entry) => ({ ...entry, tamanhos: entry.tamanhos.filter((size) => size !== "3GG") }));
+const validateOrderLines = (lines: Parameters<typeof validateOrderLinesWithCatalog>[0]) => validateOrderLinesWithCatalog(lines, products);
 const baseProduct = products[0]!;
 const product = products.find((entry) => classifyProduct(entry).price === 160 && entry.tamanhos.length > 0)
   ?? productFixture("produto-teste-torcedor", { nome: "Camisa Clube Torcedor", tipo: "torcedor", imageSeed: "Torcedor", preco: 160, tamanhos: ["M"] }, baseProduct);

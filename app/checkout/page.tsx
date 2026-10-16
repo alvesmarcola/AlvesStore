@@ -61,7 +61,7 @@ export default function CheckoutPage() {
   const { register, handleSubmit, trigger, watch, setValue, setError, formState: { errors, isSubmitting } } = useForm<CheckoutValues>({
     resolver: zodResolver(checkoutSchema),
     mode: "onTouched",
-    defaultValues: { fullName: "", email: "", cpf: "", phone: "", cep: "", street: "", number: "", complement: "", neighborhood: "", city: "", state: "" },
+    defaultValues: { fullName: "", email: "", cpf: "", phone: "", whatsappUpdates: false, cep: "", street: "", number: "", complement: "", neighborhood: "", city: "", state: "" },
   });
   const cep = watch("cep");
 
@@ -147,6 +147,7 @@ export default function CheckoutPage() {
           <CheckoutInput label="E-mail" name="email" register={register} errors={errors} autoComplete="email" placeholder="voce@email.com" type="email" />
           <CheckoutInput label="CPF" name="cpf" register={register} errors={errors} inputMode="numeric" maxLength={14} placeholder="000.000.000-00" />
           <CheckoutInput label="Celular com DDD" name="phone" register={register} errors={errors} autoComplete="tel" inputMode="tel" maxLength={15} placeholder="(00) 00000-0000" />
+          <label className="sm:col-span-2 flex items-start gap-3 rounded-lg bg-paper p-3 text-xs leading-5 text-muted"><input {...register("whatsappUpdates")} type="checkbox" className="mt-1" /><span>Quero receber pelo WhatsApp atualizações deste pedido, como o código de rastreio.</span></label>
         </div><button type="button" onClick={nextStep} className="primary-button mt-6 flex items-center gap-2 px-5 py-3 text-xs font-black uppercase">Continuar <ChevronRight size={15} /></button></section>
         <section hidden={step !== 1} className="rounded-xl border border-border p-5 sm:p-7"><h2 className="text-lg font-black">2. Endereço e frete</h2><div className="mt-4 grid gap-4 sm:grid-cols-2">
           <div className="flex items-end gap-2"><div className="flex-1"><CheckoutInput label="CEP" name="cep" register={register} errors={errors} autoComplete="postal-code" inputMode="numeric" maxLength={9} placeholder="00000-000" /></div><button type="button" onClick={lookupCep} disabled={cepLoading} aria-label="Buscar endereço pelo CEP" className="mb-[1px] grid h-11 w-11 shrink-0 place-items-center rounded-lg border border-border disabled:opacity-50">{cepLoading ? <span className="animate-spin">◌</span> : <MapPin size={17} />}</button></div>

@@ -7,11 +7,13 @@ import { Reveal } from "@/components/motion-effects";
 import { StickyLeagueRail } from "@/components/sticky-league-rail";
 import { FormulaOneShowcase } from "@/components/formula-one-showcase";
 import { images } from "@/data/images";
-import { formatCurrency, leagues, products } from "@/lib/catalog";
+import { formatCurrency } from "@/lib/catalog";
 import { storeConfig } from "@/config";
 import type { Metadata } from "next";
-import { classifyProduct } from "@/lib/product-classification";
+import type { Product } from "@/lib/types";
+import { deriveCatalogLeagues } from "@/lib/catalog-taxonomy";
 import { editorialPriorities, prioritizeClubs, prioritizeEditorialProducts, sortCatalogProducts } from "@/lib/catalog-order";
+import { classifyProduct } from "@/lib/product-classification";
 import { getSupabaseProducts } from "@/lib/server/supabase-catalog";
 
 export const metadata: Metadata = { alternates: { canonical: "/" } };
@@ -27,11 +29,11 @@ const features = [
 const collections = [
   { title: "MASCULINO", sub: "Do estádio ao dia a dia", href: "/masculino", image: images.categories.male, size: "collection-men" },
   { title: "FEMININO", sub: "Torça do seu jeito", href: "/feminino", image: images.categories.female, size: "collection-women" },
-  { title: "LIGAS", sub: "Paixão sem fronteiras", href: "/ligas/brasileirao-serie-a", image: images.categories.leagues, size: "collection-leagues" },
+  { title: "LIGAS", sub: "Paixão sem fronteiras", href: "/busca?q=clubes", image: images.categories.leagues, size: "collection-leagues" },
 ];
 
 const differentials = [
-  { title: "Clubes e seleções", body: "Explore camisas de clubes e seleções nacionais em categorias separadas.", links: [{ label: "Ver clubes", href: "/ligas/brasileirao-serie-a" }, { label: "Ver seleções", href: "/ligas/selecoes" }] },
+  { title: "Clubes e seleções", body: "Explore camisas de clubes e seleções nacionais em categorias separadas.", links: [{ label: "Ver clubes", href: "/busca?q=clubes" }, { label: "Ver seleções", href: "/busca?q=selecoes" }] },
   { title: "Personalização opcional", body: `Adicione nome e número por ${formatCurrency(storeConfig.customizationPrice)} a cada camisa personalizada.`, links: [{ label: "Escolher uma camisa", href: "/masculino" }] },
 ];
 
@@ -45,7 +47,7 @@ function ProductSection({
   title: string;
   kicker: string;
   href: string;
-  items: typeof products;
+  items: Product[];
   dark?: boolean;
 }) {
   return (
@@ -66,26 +68,30 @@ function ProductSection({
 
 export default async function HomePage() {
   const products = await getSupabaseProducts();
+  const leagues = deriveCatalogLeagues(products);
   const nationalTeamSlugs = new Set(leagues.find((league) => league.slug === "selecoes")?.clubes.map((team) => team.slug) ?? []);
-  const sellableProducts = products.filter((product) => product.tamanhos.length > 0 && !classifyProduct(product).reviewRequired);
-  const clubProducts = prioritizeEditorialProducts(
-    sellableProducts.filter((product) => product.liga !== "selecoes" && !nationalTeamSlugs.has(product.clubeSlug) && product.clubeSlug !== "revisar"),
+  const catalogProducts = sortCatalogProducts(products);
+  const clubCandidates = catalogProducts.filter((product) => product.liga !== "selecoes" && !nationalTeamSlugs.has(product.clubeSlug) && product.clubeSlug !== "revisar");
+  const selectedClubProducts = prioritizeEditorialProducts(
+    clubCandidates,
     editorialPriorities.clubs,
-    4,
+    8,
   );
+  const clubProducts = selectedClubProducts.length ? selectedClubProducts : catalogProducts.slice(0, 8);
   const nationalSelections = prioritizeEditorialProducts(
-    sellableProducts.filter((product) => product.liga === "selecoes" || nationalTeamSlugs.has(product.clubeSlug)),
+    catalogProducts.filter((product) => product.liga === "selecoes" || nationalTeamSlugs.has(product.clubeSlug)),
     editorialPriorities.selections,
-    4,
+    8,
   );
-  const retros = sortCatalogProducts(sellableProducts.filter((product) => classifyProduct(product).version === "retro")).slice(0, 4);
+  const retros = catalogProducts.filter((product) => classifyProduct(product).version === "retro").slice(0, 8);
+  const kidsProducts = catalogProducts.filter((product) => product.publico === "infantil" || /\b(?:kids|junior|youth|infantil|children)\b/i.test(`${product.nome} ${product.imageSeed}`)).slice(0, 8);
+  const formulaOneLeague = leagues.find((league) => /formula|f1/i.test(league.slug));
+  const formulaOneProducts = catalogProducts.filter((product) => product.liga === formulaOneLeague?.slug || /\b(?:f1|formula ?1|formula one)\b/i.test(`${product.nome} ${product.clube}`)).slice(0, 8);
   const destinations = new Map<string, { name: string; league: string; slug: string; popularity: number }>();
   products
     .filter((product) => product.liga !== "revisar" && product.clubeSlug !== "revisar")
     .forEach((product) => {
-      const league = nationalTeamSlugs.has(product.clubeSlug)
-        ? "selecoes"
-        : leagues.find((candidate) => candidate.slug !== "selecoes" && candidate.clubes.some((club) => club.slug === product.clubeSlug))?.slug ?? product.liga;
+      const league = nationalTeamSlugs.has(product.clubeSlug) ? "selecoes" : product.liga;
       const key = `${league}-${product.clubeSlug}`;
       const destination = destinations.get(key);
       if (destination) destination.popularity += 1;
@@ -148,11 +154,14 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <ProductSection title="Camisas de clubes" kicker="Explore o catálogo" href="/busca?q=clubes" items={clubProducts} dark />
-      <ProductSection title="Seleções nacionais" kicker="Camisas de seleções" href="/ligas/selecoes" items={nationalSelections} />
-      <ProductSection title="Clássicos retrô" kicker="Para quem vive de história" href="/busca?q=retro" items={retros} dark />
+      {products.length > 0 && <ProductSection title="Catálogo atualizado" kicker="Produtos importados do Supabase" href="/busca" items={catalogProducts.slice(0, 8)} dark />}
+      {clubProducts.length > 0 && <ProductSection title="Camisas de clubes" kicker="Explore o catálogo" href="/busca?q=clubes" items={clubProducts} />}
+      {nationalSelections.length > 0 && <ProductSection title="Seleções nacionais" kicker="Camisas de seleções" href="/busca?q=selecoes" items={nationalSelections} dark />}
+      {retros.length > 0 && <ProductSection title="Clássicos retrô" kicker="Para quem vive de história" href="/busca?q=retro" items={retros} />}
+      {kidsProducts.length > 0 && <ProductSection title="Kits infantis" kicker="A torcida começa cedo" href="/infantil" items={kidsProducts} dark />}
+      {formulaOneProducts.length > 0 && <ProductSection title="Fórmula 1" kicker="Universo motorsport" href={formulaOneLeague ? `/ligas/${formulaOneLeague.slug}` : "/busca?q=F1"} items={formulaOneProducts} />}
 
-      <FormulaOneShowcase />
+      <FormulaOneShowcase href={formulaOneLeague ? `/ligas/${formulaOneLeague.slug}` : "/busca?q=F1"} />
 
       <StickyLeagueRail leagues={leagues} />
 

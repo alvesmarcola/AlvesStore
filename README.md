@@ -33,8 +33,8 @@ Execute `npm run db:migrate` com `DATABASE_URL` apontando ao banco. A ordem e `0
 
 ## Operação
 
-- `/admin/pedidos` pede o token definido em `ADMIN_ORDERS_TOKEN`, lista pedidos aprovados e exporta CSV. O token é enviado no cabeçalho `Authorization` à API protegida; não o coloque em variáveis públicas ou em links compartilhados.
-- Na mesma tela, informe o código de rastreio e saia do campo para salvar. `/rastreio` consulta o pedido por código e e-mail ou CPF, retornando apenas status e rastreio quando os dados correspondem.
+- `/admin` redireciona para `/admin/pedidos`, protegido por `ADMIN_ORDERS_TOKEN`; o painel lista os 200 pedidos mais recentes e exporta CSV. O token segue no cabeçalho `Authorization` para a API, nunca em variáveis públicas ou links.
+- Salve o código de rastreio no botão do pedido. `/rastreio` consulta por código do pedido e e-mail ou CPF.
 - E-mails de pagamento aprovado são opcionais. Configure Resend e um remetente verificado; falhas são registradas no log e não alteram a confirmação do pagamento.
 - O limite de checkout é de 15 requisições por IP em dez minutos, mantido em memória por instância. Para múltiplas instâncias, substitua por armazenamento compartilhado antes de depender dele como controle distribuído.
 
@@ -54,3 +54,11 @@ A busca interpreta termos locais em português e inglês, abreviações de unifo
 Preços classificados: torcedor comum R$ 160,00; torcedor full patch R$ 180,00; retrô manga curta R$ 185,00; retrô manga longa R$ 220,00. Versões sem preço confirmado aparecem para revisão e não podem seguir para pagamento. Corrija a classificação em `data/product-overrides.json`, registrando fonte e responsável. O comando local `npm run catalog:override -- <product-id-ou-slug> --version retro --sleeve long --price 220 --source URL --verified-by Nome` registra uma correção; revise o JSON e publique um deploy para ativá-la.
 
 Patches só aparecem quando `data/patches.ts` registra imagem, preço, fonte, temporada, produto compatível, posições confirmadas e disponibilidade comercial. A lista começa vazia porque o catálogo atual não confirma estoque/venda nem compatibilidade desses itens. Não inclua uma opção até verificar essas informações.
+
+## Pedidos, rastreio e WhatsApp
+
+Os pedidos desta aplicação são armazenados em `store_orders` no PostgreSQL configurado por `DATABASE_URL` (Neon no setup atual). O painel `/admin` redireciona para `/admin/pedidos`; use o valor privado de `ADMIN_ORDERS_TOKEN` quando solicitado. O painel lista os 200 pedidos mais recentes e permite atualizar o código de rastreio. Isso não usa uma tabela Supabase `orders`.
+
+O webhook autenticado do Mercado Pago envia o evento `order_paid` ao endereço HTTPS configurado em `WHATSAPP_ORDER_WEBHOOK_URL` quando o pagamento muda para aprovado. O destinatário administrativo é `WHATSAPP_ORDER_RECIPIENT` (número internacional, somente dígitos); o payload inclui nome, contato, endereço, itens, valores e status. `WHATSAPP_ORDER_WEBHOOK_TOKEN` é opcional e enviado como Bearer. Configure esse endpoint numa automação/provedor que tenha acesso à API WhatsApp Business; sem URL/destinatário, nenhum envio é feito. O cadastro do código gera também os eventos `tracking_code_updated` para o cliente, por e-mail quando Resend está configurado e por WhatsApp somente se ele marcou o consentimento opcional no checkout.
+
+Mensagens iniciadas pela empresa dependem da configuração do provedor, do opt-in do cliente e dos modelos aprovados aplicáveis na plataforma WhatsApp. O FAQ `/duvidas` descreve o envio internacional e informa que o código oficial é enviado em até 3 a 4 dias úteis após a confirmação do pagamento. O cliente acompanha o pedido em `/rastreio` usando o código do pedido e e-mail ou CPF.

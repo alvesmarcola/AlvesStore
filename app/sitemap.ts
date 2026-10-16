@@ -1,10 +1,13 @@
 import type { MetadataRoute } from "next";
-import { leagues, products } from "@/lib/catalog";
+import { deriveCatalogLeagues } from "@/lib/catalog-taxonomy";
+import { getSupabaseProducts } from "@/lib/server/supabase-catalog";
 
 const baseUrl = "https://alves-store-green.vercel.app";
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const staticPaths = ["", "/masculino", "/feminino", "/quem-somos", "/privacidade", "/politica-de-troca", "/termos-de-uso", "/politica-de-personalizacao", "/envios-e-prazos", "/compra-segura", "/como-comprar", "/contato", "/rastreio"];
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const products = await getSupabaseProducts();
+  const leagues = deriveCatalogLeagues(products);
+  const staticPaths = ["", "/masculino", "/feminino", "/infantil", "/quem-somos", "/privacidade", "/politica-de-troca", "/termos-de-uso", "/politica-de-personalizacao", "/envios-e-prazos", "/compra-segura", "/como-comprar", "/contato", "/rastreio", "/duvidas", "/guia-de-medidas"];
   const leaguePaths = leagues.flatMap((league) => [
     `/ligas/${league.slug}`,
     ...league.clubes.map((club) => `/ligas/${league.slug}/${club.slug}`),

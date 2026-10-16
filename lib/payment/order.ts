@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { storeConfig } from "@/config";
-import { products } from "@/lib/catalog";
 import { getPackagePrice, getShippingCents } from "@/lib/commerce";
 import { checkoutSchema } from "@/lib/validation";
 import type { Product } from "@/lib/types";
@@ -33,7 +32,7 @@ export type VerifiedOrderLine = OrderLineInput & { product: Product; patchOption
 
 export class InvalidOrderError extends Error {}
 
-export function validateOrderLines(lines: OrderLineInput[], catalog: Product[] = products): VerifiedOrderLine[] {
+export function validateOrderLines(lines: OrderLineInput[], catalog: Product[]): VerifiedOrderLine[] {
   const seen = new Set<string>();
   let quantityTotal = 0;
 

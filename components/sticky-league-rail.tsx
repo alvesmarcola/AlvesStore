@@ -3,9 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { images } from "@/data/images";
-import type { League } from "@/lib/types";
+import type { CatalogLeague } from "@/lib/catalog-taxonomy";
 
-export function StickyLeagueRail({ leagues }: { leagues: League[] }) {
+export function StickyLeagueRail({ leagues }: { leagues: CatalogLeague[] }) {
   return (
     <section
       aria-label="Ligas e competições"
@@ -21,7 +21,7 @@ export function StickyLeagueRail({ leagues }: { leagues: League[] }) {
         </div>
         <div className="league-rail flex snap-x snap-mandatory gap-4 overflow-x-auto overflow-y-hidden pb-12" tabIndex={0} aria-label="Navegue pelos cards de ligas na horizontal">
           {leagues.map((league, index) => {
-            const cover = images.leagues[league.imagemCapa];
+            const cover = league.coverImage ?? images.categories.leagues.src;
             return (
               <Link
                 key={league.slug}
@@ -29,21 +29,18 @@ export function StickyLeagueRail({ leagues }: { leagues: League[] }) {
                 className={`league-rail-card group relative isolate flex h-[52vh] min-h-[320px] max-h-[520px] w-[76vw] max-w-[410px] shrink-0 snap-start items-end overflow-hidden rounded-lg border p-5 sm:w-[36vw] sm:p-7 lg:w-[30vw] ${index % 2 ? "sm:translate-y-10" : ""}`}
               >
                 <Image
-                  src={cover.src}
-                  alt={cover.alt}
+                  src={cover}
+                  alt={`Produtos de ${league.nome}`}
                   fill
                   sizes="(max-width: 640px) 76vw, (max-width: 1024px) 36vw, 30vw"
-                  placeholder="blur"
-                  blurDataURL={cover.blurDataURL}
                   className="league-cover object-cover"
-                  style={{ objectPosition: `${cover.focalPoint.x}% ${cover.focalPoint.y}%` }}
                 />
                 <span className="absolute inset-0 -z-10 bg-gradient-to-t from-black via-black/20 to-blue-900/15" />
                 <span className="pointer-events-none absolute -right-4 top-4 -z-10 text-[7rem] font-black uppercase leading-none tracking-tighter text-white/10 sm:text-[10rem]">{String(index + 1).padStart(2, "0")}</span>
                 <span className="relative z-10">
-                  <span className="mb-2 block text-[10px] font-black uppercase tracking-[.24em]" style={{ color: league.corDestaque }}>{league.pais}</span>
+                  <span className="mb-2 block text-[10px] font-black uppercase tracking-[.24em] text-action">Catálogo atualizado</span>
                   <span className="block max-w-[16ch] text-3xl font-black uppercase leading-none sm:text-4xl">{league.nome}</span>
-                  <span className="mt-3 block text-xs font-semibold text-white/70">{league.competicao} · {league.slug === "selecoes" ? "seleções" : `${league.clubes.length} clubes`}</span>
+                  <span className="mt-3 block text-xs font-semibold text-white/70">{league.productCount} produtos · {league.clubes.length} clubes</span>
                 </span>
                 <span className="absolute right-5 top-5 z-10 grid h-10 w-10 place-items-center rounded-full border border-white/35 text-lg transition duration-200 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:bg-action">↗</span>
               </Link>

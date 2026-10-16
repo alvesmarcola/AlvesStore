@@ -19,6 +19,7 @@ export function isValidCpf(value: string) {
 }
 
 export const checkoutSchema = z.object({
+  whatsappUpdates: z.boolean(),
   fullName: z.string().trim().min(3, "Informe seu nome completo."),
   email: z.string().trim().email("Informe um e-mail válido."),
   cpf: z.string().refine(isValidCpf, "Informe um CPF válido."),

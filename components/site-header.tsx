@@ -1,30 +1,52 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Menu, Search, ShoppingBag, X, ChevronDown } from "lucide-react";
-import { leagues, products } from "@/lib/catalog";
 import { useCart } from "@/store/cart";
-import { searchProducts } from "@/lib/smart-search";
+import type { CatalogLeague } from "@/lib/catalog-taxonomy";
 
 const maleCategories = [["Versão Torcedor", "torcedor"], ["Versão Jogador", "jogador"], ["Retrô", "retro"], ["Conjunto de Treino", "treino"], ["Mangas compridas", "inverno"], ["Regatas", "regata"]];
 const femaleCategories = [["Camisas Femininas", "torcedor"], ["Conjuntos", "treino"]];
 const dropdownTransition = { duration: 0.18, ease: "easeOut" as const };
 
-export function SiteHeader() {
+type SearchSuggestion = { id: string; slug: string; nome: string; clube: string; temporada: string };
+
+export function SiteHeader({ leagues }: { leagues: Pick<CatalogLeague, "slug" | "nome">[] }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [leagueOpen, setLeagueOpen] = useState(false);
   const [categoryOpen, setCategoryOpen] = useState("");
   const [query, setQuery] = useState("");
   const [suggestionsOpen, setSuggestionsOpen] = useState(false);
+  const [suggestions, setSuggestions] = useState<SearchSuggestion[]>([]);
+  const [alternativesOnly, setAlternativesOnly] = useState(false);
   const router = useRouter();
   const reducedMotion = useReducedMotion();
   const count = useCart((state) => state.items.reduce((sum, item) => sum + item.quantity, 0));
   const setDrawerOpen = useCart((state) => state.setDrawerOpen);
-  const searchResults = query.trim() ? searchProducts(products, query) : { results: [], alternatives: [] };
-  const suggestions = (searchResults.results.length ? searchResults.results : searchResults.alternatives).slice(0, 5);
+  useEffect(() => {
+    const normalized = query.trim();
+    if (normalized.length < 2) {
+      setSuggestions([]);
+      setAlternativesOnly(false);
+      return;
+    }
+    const controller = new AbortController();
+    const timeout = window.setTimeout(async () => {
+      try {
+        const response = await fetch(`/api/catalog/search?q=${encodeURIComponent(normalized)}`, { signal: controller.signal });
+        if (!response.ok) throw new Error("Busca indisponível");
+        const result = await response.json() as { suggestions?: SearchSuggestion[]; alternativesOnly?: boolean };
+        setSuggestions(result.suggestions ?? []);
+        setAlternativesOnly(result.alternativesOnly ?? false);
+      } catch {
+        if (!controller.signal.aborted) setSuggestions([]);
+      }
+    }, 160);
+    return () => { window.clearTimeout(timeout); controller.abort(); };
+  }, [query]);
 
   function search(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -51,7 +73,7 @@ export function SiteHeader() {
               <button className="text-[10px] font-black uppercase tracking-wider text-blue-200">Buscar</button>
             </form>
             {suggestionsOpen && suggestions.length > 0 && <div id="search-suggestions" role="listbox" className="absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-lg border border-border bg-white p-2 text-ink shadow-card">
-              {searchResults.results.length === 0 && <p className="px-3 py-2 text-[10px] leading-4 text-muted">Alternativas relacionadas; versão ou uniforme ainda não confirmados.</p>}
+              {alternativesOnly && <p className="px-3 py-2 text-[10px] leading-4 text-muted">Alternativas relacionadas; versão ou uniforme ainda não confirmados.</p>}
               {suggestions.map((product) => <Link role="option" aria-selected="false" href={`/produto/${product.slug}`} key={product.id} onClick={() => { setQuery(""); setSuggestionsOpen(false); }} className="block rounded px-3 py-2 text-xs hover:bg-paper">{product.nome}<span className="mt-1 block text-muted">{product.clube} · {product.temporada}</span></Link>)}
               <Link href={`/busca?q=${encodeURIComponent(query)}`} className="block border-t border-border px-3 py-3 text-xs font-bold text-blue-700">Ver todos os resultados</Link>
             </div>}
@@ -90,7 +112,8 @@ export function SiteHeader() {
                 </motion.div>)}
               </motion.div>}</AnimatePresence>
             </div>
-            <Link className="nav-link" href="/ligas/selecoes">Seleções nacionais</Link>
+            <Link className="nav-link" href="/infantil">Infantil</Link>
+            <Link className="nav-link" href="/busca?q=selecoes">Seleções nacionais</Link>
             <Link className="nav-link" href="/rastreio">Rastreio</Link>
           </div>
         </nav>
@@ -106,7 +129,7 @@ export function SiteHeader() {
             {categoryOpen === "feminino" && <div className="mb-3 pl-4"><Link href="/feminino" className="block py-2 text-xs font-black">Ver tudo</Link>{femaleCategories.map(([name, type], index) => <Link key={`${type}-${index}`} href={`/feminino?tipo=${type}`} className="block py-2 text-xs text-muted">{name}</Link>)}</div>}
             <button className="mobile-nav-link flex w-full items-center justify-between" aria-expanded={leagueOpen} onClick={() => setLeagueOpen(!leagueOpen)}>Ligas <ChevronDown size={16} /></button>
             {leagueOpen && <div className="mb-3 pl-4">{leagues.map((league) => <Link key={league.slug} href={`/ligas/${league.slug}`} className="block border-b border-border py-3 text-xs font-bold text-ink transition-colors hover:text-action">{league.nome}</Link>)}</div>}
-            <Link className="mobile-nav-link" href="/ligas/selecoes">Seleções nacionais</Link><Link className="mobile-nav-link" href="/rastreio">Rastreio de pedido</Link>
+            <Link className="mobile-nav-link" href="/infantil">Infantil / Kids</Link><Link className="mobile-nav-link" href="/busca?q=selecoes">Seleções nacionais</Link><Link className="mobile-nav-link" href="/rastreio">Rastreio de pedido</Link>
           </motion.aside>
         </motion.div>}
       </AnimatePresence>

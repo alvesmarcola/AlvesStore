@@ -1,19 +1,14 @@
-import productsData from "@/data/products.json";
-import leaguesData from "@/data/leagues.json";
-import { images } from "@/data/images";
 import type { ImageAsset } from "@/data/images";
-import type { League, Product } from "@/lib/types";
+import type { Product } from "@/lib/types";
 
-export const products = (productsData as Product[]).map((product) => ({ ...product, tamanhos: product.tamanhos.filter((size) => size !== "3GG") }));
-export const leagues = leaguesData as League[];
-
-export function getProduct(slug: string) {
-  return products.find((product) => product.slug === slug);
-}
-
-export function getLeague(slug: string) {
-  return leagues.find((league) => league.slug === slug);
-}
+const neutralBlur = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxIDEiPjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiNmNWY1ZjUiLz48L3N2Zz4=";
+const missingProductImage: ImageAsset = {
+  src: "/product-placeholder.svg",
+  alt: "Imagem do produto indisponível",
+  credit: "Alves Store",
+  focalPoint: { x: 50, y: 50 },
+  blurDataURL: neutralBlur,
+};
 
 export function formatCurrency(value: number) {
   return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(value);
@@ -24,11 +19,20 @@ export function productImageAsset(product: Pick<Product, "images" | "imageSeed" 
   const image = alternate
     ? product.images?.find((candidate) => candidate.src !== primary?.src) ?? primary
     : primary;
-  if (image) return { ...image, alt: `${product.nome} – ${alternate && image.src !== primary?.src ? "verso" : "frente"}` };
-  if (product.tipo === "retro") return images.retro.cover;
-  return alternate ? images.products.alternate : images.products.primary;
+  if (!image) return { ...missingProductImage, alt: product.nome };
+  return {
+    src: image.src,
+    alt: image.alt || product.nome,
+    credit: image.credit,
+    focalPoint: image.focalPoint,
+    blurDataURL: image.blurDataURL || neutralBlur,
+  };
 }
 
 export function productImage(product: Pick<Product, "images" | "imageSeed" | "tipo" | "nome">, alternate = false) {
   return productImageAsset(product, alternate).src;
+}
+
+export function toCatalogPreview(product: Product): Product {
+  return { ...product, images: product.images?.slice(0, 2) ?? [] };
 }

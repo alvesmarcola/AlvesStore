@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getPaymentClient, getSiteUrl, isProductionPaymentEnvironment } from "@/lib/server/mercado-pago";
 import { getDatabasePool } from "@/lib/server/database";
 import { isValidMercadoPagoSignature, normalizedPaymentStatus } from "@/lib/server/webhook-signature";
+import { sendWhatsAppOrderNotice, type OrderNotice } from "@/lib/server/order-notifications";
 
 export const runtime = "nodejs";
 
@@ -55,7 +56,7 @@ export async function POST(request: Request) {
     const transaction = await pool.connect();
     try {
       await transaction.query("BEGIN");
-      const orderResult = await transaction.query<{ total_cents: number; status: string; customer: Record<string, string>; item_lines: { title: string; size: string; quantity: number; customization?: { name: string; number: string }; patches?: { name: string; position: string }[] }[]; shipping_cents: number }>(
+      const orderResult = await transaction.query<{ total_cents: number; status: string; customer: Record<string, string | boolean>; item_lines: { title: string; size: string; quantity: number; customization?: { name: string; number: string }; patches?: { name: string; position: string }[] }[]; shipping_cents: number }>(
         "SELECT total_cents, status, customer, item_lines, shipping_cents FROM store_orders WHERE id = $1 FOR UPDATE",
         [payment.external_reference],
       );
@@ -95,6 +96,8 @@ export async function POST(request: Request) {
       );
       await transaction.query("COMMIT");
       if (status === "approved" && order.status !== "approved") {
+        const notice: OrderNotice = { id: payment.external_reference, status: "approved", customer: order.customer, item_lines: order.item_lines, shipping_cents: Number(order.shipping_cents), total_cents: Number(order.total_cents) };
+        await sendWhatsAppOrderNotice("order_paid", notice);
         const apiKey = process.env.RESEND_API_KEY;
         const from = process.env.ORDER_EMAIL_FROM;
         if (apiKey && from) {
