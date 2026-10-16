@@ -1,7 +1,4 @@
 import type { Product, ProductImage } from "@/lib/types";
-import imageFallbacks from "@/data/catalog-image-fallbacks.json";
-
-const DEFAULT_PRODUCT_FALLBACK = "/otimizadas/camisa-jogador-brasileirao-atletico-mineiro-26-27/01-800.webp";
 
 const PAGE_SIZE = 100;
 const PRODUCT_COLUMNS = "id,slug,clube,clubeSlug,liga,publico,tipo,temporada,uniforme,nome,preco,tamanhos,cor,imageSeed";
@@ -86,16 +83,6 @@ function productImageValues(value: Record<string, unknown>): unknown[] {
   return [value.cover, value.alternate, value.image, value.imageSeed];
 }
 
-function localProductImage(value: Record<string, unknown>, productName: string) {
-  const fallbackMap = imageFallbacks as Record<string, string>;
-  for (const candidate of [productName, value.slug, value.imageSeed]) {
-    if (typeof candidate !== "string" || !candidate.trim()) continue;
-    const fallback = fallbackMap[slugifyCatalogValue(candidate)];
-    if (fallback?.startsWith("/otimizadas/")) return fallback;
-  }
-  return DEFAULT_PRODUCT_FALLBACK;
-}
-
 function mapImage(value: unknown, productName: string, index: number): ProductImage | null {
   if (typeof value === "string") value = { src: value };
   if (!isRecord(value) || typeof value.src !== "string") return null;
@@ -134,22 +121,9 @@ function mapProduct(value: unknown): Product | null {
   const clubSlug = slugifyCatalogValue(rawClubSlug);
   const league = normalizeLeague(value.liga);
   const imageValues = productImageValues(value);
-  const localFallback = localProductImage(value, name);
   const images = imageValues
     .map((image, index) => mapImage(image, name, index))
-    .filter((image): image is ProductImage => image !== null)
-    .map((image) => ({ ...image, fallbackSrc: localFallback }));
-  if (images.length === 0) {
-    images.push({
-      src: localFallback,
-      fallbackSrc: localFallback,
-      source: "fallback-local",
-      alt: name,
-      credit: "Alves Store",
-      focalPoint: { x: 50, y: 50 },
-      blurDataURL: "",
-    });
-  }
+    .filter((image): image is ProductImage => image !== null);
   const sizes = Array.isArray(value.tamanhos)
     ? value.tamanhos.filter((size): size is string => typeof size === "string" && size !== "3GG")
     : [];
@@ -172,6 +146,10 @@ function mapProduct(value: unknown): Product | null {
     imageSeed: typeof value.imageSeed === "string" ? value.imageSeed : name,
     images,
   };
+}
+
+function isPublishedProduct(product: Product) {
+  return (product.images?.length ?? 0) > 0 && product.publico !== "revisar" && product.tipo !== "revisar";
 }
 
 export async function getSupabaseProducts(): Promise<Product[]> {
@@ -200,7 +178,7 @@ export async function getSupabaseProducts(): Promise<Product[]> {
     products.push(...rows.map(mapProduct).filter((product): product is Product => product !== null));
     if (rows.length < PAGE_SIZE) break;
   }
-  return products;
+  return products.filter(isPublishedProduct);
 }
 
 export async function getSupabaseProductBySlug(slug: string): Promise<Product | undefined> {
@@ -220,5 +198,6 @@ export async function getSupabaseProductBySlug(slug: string): Promise<Product | 
     throw new Error("NÃ£o foi possÃ­vel carregar o produto atual da loja.");
   }
   const rows = await response.json() as unknown[];
-  return rows.length ? mapProduct(rows[0]) ?? undefined : undefined;
+  const product = rows.length ? mapProduct(rows[0]) ?? undefined : undefined;
+  return product && isPublishedProduct(product) ? product : undefined;
 }
