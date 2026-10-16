@@ -1,7 +1,9 @@
 import type { Product, ProductImage } from "@/lib/types";
 
-const PAGE_SIZE = 500;
-const PRODUCT_COLUMNS = "id,yupoo_id,slug,clube,clubeSlug,liga,publico,tipo,temporada,uniforme,nome,preco,tamanhos,cor,imageSeed,images";
+const PAGE_SIZE = 100;
+const PRODUCT_COLUMNS = "id,slug,clube,clubeSlug,liga,publico,tipo,temporada,uniforme,nome,preco,tamanhos,cor,imageSeed";
+const LIST_PRODUCT_COLUMNS = `${PRODUCT_COLUMNS},cover:images->0,alternate:images->1`;
+const DETAIL_PRODUCT_COLUMNS = `${PRODUCT_COLUMNS},images`;
 
 function supabaseConfig() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
@@ -42,9 +44,10 @@ function mapProduct(value: unknown): Product | null {
   const club = typeof value.clube === "string" && value.clube.trim() ? value.clube.trim() : "Revisar";
   const clubSlug = typeof value.clubeSlug === "string" ? slugifyCatalogValue(value.clubeSlug) : slugifyCatalogValue(club);
   const league = typeof value.liga === "string" ? slugifyCatalogValue(value.liga) : "revisar";
-  const images = Array.isArray(value.images)
-    ? value.images.map((image, index) => mapImage(image, name, index)).filter((image): image is ProductImage => image !== null)
-    : [];
+  const imageValues = Array.isArray(value.images) ? value.images : [value.cover, value.alternate];
+  const images = imageValues
+    .map((image, index) => mapImage(image, name, index))
+    .filter((image): image is ProductImage => image !== null);
   const sizes = Array.isArray(value.tamanhos)
     ? value.tamanhos.filter((size): size is string => typeof size === "string" && size !== "3GG")
     : [];
@@ -79,13 +82,13 @@ export async function getSupabaseProducts(): Promise<Product[]> {
   const products: Product[] = [];
   for (let offset = 0; ; offset += PAGE_SIZE) {
     // A unique, stable key prevents rows from being skipped or repeated between pages.
-    const query = new URLSearchParams({ select: PRODUCT_COLUMNS, order: "slug.asc", limit: String(PAGE_SIZE), offset: String(offset) });
+    const query = new URLSearchParams({ select: LIST_PRODUCT_COLUMNS, order: "slug.asc", limit: String(PAGE_SIZE), offset: String(offset) });
     const response = await fetch(`${config.url}/rest/v1/products?${query}`, {
+      cache: "no-store",
       headers: {
         apikey: config.key,
         ...(config.key.startsWith("eyJ") ? { Authorization: `Bearer ${config.key}` } : {}),
       },
-      next: { revalidate: 300, tags: ["products"] },
     });
     if (!response.ok) {
       console.error(`Falha ao consultar catálogo Supabase: HTTP ${response.status}.`);
@@ -98,7 +101,22 @@ export async function getSupabaseProducts(): Promise<Product[]> {
   return products;
 }
 
-export async function getSupabaseProduct(identifier: string): Promise<Product | undefined> {
-  const products = await getSupabaseProducts();
-  return products.find((product) => product.slug === identifier || product.id === identifier);
+export async function getSupabaseProductBySlug(slug: string): Promise<Product | undefined> {
+  const config = supabaseConfig();
+  if (!config) return undefined;
+
+  const query = new URLSearchParams({ select: DETAIL_PRODUCT_COLUMNS, slug: `eq.${slug}`, limit: "1" });
+  const response = await fetch(`${config.url}/rest/v1/products?${query}`, {
+    cache: "no-store",
+    headers: {
+      apikey: config.key,
+      ...(config.key.startsWith("eyJ") ? { Authorization: `Bearer ${config.key}` } : {}),
+    },
+  });
+  if (!response.ok) {
+    console.error(`Falha ao consultar produto Supabase: HTTP ${response.status}.`);
+    throw new Error("NÃ£o foi possÃ­vel carregar o produto atual da loja.");
+  }
+  const rows = await response.json() as unknown[];
+  return rows.length ? mapProduct(rows[0]) ?? undefined : undefined;
 }
