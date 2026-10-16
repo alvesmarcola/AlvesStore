@@ -17,16 +17,71 @@ function slugifyCatalogValue(value: string) {
     .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 }
 
+function normalizeAudience(value: unknown): Product["publico"] {
+  const normalized = typeof value === "string" ? slugifyCatalogValue(value) : "";
+  if (["masculino", "homem", "homens", "men", "male"].some((term) => normalized.includes(term))) return "masculino";
+  if (["feminino", "mulher", "mulheres", "women", "female"].some((term) => normalized.includes(term))) return "feminino";
+  if (["unissex", "unisex", "unisexo"].some((term) => normalized.replaceAll("-", "").includes(term))) return "unissex";
+  if (["infantil", "infantojuvenil", "kids", "kid", "junior", "youth", "children"].some((term) => normalized.includes(term))) return "infantil";
+  return "revisar";
+}
+
+function normalizeProductType(value: unknown): Product["tipo"] {
+  const normalized = typeof value === "string" ? slugifyCatalogValue(value) : "";
+  if (["torcedor", "fan", "supporter"].some((term) => normalized.includes(term))) return "torcedor";
+  if (["jogador", "player"].some((term) => normalized.includes(term))) return "jogador";
+  if (["goleiro", "goalkeeper"].some((term) => normalized.includes(term))) return "goleiro";
+  if (["retro", "vintage"].some((term) => normalized.includes(term))) return "retro";
+  if (["treino", "training"].some((term) => normalized.includes(term))) return "treino";
+  if (normalized.includes("cropped") || normalized === "crop") return "cropped";
+  if (normalized.includes("regata") || normalized.includes("tank-top")) return "regata";
+  if (normalized.includes("inverno") || normalized.includes("winter")) return "inverno";
+  if (normalized.includes("vestido") || normalized.includes("dress")) return "vestido";
+  const aliases: Record<string, Product["tipo"]> = {
+    revisar: "revisar",
+  };
+  return aliases[normalized] ?? "revisar";
+}
+
+function normalizeLeague(value: unknown) {
+  const slug = typeof value === "string" ? slugifyCatalogValue(value) : "";
+  if (slug.includes("selec") || slug.includes("national-team")) return "selecoes";
+  return slug || "revisar";
+}
+
+function normalizeUniform(value: unknown): Product["uniforme"] {
+  const normalized = typeof value === "string" ? slugifyCatalogValue(value) : "";
+  const aliases: Record<string, Product["uniforme"]> = {
+    titular: "titular", home: "titular",
+    reserva: "reserva", away: "reserva", visitante: "reserva",
+    terceiro: "terceiro", third: "terceiro", "3rd": "terceiro",
+    quarto: "quarto", fourth: "quarto", "4th": "quarto",
+    revisar: "revisar",
+  };
+  return aliases[normalized] ?? "revisar";
+}
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
 function mapImage(value: unknown, productName: string, index: number): ProductImage | null {
-  if (!isRecord(value) || typeof value.src !== "string" || !/^https:\/\//i.test(value.src)) return null;
+  if (!isRecord(value) || typeof value.src !== "string") return null;
+  let imageUrl: URL;
+  try {
+    imageUrl = new URL(value.src.startsWith("//") ? `https:${value.src}` : value.src);
+  } catch {
+    return null;
+  }
+  const isYupooHost = imageUrl.hostname === "yupoo.com" || imageUrl.hostname.endsWith(".yupoo.com");
+  const isSupabaseHost = imageUrl.hostname.endsWith(".supabase.co");
+  if (imageUrl.protocol === "http:" && isYupooHost) imageUrl.protocol = "https:";
+  if (imageUrl.protocol !== "https:" || (!isYupooHost && !isSupabaseHost)) return null;
+  const src = imageUrl.toString();
   const focalPoint = isRecord(value.focalPoint) ? value.focalPoint : {};
   return {
-    src: value.src,
-    source: typeof value.source === "string" ? value.source : value.src,
+    src,
+    source: typeof value.source === "string" ? value.source : src,
     alt: typeof value.alt === "string" && value.alt.trim() ? value.alt : `${productName} · imagem ${index + 1}`,
     credit: typeof value.credit === "string" ? value.credit : "Yupoo",
     focalPoint: {
@@ -42,8 +97,10 @@ function mapProduct(value: unknown): Product | null {
   const name = value.nome.trim();
   if (!name) return null;
   const club = typeof value.clube === "string" && value.clube.trim() ? value.clube.trim() : "Revisar";
-  const clubSlug = typeof value.clubeSlug === "string" ? slugifyCatalogValue(value.clubeSlug) : slugifyCatalogValue(club);
-  const league = typeof value.liga === "string" ? slugifyCatalogValue(value.liga) : "revisar";
+  const candidateClubSlug = typeof value.clubeSlug === "string" ? slugifyCatalogValue(value.clubeSlug) : "";
+  const rawClubSlug = candidateClubSlug && candidateClubSlug !== "revisar" ? candidateClubSlug : club;
+  const clubSlug = slugifyCatalogValue(rawClubSlug);
+  const league = normalizeLeague(value.liga);
   const imageValues = Array.isArray(value.images) ? value.images : [value.cover, value.alternate];
   const images = imageValues
     .map((image, index) => mapImage(image, name, index))
@@ -59,10 +116,10 @@ function mapProduct(value: unknown): Product | null {
     clube: club,
     clubeSlug: clubSlug || "revisar",
     liga: league || "revisar",
-    publico: typeof value.publico === "string" ? value.publico as Product["publico"] : "revisar",
-    tipo: typeof value.tipo === "string" ? value.tipo as Product["tipo"] : "revisar",
+    publico: normalizeAudience(value.publico),
+    tipo: normalizeProductType(value.tipo),
     temporada: typeof value.temporada === "string" ? value.temporada : "revisar",
-    uniforme: typeof value.uniforme === "string" ? value.uniforme as Product["uniforme"] : "revisar",
+    uniforme: normalizeUniform(value.uniforme),
     nome: name,
     preco: Number.isFinite(price) && price >= 0 ? price : 0,
     tamanhos: sizes,

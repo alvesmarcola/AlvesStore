@@ -4,6 +4,8 @@ const nextConfig: NextConfig = {
   outputFileTracingRoot: process.cwd(),
   images: { remotePatterns: [
     { protocol: "https", hostname: "**.supabase.co" },
+    { protocol: "https", hostname: "photo.yupoo.com", pathname: "/**" },
+    { protocol: "https", hostname: "images.yupoo.com", pathname: "/**" },
     { protocol: "https", hostname: "**.yupoo.com" },
   ] },
   async redirects() {

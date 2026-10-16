@@ -58,7 +58,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .hero-control { color: white; }
 
 .league-marquee { overflow: hidden; }
-.league-marquee-track { animation: marquee-slide 48s linear infinite; }
+.league-marquee-track { animation: marquee-slide 42s linear infinite; will-change: transform; }
 .league-marquee:hover .league-marquee-track { animation-play-state: paused; }
 @keyframes marquee-slide { to { transform: translateX(-50%); } }
 
@@ -153,4 +153,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   }
   .page-transition { animation: none; }
   .magnetic-cta { will-change: auto; }
+}
+@keyframes whatsapp-pulse {
+  0% { opacity: 0.45; transform: scale(1); }
+  75%, 100% { opacity: 0; transform: scale(1.55); }
 }

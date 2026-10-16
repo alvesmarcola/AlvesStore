@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Minus, Plus, ShoppingBag, Trash2, X } from "lucide-react";
+import { SafeProductImage } from "@/components/safe-product-image";
 import { storeConfig } from "@/config";
 import { formatCurrency, productImageAsset } from "@/lib/catalog";
 import { useCart } from "@/store/cart";
@@ -25,7 +25,7 @@ export function CartDrawer() {
           <div className="flex-1 overflow-y-auto px-5">
             <p className="my-4 rounded bg-paper p-3 text-xs font-semibold text-ink">{storeConfig.shippingOfferText}</p>
             {items.map(({ lineId, product, size, quantity, customization, patches }) => <div key={lineId} className="flex gap-3 border-b py-4">
-              <div className="relative h-24 w-20 shrink-0 overflow-hidden rounded bg-paper"><Image src={productImageAsset(product).src} alt={product.nome} fill sizes="80px" className="object-cover" /></div>
+              <div className="relative h-24 w-20 shrink-0 overflow-hidden rounded bg-paper"><SafeProductImage src={productImageAsset(product).src} alt={product.nome} fill sizes="80px" className="object-cover" /></div>
               <div className="min-w-0 flex-1"><p className="line-clamp-2 text-xs font-bold">{product.nome}</p><p className="mt-1 text-xs text-muted">Tamanho: {size}{customization ? ` · ${customization.name} ${customization.number}` : ""}</p><p className="mt-1 text-sm font-black">{classifyProduct(product).reviewRequired ? classifyProduct(product).priceLabel : formatCurrency(getProductUnitPrice(product, size)!)} / camisa{customization ? ` + ${formatCurrency(storeConfig.customizationPrice)} de personalização` : ""}</p>{patches?.map((selected) => <p key={selected.id} className="mt-1 text-[10px] text-muted">{patchOptions.find((patch) => patch.id === selected.id)?.name ?? "Patch"} · {selected.position.replaceAll("-", " ")}</p>)}
                 <div className="mt-2 flex items-center gap-3"><button aria-label="Diminuir quantidade" onClick={() => updateQuantity(lineId, quantity - 1)}><Minus size={14} /></button><span className="text-sm">{quantity}</span><button aria-label="Aumentar quantidade" onClick={() => updateQuantity(lineId, quantity + 1)}><Plus size={14} /></button><button className="ml-auto text-muted" aria-label="Remover produto" onClick={() => removeItem(lineId)}><Trash2 size={15} /></button></div>
               </div>

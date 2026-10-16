@@ -19,8 +19,8 @@ import { getSupabaseProducts } from "@/lib/server/supabase-catalog";
 export const metadata: Metadata = { alternates: { canonical: "/" } };
 export const revalidate = 300;
 
-const features = [
-  { icon: ShoppingBag, title: "Condições de envio", text: storeConfig.shippingOfferText },
+const features: { icon: typeof ShoppingBag; title: string; text: string; link?: { label: string; href: string } }[] = [
+  { icon: ShoppingBag, title: "Condições de envio", text: "R$ 20 (1 item) · R$ 30 (2) · grátis a partir de 3", link: { label: "Ver regras completas", href: "/envios-e-prazos" } },
   { icon: WalletCards, title: "Pagamento", text: "Finalize seu pedido com segurança pelo Mercado Pago." },
   { icon: Truck, title: "Envio direto", text: "Seu pedido segue do fornecedor ao endereço informado." },
   { icon: HeartHandshake, title: "Personalização", text: `+${formatCurrency(storeConfig.customizationPrice)} por camisa` },
@@ -99,24 +99,28 @@ export default async function HomePage() {
     });
   const allDestinations = [...destinations.values()];
   const clubLinks = prioritizeClubs(allDestinations.filter((destination) => destination.league !== "selecoes")).slice(0, 10);
-  const marqueeText = [...leagues.map((league) => league.nome), "O jogo é de todos", ...leagues.map((league) => league.nome)];
+  const marqueeText = [...leagues.map((league) => league.nome), "O jogo é de todos"];
 
   return (
     <main className="overflow-hidden">
       <HeroCarousel />
 
       <section className="league-marquee bg-action py-4 text-white" aria-label="Ligas disponíveis">
-        <div className="league-marquee-track flex w-max items-center gap-8 whitespace-nowrap">
-          {marqueeText.map((label, index) => <span className="flex items-center gap-8" key={`${label}-${index}`} aria-hidden={index > leagues.length}><span className="text-[11px] font-black uppercase tracking-[.22em] sm:text-sm">{label}</span><span className="text-lg text-white/50" aria-hidden="true">✳</span></span>)}
+        <div className="league-marquee-track flex w-max whitespace-nowrap">
+          {[0, 1].map((copy) => <div className="flex min-w-[100vw] shrink-0 items-center justify-around gap-8 px-4" key={copy} aria-hidden={copy === 1}>
+            {marqueeText.map((label, index) => <span className="flex shrink-0 items-center gap-8" key={`${copy}-${label}-${index}`}><span className="text-[11px] font-black uppercase tracking-[.22em] sm:text-sm">{label}</span><span className="text-lg text-white/50" aria-hidden="true">✳</span></span>)}
+          </div>)}
         </div>
       </section>
 
       <section className="benefits-strip bg-[#F5F5F5]">
         <div className="mx-auto grid max-w-7xl grid-cols-2 gap-4 px-5 py-7 sm:grid-cols-4 lg:px-8">
-          {features.map(({ icon: Icon, title, text }, index) => (
-            <Reveal key={title} delay={index * 0.06} className="flex items-center gap-3">
-              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-ink text-action"><Icon size={19} /></span>
-              <div><h2 className="text-xs font-black uppercase">{title}</h2><p className="mt-1 text-[10px] text-muted sm:text-xs">{text}</p></div>
+          {features.map(({ icon: Icon, title, text, link }, index) => (
+            <Reveal key={title} delay={index * 0.06} className="h-full">
+              <div className="flex h-full min-h-28 items-start gap-3 rounded-xl border border-black/5 bg-white p-4 shadow-sm sm:min-h-32 sm:p-5">
+                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-ink text-action"><Icon size={19} /></span>
+                <div className="min-w-0"><h2 className="text-xs font-black uppercase">{title}</h2><p className="mt-1 text-[10px] leading-5 text-muted sm:text-xs">{text}</p>{link && <Link href={link.href} className="mt-2 inline-flex text-[10px] font-bold text-blue-700 underline underline-offset-2">{link.label}</Link>}</div>
+              </div>
             </Reveal>
           ))}
         </div>
