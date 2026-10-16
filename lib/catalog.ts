@@ -1,9 +1,10 @@
 import type { ImageAsset } from "@/data/images";
+import { images as storeImages } from "@/data/images";
 import type { Product } from "@/lib/types";
 
 const neutralBlur = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxIDEiPjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiNmNWY1ZjUiLz48L3N2Zz4=";
 const missingProductImage: ImageAsset = {
-  src: "/product-placeholder.svg",
+  src: storeImages.products.primary.src,
   alt: "Imagem do produto indisponível",
   credit: "Alves Store",
   focalPoint: { x: 50, y: 50 },

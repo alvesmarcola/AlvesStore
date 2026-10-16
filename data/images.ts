@@ -2,6 +2,7 @@ import catalogImageData from "@/data/catalogo-imagens.json";
 
 export interface ImageAsset {
   src: string;
+  fallbackSrc?: string;
   alt: string;
   credit: string;
   focalPoint: { x: number; y: number };

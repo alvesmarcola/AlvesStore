@@ -1,4 +1,6 @@
 import type { Product, ProductImage } from "@/lib/types";
+import imageFallbacks from "@/data/catalog-image-fallbacks.json";
+import { images as storeImages } from "@/data/images";
 
 const PAGE_SIZE = 100;
 const PRODUCT_COLUMNS = "id,slug,clube,clubeSlug,liga,publico,tipo,temporada,uniforme,nome,preco,tamanhos,cor,imageSeed";
@@ -65,6 +67,34 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
+function productImageValues(value: Record<string, unknown>): unknown[] {
+  if (Array.isArray(value.images)) return value.images;
+  if (isRecord(value.images)) return [value.images];
+  if (typeof value.images === "string" && value.images.trim()) {
+    const raw = value.images.trim();
+    try {
+      const parsed: unknown = JSON.parse(raw);
+      if (Array.isArray(parsed)) return parsed;
+      if (isRecord(parsed)) return [parsed];
+      if (typeof parsed === "string") return [parsed];
+    } catch {
+      // Legacy text columns may contain a URL or comma-separated URLs.
+    }
+    return raw.split(/,\s*(?=(?:https?:)?\/\/)/i).filter(Boolean);
+  }
+  return [value.cover, value.alternate, value.imageSeed];
+}
+
+function localProductImage(value: Record<string, unknown>, productName: string) {
+  const fallbackMap = imageFallbacks as Record<string, string>;
+  for (const candidate of [productName, value.slug, value.imageSeed]) {
+    if (typeof candidate !== "string" || !candidate.trim()) continue;
+    const fallback = fallbackMap[slugifyCatalogValue(candidate)];
+    if (fallback?.startsWith("/otimizadas/")) return fallback;
+  }
+  return storeImages.products.primary.src;
+}
+
 function mapImage(value: unknown, productName: string, index: number): ProductImage | null {
   if (typeof value === "string") value = { src: value };
   if (!isRecord(value) || typeof value.src !== "string") return null;
@@ -102,12 +132,22 @@ function mapProduct(value: unknown): Product | null {
   const rawClubSlug = candidateClubSlug && candidateClubSlug !== "revisar" ? candidateClubSlug : club;
   const clubSlug = slugifyCatalogValue(rawClubSlug);
   const league = normalizeLeague(value.liga);
-  const imageValues = Array.isArray(value.images) && value.images.length
-    ? value.images
-    : [value.cover, value.alternate, value.imageSeed];
+  const imageValues = productImageValues(value);
+  const localFallback = localProductImage(value, name);
   const images = imageValues
     .map((image, index) => mapImage(image, name, index))
-    .filter((image): image is ProductImage => image !== null);
+    .filter((image): image is ProductImage => image !== null)
+    .map((image) => ({ ...image, fallbackSrc: localFallback }));
+  if (images.length === 0) {
+    images.push({
+      src: localFallback,
+      source: "fallback-local",
+      alt: name,
+      credit: "Alves Store",
+      focalPoint: { x: 50, y: 50 },
+      blurDataURL: "",
+    });
+  }
   const sizes = Array.isArray(value.tamanhos)
     ? value.tamanhos.filter((size): size is string => typeof size === "string" && size !== "3GG")
     : [];

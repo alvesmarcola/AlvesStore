@@ -9,6 +9,7 @@ export type SleeveType = "short" | "long" | "unknown";
 
 export interface ProductImage {
   src: string;
+  fallbackSrc?: string;
   source: string;
   alt: string;
   credit: string;
