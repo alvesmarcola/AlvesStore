@@ -1,17 +1,33 @@
 import { MercadoPagoConfig, Payment, Preference } from "mercadopago";
 
-export class PaymentConfigurationError extends Error {}
+export class PaymentConfigurationError extends Error {
+  constructor(message: string, readonly missing: string[] = []) { super(message); }
+}
+
+function getAccessToken() {
+  return process.env.MERCADO_PAGO_ACCESS_TOKEN?.trim()
+    || process.env.MERCADOPAGO_ACCESS_TOKEN?.trim()
+    || process.env.MP_ACCESS_TOKEN?.trim()
+    || process.env.MP_TOKEN?.trim();
+}
 
 function getClient() {
-  const environment = process.env.PAYMENT_ENVIRONMENT;
-  if (environment !== "test" && environment !== "production") throw new PaymentConfigurationError("Configure PAYMENT_ENVIRONMENT como test ou production.");
-  const accessToken = process.env.MERCADO_PAGO_ACCESS_TOKEN;
-  const expectedPrefix = environment === "production" ? "APP_USR-" : "TEST-";
-  if (!accessToken?.startsWith(expectedPrefix)) throw new PaymentConfigurationError(`Configure um Access Token ${environment === "production" ? "de produção (APP_USR-)" : "de teste (TEST-)"} do Mercado Pago.`);
+  const accessToken = getAccessToken();
+  if (!accessToken) {
+    throw new PaymentConfigurationError(
+      "Credencial ausente: MERCADO_PAGO_ACCESS_TOKEN (ou MP_ACCESS_TOKEN).",
+      ["MERCADO_PAGO_ACCESS_TOKEN", "MP_ACCESS_TOKEN"],
+    );
+  }
   return new MercadoPagoConfig({ accessToken, options: { timeout: 10_000 } });
 }
 
-export function isProductionPaymentEnvironment() { return process.env.PAYMENT_ENVIRONMENT === "production"; }
+export function isProductionPaymentEnvironment() {
+  const explicit = process.env.PAYMENT_ENVIRONMENT?.trim().toLowerCase();
+  if (explicit === "production" || explicit === "prod") return true;
+  if (explicit === "test" || explicit === "sandbox") return false;
+  return getAccessToken()?.startsWith("APP_USR-") ?? false;
+}
 
 export function getPreferenceClient() {
   return new Preference(getClient());
@@ -22,8 +38,13 @@ export function getPaymentClient() {
 }
 
 export function getSiteUrl() {
-  const rawUrl = process.env.SITE_URL?.trim();
-  if (!rawUrl) throw new PaymentConfigurationError("Configure SITE_URL para gerar as URLs de retorno do checkout.");
+  const rawUrl = process.env.SITE_URL?.trim() || process.env.NEXT_PUBLIC_SITE_URL?.trim();
+  if (!rawUrl) {
+    throw new PaymentConfigurationError(
+      "Credencial ausente: SITE_URL (ou NEXT_PUBLIC_SITE_URL) para URLs de retorno.",
+      ["SITE_URL"],
+    );
+  }
 
   let parsed: URL;
   try {

@@ -60,13 +60,14 @@ export async function POST(request: Request) {
     const lines = await validateOrderLinesFromCatalog(requestData.items);
     const totals = calculateOrderTotals(lines);
     const requestHash = createHash("sha256").update(calculateOrderFingerprint(requestData)).digest("hex");
+    const siteUrl = getSiteUrl();
+    const preferenceClient = getPreferenceClient();
     const supabase = getSupabaseOrdersClient();
     stage = "supabase";
 
     const finalShippingCents = totals.shippingCents;
     const totalCents = totals.totalCents;
     const shippingLabel = finalShippingCents === 0 ? "Frete grátis" : "Frete fixo";
-    const siteUrl = getSiteUrl();
     const savedLines = lines.map(({ product, ...line }) => ({
       productId: product.id,
       slug: product.slug,
@@ -107,7 +108,7 @@ export async function POST(request: Request) {
 
     stage = "mercado-pago";
     const [firstName, ...surnameParts] = requestData.customer.fullName.trim().split(/\s+/);
-    const preference = await getPreferenceClient().create({
+    const preference = await preferenceClient.create({
       body: {
         items: buildPreferenceItems(order.order_id, lines, totals),
         ...(finalShippingCents > 0 ? { shipments: {
@@ -176,8 +177,13 @@ export async function POST(request: Request) {
   } catch (error) {
     if (error instanceof InvalidOrderError) return publicError(error.message, 400);
     if (error instanceof PaymentConfigurationError || error instanceof SupabaseOrdersConfigurationError) {
-      console.error("Configuração do checkout incompleta:", error.message);
-      return publicError("Checkout indisponível: configure as credenciais privadas do Supabase e do Mercado Pago no servidor.", 503);
+      console.error("Checkout configuration incomplete:", error.message);
+      return NextResponse.json({
+        error: error.message,
+        code: "CHECKOUT_CONFIGURATION",
+        missing: error instanceof PaymentConfigurationError ? error.missing : undefined,
+        stage,
+      }, { status: 503, headers: { "Cache-Control": "no-store" } });
     }
     console.error(`Falha no checkout (${stage}):`, error instanceof Error ? error.message : "erro desconhecido");
     if (stage === "mercado-pago") return publicError("O Mercado Pago não conseguiu gerar o link de pagamento. Tente novamente; o pedido não foi cobrado.", 502);
