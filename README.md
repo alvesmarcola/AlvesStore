@@ -1,6 +1,6 @@
 # Alves Store
 
-Loja de camisas de futebol feita com Next.js 15, TypeScript, Zustand, Neon/PostgreSQL e Mercado Pago Checkout Pro.
+Loja de camisas de futebol feita com Next.js 15, TypeScript, Zustand, Supabase e Mercado Pago Checkout Pro.
 
 ## Preços e frete
 
@@ -15,7 +15,8 @@ Configure as variáveis abaixo na Vercel para o ambiente desejado. `PAYMENT_ENVI
 - `PAYMENT_ENVIRONMENT=test` ou `production`
 - `MERCADO_PAGO_ACCESS_TOKEN`
 - `MERCADO_PAGO_WEBHOOK_SECRET`
-- `DATABASE_URL`
+- `SUPABASE_URL` (ou `NEXT_PUBLIC_SUPABASE_URL`)
+- `SUPABASE_SECRET_KEY` (preferível) ou `SUPABASE_SERVICE_ROLE_KEY`; somente no servidor.
 - `SITE_URL` (origem pública HTTPS, por exemplo `https://alves-store-green.vercel.app`)
 - `ADMIN_ORDERS_TOKEN` (token forte e privado para `/admin/pedidos`)
 - Opcional: `RESEND_API_KEY` e `ORDER_EMAIL_FROM` para e-mail de pagamento aprovado
@@ -24,12 +25,12 @@ Configure as variáveis abaixo na Vercel para o ambiente desejado. `PAYMENT_ENVI
 
 1. No Mercado Pago, obtenha o Access Token de produção `APP_USR-` e configure `PAYMENT_ENVIRONMENT=production` e `MERCADO_PAGO_ACCESS_TOKEN` no ambiente Production da Vercel. Não configure o token `TEST-` nesse ambiente.
 2. Cadastre no painel do Mercado Pago a URL `https://alves-store-green.vercel.app/api/mercado-pago/webhook` para notificações de pagamento. Copie a chave secreta de assinatura do webhook de produção para `MERCADO_PAGO_WEBHOOK_SECRET`.
-3. Confirme `DATABASE_URL` e aplique as migrações ao banco de produção: `npm run db:migrate`.
+3. Aplique `supabase/migrations/20261017000000_store_orders.sql` no SQL Editor do Supabase e configure a chave secreta do Supabase no ambiente Production da Vercel.
 4. Faça Redeploy de Production na Vercel e valide com uma compra real controlada. O checkout escolhe `init_point` em produção e `sandbox_init_point` em teste; o webhook recusa pagamentos com `live_mode` incompatível.
 
 ## Banco de pedidos
 
-Execute `npm run db:migrate` com `DATABASE_URL` apontando ao banco. A ordem e `001_store_orders.sql`, `002_order_tracking.sql` e `003_order_patches.sql`; as migracoes usam `IF NOT EXISTS` e podem ser reaplicadas.
+Os pedidos ficam em `store_orders` e os pagamentos em `store_order_payments` no Supabase. A migração de pedidos está em `supabase/migrations/20261017000000_store_orders.sql`; execute-a uma vez no SQL Editor do projeto Supabase.
 
 ## Operação
 
@@ -57,7 +58,7 @@ Patches só aparecem quando `data/patches.ts` registra imagem, preço, fonte, te
 
 ## Pedidos, rastreio e WhatsApp
 
-Os pedidos desta aplicação são armazenados em `store_orders` no PostgreSQL configurado por `DATABASE_URL` (Neon no setup atual). O painel `/admin` redireciona para `/admin/pedidos`; use o valor privado de `ADMIN_ORDERS_TOKEN` quando solicitado. O painel lista os 200 pedidos mais recentes e permite atualizar o código de rastreio. Isso não usa uma tabela Supabase `orders`.
+Os pedidos desta aplicação são armazenados em `store_orders` e `store_order_payments` no Supabase. A API usa uma chave privada apenas no servidor; a tabela aplica RLS e não concede acesso público. O painel `/admin` redireciona para `/admin/pedidos`; use o valor privado de `ADMIN_ORDERS_TOKEN` quando solicitado. O painel lista os 200 pedidos mais recentes e permite atualizar o código de rastreio.
 
 O webhook autenticado do Mercado Pago envia o evento `order_paid` ao endereço HTTPS configurado em `WHATSAPP_ORDER_WEBHOOK_URL` quando o pagamento muda para aprovado. O destinatário administrativo é `WHATSAPP_ORDER_RECIPIENT` (número internacional, somente dígitos); o payload inclui nome, contato, endereço, itens, valores e status. `WHATSAPP_ORDER_WEBHOOK_TOKEN` é opcional e enviado como Bearer. Configure esse endpoint numa automação/provedor que tenha acesso à API WhatsApp Business; sem URL/destinatário, nenhum envio é feito. O cadastro do código gera também os eventos `tracking_code_updated` para o cliente, por e-mail quando Resend está configurado e por WhatsApp somente se ele marcou o consentimento opcional no checkout.
 

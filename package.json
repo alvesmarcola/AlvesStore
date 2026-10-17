@@ -8,7 +8,6 @@
     "prebuild": "tsx scripts/check-catalog-categories.ts",
     "build": "next build",
     "start": "next start",
-    "db:migrate": "tsx scripts/migrate-orders.ts",
     "catalog:override": "tsx scripts/set-product-override.ts",
     "test": "tsx --test tests/payment.test.ts",
     "lint": "eslint .",
@@ -16,7 +15,6 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.9.1",
-    "@neondatabase/serverless": "^1.0.2",
     "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.117.3",
     "framer-motion": "^14.1.0",

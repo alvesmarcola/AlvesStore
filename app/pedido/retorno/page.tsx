@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getDatabasePool } from "@/lib/server/database";
+import { getSupabaseOrdersClient } from "@/lib/server/supabase-orders";
 import { OrderReturnActions, RefreshStatusButton } from "./return-actions";
 
 type OrderStatus = "pending" | "approved" | "rejected" | "cancelled" | "refunded";
@@ -36,11 +36,9 @@ export default async function OrderReturnPage({
   let status: OrderStatus | "unknown" | "unavailable" = "unknown";
   if (/^[0-9a-f-]{36}$/i.test(orderId)) {
     try {
-      const result = await getDatabasePool().query<{ status: OrderStatus }>(
-        "SELECT status FROM store_orders WHERE id = $1",
-        [orderId],
-      );
-      status = result.rows[0]?.status ?? "unknown";
+      const result = await getSupabaseOrdersClient().from("store_orders").select("status").eq("id", orderId).maybeSingle();
+      if (result.error) throw result.error;
+      status = (result.data?.status as OrderStatus | undefined) ?? "unknown";
     } catch (error) {
       console.error("Falha ao consultar o pedido após retorno do checkout:", error instanceof Error ? error.message : "erro desconhecido");
       status = "unavailable";
