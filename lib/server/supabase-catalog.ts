@@ -1,7 +1,7 @@
 import type { Product, ProductImage } from "@/lib/types";
 import bundledProducts from "@/data/products.json";
 import { isFeminineProduct, prepareFeminineProduct } from "@/lib/feminine-catalog";
-import { isFormulaOneProduct } from "@/lib/formula-one";
+import { isFormulaOneEvidence, isFormulaOneProduct } from "@/lib/formula-one";
 
 const PAGE_SIZE = 100;
 const PRODUCT_COLUMNS = "id,slug,clube,clubeSlug,liga,publico,tipo,temporada,uniforme,nome,preco,tamanhos,cor,imageSeed";
@@ -15,7 +15,7 @@ export function getBundledFormulaOneProducts(): Product[] {
 }
 
 export function getBundledFeminineProducts(): Product[] {
-  return bundledCatalog.filter((product) => (product.images?.length ?? 0) > 0 && isFeminineProduct(product))
+  return bundledCatalog.filter((product) => isPublishedProduct(product) && isFeminineProduct(product))
     .map(prepareFeminineProduct);
 }
 
@@ -43,6 +43,7 @@ function normalizeAudience(value: unknown): Product["publico"] {
 function normalizeProductType(value: unknown): Product["tipo"] {
   const normalized = typeof value === "string" ? slugifyCatalogValue(value) : "";
   if (["f1", "formula-1", "formula-one", "formula1"].includes(normalized) || /\b(?:f1|formula[-\s]*1|formula[-\s]*one)\b/.test(normalized)) return "formula1";
+  if (isFormulaOneEvidence(normalized)) return "formula1";
   if (["torcedor", "fan", "supporter"].some((term) => normalized.includes(term))) return "torcedor";
   if (["jogador", "player"].some((term) => normalized.includes(term))) return "jogador";
   if (["goleiro", "goalkeeper"].some((term) => normalized.includes(term))) return "goleiro";
@@ -186,8 +187,28 @@ function mapProduct(value: unknown): Product | null {
   };
 }
 
+function isYupooImageUrl(value: string) {
+  try {
+    const hostname = new URL(value, "https://alves-store.invalid").hostname.toLocaleLowerCase("en-US");
+    return hostname === "yupoo.com" || hostname.endsWith(".yupoo.com");
+  } catch {
+    return false;
+  }
+}
+
+function hasStorefrontImages(product: Product) {
+  const images = product.images ?? [];
+  return images.length > 0 && images.every((image) =>
+    typeof image.src === "string" && image.src.trim().length > 0 && !isYupooImageUrl(image.src) &&
+    (!image.fallbackSrc || !isYupooImageUrl(image.fallbackSrc)),
+  );
+}
+
 function isPublishedProduct(product: Product) {
-  return (product.images?.length ?? 0) > 0 && product.publico !== "revisar" && product.tipo !== "revisar";
+  const hasImage = hasStorefrontImages(product);
+  const hasKnownAudience = product.publico !== "revisar";
+  const isFormulaOne = product.tipo === "formula1";
+  return hasImage && product.tipo !== "revisar" && (hasKnownAudience || isFormulaOne);
 }
 
 export async function getSupabaseProducts(): Promise<Product[]> {
