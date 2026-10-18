@@ -121,8 +121,17 @@ export default function CheckoutPage() {
           customer: values,
         }),
       });
-      const result = await response.json() as { checkoutUrl?: string; error?: string };
-      if (!response.ok) throw new Error(result.error ?? "Não foi possível iniciar o pagamento.");
+      const result = await response.json().catch(() => ({})) as {
+        checkoutUrl?: string;
+        error?: string;
+        mpErrorMessage?: string;
+        mpErrorCause?: string;
+        rawText?: string;
+      };
+      if (!response.ok) {
+        const providerMessage = result.error || result.mpErrorMessage || result.mpErrorCause || result.rawText;
+        throw new Error(providerMessage ?? `Não foi possível iniciar o pagamento (HTTP ${response.status}).`);
+      }
       if (!result.checkoutUrl || !result.checkoutUrl.startsWith("https://")) {
         throw new Error("O servidor não retornou um link seguro do Checkout Pro.");
       }

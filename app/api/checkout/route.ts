@@ -1,10 +1,9 @@
 import { createHash, randomUUID } from "node:crypto";
-import { NextResponse } from "next/server";
+import { after, NextResponse } from "next/server";
 import { InvalidOrderError, paymentRequestSchema, validateOrderLinesFromCatalog, calculateOrderTotals, calculateOrderFingerprint } from "@/lib/payment/order";
-import { getPreferenceClient, getSiteUrl, PaymentConfigurationError, isProductionPaymentEnvironment } from "@/lib/server/mercado-pago";
+import { createMercadoPagoPreference, getSiteUrl, MercadoPagoApiError, PaymentConfigurationError, validateMercadoPagoAccessToken } from "@/lib/server/mercado-pago";
 import { SupabaseOrdersConfigurationError, describeSupabaseError, getSupabaseOrdersClient } from "@/lib/server/supabase-orders";
 import { buildPreferenceItems } from "@/lib/payment/preference-items";
-import { storeConfig } from "@/config";
 
 export const runtime = "nodejs";
 const requestWindows = new Map<string, { count: number; startedAt: number }>();
@@ -61,7 +60,7 @@ export async function POST(request: Request) {
     const totals = calculateOrderTotals(lines);
     const requestHash = createHash("sha256").update(calculateOrderFingerprint(requestData)).digest("hex");
     const siteUrl = getSiteUrl();
-    const preferenceClient = getPreferenceClient();
+    validateMercadoPagoAccessToken();
     const supabase = getSupabaseOrdersClient();
     stage = "supabase";
 
@@ -118,56 +117,42 @@ export async function POST(request: Request) {
     if (order.checkout_url) return NextResponse.json({ checkoutUrl: order.checkout_url, reused: true }, { headers: { "Cache-Control": "no-store" } });
 
     stage = "mercado-pago";
-    const [firstName, ...surnameParts] = requestData.customer.fullName.trim().split(/\s+/);
-    const preference = await preferenceClient.create({
-      body: {
-        items: buildPreferenceItems(order.id, lines, totals),
-        ...(finalShippingCents > 0 ? { shipments: {
-          mode: "not_specified",
-          cost: jsonPrice(finalShippingCents),
-          free_shipping: false,
-          receiver_address: {
-            zip_code: requestData.customer.cep.replace(/\D/g, ""),
-            street_name: requestData.customer.street,
-            street_number: requestData.customer.number,
-            apartment: requestData.customer.complement || undefined,
-            city_name: requestData.customer.city,
-            state_name: requestData.customer.state.toUpperCase(),
-            country_name: "Brasil",
-          },
-        } } : { shipments: { mode: "not_specified", cost: 0, free_shipping: true } }),
-        external_reference: order.id,
-        metadata: { store_order_id: order.id },
-        payer: {
-          name: firstName,
-          surname: surnameParts.join(" ") || firstName,
-          email: requestData.customer.email,
-        },
-        back_urls: {
-          success: `${siteUrl}/pedido/retorno?order_id=${order.id}&return=approved`,
-          pending: `${siteUrl}/pedido/retorno?order_id=${order.id}&return=pending`,
-          failure: `${siteUrl}/pedido/retorno?order_id=${order.id}&return=rejected`,
-        },
-        auto_return: "approved",
-        notification_url: `${siteUrl}/api/mercado-pago/webhook?source_news=webhooks`,
-        statement_descriptor: storeConfig.name,
+    const preference = await createMercadoPagoPreference({
+      items: buildPreferenceItems(order.id, lines, totals),
+      ...(finalShippingCents > 0 ? {
+        shipments: { mode: "not_specified", cost: jsonPrice(finalShippingCents) },
+      } : {}),
+      external_reference: String(order.id),
+      metadata: { store_order_id: String(order.id) },
+      back_urls: {
+        success: `${siteUrl}/pedido/retorno?order_id=${order.id}&return=approved`,
+        pending: `${siteUrl}/pedido/retorno?order_id=${order.id}&return=pending`,
+        failure: `${siteUrl}/pedido/retorno?order_id=${order.id}&return=rejected`,
       },
-      requestOptions: { idempotencyKey: requestData.idempotencyKey },
-    });
+      ...(siteUrl.startsWith("https://") ? { auto_return: "approved" } : {}),
+      notification_url: `${siteUrl}/api/mercado-pago/webhook?source_news=webhooks`,
+      statement_descriptor: "ALVES STORE",
+    }, requestData.idempotencyKey);
 
-    const checkoutUrl = isProductionPaymentEnvironment() ? preference.init_point : preference.sandbox_init_point;
+    const checkoutUrl = preference.init_point || preference.sandbox_init_point;
     if (!preference.id || !checkoutUrl || !checkoutUrl.startsWith("https://")) {
       throw new Error("O Mercado Pago não retornou um link seguro do Checkout Pro.");
     }
 
-    stage = "supabase";
-    const savedPreference = await supabase.from("store_orders")
-      .update({ preference_id: preference.id, checkout_url: checkoutUrl, updated_at: new Date().toISOString() })
-      .eq("id", order.id)
-      .select("id")
-      .maybeSingle();
-    if (savedPreference.error || !savedPreference.data) throw savedPreference.error ?? new Error("Não foi possível salvar o link de pagamento.");
-
+    after(async () => {
+      try {
+        const savedPreference = await supabase.from("store_orders")
+        .update({ preference_id: preference.id, checkout_url: checkoutUrl, updated_at: new Date().toISOString() })
+        .eq("id", order.id)
+        .select("id")
+        .maybeSingle();
+        if (savedPreference.error || !savedPreference.data) {
+          console.error("Preferência criada, mas não foi possível persistir preference_id/checkout_url:", savedPreference.error ?? "pedido não encontrado");
+        }
+      } catch (error) {
+        console.error("Preferência criada, mas a persistência em store_orders falhou:", error instanceof Error ? error.message : "erro desconhecido");
+      }
+    });
     const emailKey = process.env.RESEND_API_KEY;
     const emailFrom = process.env.ORDER_EMAIL_FROM;
     if (emailKey && emailFrom) {
@@ -197,7 +182,31 @@ export async function POST(request: Request) {
       }, { status: 503, headers: { "Cache-Control": "no-store" } });
     }
     console.error(`Falha no checkout (${stage}):`, error instanceof Error ? error.message : "erro desconhecido");
-    if (stage === "mercado-pago") return publicError("O Mercado Pago não conseguiu gerar o link de pagamento. Tente novamente; o pedido não foi cobrado.", 502);
+    if (stage === "mercado-pago") {
+      if (error instanceof MercadoPagoApiError) {
+        const providerReason = error.message || error.providerCause || error.rawText || "Resposta sem detalhes.";
+        const message = `O Mercado Pago não conseguiu gerar o link de pagamento (HTTP ${error.status}: ${providerReason}).`;
+        console.error("Mercado Pago recusou a preferência:", {
+          status: error.status,
+          message: error.message,
+          cause: error.providerCause,
+          response: error.rawText,
+        });
+        return NextResponse.json({
+          error: message,
+          code: "MERCADO_PAGO_PREFERENCE_FAILED",
+          httpStatus: error.status,
+          mpErrorMessage: error.message,
+          mpErrorCause: error.providerCause,
+          rawText: error.rawText,
+        }, { status: 502, headers: { "Cache-Control": "no-store" } });
+      }
+      const reason = error instanceof Error ? error.message : "Erro de comunicação desconhecido.";
+      return NextResponse.json({
+        error: "O Mercado Pago não conseguiu gerar o link de pagamento (falha de comunicação: " + reason + ").",
+        code: "MERCADO_PAGO_PREFERENCE_FAILED",
+      }, { status: 502, headers: { "Cache-Control": "no-store" } });
+    }
     if (stage === "supabase") {
       const databaseError = describeSupabaseError(error);
       console.error("Falha ao gravar/atualizar pedido em store_orders:", databaseError);

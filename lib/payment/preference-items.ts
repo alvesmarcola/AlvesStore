@@ -19,7 +19,7 @@ export function buildPreferenceItems(orderId: string, lines: VerifiedOrderLine[]
   const baseUnitPrice = totals.standardQuantity > 0 ? Math.floor(totals.standardShirtsCents / totals.standardQuantity) : 0;
   let remainingHigherPricedUnits = totals.standardQuantity > 0 ? totals.standardShirtsCents % totals.standardQuantity : 0;
 
-  return lines.flatMap((line, index) => {
+  const rawItems = lines.flatMap((line, index) => {
     const facts = classifyProduct(line.product);
     const packageEligible = isPackageEligible(line.product);
     const higherPricedQuantity = packageEligible ? Math.min(line.quantity, remainingHigherPricedUnits) : 0;
@@ -70,5 +70,22 @@ export function buildPreferenceItems(orderId: string, lines: VerifiedOrderLine[]
       })),
     ];
     return items;
+  });
+
+  return rawItems.map((item, index) => {
+    const id = String(item.id || index + 1);
+    const title = String(item.title || (item as { name?: string }).name || "Produto").slice(0, 250);
+    const quantity = Math.max(1, Math.floor(Number(item.quantity) || 1));
+    const unitPrice = Number(Number(item.unit_price ?? (item as { price?: number }).price).toFixed(2));
+    if (!Number.isFinite(unitPrice) || unitPrice <= 0) {
+      throw new Error("Preço inválido no item " + id + " da preferência Mercado Pago.");
+    }
+    return {
+      id,
+      title,
+      quantity,
+      currency_id: "BRL" as const,
+      unit_price: unitPrice,
+    };
   });
 }

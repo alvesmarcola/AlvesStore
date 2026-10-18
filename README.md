@@ -10,7 +10,7 @@ O frete é calculado pelo servidor pela quantidade total de unidades de todas as
 
 ## Variáveis de ambiente
 
-Configure as variáveis abaixo na Vercel para o ambiente desejado. `PAYMENT_ENVIRONMENT` e o prefixo do token precisam corresponder: `test` requer `TEST-`; `production` requer `APP_USR-`. O backend nunca aceita combinação cruzada.
+Configure as variáveis abaixo na Vercel para o ambiente desejado. Defina `PAYMENT_ENVIRONMENT=test` ou `production` de acordo com a credencial e a conta Mercado Pago usadas. O prefixo `APP_USR-` sozinho não distingue produção de teste: a documentação oficial também usa esse prefixo nos Access Tokens de contas de teste do Checkout Pro.
 
 - `PAYMENT_ENVIRONMENT=test` ou `production`
 - `MERCADO_PAGO_ACCESS_TOKEN`
@@ -26,7 +26,7 @@ Configure as variáveis abaixo na Vercel para o ambiente desejado. `PAYMENT_ENVI
 1. No Mercado Pago, obtenha o Access Token de produção `APP_USR-` e configure `PAYMENT_ENVIRONMENT=production` e `MERCADO_PAGO_ACCESS_TOKEN` no ambiente Production da Vercel. Não configure o token `TEST-` nesse ambiente.
 2. Cadastre no painel do Mercado Pago a URL `https://alves-store-green.vercel.app/api/mercado-pago/webhook` para notificações de pagamento. Copie a chave secreta de assinatura do webhook de produção para `MERCADO_PAGO_WEBHOOK_SECRET`.
 3. Aplique `supabase/migrations/20261017000000_store_orders.sql` no SQL Editor do Supabase e configure a chave secreta do Supabase no ambiente Production da Vercel.
-4. Faça Redeploy de Production na Vercel e valide com uma compra real controlada. O checkout escolhe `init_point` em produção e `sandbox_init_point` em teste; o webhook recusa pagamentos com `live_mode` incompatível.
+4. Faça Redeploy de Production na Vercel e valide com uma compra real controlada. O checkout redireciona para `init_point` e usa `sandbox_init_point` apenas como fallback se o primeiro não vier; o webhook recusa pagamentos com `live_mode` incompatível.
 
 ## Banco de pedidos
 
