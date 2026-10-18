@@ -12,7 +12,6 @@ import { getProductUnitPrice } from "@/lib/product-classification";
 import { getAvailablePatches } from "@/lib/patch-compatibility";
 import { useCart } from "@/store/cart";
 import { checkoutSchema, type CheckoutValues } from "@/lib/validation";
-import { useIsTestPayment } from "./payment-env-context";
 
 const stepFields: Path<CheckoutValues>[][] = [
   ["fullName", "email", "cpf", "phone"],
@@ -51,7 +50,6 @@ function CheckoutInput({
 }
 
 export default function CheckoutPage() {
-  const isTestPayment = useIsTestPayment();
   const { items } = useCart();
   const [step, setStep] = useState(0);
   const [cepLoading, setCepLoading] = useState(false);
@@ -145,7 +143,7 @@ export default function CheckoutPage() {
   if (needsReview) return <main className="mx-auto max-w-3xl px-5 py-20 text-center"><h1 className="text-2xl font-black">Há um preço para confirmar</h1><p className="mt-3 text-sm leading-6 text-muted">Um produto da sacola ainda está em revisão. Remova-o ou escolha outro modelo para continuar.</p><Link href="/carrinho" className="primary-button mt-5 inline-block px-6 py-3 text-xs font-black uppercase">Revisar sacola</Link></main>;
 
   return <main className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
-    <div className="mb-7"><p className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-blue-700"><LockKeyhole size={14} />Checkout seguro · Mercado Pago</p><h1 className="mt-2 text-3xl font-black">Finalizar compra</h1><p className="mt-1 text-sm text-muted">Informe seus dados e conclua o pagamento no ambiente seguro do Mercado Pago.</p>{isTestPayment && <p className="mt-2 text-xs font-semibold text-amber-700">Ambiente de teste: as transações não são cobranças reais.</p>}</div>
+    <div className="mb-7"><p className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-blue-700"><LockKeyhole size={14} />Checkout seguro · Mercado Pago</p><h1 className="mt-2 text-3xl font-black">Finalizar compra</h1><p className="mt-1 text-sm text-muted">Informe seus dados e conclua o pagamento no ambiente seguro do Mercado Pago.</p></div>
     <div className="mb-6 grid grid-cols-3 gap-2" aria-label="Etapas do checkout">
       {stepTitles.map((title, index) => <div key={title} className={`border-t-2 pt-2 text-xs font-bold ${index <= step ? "border-action text-ink" : "border-border text-muted"}`} aria-current={step === index ? "step" : undefined}>{index + 1}. {title}</div>)}
     </div>
@@ -169,7 +167,7 @@ export default function CheckoutPage() {
         </div>
         <p className="mt-4 rounded bg-action-soft p-3 text-xs leading-5 text-blue-900">Frete: {shipping === 0 ? "Grátis" : formatCurrency(shipping)}. A busca do CEP serve apenas para preencher o endereço.</p>
         <div className="mt-6 flex gap-2"><button type="button" onClick={() => setStep(0)} className="flex items-center gap-2 rounded-lg border border-ink px-5 py-3 text-xs font-black uppercase"><ChevronLeft size={15} /> Voltar</button><button type="button" onClick={nextStep} disabled={cepLoading} className="primary-button flex items-center gap-2 px-5 py-3 text-xs font-black uppercase disabled:opacity-50">Continuar <ChevronRight size={15} /></button></div></section>
-        <section hidden={step !== 2} className="rounded-xl border border-border p-5 sm:p-7"><h2 className="text-lg font-black">3. Pagamento</h2><div className="mt-4 rounded-lg border border-action/30 bg-action-soft p-4"><p className="text-sm font-black">Checkout Pro Mercado Pago</p><p className="mt-1 text-xs leading-5 text-muted">Você será redirecionado ao ambiente seguro do Mercado Pago. Os meios de pagamento disponíveis serão exibidos lá.</p>{isTestPayment && <p className="mt-2 text-xs font-bold text-blue-900">Integração em modo de teste; nenhuma cobrança real será realizada.</p>}</div>
+        <section hidden={step !== 2} className="rounded-xl border border-border p-5 sm:p-7"><h2 className="text-lg font-black">3. Pagamento</h2><div className="mt-4 rounded-lg border border-action/30 bg-action-soft p-4"><p className="text-sm font-black">Checkout Pro Mercado Pago</p><p className="mt-1 text-xs leading-5 text-muted">Pagamento 100% seguro processado pelo Mercado Pago (Pix com aprovação imediata, Cartão em até 12x e Boleto).</p></div>
           {checkoutError && <p role="alert" className="mt-4 rounded bg-red-50 p-3 text-sm text-red-700">{checkoutError}</p>}
           <div className="mt-6 flex gap-2"><button type="button" onClick={() => setStep(1)} disabled={isSubmitting} className="flex items-center gap-2 rounded-lg border border-ink px-5 py-3 text-xs font-black uppercase disabled:opacity-50"><ChevronLeft size={15} /> Voltar</button><button type="submit" disabled={isSubmitting} className="primary-button flex items-center gap-2 px-5 py-3 text-xs font-black uppercase disabled:opacity-50">{isSubmitting ? "Preparando pagamento..." : "Ir ao Mercado Pago"} {!isSubmitting && <ChevronRight size={15} />}</button></div>
         </section>

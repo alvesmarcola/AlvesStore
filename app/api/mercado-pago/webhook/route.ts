@@ -65,6 +65,19 @@ export async function POST(request: Request) {
       return NextResponse.json({ received: true });
     }
 
+    const orderPayment = await supabase.from("store_orders")
+      .update({
+        mercado_pago_status: payment.status ?? status,
+        mercado_pago_id: String(payment.id ?? paymentId),
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", payment.external_reference)
+      .select("id")
+      .maybeSingle();
+    if (orderPayment.error || !orderPayment.data) {
+      throw orderPayment.error ?? new Error("Pedido não encontrado ao persistir os dados do Mercado Pago.");
+    }
+
     if (status === "approved" && order.previous_status !== "approved") {
       const notice: OrderNotice = {
         id: payment.external_reference,

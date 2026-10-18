@@ -24,8 +24,8 @@ Configure as variáveis abaixo na Vercel para o ambiente desejado. Defina `PAYME
 ### Ativar pagamentos de produção
 
 1. No Mercado Pago, obtenha o Access Token de produção `APP_USR-` e configure `PAYMENT_ENVIRONMENT=production` e `MERCADO_PAGO_ACCESS_TOKEN` no ambiente Production da Vercel. Não configure o token `TEST-` nesse ambiente.
-2. Cadastre no painel do Mercado Pago a URL `https://alves-store-green.vercel.app/api/mercado-pago/webhook` para notificações de pagamento. Copie a chave secreta de assinatura do webhook de produção para `MERCADO_PAGO_WEBHOOK_SECRET`.
-3. Aplique `supabase/migrations/20261017000000_store_orders.sql` no SQL Editor do Supabase e configure a chave secreta do Supabase no ambiente Production da Vercel.
+2. Cadastre no painel do Mercado Pago a URL `https://alves-store-green.vercel.app/api/webhooks/mercadopago` para notificações de pagamento. Copie a chave secreta de assinatura do webhook de produção para `MERCADO_PAGO_WEBHOOK_SECRET`.
+3. Aplique `supabase/migrations/20261017000000_store_orders.sql` e `supabase/migrations/20261018000000_mercado_pago_order_fields.sql` no SQL Editor do Supabase e configure a chave secreta do Supabase no ambiente Production da Vercel.
 4. Faça Redeploy de Production na Vercel e valide com uma compra real controlada. O checkout redireciona para `init_point` e usa `sandbox_init_point` apenas como fallback se o primeiro não vier; o webhook recusa pagamentos com `live_mode` incompatível.
 
 ## Banco de pedidos

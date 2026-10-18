@@ -130,7 +130,8 @@ export async function POST(request: Request) {
         failure: `${siteUrl}/pedido/retorno?order_id=${order.id}&return=rejected`,
       },
       ...(siteUrl.startsWith("https://") ? { auto_return: "approved" } : {}),
-      notification_url: `${siteUrl}/api/mercado-pago/webhook?source_news=webhooks`,
+      payment_methods: { installments: 12 },
+      notification_url: siteUrl.startsWith("https://") ? `${siteUrl}/api/webhooks/mercadopago` : undefined,
       statement_descriptor: "ALVES STORE",
     }, requestData.idempotencyKey);
 
