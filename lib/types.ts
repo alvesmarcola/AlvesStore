@@ -33,6 +33,15 @@ export interface Product {
   cor: string;
   imageSeed: string;
   images?: ProductImage[];
+  category?: string;
+  gender?: string;
+  league?: string;
+  subcategory?: string;
+  tags?: string[];
+  title?: string;
+  name?: string;
+  model?: string;
+  version?: string;
 }
 
 export interface League {

@@ -1,11 +1,23 @@
 import type { Product, ProductImage } from "@/lib/types";
 import bundledProducts from "@/data/products.json";
+import { isFeminineProduct, prepareFeminineProduct } from "@/lib/feminine-catalog";
+import { isFormulaOneProduct } from "@/lib/formula-one";
 
 const PAGE_SIZE = 100;
 const PRODUCT_COLUMNS = "id,slug,clube,clubeSlug,liga,publico,tipo,temporada,uniforme,nome,preco,tamanhos,cor,imageSeed";
 const LIST_PRODUCT_COLUMNS = `${PRODUCT_COLUMNS},images`;
+const EXTENDED_LIST_PRODUCT_COLUMNS = `${LIST_PRODUCT_COLUMNS},category,gender,league,subcategory,tags,title,name,model,version`;
 const DETAIL_PRODUCT_COLUMNS = `${PRODUCT_COLUMNS},images`;
 const bundledCatalog = bundledProducts as unknown as Product[];
+
+export function getBundledFormulaOneProducts(): Product[] {
+  return bundledCatalog.filter((product) => isPublishedProduct(product) && isFormulaOneProduct(product));
+}
+
+export function getBundledFeminineProducts(): Product[] {
+  return bundledCatalog.filter((product) => (product.images?.length ?? 0) > 0 && isFeminineProduct(product))
+    .map(prepareFeminineProduct);
+}
 
 function supabaseConfig() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
@@ -30,7 +42,7 @@ function normalizeAudience(value: unknown): Product["publico"] {
 
 function normalizeProductType(value: unknown): Product["tipo"] {
   const normalized = typeof value === "string" ? slugifyCatalogValue(value) : "";
-  if (["f1", "formula-1", "formula-one"].includes(normalized)) return "formula1";
+  if (["f1", "formula-1", "formula-one", "formula1"].includes(normalized) || /\b(?:f1|formula[-\s]*1|formula[-\s]*one)\b/.test(normalized)) return "formula1";
   if (["torcedor", "fan", "supporter"].some((term) => normalized.includes(term))) return "torcedor";
   if (["jogador", "player"].some((term) => normalized.includes(term))) return "jogador";
   if (["goleiro", "goalkeeper"].some((term) => normalized.includes(term))) return "goleiro";
@@ -115,14 +127,15 @@ function mapImage(value: unknown, productName: string, index: number): ProductIm
 }
 
 function mapProduct(value: unknown): Product | null {
-  if (!isRecord(value) || typeof value.id !== "string" || typeof value.nome !== "string" || typeof value.slug !== "string") return null;
-  const name = value.nome.trim();
+  if (!isRecord(value) || typeof value.id !== "string" || typeof value.slug !== "string") return null;
+  const rawName = typeof value.nome === "string" ? value.nome : typeof value.title === "string" ? value.title : value.name;
+  if (typeof rawName !== "string") return null;
+  const name = rawName.trim();
   if (!name) return null;
   const club = typeof value.clube === "string" && value.clube.trim() ? value.clube.trim() : "Revisar";
   const candidateClubSlug = typeof value.clubeSlug === "string" ? slugifyCatalogValue(value.clubeSlug) : "";
   const rawClubSlug = candidateClubSlug && candidateClubSlug !== "revisar" ? candidateClubSlug : club;
   const clubSlug = slugifyCatalogValue(rawClubSlug);
-  const league = normalizeLeague(value.liga);
   const imageValues = productImageValues(value);
   const images = imageValues
     .map((image, index) => mapImage(image, name, index))
@@ -131,6 +144,19 @@ function mapProduct(value: unknown): Product | null {
     ? value.tamanhos.filter((size): size is string => typeof size === "string" && size !== "3GG")
     : [];
   const price = Number(value.preco);
+  const tags = Array.isArray(value.tags) ? value.tags.filter((tag): tag is string => typeof tag === "string")
+    : typeof value.tags === "string" ? value.tags.split(/[,|]/).map((tag) => tag.trim()).filter(Boolean) : [];
+  const evidence = [value.publico, value.gender, value.category, value.liga, value.league, value.subcategory,
+    value.tipo, value.title, value.name, value.model, value.version, name, value.slug, value.imageSeed, ...tags,
+    ...images.flatMap((image) => [image.source, image.src])]
+    .filter((item): item is string => typeof item === "string").join(" ");
+  const normalizedEvidence = slugifyCatalogValue(evidence);
+  const audience: Product["publico"] = /feminin|baby-look|babylook|women|woman|ladies/.test(normalizedEvidence)
+    ? "feminino" : normalizeAudience(value.publico ?? value.gender);
+  let type = normalizeProductType(value.tipo);
+  if (type === "revisar") type = normalizeProductType(evidence);
+  if (type === "revisar" && (audience === "feminino" || audience === "unissex")) type = "torcedor";
+  const league = normalizeLeague(value.liga ?? value.league);
 
   return {
     id: value.id,
@@ -138,8 +164,8 @@ function mapProduct(value: unknown): Product | null {
     clube: club,
     clubeSlug: clubSlug || "revisar",
     liga: league || "revisar",
-    publico: normalizeAudience(value.publico),
-    tipo: normalizeProductType(value.tipo),
+    publico: audience,
+    tipo: type,
     temporada: typeof value.temporada === "string" ? value.temporada : "revisar",
     uniforme: normalizeUniform(value.uniforme),
     nome: name,
@@ -148,6 +174,15 @@ function mapProduct(value: unknown): Product | null {
     cor: typeof value.cor === "string" ? value.cor : "revisar",
     imageSeed: typeof value.imageSeed === "string" ? value.imageSeed : name,
     images,
+    category: typeof value.category === "string" ? value.category : undefined,
+    gender: typeof value.gender === "string" ? value.gender : undefined,
+    league: typeof value.league === "string" ? value.league : undefined,
+    subcategory: typeof value.subcategory === "string" ? value.subcategory : undefined,
+    tags: tags.length ? tags : undefined,
+    title: typeof value.title === "string" ? value.title : undefined,
+    name: typeof value.name === "string" ? value.name : undefined,
+    model: typeof value.model === "string" ? value.model : undefined,
+    version: typeof value.version === "string" ? value.version : undefined,
   };
 }
 
@@ -164,14 +199,17 @@ export async function getSupabaseProducts(): Promise<Product[]> {
   const products: Product[] = [];
   for (let offset = 0; ; offset += PAGE_SIZE) {
     // A unique, stable key prevents rows from being skipped or repeated between pages.
-    const query = new URLSearchParams({ select: LIST_PRODUCT_COLUMNS, order: "slug.asc", limit: String(PAGE_SIZE), offset: String(offset) });
-    const response = await fetch(`${config.url}/rest/v1/products?${query}`, {
-      cache: "no-store",
-      headers: {
-        apikey: config.key,
-        ...(config.key.startsWith("eyJ") ? { Authorization: `Bearer ${config.key}` } : {}),
-      },
-    });
+    const headers = {
+      apikey: config.key,
+      ...(config.key.startsWith("eyJ") ? { Authorization: `Bearer ${config.key}` } : {}),
+    };
+    const query = new URLSearchParams({ select: EXTENDED_LIST_PRODUCT_COLUMNS, order: "slug.asc", limit: String(PAGE_SIZE), offset: String(offset) });
+    let response = await fetch(`${config.url}/rest/v1/products?${query}`, { cache: "no-store", headers });
+    if (!response.ok) {
+      // Older products schemas may not have optional category/tag columns.
+      query.set("select", LIST_PRODUCT_COLUMNS);
+      response = await fetch(`${config.url}/rest/v1/products?${query}`, { cache: "no-store", headers });
+    }
     if (!response.ok) {
       console.error(`Falha ao consultar catálogo Supabase: HTTP ${response.status}.`);
       throw new Error("Não foi possível carregar o catálogo atual da loja.");
@@ -181,7 +219,11 @@ export async function getSupabaseProducts(): Promise<Product[]> {
     if (rows.length < PAGE_SIZE) break;
   }
   const published = products.filter(isPublishedProduct);
-  return published.length ? published : bundledCatalog.filter(isPublishedProduct);
+  if (!published.length) return bundledCatalog.filter(isPublishedProduct);
+  const mergedBySlug = new Map<string, Product>();
+  for (const product of getBundledFeminineProducts()) mergedBySlug.set(product.slug, product);
+  for (const product of published) mergedBySlug.set(product.slug, product);
+  return [...mergedBySlug.values()];
 }
 
 export async function getSupabaseProductBySlug(slug: string): Promise<Product | undefined> {

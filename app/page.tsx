@@ -14,7 +14,7 @@ import type { Product } from "@/lib/types";
 import { deriveCatalogLeagues } from "@/lib/catalog-taxonomy";
 import { editorialPriorities, prioritizeClubs, prioritizeEditorialProducts, sortCatalogProducts } from "@/lib/catalog-order";
 import { classifyProduct } from "@/lib/product-classification";
-import { getSupabaseProducts } from "@/lib/server/supabase-catalog";
+import { getBundledFormulaOneProducts, getSupabaseProducts } from "@/lib/server/supabase-catalog";
 import { isFormulaOneProduct } from "@/lib/formula-one";
 
 export const metadata: Metadata = { alternates: { canonical: "/" } };
@@ -69,6 +69,10 @@ function ProductSection({
 
 export default async function HomePage() {
   const products = await getSupabaseProducts();
+  const formulaOneBySlug = new Map<string, Product>();
+  for (const product of [...getBundledFormulaOneProducts(), ...products.filter(isFormulaOneProduct)]) {
+    formulaOneBySlug.set(product.slug, product);
+  }
   const leagues = deriveCatalogLeagues(products);
   const nationalTeamSlugs = new Set(leagues.find((league) => league.slug === "selecoes")?.clubes.map((team) => team.slug) ?? []);
   const catalogProducts = sortCatalogProducts(products);
@@ -86,7 +90,7 @@ export default async function HomePage() {
   );
   const retros = catalogProducts.filter((product) => classifyProduct(product).version === "retro").slice(0, 8);
   const kidsProducts = catalogProducts.filter((product) => product.publico === "infantil" || /\b(?:kids|junior|youth|infantil|children)\b/i.test(`${product.nome} ${product.imageSeed}`)).slice(0, 8);
-  const formulaOneProducts = catalogProducts.filter(isFormulaOneProduct).slice(0, 8);
+  const formulaOneProducts = sortCatalogProducts([...formulaOneBySlug.values()]);
   const destinations = new Map<string, { name: string; league: string; slug: string; popularity: number }>();
   products
     .filter((product) => product.liga !== "revisar" && product.clubeSlug !== "revisar")
@@ -104,6 +108,15 @@ export default async function HomePage() {
   return (
     <main className="overflow-hidden">
       <HeroCarousel />
+
+      {formulaOneProducts.length > 0 ? <ProductSection title="Fórmula 1" kicker="Universo motorsport" href="/f1" items={formulaOneProducts} dark /> : (
+        <section className="bg-ink text-white" aria-labelledby="f1-home-title">
+          <div className="mx-auto flex max-w-7xl flex-wrap items-end justify-between gap-4 px-5 py-10 lg:px-8">
+            <div><p className="text-[10px] font-black uppercase tracking-[.2em] text-action">Universo motorsport</p><h2 id="f1-home-title" className="mt-2 text-3xl font-black uppercase tracking-tight sm:text-5xl">Fórmula 1</h2><p className="mt-2 text-sm text-white/70">Confira a coleção disponível.</p></div>
+            <Link className="flex shrink-0 items-center gap-1 text-[10px] font-black uppercase tracking-wide hover:text-action" href="/f1">Ver todas <ArrowRight size={15} /></Link>
+          </div>
+        </section>
+      )}
 
       <section className="league-marquee bg-action py-4 text-white" aria-label="Ligas disponíveis">
         <div className="league-marquee-track flex w-max whitespace-nowrap">
@@ -183,7 +196,6 @@ export default async function HomePage() {
       {retros.length > 0 && <ProductSection title="Clássicos retrô" kicker="Para quem vive de história" href="/retro" items={retros} />}
 
       <FormulaOneShowcase href="/f1" />
-      {formulaOneProducts.length > 0 && <ProductSection title="Fórmula 1" kicker="Universo motorsport" href="/f1" items={formulaOneProducts} />}
       {kidsProducts.length > 0 && <ProductSection title="Kits infantis" kicker="A torcida começa cedo" href="/infantil" items={kidsProducts} dark />}
 
       {products.length > 0 && <ProductSection title="Catálogo atualizado" kicker="Produtos importados do Supabase" href="/busca" items={catalogProducts.slice(0, 8)} dark />}

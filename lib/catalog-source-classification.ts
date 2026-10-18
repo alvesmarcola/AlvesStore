@@ -17,5 +17,6 @@ export function inferProductTypeFromSource(category: string, filename: string): 
   if (normalizedCategory.includes("camisa jogador") || /\b(player version|versao jogador|jogador)\b/.test(text)) return "jogador";
   if (normalizedCategory.includes("torcedor") || /\b(torcedor|supporter|fan version)\b/.test(text) || /\bultra\s*pass(?:\s*o|\s*os)?\b/.test(text)) return "torcedor";
   if (/\b(manga longa|long sleeve|ls)\b/.test(text)) return "inverno";
+  if (/feminin|baby look|women|woman|ladies/.test(`${normalizedCategory} ${text}`)) return "torcedor";
   return "revisar";
 }

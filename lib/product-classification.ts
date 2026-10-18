@@ -16,9 +16,12 @@ export interface ProductClassification {
 
 export function classifyProduct(product: Product): ProductClassification {
   const override = productOverrides[product.id] ?? productOverrides[product.slug];
-  const evidence = `${product.nome} ${product.slug} ${product.imageSeed} ${product.tipo} ${(product.images ?? []).map((image) => image.source).join(" ")}`.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("pt-BR").replace(/[^a-z0-9]+/g, " ").trim().replace(/\s+/g, " ");
+  const evidence = `${product.nome} ${product.title ?? ""} ${product.name ?? ""} ${product.slug} ${product.imageSeed} ${product.tipo} ${product.category ?? ""} ${product.subcategory ?? ""} ${product.version ?? ""} ${product.model ?? ""} ${(product.tags ?? []).join(" ")} ${(product.images ?? []).map((image) => `${image.source} ${image.src}`).join(" ")}`.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("pt-BR").replace(/[^a-z0-9]+/g, " ").trim().replace(/\s+/g, " ");
   const fullPatchEvidence = /\b(full ?patch(?:es)?|patch completo|patches completos|full sponsor|all sponsors)\b/.test(evidence);
-  const inferredVersion: ShirtVersion = product.tipo === "formula1" ? "unknown" : product.tipo === "retro" || /\b(retro|vintage)\b/.test(evidence)
+  const modelEvidence = `${product.nome} ${product.title ?? ""} ${product.name ?? ""} ${product.slug} ${product.category ?? ""} ${product.version ?? ""} ${product.model ?? ""} ${(product.tags ?? []).join(" ")}`.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("pt-BR").replace(/[^a-z0-9]+/g, " ").trim().replace(/\s+/g, " ");
+  const explicitTrainingProduct = product.tipo === "treino" && /\b(treino|training|pre jogo|pre match)\b/.test(modelEvidence)
+    && !/\b(player|jogador)\b/.test(`${product.nome} ${product.title ?? ""} ${product.name ?? ""} ${product.category ?? ""} ${product.version ?? ""} ${product.model ?? ""}`.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("pt-BR"));
+  const inferredVersion: ShirtVersion = product.tipo === "formula1" ? "unknown" : explicitTrainingProduct ? "fan" : product.tipo === "retro" || /\b(retro|vintage)\b/.test(evidence)
     ? "retro"
     : product.tipo === "jogador" || /\b(player|player version|versao jogador|jogador)\b/.test(evidence)
       ? "player"
@@ -41,10 +44,11 @@ export function classifyProduct(product: Product): ProductClassification {
   const fullPatch = override?.fullPatch ?? (version === "fan" && fullPatchEvidence);
   const overridePrice = Number.isFinite(override?.price) && (override?.price ?? 0) > 0 && (override?.price ?? Infinity) <= 2000
     ? override?.price : undefined;
-  const categoryPrice = product.tipo === "formula1" ? null : (
+  const categoryPrice = product.tipo === "formula1" ? (product.preco > 0 ? product.preco : storeConfig.fanCommonPrice) : (
     version === "retro" && sleeve === "long" ? storeConfig.retroLongSleevePrice
       : version === "retro" && sleeve === "short" ? storeConfig.retroShortSleevePrice
-        : version === "player" && sleeve === "long" ? storeConfig.playerLongSleevePrice
+        : version === "retro" ? (product.preco > 0 && product.preco !== storeConfig.fanCommonPrice ? product.preco : storeConfig.retroShortSleevePrice)
+        : version === "player" ? storeConfig.playerLongSleevePrice
       : version === "goalkeeper" ? storeConfig.fanCommonPrice
         : version === "fan" && fullPatch ? storeConfig.fanFullPatchPrice
             : version === "fan" && sleeve === "long" && product.preco > 0 && product.preco !== storeConfig.fanCommonPrice ? product.preco
@@ -53,10 +57,9 @@ export function classifyProduct(product: Product): ProductClassification {
   const registeredPrice = Number.isFinite(product.preco) && product.preco > 0 && !(product.preco === storeConfig.fanCommonPrice && version !== "fan");
   const price = isGoalkeeper ? storeConfig.fanCommonPrice : overridePrice ?? categoryPrice ?? (
     registeredPrice && (product.tipo === "formula1" || (version === "retro" && sleeve === "unknown") || !["fan", "player"].includes(version))
-      ? product.preco : null
+      ? product.preco : storeConfig.fanCommonPrice
   );
-  const verifiedOverride = Boolean(override?.source && override?.verifiedBy);
-  const reviewRequired = price === null || (version === "unknown" && product.tipo !== "formula1") || (version === "player" && sleeve !== "long" && !verifiedOverride);
+  const reviewRequired = price === null;
   const label = price === null ? "Preço em revisão" : `R$ ${price.toFixed(2).replace(".", ",")}${reviewRequired ? " · classificação em revisão" : ""}`;
   return {
     version,
@@ -82,5 +85,5 @@ export function getProductUnitPrice(product: Product, size?: string) {
 
 export function isPackageEligible(product: Product) {
   const facts = classifyProduct(product);
-  return product.tipo !== "goleiro" && facts.version === "fan" && !facts.fullPatch && facts.price === storeConfig.fanCommonPrice;
+  return product.tipo === "torcedor" && facts.version === "fan" && !facts.fullPatch && facts.price === storeConfig.fanCommonPrice;
 }

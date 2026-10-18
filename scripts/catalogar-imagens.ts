@@ -171,7 +171,7 @@ function findLeague(leagues: LeagueData[], directory: string, filename: string) 
 function audienceFrom(category: string, names = ""): Audience {
   const folder = normalize(`${category} ${names}`);
   if (folder.includes("kits infantis")) return "infantil";
-  if (folder.includes("feminina")) return "feminino";
+  if (/feminin|baby look|women|woman|ladies/.test(folder)) return "feminino";
   if (folder.includes("camisa jogador") || folder.includes("torcedor") || folder.includes("ultrapass")) return "masculino";
   return "revisar";
 }
@@ -315,7 +315,7 @@ function priceFor(group: ProductGroup, previousProduct?: Product) {
     if (shortSleeve) return storeConfig.retroShortSleevePrice;
     return previousProduct?.preco ?? 0;
   }
-  if (group.type === "jogador") return longSleeve ? storeConfig.playerLongSleevePrice : previousProduct?.preco && previousProduct.preco !== storeConfig.fanCommonPrice ? previousProduct.preco : 0;
+  if (group.type === "jogador") return storeConfig.playerLongSleevePrice;
   if (group.type === "torcedor") {
     if (fullPatch) return storeConfig.fanFullPatchPrice;
     if (longSleeve && previousProduct?.preco && previousProduct.preco !== storeConfig.fanCommonPrice) return previousProduct.preco;
