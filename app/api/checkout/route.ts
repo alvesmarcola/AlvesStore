@@ -84,24 +84,35 @@ export async function POST(request: Request) {
       })),
     }));
 
-    const prepared = await supabase.rpc("prepare_store_order", {
-      p_id: randomUUID(),
-      p_idempotency_key: requestData.idempotencyKey,
-      p_request_hash: requestHash,
-      p_item_lines: savedLines,
-      p_customer: requestData.customer,
-      p_shipping: { label: shippingLabel, priceCents: finalShippingCents },
-      p_shirt_quantity: totals.quantity,
-      p_shirts_cents: totals.shirtsCents,
-      p_customization_cents: totals.customizationCents,
-      p_patches_cents: totals.patchesCents,
-      p_shipping_cents: finalShippingCents,
-      p_total_cents: totalCents,
-    });
-    if (prepared.error) throw prepared.error;
-    const order = Array.isArray(prepared.data) ? prepared.data[0] : null;
-    if (!order?.order_id) throw new Error("Supabase não retornou o pedido preparado.");
-    if (String(order.saved_request_hash).trim() !== requestHash) {
+    const inserted = await supabase.from("store_orders").upsert({
+      id: randomUUID(),
+      idempotency_key: requestData.idempotencyKey,
+      request_hash: requestHash,
+      item_lines: savedLines,
+      customer: requestData.customer,
+      shipping: { label: shippingLabel, priceCents: finalShippingCents },
+      shirt_quantity: totals.quantity,
+      shirts_cents: totals.shirtsCents,
+      customization_cents: totals.customizationCents,
+      patches_cents: totals.patchesCents,
+      shipping_cents: finalShippingCents,
+      total_cents: totalCents,
+    }, { onConflict: "idempotency_key", ignoreDuplicates: true })
+      .select("id, request_hash, checkout_url, status")
+      .maybeSingle();
+    if (inserted.error) throw inserted.error;
+
+    let order = inserted.data;
+    if (!order) {
+      const existing = await supabase.from("store_orders")
+        .select("id, request_hash, checkout_url, status")
+        .eq("idempotency_key", requestData.idempotencyKey)
+        .maybeSingle();
+      if (existing.error) throw existing.error;
+      order = existing.data;
+    }
+    if (!order?.id) throw new Error("Supabase não retornou o pedido gravado.");
+    if (String(order.request_hash).trim() !== requestHash) {
       return publicError("Esta chave de pedido já foi usada com dados diferentes. Recarregue o checkout.", 409);
     }
     if (order.checkout_url) return NextResponse.json({ checkoutUrl: order.checkout_url, reused: true }, { headers: { "Cache-Control": "no-store" } });
@@ -110,7 +121,7 @@ export async function POST(request: Request) {
     const [firstName, ...surnameParts] = requestData.customer.fullName.trim().split(/\s+/);
     const preference = await preferenceClient.create({
       body: {
-        items: buildPreferenceItems(order.order_id, lines, totals),
+        items: buildPreferenceItems(order.id, lines, totals),
         ...(finalShippingCents > 0 ? { shipments: {
           mode: "not_specified",
           cost: jsonPrice(finalShippingCents),
@@ -125,17 +136,17 @@ export async function POST(request: Request) {
             country_name: "Brasil",
           },
         } } : { shipments: { mode: "not_specified", cost: 0, free_shipping: true } }),
-        external_reference: order.order_id,
-        metadata: { store_order_id: order.order_id },
+        external_reference: order.id,
+        metadata: { store_order_id: order.id },
         payer: {
           name: firstName,
           surname: surnameParts.join(" ") || firstName,
           email: requestData.customer.email,
         },
         back_urls: {
-          success: `${siteUrl}/pedido/retorno?order_id=${order.order_id}&return=approved`,
-          pending: `${siteUrl}/pedido/retorno?order_id=${order.order_id}&return=pending`,
-          failure: `${siteUrl}/pedido/retorno?order_id=${order.order_id}&return=rejected`,
+          success: `${siteUrl}/pedido/retorno?order_id=${order.id}&return=approved`,
+          pending: `${siteUrl}/pedido/retorno?order_id=${order.id}&return=pending`,
+          failure: `${siteUrl}/pedido/retorno?order_id=${order.id}&return=rejected`,
         },
         auto_return: "approved",
         notification_url: `${siteUrl}/api/mercado-pago/webhook?source_news=webhooks`,
@@ -152,7 +163,7 @@ export async function POST(request: Request) {
     stage = "supabase";
     const savedPreference = await supabase.from("store_orders")
       .update({ preference_id: preference.id, checkout_url: checkoutUrl, updated_at: new Date().toISOString() })
-      .eq("id", order.order_id)
+      .eq("id", order.id)
       .select("id")
       .maybeSingle();
     if (savedPreference.error || !savedPreference.data) throw savedPreference.error ?? new Error("Não foi possível salvar o link de pagamento.");
@@ -173,7 +184,7 @@ export async function POST(request: Request) {
       }
     }
 
-    return NextResponse.json({ checkoutUrl, orderId: order.order_id }, { headers: { "Cache-Control": "no-store" } });
+    return NextResponse.json({ checkoutUrl, orderId: order.id }, { headers: { "Cache-Control": "no-store" } });
   } catch (error) {
     if (error instanceof InvalidOrderError) return publicError(error.message, 400);
     if (error instanceof PaymentConfigurationError || error instanceof SupabaseOrdersConfigurationError) {
@@ -187,7 +198,14 @@ export async function POST(request: Request) {
     }
     console.error(`Falha no checkout (${stage}):`, error instanceof Error ? error.message : "erro desconhecido");
     if (stage === "mercado-pago") return publicError("O Mercado Pago não conseguiu gerar o link de pagamento. Tente novamente; o pedido não foi cobrado.", 502);
-    if (stage === "supabase") return publicError("O banco de pedidos Supabase está indisponível ou ainda não recebeu a migração store_orders.", 503);
+    if (stage === "supabase") {
+      console.error("Falha ao gravar/atualizar pedido em store_orders:", error instanceof Error ? error.message : "erro desconhecido");
+      return NextResponse.json({
+        error: "Não foi possível gravar ou consultar o pedido em store_orders.",
+        code: "SUPABASE_ORDER_WRITE_FAILED",
+        details: error instanceof Error ? error.message : "Erro desconhecido do Supabase.",
+      }, { status: 503, headers: { "Cache-Control": "no-store" } });
+    }
     return publicError("Não foi possível validar o pedido agora. Tente novamente.", 503);
   }
 }
