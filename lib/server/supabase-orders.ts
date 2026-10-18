@@ -4,6 +4,19 @@ export class SupabaseOrdersConfigurationError extends Error {}
 
 const globalForOrders = globalThis as typeof globalThis & { alvesSupabaseOrders?: SupabaseClient };
 
+export function describeSupabaseError(error: unknown) {
+  if (!error || typeof error !== "object") {
+    return { message: typeof error === "string" ? error : "Erro desconhecido do Supabase." };
+  }
+  const value = error as { message?: unknown; details?: unknown; hint?: unknown; code?: unknown };
+  return {
+    message: typeof value.message === "string" ? value.message : "Erro desconhecido do Supabase.",
+    ...(typeof value.details === "string" ? { details: value.details } : {}),
+    ...(typeof value.hint === "string" ? { hint: value.hint } : {}),
+    ...(typeof value.code === "string" ? { code: value.code } : {}),
+  };
+}
+
 function isPublicSupabaseKey(key: string) {
   if (key.startsWith("sb_publishable_")) return true;
   try {

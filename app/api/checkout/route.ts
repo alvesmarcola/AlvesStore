@@ -2,7 +2,7 @@ import { createHash, randomUUID } from "node:crypto";
 import { NextResponse } from "next/server";
 import { InvalidOrderError, paymentRequestSchema, validateOrderLinesFromCatalog, calculateOrderTotals, calculateOrderFingerprint } from "@/lib/payment/order";
 import { getPreferenceClient, getSiteUrl, PaymentConfigurationError, isProductionPaymentEnvironment } from "@/lib/server/mercado-pago";
-import { SupabaseOrdersConfigurationError, getSupabaseOrdersClient } from "@/lib/server/supabase-orders";
+import { SupabaseOrdersConfigurationError, describeSupabaseError, getSupabaseOrdersClient } from "@/lib/server/supabase-orders";
 import { buildPreferenceItems } from "@/lib/payment/preference-items";
 import { storeConfig } from "@/config";
 
@@ -199,11 +199,14 @@ export async function POST(request: Request) {
     console.error(`Falha no checkout (${stage}):`, error instanceof Error ? error.message : "erro desconhecido");
     if (stage === "mercado-pago") return publicError("O Mercado Pago não conseguiu gerar o link de pagamento. Tente novamente; o pedido não foi cobrado.", 502);
     if (stage === "supabase") {
-      console.error("Falha ao gravar/atualizar pedido em store_orders:", error instanceof Error ? error.message : "erro desconhecido");
+      const databaseError = describeSupabaseError(error);
+      console.error("Falha ao gravar/atualizar pedido em store_orders:", databaseError);
       return NextResponse.json({
-        error: "Não foi possível gravar ou consultar o pedido em store_orders.",
+        error: databaseError.message,
         code: "SUPABASE_ORDER_WRITE_FAILED",
-        details: error instanceof Error ? error.message : "Erro desconhecido do Supabase.",
+        details: databaseError.details,
+        hint: databaseError.hint,
+        databaseCode: databaseError.code,
       }, { status: 503, headers: { "Cache-Control": "no-store" } });
     }
     return publicError("Não foi possível validar o pedido agora. Tente novamente.", 503);
