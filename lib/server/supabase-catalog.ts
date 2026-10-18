@@ -243,6 +243,7 @@ export async function getSupabaseProducts(): Promise<Product[]> {
   if (!published.length) return bundledCatalog.filter(isPublishedProduct);
   const mergedBySlug = new Map<string, Product>();
   for (const product of getBundledFeminineProducts()) mergedBySlug.set(product.slug, product);
+  for (const product of getBundledFormulaOneProducts()) mergedBySlug.set(product.slug, product);
   for (const product of published) mergedBySlug.set(product.slug, product);
   return [...mergedBySlug.values()];
 }

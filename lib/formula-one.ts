@@ -3,7 +3,8 @@ import type { Product } from "@/lib/types";
 const FORMULA_ONE_TERM = /\b(?:f1|formula[-\s]*1|formula[-\s]*one|automobilismo|scuderia|ferrari|red[-\s]*bull(?:[-\s]*racing)?|mclaren|mercedes(?:[-\s]*amg)?|senna|aston[-\s]*martin|alpine|williams|haas)\b/;
 
 export function isFormulaOneEvidence(value: string) {
-  const normalized = value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("pt-BR");
+  const normalized = value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("pt-BR")
+    .replace(/\bred[-\s]*bull[-\s]+bragantino\b/g, "bragantino");
   return FORMULA_ONE_TERM.test(normalized);
 }
 
@@ -12,6 +13,10 @@ export function isFormulaOneProduct(product: Product) {
     product.liga,
     product.tipo,
     product.nome,
+    product.title,
+    product.name,
+    product.model,
+    product.version,
     product.slug,
     product.clube,
     product.clubeSlug,

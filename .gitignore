@@ -8,3 +8,5 @@ coverage/
 *.log
 *.tsbuildinfo
 /catalogo-fonte/
+chat.zip
+*.zip
