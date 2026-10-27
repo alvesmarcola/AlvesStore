@@ -205,7 +205,9 @@ function hasStorefrontImages(product: Product) {
 }
 
 function isPublishedProduct(product: Product) {
-  const hasImage = hasStorefrontImages(product);
+  const hasImage = product.tipo === "formula1"
+    ? (product.images?.length ?? 0) > 0
+    : hasStorefrontImages(product);
   const hasKnownAudience = product.publico !== "revisar";
   const isFormulaOne = product.tipo === "formula1";
   return hasImage && product.tipo !== "revisar" && (hasKnownAudience || isFormulaOne);
@@ -242,6 +244,7 @@ export async function getSupabaseProducts(): Promise<Product[]> {
   const published = products.filter(isPublishedProduct);
   if (!published.length) return bundledCatalog.filter(isPublishedProduct);
   const mergedBySlug = new Map<string, Product>();
+  for (const product of bundledCatalog.filter(isPublishedProduct)) mergedBySlug.set(product.slug, product);
   for (const product of getBundledFeminineProducts()) mergedBySlug.set(product.slug, product);
   for (const product of getBundledFormulaOneProducts()) mergedBySlug.set(product.slug, product);
   for (const product of published) mergedBySlug.set(product.slug, product);
