@@ -76,7 +76,7 @@ export default async function HomePage() {
   const leagues = deriveCatalogLeagues(products);
   const nationalTeamSlugs = new Set(leagues.find((league) => league.slug === "selecoes")?.clubes.map((team) => team.slug) ?? []);
   const catalogProducts = sortCatalogProducts(products);
-  const clubCandidates = catalogProducts.filter((product) => product.liga !== "selecoes" && !nationalTeamSlugs.has(product.clubeSlug) && product.clubeSlug !== "revisar");
+  const clubCandidates = catalogProducts.filter((product) => product.liga !== "selecoes" && !nationalTeamSlugs.has(product.clubeSlug) && product.clubeSlug !== "revisar" && !isFormulaOneProduct(product));
   const selectedClubProducts = prioritizeEditorialProducts(
     clubCandidates,
     editorialPriorities.clubs,
@@ -84,13 +84,13 @@ export default async function HomePage() {
   );
   const clubProducts = selectedClubProducts.length ? selectedClubProducts : catalogProducts.slice(0, 8);
   const nationalSelections = prioritizeEditorialProducts(
-    catalogProducts.filter((product) => product.liga === "selecoes" || nationalTeamSlugs.has(product.clubeSlug)),
+    catalogProducts.filter((product) => (product.liga === "selecoes" || nationalTeamSlugs.has(product.clubeSlug)) && !isFormulaOneProduct(product)),
     editorialPriorities.selections,
     8,
   );
-  const retros = catalogProducts.filter((product) => classifyProduct(product).version === "retro").slice(0, 8);
-  const kidsProducts = catalogProducts.filter((product) => product.publico === "infantil" || /\b(?:kids|junior|youth|infantil|children)\b/i.test(`${product.nome} ${product.imageSeed}`)).slice(0, 8);
-  const formulaOneProducts = sortCatalogProducts([...formulaOneBySlug.values()]);
+  const retros = catalogProducts.filter((product) => classifyProduct(product).version === "retro" && !isFormulaOneProduct(product)).slice(0, 8);
+  const kidsProducts = catalogProducts.filter((product) => (product.publico === "infantil" || /\b(?:kids|junior|youth|infantil|children)\b/i.test(`${product.nome} ${product.imageSeed}`)) && !isFormulaOneProduct(product)).slice(0, 8);
+  const formulaOneProducts = sortCatalogProducts([...formulaOneBySlug.values()]).slice(0, 12);
   const destinations = new Map<string, { name: string; league: string; slug: string; popularity: number }>();
   products
     .filter((product) => product.liga !== "revisar" && product.clubeSlug !== "revisar")
@@ -198,7 +198,7 @@ export default async function HomePage() {
       <FormulaOneShowcase href="/f1" />
       {kidsProducts.length > 0 && <ProductSection title="Kits infantis" kicker="A torcida começa cedo" href="/infantil" items={kidsProducts} dark />}
 
-      {products.length > 0 && <ProductSection title="Catálogo atualizado" kicker="Produtos importados do Supabase" href="/busca" items={catalogProducts.slice(0, 8)} dark />}
+      {products.length > 0 && <ProductSection title="Catálogo atualizado" kicker="Produtos importados do Supabase" href="/busca" items={catalogProducts.filter((product) => !isFormulaOneProduct(product)).slice(0, 8)} dark />}
       {nationalSelections.length > 0 && <ProductSection title="Seleções nacionais" kicker="Camisas de seleções" href="/selecoes" items={nationalSelections} dark />}
 
       <section className="mx-auto grid max-w-7xl gap-4 px-5 py-14 sm:grid-cols-3 lg:px-8 lg:py-20">
