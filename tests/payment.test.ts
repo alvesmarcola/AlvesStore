@@ -7,6 +7,7 @@ import { buildPreferenceItems } from "@/lib/payment/preference-items";
 import { isValidMercadoPagoSignature, normalizedPaymentStatus } from "@/lib/server/webhook-signature";
 import productsData from "@/data/products.json";
 import { classifyProduct, isPackageEligible } from "@/lib/product-classification";
+import { getAvailablePatches } from "@/lib/patch-compatibility";
 import { inferProductTypeFromSource } from "@/lib/catalog-source-classification";
 import { prioritizeClubs, prioritizeEditorialProducts, sortCatalogProducts } from "@/lib/catalog-order";
 import { parseSearchIntent, searchProducts } from "@/lib/smart-search";
@@ -205,6 +206,36 @@ test("revalida patch compatível, preço e posição no servidor", () => {
     assert.throws(() => validateOrderLines([{ ...validLine, patches: [{ id: "patch-teste", position: "peito" }] }]));
   } finally {
     patchOptions.pop();
+  }
+});
+
+test("patches custam R$ 10 cada, respeitam a liga e não aparecem em retrô nem F1", () => {
+  const brasileiro = productFixture("teste-patch-brasileirao", { nome: "Clube Torcedor", tipo: "torcedor", liga: "brasileirao-serie-a", clubeSlug: "clube-teste", temporada: "26/27", imageSeed: "Torcedor", preco: 160, tamanhos: ["M"] });
+  const europeu = productFixture("teste-patch-europeu", { nome: "Clube Torcedor", tipo: "torcedor", liga: "premier-league", clubeSlug: "clube-europeu", temporada: "26/27", imageSeed: "Torcedor", preco: 160, tamanhos: ["M"] });
+  const retro = productFixture("teste-patch-retro", { nome: "Clube Retrô manga curta", tipo: "retro", liga: "brasileirao-serie-a", clubeSlug: "clube-teste", imageSeed: "Retro Manga Curta", preco: 185, tamanhos: ["M"] });
+  const f1 = productFixture("teste-patch-f1", { nome: "Red Bull F1", tipo: "formula1", liga: "brasileirao-serie-a", clubeSlug: "red-bull", imageSeed: "F1", preco: 160, tamanhos: ["M"] });
+  const campeao = productFixture("teste-patch-campeao", { nome: "Argentina Torcedor", tipo: "torcedor", liga: "selecoes", clubeSlug: "argentina", temporada: "26/27", imageSeed: "Torcedor", preco: 160, tamanhos: ["M"] });
+  const names = (item: Product) => getAvailablePatches(item).map((patch) => patch.id).sort();
+
+  assert.deepEqual(names(brasileiro), ["brasileirao", "copa-do-brasil", "libertadores"]);
+  assert.deepEqual(names(europeu), ["champions-league"]);
+  assert.deepEqual(names(campeao), ["campeao-do-mundo"]);
+  assert.deepEqual(names(retro), []);
+  assert.deepEqual(names(f1), []);
+  assert.ok(getAvailablePatches(brasileiro).every((patch) => patch.priceCents === 1000));
+
+  products.push(brasileiro);
+  try {
+    const lines = validateOrderLines([{ productId: brasileiro.id, size: "M", quantity: 2, patches: [{ id: "brasileirao", position: "manga-esquerda" }, { id: "libertadores", position: "manga-esquerda" }] }]);
+    const totals = calculateOrderTotals(lines);
+    assert.equal(totals.patchesCents, 4000); // 2 patches x R$ 10 x 2 camisas
+    assert.equal(totals.productsTotalCents, totals.shirtsCents + 4000);
+    assert.equal(getCartPricing([{ lineId: "x", product: brasileiro, size: "M", quantity: 2, patches: [{ id: "brasileirao", position: "manga-esquerda" }, { id: "libertadores", position: "manga-esquerda" }] }]).total, 300 + 40);
+    assert.throws(() => validateOrderLines([{ productId: brasileiro.id, size: "M", quantity: 1, patches: [{ id: "champions-league", position: "manga-esquerda" }] }]));
+    const items = buildPreferenceItems("pedido-patches", lines, totals);
+    assert.equal(items.reduce((sum, item) => sum + Math.round(item.unit_price * 100) * item.quantity, 0), totals.productsTotalCents);
+  } finally {
+    products.pop();
   }
 });
 

@@ -54,7 +54,7 @@ A busca interpreta termos locais em português e inglês, abreviações de unifo
 
 Preços classificados: torcedor comum R$ 160,00; torcedor full patch R$ 180,00; retrô manga curta R$ 185,00; retrô manga longa R$ 220,00; jogador R$ 190,00; jogador manga longa R$ 220,00. Versões sem preço confirmado aparecem para revisão e não podem seguir para pagamento. Corrija a classificação em `data/product-overrides.json`, registrando fonte e responsável. O comando local `npm run catalog:override -- <product-id-ou-slug> --version retro --sleeve long --price 220 --source URL --verified-by Nome` registra uma correção; revise o JSON e publique um deploy para ativá-la.
 
-Patches só aparecem quando `data/patches.ts` registra imagem, preço, fonte, temporada, produto compatível, posições confirmadas e disponibilidade comercial. A lista começa vazia porque o catálogo atual não confirma estoque/venda nem compatibilidade desses itens. Não inclua uma opção até verificar essas informações.
+Patches de competição ficam em `data/patches.ts` e custam R$ 10,00 cada, por camisa (`patchPrice` em `config.ts`). Hoje: Brasileirão, Copa do Brasil, Libertadores, Champions League e Campeão do Mundo. Cada patch só aparece para as ligas (`leagueSlugs`) ou clubes/seleções (`clubSlugs`) listados nele, e nunca em camisas retrô ou de Fórmula 1. O cliente marca quantos quiser na página do produto; a escolha vai para o carrinho, é revalidada no servidor (preço, compatibilidade e posição) e fica gravada em `item_lines` do pedido, visível no painel `/admin/pedidos`. Para adicionar um patch novo, inclua um item em `patchOptions`.
 
 ## Pedidos, rastreio e WhatsApp
 
