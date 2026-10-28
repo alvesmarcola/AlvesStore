@@ -6,6 +6,8 @@ import { HeroCarousel } from "@/components/hero-carousel";
 import { Reveal } from "@/components/motion-effects";
 import { StickyLeagueRail } from "@/components/sticky-league-rail";
 import { FormulaOneShowcase } from "@/components/formula-one-showcase";
+import { InstagramCTA } from "@/components/instagram-cta";
+import { CustomerReviews } from "@/components/customer-reviews";
 import { images } from "@/data/images";
 import { formatCurrency } from "@/lib/catalog";
 import { storeConfig } from "@/config";
@@ -107,17 +109,10 @@ export default async function HomePage() {
 
   return (
     <main className="overflow-hidden">
+      {/* ─── 1. HERO CAROUSEL ─── */}
       <HeroCarousel />
 
-      {formulaOneProducts.length > 0 ? <ProductSection title="Fórmula 1" kicker="Universo motorsport" href="/f1" items={formulaOneProducts} dark /> : (
-        <section className="bg-ink text-white" aria-labelledby="f1-home-title">
-          <div className="mx-auto flex max-w-7xl flex-wrap items-end justify-between gap-4 px-5 py-10 lg:px-8">
-            <div><p className="text-[10px] font-black uppercase tracking-[.2em] text-action">Universo motorsport</p><h2 id="f1-home-title" className="mt-2 text-3xl font-black uppercase tracking-tight sm:text-5xl">Fórmula 1</h2><p className="mt-2 text-sm text-white/70">Confira a coleção disponível.</p></div>
-            <Link className="flex shrink-0 items-center gap-1 text-[10px] font-black uppercase tracking-wide hover:text-action" href="/f1">Ver todas <ArrowRight size={15} /></Link>
-          </div>
-        </section>
-      )}
-
+      {/* ─── 2. LEAGUE MARQUEE ─── */}
       <section className="league-marquee bg-action py-4 text-white" aria-label="Ligas disponíveis">
         <div className="league-marquee-track flex w-max whitespace-nowrap">
           {[0, 1].map((copy) => <div className="flex min-w-[100vw] shrink-0 items-center justify-around gap-8 px-4" key={copy} aria-hidden={copy === 1}>
@@ -126,6 +121,7 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* ─── 3. BENEFITS STRIP ─── */}
       <section className="benefits-strip bg-[#F5F5F5]">
         <div className="mx-auto grid max-w-7xl grid-cols-2 gap-4 px-5 py-7 sm:grid-cols-4 lg:px-8">
           {features.map(({ icon: Icon, title, text, link }, index) => (
@@ -139,6 +135,7 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* ─── 4. COLLECTIONS BENTO ─── */}
       <section className="mx-auto max-w-7xl px-5 py-14 lg:px-8 lg:py-20" aria-label="Explore coleções">
         <Reveal className="mb-7 flex items-end justify-between gap-4">
           <div><p className="text-[10px] font-black uppercase tracking-[.2em] text-action">Escolha o seu lado</p><h2 className="mt-2 text-3xl font-black uppercase sm:text-5xl">O jogo é seu</h2></div>
@@ -171,8 +168,13 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* ─── 5. LEAGUE RAIL ─── */}
       <StickyLeagueRail leagues={leagues} />
+
+      {/* ─── 6. CLUB PRODUCTS ─── */}
       {clubProducts.length > 0 && <ProductSection title="Camisas de clubes" kicker="Explore o catálogo" href="/clubes" items={clubProducts} />}
+
+      {/* ─── 7. FEATURED CLUBS ─── */}
       <section className="bg-[#F5F5F5] py-14 sm:py-20">
         <div className="mx-auto max-w-7xl px-5 lg:px-8">
           <Reveal>
@@ -193,14 +195,30 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* ─── 8. RETRO ─── */}
       {retros.length > 0 && <ProductSection title="Clássicos retrô" kicker="Para quem vive de história" href="/retro" items={retros} />}
 
+      {/* ─── 9. SESSÃO INFORMATIVA F1 ─── */}
       <FormulaOneShowcase href="/f1" />
+
+      {/* ─── 10. PRODUTOS FÓRMULA 1 (Logo abaixo da sessão informativa F1) ─── */}
+      {formulaOneProducts.length > 0 && (
+        <ProductSection
+          title="F1"
+          kicker="Universo motorsport"
+          href="/f1"
+          items={formulaOneProducts}
+          dark
+        />
+      )}
+
+      {/* ─── 11. KIDS ─── */}
       {kidsProducts.length > 0 && <ProductSection title="Kits infantis" kicker="A torcida começa cedo" href="/infantil" items={kidsProducts} dark />}
 
-      {products.length > 0 && <ProductSection title="Catálogo atualizado" kicker="Produtos importados do Supabase" href="/busca" items={catalogProducts.filter((product) => !isFormulaOneProduct(product)).slice(0, 8)} dark />}
+      {/* ─── 12. SELEÇÕES NACIONAIS ─── */}
       {nationalSelections.length > 0 && <ProductSection title="Seleções nacionais" kicker="Camisas de seleções" href="/selecoes" items={nationalSelections} dark />}
 
+      {/* ─── 13. DIFFERENTIALS ─── */}
       <section className="mx-auto grid max-w-7xl gap-4 px-5 py-14 sm:grid-cols-3 lg:px-8 lg:py-20">
         {differentials.map((item, index) => (
           <Reveal key={item.title} delay={index * 0.08} className="h-full">
@@ -213,6 +231,12 @@ export default async function HomePage() {
           </Reveal>
         ))}
       </section>
+
+      {/* ─── 14. INSTAGRAM CTA ─── */}
+      <InstagramCTA />
+
+      {/* ─── 15. CUSTOMER REVIEWS ─── */}
+      <CustomerReviews />
 
     </main>
   );

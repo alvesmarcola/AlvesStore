@@ -29,5 +29,5 @@ export function isFormulaOneProduct(product: Product) {
     ...(product.images ?? []).flatMap((image) => [image.source, image.src]),
   ].join(" ").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("pt-BR");
 
-  return product.tipo === "formula1" || isFormulaOneEvidence(evidence);
+  return product.tipo === "f1" || product.tipo === "formula1" || product.liga === "f1" || product.liga === "formula-1" || isFormulaOneEvidence(evidence);
 }

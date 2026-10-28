@@ -1,5 +1,6 @@
 import type { Product, ProductImage } from "@/lib/types";
 import bundledProducts from "@/data/products.json";
+import f1BundledProducts from "@/data/f1-products.json";
 import { isFeminineProduct, prepareFeminineProduct } from "@/lib/feminine-catalog";
 import { isFormulaOneEvidence, isFormulaOneProduct } from "@/lib/formula-one";
 
@@ -8,7 +9,7 @@ const PRODUCT_COLUMNS = "id,slug,clube,clubeSlug,liga,publico,tipo,temporada,uni
 const LIST_PRODUCT_COLUMNS = `${PRODUCT_COLUMNS},images`;
 const EXTENDED_LIST_PRODUCT_COLUMNS = `${LIST_PRODUCT_COLUMNS},category,gender,league,subcategory,tags,title,name,model,version`;
 const DETAIL_PRODUCT_COLUMNS = `${PRODUCT_COLUMNS},images`;
-const bundledCatalog = bundledProducts as unknown as Product[];
+const bundledCatalog = [...(bundledProducts as unknown as Product[]), ...(f1BundledProducts as unknown as Product[])];
 
 export function getBundledFormulaOneProducts(): Product[] {
   return bundledCatalog.filter((product) => isPublishedProduct(product) && isFormulaOneProduct(product));
@@ -42,8 +43,8 @@ function normalizeAudience(value: unknown): Product["publico"] {
 
 function normalizeProductType(value: unknown): Product["tipo"] {
   const normalized = typeof value === "string" ? slugifyCatalogValue(value) : "";
-  if (["f1", "formula-1", "formula-one", "formula1"].includes(normalized) || /\b(?:f1|formula[-\s]*1|formula[-\s]*one)\b/.test(normalized)) return "formula1";
-  if (isFormulaOneEvidence(normalized)) return "formula1";
+  if (["f1", "formula-1", "formula-one", "formula1"].includes(normalized) || /\b(?:f1|formula[-\s]*1|formula[-\s]*one)\b/.test(normalized)) return "f1";
+  if (isFormulaOneEvidence(normalized)) return "f1";
   if (["torcedor", "fan", "supporter"].some((term) => normalized.includes(term))) return "torcedor";
   if (["jogador", "player"].some((term) => normalized.includes(term))) return "jogador";
   if (["goleiro", "goalkeeper"].some((term) => normalized.includes(term))) return "goleiro";
@@ -61,6 +62,7 @@ function normalizeProductType(value: unknown): Product["tipo"] {
 
 function normalizeLeague(value: unknown) {
   const slug = typeof value === "string" ? slugifyCatalogValue(value) : "";
+  if (["f1", "formula-1", "formula-one", "formula1"].includes(slug) || isFormulaOneEvidence(slug)) return "f1";
   if (slug.includes("selec") || slug.includes("national-team")) return "selecoes";
   return slug || "revisar";
 }
@@ -127,24 +129,40 @@ function mapImage(value: unknown, productName: string, index: number): ProductIm
   };
 }
 
+function inferF1Team(name: string): { club: string; clubSlug: string } {
+  const lower = name.toLowerCase();
+  if (lower.includes("ferrari")) return { club: "Ferrari", clubSlug: "ferrari" };
+  if (lower.includes("mercedes")) return { club: "Mercedes-AMG", clubSlug: "mercedes-amg" };
+  if (lower.includes("red bull")) return { club: "Red Bull Racing", clubSlug: "red-bull-racing" };
+  if (lower.includes("mclaren")) return { club: "McLaren", clubSlug: "mclaren" };
+  if (lower.includes("williams")) return { club: "Williams", clubSlug: "williams" };
+  if (lower.includes("aston martin")) return { club: "Aston Martin", clubSlug: "aston-martin" };
+  if (lower.includes("alpine")) return { club: "Alpine", clubSlug: "alpine" };
+  if (lower.includes("haas")) return { club: "Haas", clubSlug: "haas" };
+  if (lower.includes("cadillac")) return { club: "Cadillac F1", clubSlug: "cadillac-f1" };
+  if (lower.includes("audi")) return { club: "Audi F1", clubSlug: "audi-f1" };
+  if (lower.includes("senna")) return { club: "Ayrton Senna", clubSlug: "senna" };
+  return { club: "F1 Racing", clubSlug: "f1-racing" };
+}
+
 function mapProduct(value: unknown): Product | null {
   if (!isRecord(value) || typeof value.id !== "string" || typeof value.slug !== "string") return null;
   const rawName = typeof value.nome === "string" ? value.nome : typeof value.title === "string" ? value.title : value.name;
   if (typeof rawName !== "string") return null;
   const name = rawName.trim();
   if (!name) return null;
-  const club = typeof value.clube === "string" && value.clube.trim() ? value.clube.trim() : "Revisar";
+  let club = typeof value.clube === "string" && value.clube.trim() ? value.clube.trim() : "Revisar";
   const candidateClubSlug = typeof value.clubeSlug === "string" ? slugifyCatalogValue(value.clubeSlug) : "";
   const rawClubSlug = candidateClubSlug && candidateClubSlug !== "revisar" ? candidateClubSlug : club;
-  const clubSlug = slugifyCatalogValue(rawClubSlug);
+  let clubSlug = slugifyCatalogValue(rawClubSlug);
   const imageValues = productImageValues(value);
   const images = imageValues
     .map((image, index) => mapImage(image, name, index))
     .filter((image): image is ProductImage => image !== null);
-  const sizes = Array.isArray(value.tamanhos)
+  let sizes = Array.isArray(value.tamanhos)
     ? value.tamanhos.filter((size): size is string => typeof size === "string" && size !== "3GG")
     : [];
-  const price = Number(value.preco);
+  let price = Number(value.preco);
   const tags = Array.isArray(value.tags) ? value.tags.filter((tag): tag is string => typeof tag === "string")
     : typeof value.tags === "string" ? value.tags.split(/[,|]/).map((tag) => tag.trim()).filter(Boolean) : [];
   const evidence = [value.publico, value.gender, value.category, value.liga, value.league, value.subcategory,
@@ -152,12 +170,26 @@ function mapProduct(value: unknown): Product | null {
     ...images.flatMap((image) => [image.source, image.src])]
     .filter((item): item is string => typeof item === "string").join(" ");
   const normalizedEvidence = slugifyCatalogValue(evidence);
-  const audience: Product["publico"] = /feminin|baby-look|babylook|women|woman|ladies/.test(normalizedEvidence)
+  let audience: Product["publico"] = /feminin|baby-look|babylook|women|woman|ladies/.test(normalizedEvidence)
     ? "feminino" : normalizeAudience(value.publico ?? value.gender);
   let type = normalizeProductType(value.tipo);
   if (type === "revisar") type = normalizeProductType(evidence);
   if (type === "revisar" && (audience === "feminino" || audience === "unissex")) type = "torcedor";
-  const league = normalizeLeague(value.liga ?? value.league);
+  let league = normalizeLeague(value.liga ?? value.league);
+
+  const isF1 = type === "f1" || type === "formula1" || league === "f1" || isFormulaOneEvidence(normalizedEvidence);
+  if (isF1) {
+    type = "f1";
+    league = "f1";
+    if (audience === "revisar") audience = "unissex";
+    if (!Number.isFinite(price) || price <= 0) price = 180;
+    if (sizes.length === 0) sizes = ["P", "M", "G", "GG", "2GG"];
+    if (club === "Revisar" || !clubSlug || clubSlug === "revisar") {
+      const inferred = inferF1Team(name);
+      club = inferred.club;
+      clubSlug = inferred.clubSlug;
+    }
+  }
 
   return {
     id: value.id,
@@ -198,18 +230,19 @@ function isYupooImageUrl(value: string) {
 
 function hasStorefrontImages(product: Product) {
   const images = product.images ?? [];
+  const isF1 = product.tipo === "f1" || product.tipo === "formula1" || product.liga === "f1" || isFormulaOneProduct(product);
   return images.length > 0 && images.every((image) =>
-    typeof image.src === "string" && image.src.trim().length > 0 && !isYupooImageUrl(image.src) &&
-    (!image.fallbackSrc || !isYupooImageUrl(image.fallbackSrc)),
+    typeof image.src === "string" && image.src.trim().length > 0 && (isF1 || !isYupooImageUrl(image.src)) &&
+    (isF1 || !image.fallbackSrc || !isYupooImageUrl(image.fallbackSrc)),
   );
 }
 
 function isPublishedProduct(product: Product) {
-  const hasImage = product.tipo === "formula1"
-    ? (product.images?.length ?? 0) > 0
+  const hasImage = (product.tipo === "f1" || product.tipo === "formula1" || product.liga === "f1" || isFormulaOneProduct(product))
+    ? true
     : hasStorefrontImages(product);
   const hasKnownAudience = product.publico !== "revisar";
-  const isFormulaOne = product.tipo === "formula1";
+  const isFormulaOne = product.tipo === "f1" || product.tipo === "formula1" || product.liga === "f1" || isFormulaOneProduct(product);
   return hasImage && product.tipo !== "revisar" && (hasKnownAudience || isFormulaOne);
 }
 

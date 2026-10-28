@@ -7,7 +7,7 @@ function normalizeSource(value: string) {
 export function inferProductTypeFromSource(category: string, filename: string): ProductType {
   const normalizedCategory = normalizeSource(category);
   const text = normalizeSource(`${category} ${filename}`);
-  if (/\b(f1|formula\s*1|formula\s*one)\b/.test(normalizedCategory)) return "formula1";
+  if (/\b(f1|formula\s*1|formula\s*one)\b/.test(normalizedCategory)) return "f1";
   if (/\b(goleiro|goleira|keeper|goalkeeper|gk)\b/.test(text)) return "goleiro";
   if (/\b(treino|training|pre jogo|pre match)\b/.test(text)) return "treino";
   if (/\b(retro|vintage)\b/.test(text)) return "retro";

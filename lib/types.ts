@@ -2,7 +2,7 @@ import type { LeagueImageSlot } from "@/data/images";
 import type { PatchPosition } from "@/data/patches";
 
 export type Audience = "masculino" | "feminino" | "unissex" | "infantil" | "revisar";
-export type ProductType = "torcedor" | "jogador" | "goleiro" | "retro" | "treino" | "cropped" | "regata" | "inverno" | "vestido" | "formula1" | "revisar";
+export type ProductType = "torcedor" | "jogador" | "goleiro" | "retro" | "treino" | "cropped" | "regata" | "inverno" | "vestido" | "f1" | "formula1" | "revisar";
 export type Uniform = "titular" | "reserva" | "terceiro" | "quarto" | "revisar";
 export type ShirtVersion = "fan" | "player" | "retro" | "goalkeeper" | "unknown";
 export type SleeveType = "short" | "long" | "unknown";

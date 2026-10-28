@@ -158,3 +158,12 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   0% { opacity: 0.45; transform: scale(1); }
   75%, 100% { opacity: 0; transform: scale(1.55); }
 }
+
+/* Hero carousel dot progress ring */
+@keyframes hero-dot-fill {
+  from { stroke-dashoffset: 62.83; }
+  to { stroke-dashoffset: 0; }
+}
+.hero-dot-progress {
+  stroke-linecap: round;
+}

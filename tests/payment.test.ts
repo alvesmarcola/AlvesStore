@@ -183,7 +183,7 @@ test("usa R$ 180 para torcedor full patch somente com classificação administra
 });
 
 test("revalida patch compatível, preço e posição no servidor", () => {
-  patchOptions.push({ id: "patch-teste", name: "Patch de teste", image: "/patches/test.svg", priceCents: 500, productIds: [product.id], seasons: [product.temporada], positions: ["manga-esquerda"], sourceUrl: "https://example.com/source", verified: true, commerciallyAvailable: true });
+  patchOptions.push({ id: "patch-teste", name: "Patch de teste", image: "/patches/test.svg", priceCents: 500, productIds: [product.id], seasons: [product.temporada], positions: ["manga-esquerda"], verified: true, commerciallyAvailable: true });
   try {
     const lines = validateOrderLines([{ ...validLine, patches: [{ id: "patch-teste", position: "manga-esquerda" }] }]);
     const totals = calculateOrderTotals(lines);

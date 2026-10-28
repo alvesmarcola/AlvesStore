@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
     { protocol: "https", hostname: "photo.yupoo.com", pathname: "/**" },
     { protocol: "https", hostname: "images.yupoo.com", pathname: "/**" },
     { protocol: "https", hostname: "**.yupoo.com" },
+    { protocol: "https", hostname: "images.unsplash.com" },
   ] },
   async redirects() {
     return [{ source: "/login", destination: "/", permanent: true }];

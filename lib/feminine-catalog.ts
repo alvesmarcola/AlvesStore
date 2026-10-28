@@ -36,7 +36,7 @@ function inferFeminineType(product: Product): ProductType {
   if (/\b(treino|training|pre jogo|pre match)\b/.test(evidence)) return "treino";
   if (/\b(retro|vintage)\b/.test(evidence)) return "retro";
   if (/\b(jogador|player)\b/.test(evidence)) return "jogador";
-  if (/\b(f1|formula\s*1|formula\s*one)\b/.test(evidence)) return "formula1";
+  if (/\b(f1|formula\s*1|formula\s*one)\b/.test(evidence)) return "f1";
   if (/\b(cropped|regata|inverno|corta vento|windbreaker)\b/.test(evidence)) {
     if (/\bcropped\b/.test(evidence)) return "cropped";
     if (/\bregata\b/.test(evidence)) return "regata";

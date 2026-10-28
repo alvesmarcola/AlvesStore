@@ -1,0 +1,386 @@
+[
+  {
+    "id": "f1-scuderia-ferrari-2026-polo",
+    "slug": "camisa-polo-scuderia-ferrari-f1-2026",
+    "clube": "Ferrari",
+    "clubeSlug": "ferrari",
+    "liga": "f1",
+    "publico": "unissex",
+    "tipo": "f1",
+    "temporada": "2026",
+    "uniforme": "titular",
+    "nome": "Camisa Polo Scuderia Ferrari F1 2026 Vermelha",
+    "preco": 180,
+    "tamanhos": ["P", "M", "G", "GG", "2GG"],
+    "cor": "Vermelho",
+    "imageSeed": "scuderia-ferrari-f1-polo-2026",
+    "images": [
+      {
+        "src": "https://photo.yupoo.com/minkang/2ddfd0ef/big.jpg",
+        "alt": "Camisa Polo Scuderia Ferrari F1 2026 Vermelha",
+        "credit": "Yupoo",
+        "focalPoint": { "x": 50, "y": 50 },
+        "blurDataURL": ""
+      },
+      {
+        "src": "https://photo.yupoo.com/minkang/2ddfd0ef/dfe270c6.jpg",
+        "alt": "Camisa Polo Scuderia Ferrari F1 2026 Vermelha - Costas",
+        "credit": "Yupoo",
+        "focalPoint": { "x": 50, "y": 50 },
+        "blurDataURL": ""
+      }
+    ]
+  },
+  {
+    "id": "f1-scuderia-ferrari-2026-red-tshirt",
+    "slug": "camisa-scuderia-ferrari-f1-2026-vermelha",
+    "clube": "Ferrari",
+    "clubeSlug": "ferrari",
+    "liga": "f1",
+    "publico": "unissex",
+    "tipo": "f1",
+    "temporada": "2026",
+    "uniforme": "titular",
+    "nome": "Camisa Scuderia Ferrari F1 2026 Vermelha",
+    "preco": 180,
+    "tamanhos": ["P", "M", "G", "GG", "2GG"],
+    "cor": "Vermelho",
+    "imageSeed": "scuderia-ferrari-f1-tshirt-2026",
+    "images": [
+      {
+        "src": "https://photo.yupoo.com/minkang/10be026368/big.jpg",
+        "alt": "Camisa Scuderia Ferrari F1 2026 Vermelha",
+        "credit": "Yupoo",
+        "focalPoint": { "x": 50, "y": 50 },
+        "blurDataURL": ""
+      },
+      {
+        "src": "https://photo.yupoo.com/minkang/c25ee0f0b0/58304a13.jpg",
+        "alt": "Camisa Scuderia Ferrari F1 2026 Vermelha - Detalhe",
+        "credit": "Yupoo",
+        "focalPoint": { "x": 50, "y": 50 },
+        "blurDataURL": ""
+      }
+    ]
+  },
+  {
+    "id": "f1-red-bull-racing-2025-polo",
+    "slug": "camisa-polo-red-bull-racing-f1-navy-blue",
+    "clube": "Red Bull Racing",
+    "clubeSlug": "red-bull-racing",
+    "liga": "f1",
+    "publico": "unissex",
+    "tipo": "f1",
+    "temporada": "2026",
+    "uniforme": "titular",
+    "nome": "Camisa Polo Red Bull Racing F1 Azul Marinho",
+    "preco": 180,
+    "tamanhos": ["P", "M", "G", "GG", "2GG"],
+    "cor": "Azul Marinho",
+    "imageSeed": "red-bull-racing-polo-navy",
+    "images": [
+      {
+        "src": "https://photo.yupoo.com/minkang/ae0cc026/big.jpg",
+        "alt": "Camisa Polo Red Bull Racing F1 Azul Marinho",
+        "credit": "Yupoo",
+        "focalPoint": { "x": 50, "y": 50 },
+        "blurDataURL": ""
+      },
+      {
+        "src": "https://photo.yupoo.com/minkang/ae0cc026/a0cb432a.jpg",
+        "alt": "Camisa Polo Red Bull Racing F1 Azul Marinho - Costas",
+        "credit": "Yupoo",
+        "focalPoint": { "x": 50, "y": 50 },
+        "blurDataURL": ""
+      }
+    ]
+  },
+  {
+    "id": "f1-red-bull-racing-2025-tshirt",
+    "slug": "camisa-red-bull-racing-f1-t-shirt-navy-blue",
+    "clube": "Red Bull Racing",
+    "clubeSlug": "red-bull-racing",
+    "liga": "f1",
+    "publico": "unissex",
+    "tipo": "f1",
+    "temporada": "2026",
+    "uniforme": "titular",
+    "nome": "Camisa Red Bull Racing F1 Azul Marinho",
+    "preco": 180,
+    "tamanhos": ["P", "M", "G", "GG", "2GG"],
+    "cor": "Azul Marinho",
+    "imageSeed": "red-bull-racing-tshirt-navy",
+    "images": [
+      {
+        "src": "https://photo.yupoo.com/minkang/743fbd88/big.jpg",
+        "alt": "Camisa Red Bull Racing F1 Azul Marinho",
+        "credit": "Yupoo",
+        "focalPoint": { "x": 50, "y": 50 },
+        "blurDataURL": ""
+      },
+      {
+        "src": "https://photo.yupoo.com/minkang/743fbd88/b0b332ea.jpg",
+        "alt": "Camisa Red Bull Racing F1 Azul Marinho - Costas",
+        "credit": "Yupoo",
+        "focalPoint": { "x": 50, "y": 50 },
+        "blurDataURL": ""
+      }
+    ]
+  },
+  {
+    "id": "f1-mercedes-amg-petronas-black-tshirt",
+    "slug": "camisa-mercedes-amg-petronas-f1-2026-preta",
+    "clube": "Mercedes-AMG",
+    "clubeSlug": "mercedes-amg",
+    "liga": "f1",
+    "publico": "unissex",
+    "tipo": "f1",
+    "temporada": "2026",
+    "uniforme": "titular",
+    "nome": "Camisa Mercedes-AMG Petronas F1 2026 Preta",
+    "preco": 180,
+    "tamanhos": ["P", "M", "G", "GG", "2GG"],
+    "cor": "Preto",
+    "imageSeed": "mercedes-amg-petronas-black-2026",
+    "images": [
+      {
+        "src": "https://photo.yupoo.com/minkang/9c90ef0644/big.jpg",
+        "alt": "Camisa Mercedes-AMG Petronas F1 2026 Preta",
+        "credit": "Yupoo",
+        "focalPoint": { "x": 50, "y": 50 },
+        "blurDataURL": ""
+      },
+      {
+        "src": "https://photo.yupoo.com/minkang/9c90ef0644/49c2ceaf.jpg",
+        "alt": "Camisa Mercedes-AMG Petronas F1 2026 Preta - Costas",
+        "credit": "Yupoo",
+        "focalPoint": { "x": 50, "y": 50 },
+        "blurDataURL": ""
+      }
+    ]
+  },
+  {
+    "id": "f1-mercedes-amg-petronas-white-polo",
+    "slug": "camisa-polo-mercedes-amg-petronas-f1-2026-branca",
+    "clube": "Mercedes-AMG",
+    "clubeSlug": "mercedes-amg",
+    "liga": "f1",
+    "publico": "unissex",
+    "tipo": "f1",
+    "temporada": "2026",
+    "uniforme": "reserva",
+    "nome": "Camisa Polo Mercedes-AMG Petronas F1 2026 Branca",
+    "preco": 180,
+    "tamanhos": ["P", "M", "G", "GG", "2GG"],
+    "cor": "Branco",
+    "imageSeed": "mercedes-amg-petronas-white-polo-2026",
+    "images": [
+      {
+        "src": "https://photo.yupoo.com/minkang/e2770b9b54/big.jpg",
+        "alt": "Camisa Polo Mercedes-AMG Petronas F1 2026 Branca",
+        "credit": "Yupoo",
+        "focalPoint": { "x": 50, "y": 50 },
+        "blurDataURL": ""
+      },
+      {
+        "src": "https://photo.yupoo.com/minkang/e2770b9b54/79a61258.jpg",
+        "alt": "Camisa Polo Mercedes-AMG Petronas F1 2026 Branca - Costas",
+        "credit": "Yupoo",
+        "focalPoint": { "x": 50, "y": 50 },
+        "blurDataURL": ""
+      }
+    ]
+  },
+  {
+    "id": "f1-mercedes-amg-petronas-blue-tshirt",
+    "slug": "camisa-mercedes-amg-petronas-f1-2026-azul",
+    "clube": "Mercedes-AMG",
+    "clubeSlug": "mercedes-amg",
+    "liga": "f1",
+    "publico": "unissex",
+    "tipo": "f1",
+    "temporada": "2026",
+    "uniforme": "titular",
+    "nome": "Camisa Mercedes-AMG Petronas F1 2026 Azul",
+    "preco": 180,
+    "tamanhos": ["P", "M", "G", "GG", "2GG"],
+    "cor": "Azul",
+    "imageSeed": "mercedes-amg-petronas-blue-2026",
+    "images": [
+      {
+        "src": "https://photo.yupoo.com/minkang/19cfd19bac/big.jpg",
+        "alt": "Camisa Mercedes-AMG Petronas F1 2026 Azul",
+        "credit": "Yupoo",
+        "focalPoint": { "x": 50, "y": 50 },
+        "blurDataURL": ""
+      },
+      {
+        "src": "https://photo.yupoo.com/minkang/7abf78dd56/1ab8780c.jpg",
+        "alt": "Camisa Mercedes-AMG Petronas F1 2026 Azul - Costas",
+        "credit": "Yupoo",
+        "focalPoint": { "x": 50, "y": 50 },
+        "blurDataURL": ""
+      }
+    ]
+  },
+  {
+    "id": "f1-mclaren-f1-team-orange-polo",
+    "slug": "camisa-polo-mclaren-f1-team-laranja-preta",
+    "clube": "McLaren",
+    "clubeSlug": "mclaren",
+    "liga": "f1",
+    "publico": "unissex",
+    "tipo": "f1",
+    "temporada": "2026",
+    "uniforme": "titular",
+    "nome": "Camisa Polo McLaren F1 Team Laranja & Preta",
+    "preco": 180,
+    "tamanhos": ["P", "M", "G", "GG", "2GG"],
+    "cor": "Laranja",
+    "imageSeed": "mclaren-f1-team-polo-orange",
+    "images": [
+      {
+        "src": "https://photo.yupoo.com/minkang/8dcfb5a3d0/big.jpg",
+        "alt": "Camisa Polo McLaren F1 Team Laranja & Preta",
+        "credit": "Yupoo",
+        "focalPoint": { "x": 50, "y": 50 },
+        "blurDataURL": ""
+      },
+      {
+        "src": "https://photo.yupoo.com/minkang/d42fb87d6f/aecba1ac.jpg",
+        "alt": "Camisa Polo McLaren F1 Team Laranja & Preta - Costas",
+        "credit": "Yupoo",
+        "focalPoint": { "x": 50, "y": 50 },
+        "blurDataURL": ""
+      }
+    ]
+  },
+  {
+    "id": "f1-mclaren-f1-team-black-orange-tshirt",
+    "slug": "camisa-mclaren-f1-team-preta-laranja",
+    "clube": "McLaren",
+    "clubeSlug": "mclaren",
+    "liga": "f1",
+    "publico": "unissex",
+    "tipo": "f1",
+    "temporada": "2026",
+    "uniforme": "titular",
+    "nome": "Camisa McLaren F1 Team Preta & Laranja",
+    "preco": 180,
+    "tamanhos": ["P", "M", "G", "GG", "2GG"],
+    "cor": "Preto",
+    "imageSeed": "mclaren-f1-team-tshirt-black-orange",
+    "images": [
+      {
+        "src": "https://photo.yupoo.com/minkang/83404462d4/big.jpg",
+        "alt": "Camisa McLaren F1 Team Preta & Laranja",
+        "credit": "Yupoo",
+        "focalPoint": { "x": 50, "y": 50 },
+        "blurDataURL": ""
+      },
+      {
+        "src": "https://photo.yupoo.com/minkang/d4e31ee067/3aa6a58a.jpg",
+        "alt": "Camisa McLaren F1 Team Preta & Laranja - Costas",
+        "credit": "Yupoo",
+        "focalPoint": { "x": 50, "y": 50 },
+        "blurDataURL": ""
+      }
+    ]
+  },
+  {
+    "id": "f1-williams-racing-polo",
+    "slug": "camisa-polo-williams-racing-f1-preta-azul",
+    "clube": "Williams",
+    "clubeSlug": "williams",
+    "liga": "f1",
+    "publico": "unissex",
+    "tipo": "f1",
+    "temporada": "2026",
+    "uniforme": "titular",
+    "nome": "Camisa Polo Williams Racing F1 Preta & Azul",
+    "preco": 180,
+    "tamanhos": ["P", "M", "G", "GG", "2GG"],
+    "cor": "Azul",
+    "imageSeed": "williams-racing-polo-2026",
+    "images": [
+      {
+        "src": "https://photo.yupoo.com/minkang/a452b2ea34/big.jpg",
+        "alt": "Camisa Polo Williams Racing F1 Preta & Azul",
+        "credit": "Yupoo",
+        "focalPoint": { "x": 50, "y": 50 },
+        "blurDataURL": ""
+      },
+      {
+        "src": "https://photo.yupoo.com/minkang/e8d00f56cf/afef04e4.jpg",
+        "alt": "Camisa Polo Williams Racing F1 Preta & Azul - Costas",
+        "credit": "Yupoo",
+        "focalPoint": { "x": 50, "y": 50 },
+        "blurDataURL": ""
+      }
+    ]
+  },
+  {
+    "id": "f1-cadillac-f1-team-replica-polo",
+    "slug": "camisa-tommy-hilfiger-cadillac-f1-team-polo",
+    "clube": "Cadillac F1",
+    "clubeSlug": "cadillac-f1",
+    "liga": "f1",
+    "publico": "unissex",
+    "tipo": "f1",
+    "temporada": "2026",
+    "uniforme": "titular",
+    "nome": "Camisa Tommy Hilfiger x Cadillac F1 Team Polo",
+    "preco": 180,
+    "tamanhos": ["P", "M", "G", "GG", "2GG"],
+    "cor": "Branco",
+    "imageSeed": "cadillac-f1-team-replica-polo",
+    "images": [
+      {
+        "src": "https://photo.yupoo.com/minkang/e123ecc100/big.jpg",
+        "alt": "Camisa Tommy Hilfiger x Cadillac F1 Team Polo",
+        "credit": "Yupoo",
+        "focalPoint": { "x": 50, "y": 50 },
+        "blurDataURL": ""
+      },
+      {
+        "src": "https://photo.yupoo.com/minkang/124e6dc0e5/c25fd35e.jpg",
+        "alt": "Camisa Tommy Hilfiger x Cadillac F1 Team Polo - Costas",
+        "credit": "Yupoo",
+        "focalPoint": { "x": 50, "y": 50 },
+        "blurDataURL": ""
+      }
+    ]
+  },
+  {
+    "id": "f1-ferrari-retro-racing-jacket",
+    "slug": "jaqueta-f1-ferrari-retro-racing-vermelha",
+    "clube": "Ferrari",
+    "clubeSlug": "ferrari",
+    "liga": "f1",
+    "publico": "unissex",
+    "tipo": "f1",
+    "temporada": "2026",
+    "uniforme": "titular",
+    "nome": "Jaqueta F1 Ferrari Retro Racing Vermelha",
+    "preco": 220,
+    "tamanhos": ["P", "M", "G", "GG", "2GG"],
+    "cor": "Vermelho",
+    "imageSeed": "ferrari-retro-racing-jacket",
+    "images": [
+      {
+        "src": "https://photo.yupoo.com/minkang/807928725f/big.jpg",
+        "alt": "Jaqueta F1 Ferrari Retro Racing Vermelha",
+        "credit": "Yupoo",
+        "focalPoint": { "x": 50, "y": 50 },
+        "blurDataURL": ""
+      },
+      {
+        "src": "https://photo.yupoo.com/minkang/c8a54bd774/0f908898.jpg",
+        "alt": "Jaqueta F1 Ferrari Retro Racing Vermelha - Detalhes",
+        "credit": "Yupoo",
+        "focalPoint": { "x": 50, "y": 50 },
+        "blurDataURL": ""
+      }
+    ]
+  }
+]
