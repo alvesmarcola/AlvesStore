@@ -3,6 +3,7 @@ import { getPaymentClient, getSiteUrl, isProductionPaymentEnvironment } from "@/
 import { getSupabaseOrdersClient } from "@/lib/server/supabase-orders";
 import { isValidMercadoPagoSignature, normalizedPaymentStatus } from "@/lib/server/webhook-signature";
 import { sendWhatsAppOrderNotice, type OrderNotice } from "@/lib/server/order-notifications";
+import { buildOrderPaidEmail, sendOrderEmail } from "@/lib/server/order-emails";
 
 export const runtime = "nodejs";
 
@@ -78,37 +79,44 @@ export async function POST(request: Request) {
       throw orderPayment.error ?? new Error("Pedido não encontrado ao persistir os dados do Mercado Pago.");
     }
 
-    if (status === "approved" && order.previous_status !== "approved") {
-      const notice: OrderNotice = {
-        id: payment.external_reference,
-        status: "approved",
-        customer: order.customer,
-        item_lines: order.item_lines,
-        shipping_cents: Number(order.shipping_cents),
-        total_cents: Number(order.total_cents),
-      };
-      await sendWhatsAppOrderNotice("order_paid", notice);
-      const apiKey = process.env.RESEND_API_KEY;
-      const from = process.env.ORDER_EMAIL_FROM;
-      if (apiKey && from) {
-        const list = notice.item_lines.map((item) => `${item.title} · tamanho ${item.size} · ${item.quantity} un.${item.customization ? ` · personalizado ${item.customization.name} ${item.customization.number}` : ""}${item.patches?.length ? ` · patches: ${item.patches.map((patch) => `${patch.name} (${patch.position})`).join(", ")}` : ""}`).join("\n");
-        const amount = (cents: number) => `R$ ${(cents / 100).toFixed(2).replace(".", ",")}`;
-        try {
-          const response = await fetch("https://api.resend.com/emails", {
-            method: "POST",
-            headers: { authorization: `Bearer ${apiKey}`, "content-type": "application/json" },
-            body: JSON.stringify({
-              from,
-              to: [notice.customer.email],
-              subject: "Pagamento aprovado — Alves Store",
-              text: `Olá, ${notice.customer.fullName}! Seu pedido foi aprovado.\n\n${list}\nFrete: ${amount(notice.shipping_cents)}\nTotal: ${amount(notice.total_cents)}\n\nAcompanhe em ${getSiteUrl()}/rastreio`,
-            }),
-            signal: AbortSignal.timeout(5_000),
-          });
-          if (!response.ok) console.error("E-mail transacional não enviado:", response.status);
-        } catch (error) {
-          console.error("Falha no e-mail transacional:", error instanceof Error ? error.message : "erro desconhecido");
-        }
+    if (status === "approved") {
+      // O aviso é "reservado" de forma atômica: só uma notificação por pedido consegue marcar
+      // paid_notified_at. Isso evita avisos duplicados e também não perde o aviso quando o Mercado
+      // Pago repete a notificação depois de uma falha (o status já estaria "approved" nesse caso).
+      const claim = await supabase.from("store_orders")
+        .update({ paid_notified_at: new Date().toISOString() })
+        .eq("id", payment.external_reference)
+        .eq("status", "approved")
+        .is("paid_notified_at", null)
+        .select("id")
+        .maybeSingle();
+      let shouldNotify: boolean;
+      if (claim.error) {
+        // Provavelmente a migração 20261019000000_order_paid_notice.sql ainda não foi aplicada.
+        console.error("Não foi possível reservar o aviso de pagamento aprovado:", claim.error.message);
+        shouldNotify = order.previous_status !== "approved";
+      } else {
+        shouldNotify = Boolean(claim.data);
+      }
+
+      if (shouldNotify) {
+        const notice: OrderNotice = {
+          id: payment.external_reference,
+          status: "approved",
+          customer: order.customer,
+          item_lines: order.item_lines,
+          shipping_cents: Number(order.shipping_cents),
+          total_cents: Number(order.total_cents),
+        };
+        await sendWhatsAppOrderNotice("order_paid", notice);
+        await sendOrderEmail(String(notice.customer.email ?? ""), buildOrderPaidEmail({
+          orderId: notice.id,
+          customerName: String(notice.customer.fullName ?? ""),
+          items: notice.item_lines,
+          shippingCents: notice.shipping_cents,
+          totalCents: notice.total_cents,
+          siteUrl: getSiteUrl(),
+        }));
       }
     }
 

@@ -112,10 +112,7 @@ export default async function HomePage() {
       {/* ─── 1. HERO CAROUSEL ─── */}
       <HeroCarousel />
 
-<<<<<<< HEAD
       {/* ─── 2. LEAGUE MARQUEE ─── */}
-=======
->>>>>>> c0eb25c9979439dfad6b82efefcd57647258bb02
       <section className="league-marquee bg-action py-4 text-white" aria-label="Ligas disponíveis">
         <div className="league-marquee-track flex w-max whitespace-nowrap">
           {[0, 1].map((copy) => <div className="flex min-w-[100vw] shrink-0 items-center justify-around gap-8 px-4" key={copy} aria-hidden={copy === 1}>
@@ -203,7 +200,6 @@ export default async function HomePage() {
 
       {/* ─── 9. SESSÃO INFORMATIVA F1 ─── */}
       <FormulaOneShowcase href="/f1" />
-<<<<<<< HEAD
 
       {/* ─── 10. PRODUTOS FÓRMULA 1 (Logo abaixo da sessão informativa F1) ─── */}
       {formulaOneProducts.length > 0 && (
@@ -220,12 +216,6 @@ export default async function HomePage() {
       {kidsProducts.length > 0 && <ProductSection title="Kits infantis" kicker="A torcida começa cedo" href="/infantil" items={kidsProducts} dark />}
 
       {/* ─── 12. SELEÇÕES NACIONAIS ─── */}
-=======
-      {formulaOneProducts.length > 0 && <ProductSection title="Camisas de Fórmula 1" kicker="Coleção motorsport" href="/f1" items={formulaOneProducts} dark />}
-      {kidsProducts.length > 0 && <ProductSection title="Kits infantis" kicker="A torcida começa cedo" href="/infantil" items={kidsProducts} dark />}
-
-      {products.length > 0 && <ProductSection title="Catálogo atualizado" kicker="Novidades da loja" href="/busca" items={catalogProducts.filter((product) => !isFormulaOneProduct(product)).slice(0, 8)} dark />}
->>>>>>> c0eb25c9979439dfad6b82efefcd57647258bb02
       {nationalSelections.length > 0 && <ProductSection title="Seleções nacionais" kicker="Camisas de seleções" href="/selecoes" items={nationalSelections} dark />}
 
       {/* ─── 13. DIFFERENTIALS ─── */}

@@ -25,7 +25,7 @@ Configure as variáveis abaixo na Vercel para o ambiente desejado. Defina `PAYME
 
 1. No Mercado Pago, obtenha o Access Token de produção `APP_USR-` e configure `PAYMENT_ENVIRONMENT=production` e `MERCADO_PAGO_ACCESS_TOKEN` no ambiente Production da Vercel. Não configure o token `TEST-` nesse ambiente.
 2. Cadastre no painel do Mercado Pago a URL `https://alves-store-green.vercel.app/api/webhooks/mercadopago` para notificações de pagamento. Copie a chave secreta de assinatura do webhook de produção para `MERCADO_PAGO_WEBHOOK_SECRET`.
-3. Aplique `supabase/migrations/20261017000000_store_orders.sql` e `supabase/migrations/20261018000000_mercado_pago_order_fields.sql` no SQL Editor do Supabase e configure a chave secreta do Supabase no ambiente Production da Vercel.
+3. Aplique `supabase/migrations/20261017000000_store_orders.sql`, `supabase/migrations/20261018000000_mercado_pago_order_fields.sql` e `supabase/migrations/20261019000000_order_paid_notice.sql` (garante que o aviso de pagamento aprovado saia uma única vez, mesmo se o Mercado Pago repetir a notificação) no SQL Editor do Supabase e configure a chave secreta do Supabase no ambiente Production da Vercel.
 4. Faça Redeploy de Production na Vercel e valide com uma compra real controlada. O checkout redireciona para `init_point` e usa `sandbox_init_point` apenas como fallback se o primeiro não vier; o webhook recusa pagamentos com `live_mode` incompatível.
 
 ## Banco de pedidos
@@ -35,7 +35,7 @@ Os pedidos ficam em `store_orders` e os pagamentos em `store_order_payments` no 
 ## Operação
 
 - `/admin` redireciona para `/admin/pedidos`, protegido por `ADMIN_ORDERS_TOKEN`; o painel lista os 200 pedidos mais recentes e exporta CSV. O token segue no cabeçalho `Authorization` para a API, nunca em variáveis públicas ou links.
-- Salve o código de rastreio no botão do pedido. `/rastreio` consulta por código do pedido e e-mail ou CPF.
+- Salve o código de rastreio no botão do pedido (só pedidos com pagamento aprovado aceitam; por padrão o painel mostra só os pagos). `/rastreio` consulta pelo código do pedido (8 caracteres, enviado por e-mail e mostrado após o pagamento) e e-mail ou CPF, com limite de 20 consultas por IP a cada 10 minutos.
 - E-mails de pagamento aprovado são opcionais. Configure Resend e um remetente verificado; falhas são registradas no log e não alteram a confirmação do pagamento.
 - O limite de checkout é de 15 requisições por IP em dez minutos, mantido em memória por instância. Para múltiplas instâncias, substitua por armazenamento compartilhado antes de depender dele como controle distribuído.
 
@@ -54,7 +54,7 @@ A busca interpreta termos locais em português e inglês, abreviações de unifo
 
 Preços classificados: torcedor comum R$ 160,00; torcedor full patch R$ 180,00; retrô manga curta R$ 185,00; retrô manga longa R$ 220,00; jogador R$ 190,00; jogador manga longa R$ 220,00. Versões sem preço confirmado aparecem para revisão e não podem seguir para pagamento. Corrija a classificação em `data/product-overrides.json`, registrando fonte e responsável. O comando local `npm run catalog:override -- <product-id-ou-slug> --version retro --sleeve long --price 220 --source URL --verified-by Nome` registra uma correção; revise o JSON e publique um deploy para ativá-la.
 
-Patches só aparecem quando `data/patches.ts` registra imagem, preço, fonte, temporada, produto compatível, posições confirmadas e disponibilidade comercial. A lista começa vazia porque o catálogo atual não confirma estoque/venda nem compatibilidade desses itens. Não inclua uma opção até verificar essas informações.
+Patches de competição ficam em `data/patches.ts` e custam R$ 10,00 cada, por camisa (`patchPrice` em `config.ts`). Hoje: Brasileirão, Copa do Brasil, Libertadores, Champions League e Campeão do Mundo. Cada patch só aparece para as ligas (`leagueSlugs`) ou clubes/seleções (`clubSlugs`) listados nele, e nunca em camisas retrô ou de Fórmula 1. O cliente marca quantos quiser na página do produto; a escolha vai para o carrinho, é revalidada no servidor (preço, compatibilidade e posição) e fica gravada em `item_lines` do pedido, visível no painel `/admin/pedidos`. Para adicionar um patch novo, inclua um item em `patchOptions`.
 
 ## Pedidos, rastreio e WhatsApp
 

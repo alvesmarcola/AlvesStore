@@ -7,6 +7,10 @@ import { buildPreferenceItems } from "@/lib/payment/preference-items";
 import { isValidMercadoPagoSignature, normalizedPaymentStatus } from "@/lib/server/webhook-signature";
 import productsData from "@/data/products.json";
 import { classifyProduct, isPackageEligible } from "@/lib/product-classification";
+import { getAvailablePatches } from "@/lib/patch-compatibility";
+import { isCompleteOrderCode, normalizeOrderCodeInput, orderCode } from "@/lib/order-code";
+import { buildOrderPaidEmail, buildOrderReceivedEmail } from "@/lib/server/order-emails";
+import { isRateLimited } from "@/lib/server/rate-limit";
 import { inferProductTypeFromSource } from "@/lib/catalog-source-classification";
 import { prioritizeClubs, prioritizeEditorialProducts, sortCatalogProducts } from "@/lib/catalog-order";
 import { parseSearchIntent, searchProducts } from "@/lib/smart-search";
@@ -208,6 +212,36 @@ test("revalida patch compatível, preço e posição no servidor", () => {
   }
 });
 
+test("patches custam R$ 10 cada, respeitam a liga e não aparecem em retrô nem F1", () => {
+  const brasileiro = productFixture("teste-patch-brasileirao", { nome: "Clube Torcedor", tipo: "torcedor", liga: "brasileirao-serie-a", clubeSlug: "clube-teste", temporada: "26/27", imageSeed: "Torcedor", preco: 160, tamanhos: ["M"] });
+  const europeu = productFixture("teste-patch-europeu", { nome: "Clube Torcedor", tipo: "torcedor", liga: "premier-league", clubeSlug: "clube-europeu", temporada: "26/27", imageSeed: "Torcedor", preco: 160, tamanhos: ["M"] });
+  const retro = productFixture("teste-patch-retro", { nome: "Clube Retrô manga curta", tipo: "retro", liga: "brasileirao-serie-a", clubeSlug: "clube-teste", imageSeed: "Retro Manga Curta", preco: 185, tamanhos: ["M"] });
+  const f1 = productFixture("teste-patch-f1", { nome: "Red Bull F1", tipo: "formula1", liga: "brasileirao-serie-a", clubeSlug: "red-bull", imageSeed: "F1", preco: 160, tamanhos: ["M"] });
+  const campeao = productFixture("teste-patch-campeao", { nome: "Argentina Torcedor", tipo: "torcedor", liga: "selecoes", clubeSlug: "argentina", temporada: "26/27", imageSeed: "Torcedor", preco: 160, tamanhos: ["M"] });
+  const names = (item: Product) => getAvailablePatches(item).map((patch) => patch.id).sort();
+
+  assert.deepEqual(names(brasileiro), ["brasileirao", "copa-do-brasil", "libertadores"]);
+  assert.deepEqual(names(europeu), ["champions-league"]);
+  assert.deepEqual(names(campeao), ["campeao-do-mundo"]);
+  assert.deepEqual(names(retro), []);
+  assert.deepEqual(names(f1), []);
+  assert.ok(getAvailablePatches(brasileiro).every((patch) => patch.priceCents === 1000));
+
+  products.push(brasileiro);
+  try {
+    const lines = validateOrderLines([{ productId: brasileiro.id, size: "M", quantity: 2, patches: [{ id: "brasileirao", position: "manga-esquerda" }, { id: "libertadores", position: "manga-esquerda" }] }]);
+    const totals = calculateOrderTotals(lines);
+    assert.equal(totals.patchesCents, 4000); // 2 patches x R$ 10 x 2 camisas
+    assert.equal(totals.productsTotalCents, totals.shirtsCents + 4000);
+    assert.equal(getCartPricing([{ lineId: "x", product: brasileiro, size: "M", quantity: 2, patches: [{ id: "brasileirao", position: "manga-esquerda" }, { id: "libertadores", position: "manga-esquerda" }] }]).total, 300 + 40);
+    assert.throws(() => validateOrderLines([{ productId: brasileiro.id, size: "M", quantity: 1, patches: [{ id: "champions-league", position: "manga-esquerda" }] }]));
+    const items = buildPreferenceItems("pedido-patches", lines, totals);
+    assert.equal(items.reduce((sum, item) => sum + Math.round(item.unit_price * 100) * item.quantity, 0), totals.productsTotalCents);
+  } finally {
+    products.pop();
+  }
+});
+
 test("soma quantidades de produtos e linhas diferentes para definir frete", () => {
   const other = products.find((entry) => entry.id !== product.id && classifyProduct(entry).price === 160 && entry.tamanhos.length > 0)
     ?? productFixture("produto-teste-torcedor-outro", { nome: "Outra camisa Torcedor", tipo: "torcedor", imageSeed: "Torcedor", preco: 160 }, baseProduct);
@@ -260,4 +294,46 @@ test("valida assinatura do webhook e converte estados de pagamento", () => {
   assert.equal(normalizedPaymentStatus("approved"), "approved");
   assert.equal(normalizedPaymentStatus("in_process"), "pending");
   assert.equal(normalizedPaymentStatus("rejected"), "rejected");
+});
+
+test("código do pedido aceita código curto e UUID, e rejeita códigos incompletos", () => {
+  const id = "a1b2c3d4-1111-4222-8333-444455556666";
+  assert.equal(orderCode(id), "A1B2C3D4");
+  assert.equal(normalizeOrderCodeInput("#A1B2-C3D4"), "a1b2c3d4");
+  assert.equal(normalizeOrderCodeInput(id), id);
+  assert.equal(normalizeOrderCodeInput("a1b2c3d4111142228333444455556666"), id);
+  assert.equal(isCompleteOrderCode("A1B2C3D4"), true);
+  assert.equal(isCompleteOrderCode(id), true);
+  assert.equal(isCompleteOrderCode("a1b2"), false);
+  assert.equal(isCompleteOrderCode("a1b2c3"), false);
+});
+
+test("e-mails do pedido trazem o código e as instruções de rastreio", () => {
+  const id = "a1b2c3d4-1111-4222-8333-444455556666";
+  const base = {
+    orderId: id,
+    customerName: "Ana",
+    items: [{ title: "Camisa Teste", size: "M", quantity: 2, customization: { name: "ANA", number: "10" }, patches: [{ name: "Brasileirão", position: "manga-esquerda" }] }],
+    totalCents: 34000,
+    siteUrl: "https://loja.test",
+  };
+  const paid = buildOrderPaidEmail({ ...base, shippingCents: 0 });
+  assert.match(paid.subject, /A1B2C3D4/);
+  assert.match(paid.text, /Código do seu pedido: A1B2C3D4/);
+  assert.match(paid.text, /https:\/\/loja\.test\/rastreio/);
+  assert.match(paid.text, /Frete: grátis/);
+  assert.match(paid.text, /Total: R\$ 340,00/);
+  assert.match(paid.text, /patches: Brasileirão \(manga-esquerda\)/);
+  assert.match(paid.text, /personalizado ANA 10/);
+  const received = buildOrderReceivedEmail({ ...base, shippingCents: 2000 });
+  assert.match(received.text, /Código do seu pedido: A1B2C3D4/);
+  assert.match(received.text, /Frete: R\$ 20,00/);
+});
+
+test("limite de tentativas bloqueia por IP e libera na janela seguinte", () => {
+  const request = (ip: string) => new Request("https://loja.test/api/orders/track", { headers: { "x-forwarded-for": ip } });
+  const bucket = `teste-${Date.now()}`;
+  assert.deepEqual([1, 2, 3, 4].map(() => isRateLimited(request("1.1.1.1"), bucket, 3, 60_000, 1_000)), [false, false, false, true]);
+  assert.equal(isRateLimited(request("2.2.2.2"), bucket, 3, 60_000, 1_000), false);
+  assert.equal(isRateLimited(request("1.1.1.1"), bucket, 3, 60_000, 62_000), false);
 });

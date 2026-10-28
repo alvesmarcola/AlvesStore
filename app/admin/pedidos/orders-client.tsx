@@ -57,6 +57,8 @@ export default function AdminOrders() {
   const [trackingValues, setTrackingValues] = useState<Record<string, string>>({});
   const [savingId, setSavingId] = useState("");
   const [message, setMessage] = useState("");
+  const [onlyPaid, setOnlyPaid] = useState(true);
+  const visibleOrders = onlyPaid ? orders.filter((order) => order.status === "approved") : orders;
 
   async function load() {
     setMessage("");
@@ -99,7 +101,7 @@ export default function AdminOrders() {
   function exportCsv() {
     const columns = ["pedido", "data", "nome", "email", "telefone", "endereco", "itens", "frete_centavos", "total_centavos", "status", "rastreio"];
     const quote = (value: unknown) => `"${String(value ?? "").replaceAll('"', '""')}"`;
-    const rows = orders.map((order) => [
+    const rows = visibleOrders.map((order) => [
       order.id,
       order.created_at,
       order.customer.fullName,
@@ -138,8 +140,11 @@ export default function AdminOrders() {
       </form>
 
       {message && <p role="status" aria-live="polite" className="mt-4 rounded-lg bg-paper px-4 py-3 text-sm">{message}</p>}
+      {orders.length > 0 && <label className="mt-4 flex w-fit items-center gap-2 text-xs font-bold"><input type="checkbox" checked={onlyPaid} onChange={(event) => setOnlyPaid(event.target.checked)} />Mostrar só pedidos pagos ({orders.filter((order) => order.status === "approved").length} de {orders.length})</label>}
       {orders.length === 0 ? (
         <div className="mt-6 rounded-xl border border-dashed border-border px-5 py-12 text-center text-sm text-muted">Informe o token e carregue os pedidos recentes.</div>
+      ) : visibleOrders.length === 0 ? (
+        <div className="mt-6 rounded-xl border border-dashed border-border px-5 py-12 text-center text-sm text-muted">Nenhum pedido pago entre os pedidos recentes. Desmarque o filtro para ver os demais.</div>
       ) : (
         <div className="mt-6 overflow-x-auto rounded-xl border border-border bg-white">
           <table className="w-full min-w-[1120px] border-collapse text-left text-xs">
@@ -147,7 +152,7 @@ export default function AdminOrders() {
               <tr>{["Pedido", "Cliente", "Produto / tamanho", "Endereço de entrega", "Valor", "Status", "Código de rastreio"].map((heading) => <th key={heading} className="px-4 py-3 font-black">{heading}</th>)}</tr>
             </thead>
             <tbody className="divide-y divide-border">
-              {orders.map((order) => (
+              {visibleOrders.map((order) => (
                 <tr key={order.id} className="align-top hover:bg-paper/50">
                   <td className="whitespace-nowrap px-4 py-4"><span className="font-black">{order.id.slice(0, 8).toUpperCase()}</span><span className="mt-1 block text-[10px] text-muted">{date.format(new Date(order.created_at))}</span></td>
                   <td className="max-w-48 px-4 py-4"><span className="font-bold">{order.customer.fullName}</span><span className="mt-1 block break-all text-[10px] text-muted">{order.customer.email}</span><span className="mt-1 block text-[10px] text-muted">{order.customer.phone}</span></td>
@@ -155,7 +160,7 @@ export default function AdminOrders() {
                   <td className="max-w-60 whitespace-pre-line px-4 py-4 leading-5 text-muted">{address(order.customer)}</td>
                   <td className="whitespace-nowrap px-4 py-4"><span className="font-black">{money.format(order.total_cents / 100)}</span><span className="mt-1 block text-[10px] text-muted">Frete: {money.format(order.shipping_cents / 100)}</span></td>
                   <td className="px-4 py-4"><span className={`inline-flex rounded-full px-2.5 py-1 text-[10px] font-bold ${order.status === "approved" ? "bg-green-50 text-green-700" : "bg-paper text-ink"}`}>{statusLabels[order.status] ?? order.status}</span></td>
-                  <td className="min-w-52 px-4 py-4"><label className="sr-only" htmlFor={`tracking-${order.id}`}>Código de rastreio do pedido {order.id.slice(0, 8)}</label><input id={`tracking-${order.id}`} value={trackingValues[order.id] ?? ""} onChange={(event) => setTrackingValues((current) => ({ ...current, [order.id]: event.target.value }))} maxLength={80} className="w-full rounded-md border border-border px-3 py-2" placeholder="Código de rastreio"/><button disabled={savingId === order.id || (trackingValues[order.id] ?? "") === (order.tracking_code ?? "")} onClick={() => void saveTracking(order)} className="mt-2 rounded-md bg-ink px-3 py-2 text-[10px] font-bold text-white disabled:cursor-not-allowed disabled:opacity-40">{savingId === order.id ? "Salvando…" : "Salvar rastreio"}</button></td>
+                  <td className="min-w-52 px-4 py-4"><label className="sr-only" htmlFor={`tracking-${order.id}`}>Código de rastreio do pedido {order.id.slice(0, 8)}</label><input id={`tracking-${order.id}`} value={trackingValues[order.id] ?? ""} onChange={(event) => setTrackingValues((current) => ({ ...current, [order.id]: event.target.value }))} maxLength={80} disabled={order.status !== "approved"} className="w-full rounded-md border border-border px-3 py-2 disabled:bg-paper disabled:text-muted" placeholder={order.status === "approved" ? "Código de rastreio" : "Disponível após o pagamento"}/><button disabled={order.status !== "approved" || savingId === order.id || (trackingValues[order.id] ?? "") === (order.tracking_code ?? "")} onClick={() => void saveTracking(order)} className="mt-2 rounded-md bg-ink px-3 py-2 text-[10px] font-bold text-white disabled:cursor-not-allowed disabled:opacity-40">{savingId === order.id ? "Salvando…" : "Salvar rastreio"}</button></td>
                 </tr>
               ))}
             </tbody>

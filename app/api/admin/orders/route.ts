@@ -45,6 +45,11 @@ export async function PATCH(request: Request) {
     if (!order) return NextResponse.json({ error: "Pedido não encontrado." }, { status: 404 });
 
     const trackingCode = body.trackingCode.trim() || null;
+    // Limpar um código é sempre permitido; cadastrar um novo só depois do pagamento aprovado,
+    // porque o cliente recebe e-mail/WhatsApp assim que o código é salvo.
+    if (trackingCode && order.status !== "approved") {
+      return NextResponse.json({ error: "Só é possível cadastrar o rastreio de pedidos com pagamento aprovado." }, { status: 409 });
+    }
     const updated = await supabase.from("store_orders")
       .update({ tracking_code: trackingCode, updated_at: new Date().toISOString() })
       .eq("id", body.orderId)
