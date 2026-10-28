@@ -5,6 +5,7 @@ import { checkoutSchema } from "@/lib/validation";
 import type { Product } from "@/lib/types";
 import { classifyProduct, isPackageEligible } from "@/lib/product-classification";
 import { getAvailablePatches } from "@/lib/patch-compatibility";
+import { allowsCustomization } from "@/lib/formula-one";
 import { getSupabaseProducts } from "@/lib/server/supabase-catalog";
 import { getProductSizeSurcharge } from "@/lib/product-classification";
 
@@ -40,6 +41,7 @@ export function validateOrderLines(lines: OrderLineInput[], catalog: Product[]):
     const product = catalog.find((candidate) => candidate.id === line.productId);
     if (!product) throw new InvalidOrderError("Um dos produtos não está mais disponível.");
     if (line.size === "3GG" || !product.tamanhos.includes(line.size)) throw new InvalidOrderError("Um dos tamanhos selecionados não está disponível.");
+    if (line.customization && !allowsCustomization(product)) throw new InvalidOrderError("Camisas de Fórmula 1 não podem ser personalizadas.");
     const facts = classifyProduct(product);
     if (facts.reviewRequired || facts.price === null) throw new InvalidOrderError("O preço deste produto está em revisão. Escolha outro modelo ou tente novamente mais tarde.");
     const availablePatches = getAvailablePatches(product);

@@ -8,6 +8,11 @@ export function isFormulaOneEvidence(value: string) {
   return FORMULA_ONE_TERM.test(normalized);
 }
 
+/** Camisas de Fórmula 1 não aceitam personalização de nome e número. */
+export function allowsCustomization(product: Pick<Product, "tipo">) {
+  return product.tipo !== "formula1";
+}
+
 export function isFormulaOneProduct(product: Product) {
   const evidence = [
     product.liga,

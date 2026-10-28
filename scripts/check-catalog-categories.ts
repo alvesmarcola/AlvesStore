@@ -31,7 +31,8 @@ const playerProducts = published.filter((product) => classifyProduct(product as 
 const unpricedPlayers = playerProducts.filter((product) => {
   const item = product as Product;
   const classification = classifyProduct(item);
-  return classification.reviewRequired || classification.price !== storeConfig.playerLongSleevePrice || isPackageEligible(item);
+  const expectedPrice = classification.sleeve === "long" ? storeConfig.playerLongSleevePrice : storeConfig.playerShortSleevePrice;
+  return classification.reviewRequired || classification.price !== expectedPrice || isPackageEligible(item);
 });
 if (unpricedPlayers.length) throw new Error(`${unpricedPlayers.length} modelos Jogador não estão ativos pelo preço oficial ou receberam pacote indevido: ${unpricedPlayers.map((product) => product.slug).join(", ")}.`);
 const categories: Record<string, number> = {

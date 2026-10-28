@@ -11,6 +11,7 @@ import { useCart } from "@/store/cart";
 import { flyThumbnailToCart } from "@/lib/fly-to-cart";
 import { classifyProduct, getProductUnitPrice } from "@/lib/product-classification";
 import { getProductOfferText } from "@/lib/commerce";
+import { allowsCustomization } from "@/lib/formula-one";
 
 export function ProductCard({ product }: { product: Product }) {
   const [size, setSize] = useState("");
@@ -50,7 +51,7 @@ export function ProductCard({ product }: { product: Product }) {
       <div className="mt-2 flex items-baseline gap-2"><span className="text-base font-black text-ink">{classification.reviewRequired ? classification.priceLabel : `A partir de ${formatCurrency(getProductUnitPrice(product)!)}`}</span></div>
       <p className="mt-1 text-[10px] leading-4 text-muted">{getProductOfferText(product)}</p>
       <p className="mt-1 text-[10px] text-muted">Tamanho 2GG: +{formatCurrency(storeConfig.size2GGPrice)}</p>
-      <p className="mt-1 text-[10px] text-muted">Personalização: +{formatCurrency(storeConfig.customizationPrice)} por camisa</p>
+      {allowsCustomization(product) && <p className="mt-1 text-[10px] text-muted">Personalização: +{formatCurrency(storeConfig.customizationPrice)} por camisa</p>}
       <div className="mt-3 flex flex-wrap gap-1" aria-label="Selecione um tamanho">
         {product.tamanhos.slice(0, 6).map((itemSize) => <button key={itemSize} onClick={() => setSize(itemSize)} aria-label={`Tamanho ${itemSize}`} className={`grid h-7 min-w-7 place-items-center rounded-lg border px-1 text-[10px] font-bold ${size === itemSize ? "border-pitch bg-pitch text-white" : "border-border text-ink"}`}>{itemSize}</button>)}
       </div>

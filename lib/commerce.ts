@@ -18,8 +18,7 @@ export function qualifiesForFreeShipping(items: CartItem[]) {
 export function getShippingCents(units: number) {
   const quantity = Math.max(0, Math.floor(units));
   if (quantity >= storeConfig.freeShippingQuantity) return 0;
-  if (quantity === 2) return storeConfig.shippingTwoShirts * 100;
-  return quantity === 1 ? storeConfig.shippingOneShirt * 100 : 0;
+  return quantity >= 1 ? storeConfig.shippingPrice * 100 : 0;
 }
 
 export function getCartPricing(items: CartItem[]) {
@@ -58,7 +57,7 @@ export function getProductCategoryKey(product: CartItem["product"]) {
 
 export function getProductOfferText(product: CartItem["product"]) {
   const facts = classifyProduct(product);
-  const shipping = "Frete: R$ 20,00 (1 camisa), R$ 30,00 (2) ou grátis (3+).";
+  const shipping = "Frete: R$ 20,00 (1 ou 2 camisas) ou grátis (3+).";
   if (isPackageEligible(product)) {
     return `Torcedor comum: 1 por R$ ${storeConfig.fanCommonPrice}, 2 por R$ ${storeConfig.twoShirtPrice} ou 3 por R$ ${storeConfig.threeShirtPrice}. ${shipping}`;
   }

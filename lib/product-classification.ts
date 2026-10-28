@@ -48,7 +48,7 @@ export function classifyProduct(product: Product): ProductClassification {
     version === "retro" && sleeve === "long" ? storeConfig.retroLongSleevePrice
       : version === "retro" && sleeve === "short" ? storeConfig.retroShortSleevePrice
         : version === "retro" ? (product.preco > 0 && product.preco !== storeConfig.fanCommonPrice ? product.preco : storeConfig.retroShortSleevePrice)
-        : version === "player" ? storeConfig.playerLongSleevePrice
+        : version === "player" ? (sleeve === "long" ? storeConfig.playerLongSleevePrice : storeConfig.playerShortSleevePrice)
       : version === "goalkeeper" ? storeConfig.fanCommonPrice
         : version === "fan" && fullPatch ? storeConfig.fanFullPatchPrice
             : version === "fan" && sleeve === "long" && product.preco > 0 && product.preco !== storeConfig.fanCommonPrice ? product.preco

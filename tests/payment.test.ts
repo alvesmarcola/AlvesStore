@@ -48,8 +48,8 @@ test("retro shirts keep their R$185 price and do not receive package discounts",
   const lines = validateOrderLines([{ productId: retro.id, size: retro.tamanhos[0], quantity: 2 }]);
   const totals = calculateOrderTotals(lines);
   assert.equal(totals.shirtsCents, 37000);
-  assert.equal(totals.shippingCents, 3000);
-  assert.equal(totals.totalCents, 40000);
+  assert.equal(totals.shippingCents, 2000);
+  assert.equal(totals.totalCents, 39000);
   const items = buildPreferenceItems("pedido-retro", lines, totals);
   assert.equal(items.reduce((sum, item) => sum + Math.round(item.unit_price * 100) * item.quantity, 0), totals.productsTotalCents);
 });
@@ -70,8 +70,8 @@ test("classifica Torcedor, Ultrapasso, Full Patches e mangas sem confundir vers�
   assert.equal(classifyProduct(retroShort).price, 185);
   assert.equal(classifyProduct(retroLong).price, 220);
   assert.equal(classifyProduct(playerLong).price, 220);
-  assert.equal(classifyProduct(playerShort).price, null);
-  assert.equal(classifyProduct(playerShort).reviewRequired, true);
+  assert.equal(classifyProduct(playerShort).price, 190);
+  assert.equal(classifyProduct(playerShort).reviewRequired, false);
   assert.equal(classifyProduct(legacyFanLong).price, 190);
   assert.equal(isPackageEligible(legacyFanLong), false);
   assert.match(getProductOfferText(retroShort), /sem oferta por quantidade/);
@@ -108,7 +108,18 @@ test("ordenação editorial prioriza clubes e seleções e organiza temporadas",
 });
 
 test("calcula frete fixo para 0, 1, 2, 3, 4 e 10 unidades", () => {
-  assert.deepEqual([0, 1, 2, 3, 4, 10].map(getShippingCents), [0, 2000, 3000, 0, 0, 0]);
+  assert.deepEqual([0, 1, 2, 3, 4, 10].map(getShippingCents), [0, 2000, 2000, 0, 0, 0]);
+});
+
+test("camisa de Fórmula 1 tem tamanhos, mas não aceita personalização", () => {
+  const f1 = productFixture("teste-f1", { nome: "Red Bull 26/27 Home Jersey", tipo: "formula1", imageSeed: "F1", preco: 160, tamanhos: ["M"] });
+  products.push(f1);
+  try {
+    assert.doesNotThrow(() => validateOrderLines([{ productId: f1.id, size: "M", quantity: 1 }]));
+    assert.throws(() => validateOrderLines([{ productId: f1.id, size: "M", quantity: 1, customization: { name: "ALEX", number: "10" } }]), /Fórmula 1/);
+  } finally {
+    products.pop();
+  }
 });
 
 test("identifica intenções Home, Away, Third, versões, temporada e manga", () => {
@@ -208,7 +219,7 @@ test("soma quantidades de produtos e linhas diferentes para definir frete", () =
       { productId: other.id, size: other.tamanhos[0], quantity: 1 },
     ]);
     const totals = calculateOrderTotals(lines);
-    assert.equal(totals.shippingCents, 3000);
+    assert.equal(totals.shippingCents, 2000);
     assert.equal(totals.totalCents, totals.productsTotalCents + totals.shippingCents);
   } finally {
     if (addToCatalog) products.pop();
