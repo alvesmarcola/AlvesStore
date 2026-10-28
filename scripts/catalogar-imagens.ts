@@ -328,8 +328,11 @@ function makeProductSlug(group: ProductGroup, used: Set<string>) {
   const relativeDirectory = group.directory.slice(path.join(sourceRoot, group.rootCategory).length);
   const subject = group.club?.slug ?? slugify(bestName(group));
   const season = group.season === "revisar" ? "" : group.season.replace("/", "-");
+  const uniform = group.uniform === "revisar" ? "" : group.uniform;
   const qualifiers = qualifiersFrom(bestName(group)).join("-");
-  const base = slugify([slugify(group.rootCategory), slugify(relativeDirectory), subject, season, qualifiers].filter(Boolean).join("-"));
+  const baseComponents = [slugify(group.rootCategory), slugify(relativeDirectory), subject, season, uniform, qualifiers].filter(Boolean);
+  const base = slugify([...new Set(baseComponents)].join("-"));
+
   let slug = base;
   let index = 2;
   while (used.has(slug)) slug = `${base}-${index++}`;
@@ -542,9 +545,10 @@ async function main() {
       ?? leagueHint
       ?? (hasUnmodeledCompetition ? undefined : club?.league);
     const season = seasonFrom(cleanName);
+    const uniform = uniformFrom(cleanName);
     const qualifiers = qualifiersFrom(cleanName);
     const groupKey = club && season !== "revisar"
-      ? `${relativeDirectory}|${club.slug}|${season}|${qualifiers.join("-")}`
+      ? `${relativeDirectory}|${club.slug}|${season}|${uniform}|${qualifiers.join("-")}`
       : `${relativeDirectory}|${normalize(cleanName)}`;
     const group = groups.get(groupKey) ?? {
       key: groupKey,
@@ -556,7 +560,7 @@ async function main() {
       audience: audienceFrom(rootCategory, image.name),
       type: typeFrom(rootCategory, cleanName),
       season,
-      uniform: uniformFrom(cleanName),
+      uniform,
     };
     group.files.push(image);
     groups.set(groupKey, group);
