@@ -8,6 +8,9 @@ import { isValidMercadoPagoSignature, normalizedPaymentStatus } from "@/lib/serv
 import productsData from "@/data/products.json";
 import { classifyProduct, isPackageEligible } from "@/lib/product-classification";
 import { getAvailablePatches } from "@/lib/patch-compatibility";
+import { isCompleteOrderCode, normalizeOrderCodeInput, orderCode } from "@/lib/order-code";
+import { buildOrderPaidEmail, buildOrderReceivedEmail } from "@/lib/server/order-emails";
+import { isRateLimited } from "@/lib/server/rate-limit";
 import { inferProductTypeFromSource } from "@/lib/catalog-source-classification";
 import { prioritizeClubs, prioritizeEditorialProducts, sortCatalogProducts } from "@/lib/catalog-order";
 import { parseSearchIntent, searchProducts } from "@/lib/smart-search";
@@ -291,4 +294,46 @@ test("valida assinatura do webhook e converte estados de pagamento", () => {
   assert.equal(normalizedPaymentStatus("approved"), "approved");
   assert.equal(normalizedPaymentStatus("in_process"), "pending");
   assert.equal(normalizedPaymentStatus("rejected"), "rejected");
+});
+
+test("código do pedido aceita código curto e UUID, e rejeita códigos incompletos", () => {
+  const id = "a1b2c3d4-1111-4222-8333-444455556666";
+  assert.equal(orderCode(id), "A1B2C3D4");
+  assert.equal(normalizeOrderCodeInput("#A1B2-C3D4"), "a1b2c3d4");
+  assert.equal(normalizeOrderCodeInput(id), id);
+  assert.equal(normalizeOrderCodeInput("a1b2c3d4111142228333444455556666"), id);
+  assert.equal(isCompleteOrderCode("A1B2C3D4"), true);
+  assert.equal(isCompleteOrderCode(id), true);
+  assert.equal(isCompleteOrderCode("a1b2"), false);
+  assert.equal(isCompleteOrderCode("a1b2c3"), false);
+});
+
+test("e-mails do pedido trazem o código e as instruções de rastreio", () => {
+  const id = "a1b2c3d4-1111-4222-8333-444455556666";
+  const base = {
+    orderId: id,
+    customerName: "Ana",
+    items: [{ title: "Camisa Teste", size: "M", quantity: 2, customization: { name: "ANA", number: "10" }, patches: [{ name: "Brasileirão", position: "manga-esquerda" }] }],
+    totalCents: 34000,
+    siteUrl: "https://loja.test",
+  };
+  const paid = buildOrderPaidEmail({ ...base, shippingCents: 0 });
+  assert.match(paid.subject, /A1B2C3D4/);
+  assert.match(paid.text, /Código do seu pedido: A1B2C3D4/);
+  assert.match(paid.text, /https:\/\/loja\.test\/rastreio/);
+  assert.match(paid.text, /Frete: grátis/);
+  assert.match(paid.text, /Total: R\$ 340,00/);
+  assert.match(paid.text, /patches: Brasileirão \(manga-esquerda\)/);
+  assert.match(paid.text, /personalizado ANA 10/);
+  const received = buildOrderReceivedEmail({ ...base, shippingCents: 2000 });
+  assert.match(received.text, /Código do seu pedido: A1B2C3D4/);
+  assert.match(received.text, /Frete: R\$ 20,00/);
+});
+
+test("limite de tentativas bloqueia por IP e libera na janela seguinte", () => {
+  const request = (ip: string) => new Request("https://loja.test/api/orders/track", { headers: { "x-forwarded-for": ip } });
+  const bucket = `teste-${Date.now()}`;
+  assert.deepEqual([1, 2, 3, 4].map(() => isRateLimited(request("1.1.1.1"), bucket, 3, 60_000, 1_000)), [false, false, false, true]);
+  assert.equal(isRateLimited(request("2.2.2.2"), bucket, 3, 60_000, 1_000), false);
+  assert.equal(isRateLimited(request("1.1.1.1"), bucket, 3, 60_000, 62_000), false);
 });

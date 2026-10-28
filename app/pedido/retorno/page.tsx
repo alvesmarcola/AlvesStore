@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getSupabaseOrdersClient } from "@/lib/server/supabase-orders";
+import { orderCode } from "@/lib/order-code";
 import { OrderReturnActions, RefreshStatusButton } from "./return-actions";
 
 type OrderStatus = "pending" | "approved" | "rejected" | "cancelled" | "refunded";
@@ -54,7 +55,11 @@ export default async function OrderReturnPage({
     <p className="mt-3 text-sm leading-6 text-muted">{details?.description ?? (status === "unavailable"
       ? "Não foi possível consultar o banco de pedidos agora. O retorno do navegador não confirma pagamento; atualize a página em instantes."
       : "Não foi possível localizar uma confirmação de pagamento para este pedido.")}</p>
-    {orderId && <p className="mt-4 text-xs text-muted">Pedido: {orderId}</p>}
+    {details && /^[0-9a-f-]{36}$/i.test(orderId) && <div className="mx-auto mt-5 max-w-sm rounded-lg bg-paper p-4 text-sm">
+      <p className="text-xs text-muted">Código do seu pedido</p>
+      <p className="mt-1 text-2xl font-black tracking-widest">{orderCode(orderId)}</p>
+      <p className="mt-2 text-xs leading-5 text-muted">Guarde este código: ele também foi enviado por e-mail. Use-o em <Link href="/rastreio" className="font-bold text-blue-700 underline">Rastrear pedido</Link>, junto com o e-mail ou CPF da compra.</p>
+    </div>}
     {status === "approved" && <OrderReturnActions />}
     <div className="mt-7 flex flex-wrap justify-center gap-3">
       <Link href="/carrinho" className="rounded-lg border border-ink px-5 py-3 text-xs font-black uppercase">Voltar à sacola</Link>

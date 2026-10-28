@@ -4,6 +4,7 @@ import { InvalidOrderError, paymentRequestSchema, validateOrderLinesFromCatalog,
 import { createMercadoPagoPreference, getSiteUrl, MercadoPagoApiError, PaymentConfigurationError, validateMercadoPagoAccessToken } from "@/lib/server/mercado-pago";
 import { SupabaseOrdersConfigurationError, describeSupabaseError, getSupabaseOrdersClient } from "@/lib/server/supabase-orders";
 import { buildPreferenceItems } from "@/lib/payment/preference-items";
+import { buildOrderReceivedEmail, sendOrderEmail } from "@/lib/server/order-emails";
 
 export const runtime = "nodejs";
 const requestWindows = new Map<string, { count: number; startedAt: number }>();
@@ -154,21 +155,20 @@ export async function POST(request: Request) {
         console.error("Preferência criada, mas a persistência em store_orders falhou:", error instanceof Error ? error.message : "erro desconhecido");
       }
     });
-    const emailKey = process.env.RESEND_API_KEY;
-    const emailFrom = process.env.ORDER_EMAIL_FROM;
-    if (emailKey && emailFrom) {
-      const itemSummary = lines.map((line) => `${line.product.nome} · tamanho ${line.size} · ${line.quantity} un.${line.customization ? ` · personalizado ${line.customization.name} ${line.customization.number}` : ""}${line.patchOptions.length ? ` · patches: ${line.patchOptions.map((patch) => patch.name).join(", ")}` : ""}`).join("\n");
-      try {
-        const emailResponse = await fetch("https://api.resend.com/emails", {
-          method: "POST", headers: { authorization: `Bearer ${emailKey}`, "content-type": "application/json" },
-          body: JSON.stringify({ from: emailFrom, to: [requestData.customer.email], subject: "Pedido recebido — Alves Store", text: `Olá, ${requestData.customer.fullName}! Recebemos seu pedido. O pagamento ainda precisa ser concluído no Mercado Pago.\n\n${itemSummary}\nFrete: ${shippingLabel} (${jsonPrice(finalShippingCents).toFixed(2).replace(".", ",")})\nTotal: ${jsonPrice(totalCents).toFixed(2).replace(".", ",")}\n\nAcompanhe o pedido em ${siteUrl}/rastreio` }),
-          signal: AbortSignal.timeout(5_000),
-        });
-        if (!emailResponse.ok) console.error("E-mail de pedido recebido não enviado:", emailResponse.status);
-      } catch (error) {
-        console.error("Falha no e-mail de pedido recebido:", error instanceof Error ? error.message : "erro desconhecido");
-      }
-    }
+    await sendOrderEmail(requestData.customer.email, buildOrderReceivedEmail({
+      orderId: String(order.id),
+      customerName: requestData.customer.fullName,
+      items: lines.map((line) => ({
+        title: line.product.nome,
+        size: line.size,
+        quantity: line.quantity,
+        customization: line.customization ?? null,
+        patches: line.patchOptions.map((patch, index) => ({ name: patch.name, position: line.patches?.[index]?.position })),
+      })),
+      shippingCents: finalShippingCents,
+      totalCents,
+      siteUrl,
+    }));
 
     return NextResponse.json({ checkoutUrl, orderId: order.id }, { headers: { "Cache-Control": "no-store" } });
   } catch (error) {
