@@ -158,6 +158,9 @@ function mapProduct(value: unknown): Product | null {
   if (type === "revisar") type = normalizeProductType(evidence);
   if (type === "revisar" && (audience === "feminino" || audience === "unissex")) type = "torcedor";
   const league = normalizeLeague(value.liga ?? value.league);
+  // Camisas de F1 importadas do fornecedor (tamanhos "S-5XL") chegam sem lista de tamanhos.
+  // Sem lista, o cliente não consegue escolher tamanho e o servidor recusa o pedido.
+  const finalSizes = type === "formula1" && sizes.length === 0 ? ["P", "M", "G", "GG", "2GG"] : sizes;
 
   return {
     id: value.id,
@@ -171,7 +174,7 @@ function mapProduct(value: unknown): Product | null {
     uniforme: normalizeUniform(value.uniforme),
     nome: name,
     preco: Number.isFinite(price) && price >= 0 ? price : 0,
-    tamanhos: sizes,
+    tamanhos: finalSizes,
     cor: typeof value.cor === "string" ? value.cor : "revisar",
     imageSeed: typeof value.imageSeed === "string" ? value.imageSeed : name,
     images,

@@ -18,10 +18,12 @@ export function SafeProductImage({ src, onError, fallbackSrc = "/product-placeho
   const isYupooImage = typeof src === "string" && isYupooSource(src);
   const [failedSource, setFailedSource] = useState<string | null>(null);
   const failed = failedSource === sourceKey;
+  // Fotos do Yupoo passam pelo servidor da loja, porque o Yupoo bloqueia o carregamento direto.
+  const displaySrc = isYupooImage && typeof src === "string" ? `/api/yupoo-image?u=${encodeURIComponent(src)}` : src;
 
   return <Image
     {...props}
-    src={failed ? fallbackSrc : src}
+    src={failed ? fallbackSrc : displaySrc}
     unoptimized={failed ? false : props.unoptimized ?? isYupooImage}
     alt={props.alt}
     placeholder={props.placeholder}
