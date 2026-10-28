@@ -4,9 +4,9 @@ Loja de camisas de futebol feita com Next.js 15, TypeScript, Zustand, Supabase e
 
 ## Preços e frete
 
-`config.ts` define os pacotes das camisas comuns (R$ 160,00 / R$ 300,00 / R$ 450,00), retro manga curta por R$ 185,00, retro manga longa por R$ 220,00 e torcedor full patch por R$ 180,00. Personalizacao adiciona R$ 20,00 por camisa.
+`config.ts` define os pacotes das camisas comuns (R$ 160,00 / R$ 300,00 / R$ 450,00), retro manga curta por R$ 185,00, retro manga longa por R$ 220,00, jogador por R$ 190,00 (manga longa R$ 220,00) e torcedor full patch por R$ 180,00. Camisas de Fórmula 1 não têm personalização. Personalizacao adiciona R$ 20,00 por camisa.
 
-O frete é calculado pelo servidor pela quantidade total de unidades de todas as linhas do pedido: uma camisa R$ 20,00, duas R$ 30,00 e três ou mais grátis. O navegador não envia preço ou escolha de frete. O valor salvo no pedido, enviado ao Checkout Pro e conferido no webhook é recalculado no servidor.
+O frete é calculado pelo servidor pela quantidade total de unidades de todas as linhas do pedido: uma ou duas camisas R$ 20,00 e três ou mais grátis. O navegador não envia preço ou escolha de frete. O valor salvo no pedido, enviado ao Checkout Pro e conferido no webhook é recalculado no servidor.
 
 ## Variáveis de ambiente
 
@@ -52,7 +52,7 @@ Antes da publicação, o responsável pela loja deve completar os itens `TODO(do
 
 A busca interpreta termos locais em português e inglês, abreviações de uniforme, versão, manga e temporada. Não usa IA nem serviço externo; quando a versão não está confirmada, mostra alternativas sem afirmar que são o modelo exato.
 
-Preços classificados: torcedor comum R$ 160,00; torcedor full patch R$ 180,00; retrô manga curta R$ 185,00; retrô manga longa R$ 220,00. Versões sem preço confirmado aparecem para revisão e não podem seguir para pagamento. Corrija a classificação em `data/product-overrides.json`, registrando fonte e responsável. O comando local `npm run catalog:override -- <product-id-ou-slug> --version retro --sleeve long --price 220 --source URL --verified-by Nome` registra uma correção; revise o JSON e publique um deploy para ativá-la.
+Preços classificados: torcedor comum R$ 160,00; torcedor full patch R$ 180,00; retrô manga curta R$ 185,00; retrô manga longa R$ 220,00; jogador R$ 190,00; jogador manga longa R$ 220,00. Versões sem preço confirmado aparecem para revisão e não podem seguir para pagamento. Corrija a classificação em `data/product-overrides.json`, registrando fonte e responsável. O comando local `npm run catalog:override -- <product-id-ou-slug> --version retro --sleeve long --price 220 --source URL --verified-by Nome` registra uma correção; revise o JSON e publique um deploy para ativá-la.
 
 Patches só aparecem quando `data/patches.ts` registra imagem, preço, fonte, temporada, produto compatível, posições confirmadas e disponibilidade comercial. A lista começa vazia porque o catálogo atual não confirma estoque/venda nem compatibilidade desses itens. Não inclua uma opção até verificar essas informações.
 

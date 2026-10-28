@@ -58,7 +58,7 @@ const pages: Record<string, InstitutionalPage> = {
         "O código de rastreio oficial é gerado e enviado ao e-mail cadastrado em até 3 a 4 dias úteis após a confirmação do pagamento. Se você autorizou notificações pelo WhatsApp no checkout, também poderá receber a atualização por esse canal. Esse período é usado para liberação e postagem logística; não representa o prazo total de entrega.",
       ] },
       { heading: "Frete", paragraphs: [
-        "O valor do frete é o mesmo para qualquer produto: R$ 20,00 para 1 item, R$ 30,00 para 2 itens e grátis a partir de 3 itens no pedido. O total do frete aparece antes da confirmação do pagamento.",
+        "O valor do frete é o mesmo para qualquer produto: R$ 20,00 para 1 ou 2 itens e grátis a partir de 3 itens no pedido. O total do frete aparece antes da confirmação do pagamento.",
       ] },
       { heading: "Acompanhe a entrega", paragraphs: [
         "Quando receber o código, acesse a página de Rastreio da loja e informe o código do pedido e o e-mail ou CPF usados na compra. O rastreio oficial será exibido assim que estiver disponível.",

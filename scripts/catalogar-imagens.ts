@@ -315,7 +315,7 @@ function priceFor(group: ProductGroup, previousProduct?: Product) {
     if (shortSleeve) return storeConfig.retroShortSleevePrice;
     return previousProduct?.preco ?? 0;
   }
-  if (group.type === "jogador") return storeConfig.playerLongSleevePrice;
+  if (group.type === "jogador") return longSleeve ? storeConfig.playerLongSleevePrice : storeConfig.playerShortSleevePrice;
   if (group.type === "torcedor") {
     if (fullPatch) return storeConfig.fanFullPatchPrice;
     if (longSleeve && previousProduct?.preco && previousProduct.preco !== storeConfig.fanCommonPrice) return previousProduct.preco;

@@ -21,7 +21,7 @@ export const metadata: Metadata = { alternates: { canonical: "/" } };
 export const revalidate = 300;
 
 const features: { icon: typeof ShoppingBag; title: string; text: string; link?: { label: string; href: string } }[] = [
-  { icon: ShoppingBag, title: "Condições de envio", text: "R$ 20 (1 item) · R$ 30 (2) · grátis a partir de 3", link: { label: "Ver regras completas", href: "/envios-e-prazos" } },
+  { icon: ShoppingBag, title: "Condições de envio", text: "R$ 20 (1 ou 2 itens) · grátis a partir de 3", link: { label: "Ver regras completas", href: "/envios-e-prazos" } },
   { icon: WalletCards, title: "Pagamento", text: "Finalize seu pedido com segurança pelo Mercado Pago." },
   { icon: Truck, title: "Envio direto", text: "Seu pedido segue do fornecedor ao endereço informado." },
   { icon: HeartHandshake, title: "Personalização", text: `+${formatCurrency(storeConfig.customizationPrice)} por camisa` },
