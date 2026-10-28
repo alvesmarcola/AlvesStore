@@ -12,16 +12,16 @@ interface Testimonial {
 
 const testimonials: Testimonial[] = [
   {
-    name: "Rafael S.",
-    location: "São Paulo, SP",
+    name: "Douglas Nienow.",
+    location: "Nova Petrópolis, RS",
     stars: 5,
-    text: "Qualidade impressionante! Recebi a camisa do meu time e parece original. Recomendo demais!",
+    text: "Qualidade top! Recebi a camisa do meu time e parece original. Recomendo demais!",
   },
   {
-    name: "Camila O.",
-    location: "Belo Horizonte, MG",
-    stars: 5,
-    text: "Fiz a personalização com meu nome e ficou perfeita. O acabamento é impecável, superou as expectativas.",
+    name: "Yuri.",
+    location: "Picada Café, RS",
+    stars: 4.5,
+    text: "Fiz a personalização com meu nome e ficou top. O acabamento é igual ao original, superou as expectativas.",
   },
   {
     name: "Lucas M.",
@@ -32,7 +32,7 @@ const testimonials: Testimonial[] = [
   {
     name: "Juliana R.",
     location: "Curitiba, PR",
-    stars: 5,
+    stars: 4.5,
     text: "Meu marido amou o presente! A camisa retrô ficou linda e o tecido é super confortável.",
   },
   {
@@ -45,7 +45,7 @@ const testimonials: Testimonial[] = [
     name: "Fernanda L.",
     location: "Porto Alegre, RS",
     stars: 5,
-    text: "Comprei a camisa da seleção feminina e recebi em menos de uma semana. Material excelente!",
+    text: "Comprei a camisa da seleção feminina e recebi em duas semanas. Material excelente!",
   },
 ];
 
