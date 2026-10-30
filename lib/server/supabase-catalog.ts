@@ -385,6 +385,39 @@ export async function getSupabaseProductsForCheckout(): Promise<Product[]> {
   return fetchSupabaseProductsFresh();
 }
 
+export async function getSupabaseProductsByIds(ids: string[]): Promise<Product[]> {
+  const unique = [...new Set(ids.map((id) => id.trim()).filter(Boolean))];
+  const config = supabaseConfig();
+  if (!config) {
+    const catalog = await getBundledCatalog();
+    return catalog.filter((product) => isPublishedProduct(product) && unique.includes(product.id));
+  }
+
+  const headers = {
+    apikey: config.key,
+    ...(config.key.startsWith("eyJ") ? { Authorization: `Bearer ${config.key}` } : {}),
+  };
+  const query = new URLSearchParams({ select: LIST_PRODUCT_COLUMNS, order: "slug.asc" });
+  const inFilter = `in.(${unique.map((id) => `"${id.replace(/"/g, "")}"`).join(",")})`;
+  query.set("id", inFilter);
+
+  const response = await fetch(`${config.url}/rest/v1/products?${query}`, { headers, cache: "no-store" });
+  if (!response.ok) {
+    return getSupabaseProductsForCheckout().then((all) => all.filter((p) => unique.includes(p.id)));
+  }
+  const rows = await response.json() as unknown[];
+  const products = rows.map(mapProduct).filter((product): product is Product => product !== null && isPublishedProduct(product));
+  if (!products.length) {
+    const catalog = await getBundledCatalog();
+    return catalog.filter((product) => isPublishedProduct(product) && unique.includes(product.id));
+  }
+  const mergedBySlug = new Map<string, Product>();
+  const bundled = await getBundledCatalog();
+  for (const product of bundled.filter((p) => isPublishedProduct(p) && unique.includes(p.id))) mergedBySlug.set(product.slug, product);
+  for (const product of products) mergedBySlug.set(product.slug, product);
+  return [...mergedBySlug.values()];
+}
+
 export async function getBundledRelatedProducts(product: Product): Promise<Product[]> {
   const catalog = await getBundledCatalog();
   return catalog.filter((item) => isPublishedProduct(item) && item.id !== product.id &&
