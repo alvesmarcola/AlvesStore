@@ -23,6 +23,6 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const { slug } = await params;
   const product = await getSupabaseProductBySlug(slug);
   if (!product) notFound();
-  const relatedProducts = getBundledRelatedProducts(product);
+  const relatedProducts = await getBundledRelatedProducts(product);
   return <ProductDetails product={product} relatedProducts={relatedProducts} />;
 }

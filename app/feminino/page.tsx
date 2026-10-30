@@ -14,7 +14,7 @@ export default async function FemininoPage({ searchParams }: { searchParams: Pro
   const products = await getSupabaseProducts();
   const initialType = ["torcedor", "treino"].includes(tipo) ? tipo : "";
   const feminineBySlug = new Map<string, ReturnType<typeof prepareFeminineProduct>>();
-  for (const product of [...getBundledFeminineProducts(), ...products.filter(isFeminineProduct).map(prepareFeminineProduct)]) {
+  for (const product of [...await getBundledFeminineProducts(), ...products.filter(isFeminineProduct).map(prepareFeminineProduct)]) {
     feminineBySlug.set(product.slug, product);
   }
   const feminineProducts = sortCatalogProducts([...feminineBySlug.values()]);

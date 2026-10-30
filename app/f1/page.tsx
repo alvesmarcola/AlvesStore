@@ -14,7 +14,7 @@ export const revalidate = 300;
 
 export default async function FormulaOnePage() {
   const productBySlug = new Map<string, Product>();
-  for (const product of [...getBundledFormulaOneProducts(), ...(await getSupabaseProducts()).filter(isFormulaOneProduct)]) {
+  for (const product of [...await getBundledFormulaOneProducts(), ...(await getSupabaseProducts()).filter(isFormulaOneProduct)]) {
     productBySlug.set(product.slug, product);
   }
   const products = sortCatalogProducts([...productBySlug.values()]);

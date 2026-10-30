@@ -74,7 +74,7 @@ function ProductSection({
 export default async function HomePage() {
   const products = await getSupabaseProducts();
   const formulaOneBySlug = new Map<string, Product>();
-  for (const product of [...getBundledFormulaOneProducts(), ...products.filter(isFormulaOneProduct)]) {
+  for (const product of [...await getBundledFormulaOneProducts(), ...products.filter(isFormulaOneProduct)]) {
     formulaOneBySlug.set(product.slug, product);
   }
   const leagues = deriveCatalogLeagues(products);

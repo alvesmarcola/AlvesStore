@@ -1,6 +1,4 @@
 import type { Product, ProductImage } from "@/lib/types";
-const bundledProductsModule = await import("@/data/products.json");
-const bundledProducts = (bundledProductsModule.default ?? bundledProductsModule) as unknown as Product[];
 import f1BundledProducts from "@/data/f1-products.json";
 import { isFeminineProduct, prepareFeminineProduct } from "@/lib/feminine-catalog";
 import { isFormulaOneEvidence, isFormulaOneProduct } from "@/lib/formula-one";
@@ -11,14 +9,26 @@ const PRODUCT_COLUMNS = "id,slug,clube,clubeSlug,liga,publico,tipo,temporada,uni
 const LIST_PRODUCT_COLUMNS = `${PRODUCT_COLUMNS},images`;
 const EXTENDED_LIST_PRODUCT_COLUMNS = `${LIST_PRODUCT_COLUMNS},category,gender,league,subcategory,tags,title,name,model,version`;
 const DETAIL_PRODUCT_COLUMNS = `${PRODUCT_COLUMNS},images`;
-const bundledCatalog = [...(bundledProducts as unknown as Product[]), ...(f1BundledProducts as unknown as Product[])];
-
-export function getBundledFormulaOneProducts(): Product[] {
-  return bundledCatalog.filter((product) => isPublishedProduct(product) && isFormulaOneProduct(product));
+let bundledCatalogPromise: Promise<Product[]> | null = null;
+function getBundledCatalog(): Promise<Product[]> {
+  if (!bundledCatalogPromise) {
+    bundledCatalogPromise = (async () => {
+      const mod = await import("@/data/products.json");
+      const products = (mod.default ?? mod) as unknown as Product[];
+      return [...products, ...(f1BundledProducts as unknown as Product[])];
+    })();
+  }
+  return bundledCatalogPromise;
 }
 
-export function getBundledFeminineProducts(): Product[] {
-  return bundledCatalog.filter((product) => isPublishedProduct(product) && isFeminineProduct(product))
+export async function getBundledFormulaOneProducts(): Promise<Product[]> {
+  const catalog = await getBundledCatalog();
+  return catalog.filter((product) => isPublishedProduct(product) && isFormulaOneProduct(product));
+}
+
+export async function getBundledFeminineProducts(): Promise<Product[]> {
+  const catalog = await getBundledCatalog();
+  return catalog.filter((product) => isPublishedProduct(product) && isFeminineProduct(product))
     .map(prepareFeminineProduct);
 }
 
@@ -251,7 +261,8 @@ function isPublishedProduct(product: Product) {
 async function fetchSupabaseProducts(): Promise<Product[]> {
   const config = supabaseConfig();
   if (!config) {
-    return bundledCatalog.filter(isPublishedProduct);
+    const catalog = await getBundledCatalog();
+    return catalog.filter(isPublishedProduct);
   }
 
   const products: Product[] = [];
@@ -281,11 +292,15 @@ async function fetchSupabaseProducts(): Promise<Product[]> {
     if (rows.length < PAGE_SIZE) break;
   }
   const published = products.filter(isPublishedProduct);
-  if (!published.length) return bundledCatalog.filter(isPublishedProduct);
+  if (!published.length) {
+    const catalog = await getBundledCatalog();
+    return catalog.filter(isPublishedProduct);
+  }
   const mergedBySlug = new Map<string, Product>();
-  for (const product of bundledCatalog.filter(isPublishedProduct)) mergedBySlug.set(product.slug, product);
-  for (const product of getBundledFeminineProducts()) mergedBySlug.set(product.slug, product);
-  for (const product of getBundledFormulaOneProducts()) mergedBySlug.set(product.slug, product);
+  const bundled = await getBundledCatalog();
+  for (const product of bundled.filter(isPublishedProduct)) mergedBySlug.set(product.slug, product);
+  for (const product of await getBundledFeminineProducts()) mergedBySlug.set(product.slug, product);
+  for (const product of await getBundledFormulaOneProducts()) mergedBySlug.set(product.slug, product);
   for (const product of published) mergedBySlug.set(product.slug, product);
   const result = [...mergedBySlug.values()];
   return result;
@@ -298,7 +313,8 @@ export const getSupabaseProducts = unstable_cache(
 );
 
 export async function getSupabaseProductBySlug(slug: string): Promise<Product | undefined> {
-  const bundledProduct = bundledCatalog.find((product) => product.slug.toLocaleLowerCase("en-US") === slug.toLocaleLowerCase("en-US") && isPublishedProduct(product));
+  const catalog = await getBundledCatalog();
+  const bundledProduct = catalog.find((product) => product.slug.toLocaleLowerCase("en-US") === slug.toLocaleLowerCase("en-US") && isPublishedProduct(product));
   const config = supabaseConfig();
   if (!config) return bundledProduct;
 
@@ -324,8 +340,9 @@ export async function getSupabaseProductBySlug(slug: string): Promise<Product | 
   return product && isPublishedProduct(product) ? product : bundledProduct;
 }
 
-export function getBundledRelatedProducts(product: Product): Product[] {
-  return bundledCatalog.filter((item) => isPublishedProduct(item) && item.id !== product.id &&
+export async function getBundledRelatedProducts(product: Product): Promise<Product[]> {
+  const catalog = await getBundledCatalog();
+  return catalog.filter((item) => isPublishedProduct(item) && item.id !== product.id &&
     ((product.clubeSlug !== "revisar" && item.clubeSlug === product.clubeSlug) ||
       (product.liga !== "revisar" && item.liga === product.liga))).slice(0, 5);
 }
