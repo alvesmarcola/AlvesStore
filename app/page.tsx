@@ -5,7 +5,9 @@ import { ProductGrid } from "@/components/product-grid";
 import { HeroCarousel } from "@/components/hero-carousel";
 import { Reveal } from "@/components/motion-effects";
 import { StickyLeagueRail } from "@/components/sticky-league-rail";
-import { FormulaOneShowcase } from "@/components/formula-one-showcase";
+import dynamic from "next/dynamic";
+
+const FormulaOneShowcase = dynamic(() => import("@/components/formula-one-showcase").then((m) => m.FormulaOneShowcase));
 import { InstagramCTA } from "@/components/instagram-cta";
 import { CustomerReviews } from "@/components/customer-reviews";
 import { images } from "@/data/images";

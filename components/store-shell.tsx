@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect } from "react";
-import { CartDrawer } from "@/components/cart-drawer";
+import dynamic from "next/dynamic";
 import { useCart } from "@/store/cart";
+
+const CartDrawer = dynamic(() => import("@/components/cart-drawer").then((mod) => mod.CartDrawer), { ssr: false });
 
 export function StoreShell({ children }: { children: React.ReactNode }) {
   const setDrawerOpen = useCart((state) => state.setDrawerOpen);
