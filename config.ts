@@ -1,6 +1,7 @@
 export const storeConfig = {
   name: "ALVES STORE",
   fanCommonPrice: 160,
+  kidsPrice: 180,
   fanFullPatchPrice: 180,
   retroShortSleevePrice: 185,
   retroLongSleevePrice: 220,

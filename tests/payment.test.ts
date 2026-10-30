@@ -16,12 +16,13 @@ import { prioritizeClubs, prioritizeEditorialProducts, sortCatalogProducts } fro
 import { parseSearchIntent, searchProducts } from "@/lib/smart-search";
 import { patchOptions } from "@/data/patches";
 import { productOverrides } from "@/data/product-overrides";
+import { storeConfig } from "@/config";
 import type { Product } from "@/lib/types";
 
 const products = (productsData as Product[]).map((entry) => ({ ...entry, tamanhos: entry.tamanhos.filter((size) => size !== "3GG") }));
 const validateOrderLines = (lines: Parameters<typeof validateOrderLinesWithCatalog>[0]) => validateOrderLinesWithCatalog(lines, products);
 const baseProduct = products[0]!;
-const product = products.find((entry) => classifyProduct(entry).price === 160 && entry.tamanhos.length > 0)
+const product = products.find((entry) => classifyProduct(entry).price === 160 && entry.tamanhos.length > 0 && entry.tipo === "torcedor")
   ?? productFixture("produto-teste-torcedor", { nome: "Camisa Clube Torcedor", tipo: "torcedor", imageSeed: "Torcedor", preco: 160, tamanhos: ["M"] }, baseProduct);
 if (!products.some((entry) => entry.id === product.id)) products.push(product);
 assert.ok(product, "O catálogo precisa ter ao menos um produto com tamanho disponível para os testes.");
@@ -59,7 +60,7 @@ test("retro shirts keep their R$185 price and do not receive package discounts",
 });
 
 test("classifica Torcedor, Ultrapasso, Full Patches e mangas sem confundir versões", () => {
-  const fan = productFixture("teste-ultrapasso", { nome: "Camisa Clube Ultrapass(o)", tipo: "revisar", imageSeed: "Torcedor/Ultrapasso", preco: 160 });
+  const fan = productFixture("teste-ultrapasso", { nome: "Camisa Clube Ultrapass(o)", tipo: "torcedor", imageSeed: "Torcedor/Ultrapasso", preco: 160 });
   const fullPatch = productFixture("teste-full-patch", { nome: "Clube Full Patches", tipo: "revisar", imageSeed: "Torcedor/Full Patches", preco: 160 });
   const retroShort = productFixture("teste-retro-curta", { nome: "Clube Retrô manga curta", tipo: "retro", imageSeed: "Retro/Manga Curta", preco: 160 });
   const retroLong = productFixture("teste-retro-longa", { nome: "Clube Retrô manga longa", tipo: "retro", imageSeed: "Camisa Manga Longa Retrô", preco: 160 });
@@ -69,8 +70,10 @@ test("classifica Torcedor, Ultrapasso, Full Patches e mangas sem confundir vers�
 
   assert.equal(getProductCategoryKey(fan), "torcedor");
   assert.equal(classifyProduct(fan).price, 160);
+
   assert.equal(getProductCategoryKey(fullPatch), "full-patch");
-  assert.equal(classifyProduct(fullPatch).price, 180);
+  assert.equal(classifyProduct(fullPatch).price, null);
+  assert.equal(classifyProduct(fullPatch).reviewRequired, true);
   assert.equal(classifyProduct(retroShort).price, 185);
   assert.equal(classifyProduct(retroLong).price, 220);
   assert.equal(classifyProduct(playerLong).price, 220);
@@ -189,6 +192,7 @@ test("não atribui preço a categorias não confirmadas", () => {
 test("usa R$ 180 para torcedor full patch somente com classificação administrativa", () => {
   const original = productOverrides[product.id];
   productOverrides[product.id] = { version: "fan", fullPatch: true, source: "https://example.com", verifiedBy: "teste" };
+  console.log("TEST product.id:", product.id, "override found:", !!productOverrides[product.id]);
   try {
     assert.equal(classifyProduct(product).price, 180);
   } finally {
@@ -335,5 +339,41 @@ test("limite de tentativas bloqueia por IP e libera na janela seguinte", () => {
   const bucket = `teste-${Date.now()}`;
   assert.deepEqual([1, 2, 3, 4].map(() => isRateLimited(request("1.1.1.1"), bucket, 3, 60_000, 1_000)), [false, false, false, true]);
   assert.equal(isRateLimited(request("2.2.2.2"), bucket, 3, 60_000, 1_000), false);
+
+
   assert.equal(isRateLimited(request("1.1.1.1"), bucket, 3, 60_000, 62_000), false);
+
+test("infantil custa R$ 180,00 por camisa", () => {
+  const kid = productFixture("teste-infantil-unitario", { nome: "Camisa Infantil Teste", tipo: "revisar", publico: "infantil", imageSeed: "Infantil Teste", preco: 160, tamanhos: ["M"] }, baseProduct);
+  assert.equal(classifyProduct(kid).price, storeConfig.kidsPrice);
+  assert.equal(classifyProduct(kid).reviewRequired, false);
+});
+
+test("2 e 3 unidades de infantil somam R$ 180 por unidade (sem pacote)", () => {
+  const kid = productFixture("teste-infantil-pacote", { nome: "Camisa Infantil Pacote", tipo: "revisar", publico: "infantil", imageSeed: "Infantil Pacote", preco: 160, tamanhos: ["M"] }, baseProduct);
+  const lines2 = validateOrderLinesWithCatalog([{ productId: kid.id, size: "M", quantity: 2 }], [kid]);
+  const lines3 = validateOrderLinesWithCatalog([{ productId: kid.id, size: "M", quantity: 3 }], [kid]);
+  assert.equal(calculateOrderTotals(lines2).shirtsCents, 2 * storeConfig.kidsPrice * 100);
+  assert.equal(calculateOrderTotals(lines3).shirtsCents, 3 * storeConfig.kidsPrice * 100);
+  assert.equal(isPackageEligible(kid), false);
+});
+
+test("infantil misturado com torcedor calcula cada linha e frete pelo total de unidades", () => {
+  const kid = productFixture("teste-infantil-misto", { nome: "Camisa Infantil Misto", tipo: "revisar", publico: "infantil", imageSeed: "Infantil Misto", preco: 160, tamanhos: ["M"] }, baseProduct);
+  const fanProduct = products.find((entry) => classifyProduct(entry).price === 160 && entry.tamanhos.length > 0 && entry.tipo === "torcedor") ?? product;
+  const lines = validateOrderLinesWithCatalog([
+    { productId: kid.id, size: "M", quantity: 1 },
+    { productId: fanProduct.id, size: fanProduct.tamanhos[0], quantity: 2 },
+  ], [kid, fanProduct]);
+  const totals = calculateOrderTotals(lines);
+  assert.equal(totals.shippingCents, 0);
+  assert.ok(totals.shirtsCents >= storeConfig.kidsPrice * 100);
+});
+
+test("produto infantil sem tipo confirmado não vira R$ 160 por engano", () => {
+  const kid = productFixture("teste-infantil-revisar", { nome: "Camisa Infantil Revisar", tipo: "revisar", publico: "infantil", imageSeed: "Infantil Revisar", preco: 160, tamanhos: ["M"] }, baseProduct);
+  assert.equal(classifyProduct(kid).price, storeConfig.kidsPrice);
+  assert.notEqual(classifyProduct(kid).price, 160);
+});
+
 });

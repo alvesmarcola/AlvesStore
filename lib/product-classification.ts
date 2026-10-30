@@ -17,6 +17,7 @@ export interface ProductClassification {
 export function classifyProduct(product: Product): ProductClassification {
   const override = productOverrides[product.id] ?? productOverrides[product.slug];
   const evidence = `${product.nome} ${product.title ?? ""} ${product.name ?? ""} ${product.slug} ${product.imageSeed} ${product.tipo} ${product.category ?? ""} ${product.subcategory ?? ""} ${product.version ?? ""} ${product.model ?? ""} ${(product.tags ?? []).join(" ")} ${(product.images ?? []).map((image) => `${image.source} ${image.src}`).join(" ")}`.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("pt-BR").replace(/[^a-z0-9]+/g, " ").trim().replace(/\s+/g, " ");
+  const isKids = product.publico === "infantil" || /\b(?:kids|junior|youth|infantil|children)\b/i.test(`${product.nome} ${product.imageSeed}`);
   const fullPatchEvidence = /\b(full ?patch(?:es)?|patch completo|patches completos|full sponsor|all sponsors)\b/.test(evidence);
   const modelEvidence = `${product.nome} ${product.title ?? ""} ${product.name ?? ""} ${product.slug} ${product.category ?? ""} ${product.version ?? ""} ${product.model ?? ""} ${(product.tags ?? []).join(" ")}`.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("pt-BR").replace(/[^a-z0-9]+/g, " ").trim().replace(/\s+/g, " ");
   const explicitTrainingProduct = product.tipo === "treino" && /\b(treino|training|pre jogo|pre match)\b/.test(modelEvidence)
@@ -41,10 +42,10 @@ export function classifyProduct(product: Product): ProductClassification {
   const isGoalkeeper = product.tipo === "goleiro" || inferredVersion === "goalkeeper";
   const sleeve = override?.sleeve ?? inferredSleeve;
   const uniform = override?.uniform ?? inferredUniform;
-  const fullPatch = override?.fullPatch ?? (version === "fan" && fullPatchEvidence);
+  const fullPatch = override?.fullPatch ?? (version === "fan" && fullPatchEvidence && !isKids);
   const overridePrice = Number.isFinite(override?.price) && (override?.price ?? 0) > 0 && (override?.price ?? Infinity) <= 2000
     ? override?.price : undefined;
-  const categoryPrice = (product.tipo === "f1" || product.tipo === "formula1") ? (product.preco > 0 ? product.preco : storeConfig.fanCommonPrice) : (
+  const categoryPrice = isKids ? storeConfig.kidsPrice : (product.tipo === "revisar" && !override ? null : ((product.tipo === "f1" || product.tipo === "formula1") ? (product.preco > 0 ? product.preco : storeConfig.fanCommonPrice) : (
     version === "retro" && sleeve === "long" ? storeConfig.retroLongSleevePrice
       : version === "retro" && sleeve === "short" ? storeConfig.retroShortSleevePrice
         : version === "retro" ? (product.preco > 0 && product.preco !== storeConfig.fanCommonPrice ? product.preco : storeConfig.retroShortSleevePrice)
@@ -53,12 +54,10 @@ export function classifyProduct(product: Product): ProductClassification {
         : version === "fan" && fullPatch ? storeConfig.fanFullPatchPrice
             : version === "fan" && sleeve === "long" && product.preco > 0 && product.preco !== storeConfig.fanCommonPrice ? product.preco
               : version === "fan" ? storeConfig.fanCommonPrice : null
-  );
+  )));
+
   const registeredPrice = Number.isFinite(product.preco) && product.preco > 0 && !(product.preco === storeConfig.fanCommonPrice && version !== "fan");
-  const price = isGoalkeeper ? storeConfig.fanCommonPrice : overridePrice ?? categoryPrice ?? (
-    registeredPrice && (product.tipo === "f1" || product.tipo === "formula1" || (version === "retro" && sleeve === "unknown") || !["fan", "player"].includes(version))
-      ? product.preco : storeConfig.fanCommonPrice
-  );
+  const price = isGoalkeeper ? storeConfig.fanCommonPrice : (categoryPrice === null && overridePrice === undefined ? null : (overridePrice ?? categoryPrice ?? (registeredPrice && (product.tipo === "f1" || product.tipo === "formula1" || (version === "retro" && sleeve === "unknown") || !["fan", "player"].includes(version)) ? product.preco : storeConfig.fanCommonPrice)));
   const reviewRequired = price === null;
   const label = price === null ? "Preço em revisão" : `R$ ${price.toFixed(2).replace(".", ",")}${reviewRequired ? " · classificação em revisão" : ""}`;
   return {
@@ -85,5 +84,6 @@ export function getProductUnitPrice(product: Product, size?: string) {
 
 export function isPackageEligible(product: Product) {
   const facts = classifyProduct(product);
-  return product.tipo === "torcedor" && facts.version === "fan" && !facts.fullPatch && facts.price === storeConfig.fanCommonPrice;
+  const isKids = product.publico === "infantil" || /\b(?:kids|junior|youth|infantil|children)\b/i.test(`${product.nome} ${product.imageSeed}`);
+  return product.tipo === "torcedor" && facts.version === "fan" && !facts.fullPatch && facts.price === storeConfig.fanCommonPrice && !isKids;
 }
