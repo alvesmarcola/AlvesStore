@@ -3,6 +3,7 @@ import bundledProducts from "@/data/products.json";
 import f1BundledProducts from "@/data/f1-products.json";
 import { isFeminineProduct, prepareFeminineProduct } from "@/lib/feminine-catalog";
 import { isFormulaOneEvidence, isFormulaOneProduct } from "@/lib/formula-one";
+import { unstable_cache } from "next/cache";
 
 const PAGE_SIZE = 100;
 const PRODUCT_COLUMNS = "id,slug,clube,clubeSlug,liga,publico,tipo,temporada,uniforme,nome,preco,tamanhos,cor,imageSeed";
@@ -246,7 +247,7 @@ function isPublishedProduct(product: Product) {
   return hasImage && product.tipo !== "revisar" && (hasKnownAudience || isFormulaOne);
 }
 
-export async function getSupabaseProducts(): Promise<Product[]> {
+async function fetchSupabaseProducts(): Promise<Product[]> {
   const config = supabaseConfig();
   if (!config) {
     return bundledCatalog.filter(isPublishedProduct);
@@ -260,18 +261,22 @@ export async function getSupabaseProducts(): Promise<Product[]> {
       ...(config.key.startsWith("eyJ") ? { Authorization: `Bearer ${config.key}` } : {}),
     };
     const query = new URLSearchParams({ select: EXTENDED_LIST_PRODUCT_COLUMNS, order: "slug.asc", limit: String(PAGE_SIZE), offset: String(offset) });
-    let response = await fetch(`${config.url}/rest/v1/products?${query}`, { cache: "no-store", headers });
+    let response = await fetch(`${config.url}/rest/v1/products?${query}`, { headers, next: { revalidate: 300 } });
     if (!response.ok) {
       // Older products schemas may not have optional category/tag columns.
       query.set("select", LIST_PRODUCT_COLUMNS);
-      response = await fetch(`${config.url}/rest/v1/products?${query}`, { cache: "no-store", headers });
+      response = await fetch(`${config.url}/rest/v1/products?${query}`, { headers, next: { revalidate: 300 } });
     }
     if (!response.ok) {
       console.error(`Falha ao consultar catálogo Supabase: HTTP ${response.status}.`);
       throw new Error("Não foi possível carregar o catálogo atual da loja.");
     }
     const rows = await response.json() as unknown[];
-    products.push(...rows.map(mapProduct).filter((product): product is Product => product !== null));
+    // Mantém apenas produtos publicados e versão enxuta (2 imagens) para caber no cache (< 2 MB).
+    const mapped = rows.map(mapProduct).filter((product): product is Product => product !== null)
+      .filter(isPublishedProduct)
+      .map((product) => ({ ...product, images: (product.images ?? []).slice(0, 2) }));
+    products.push(...mapped);
     if (rows.length < PAGE_SIZE) break;
   }
   const published = products.filter(isPublishedProduct);
@@ -281,8 +286,15 @@ export async function getSupabaseProducts(): Promise<Product[]> {
   for (const product of getBundledFeminineProducts()) mergedBySlug.set(product.slug, product);
   for (const product of getBundledFormulaOneProducts()) mergedBySlug.set(product.slug, product);
   for (const product of published) mergedBySlug.set(product.slug, product);
-  return [...mergedBySlug.values()];
+  const result = [...mergedBySlug.values()];
+  return result;
 }
+
+export const getSupabaseProducts = unstable_cache(
+  fetchSupabaseProducts,
+  ["supabase-products-v1"],
+  { revalidate: 300, tags: ["catalog"] },
+);
 
 export async function getSupabaseProductBySlug(slug: string): Promise<Product | undefined> {
   const bundledProduct = bundledCatalog.find((product) => product.slug.toLocaleLowerCase("en-US") === slug.toLocaleLowerCase("en-US") && isPublishedProduct(product));
@@ -291,7 +303,7 @@ export async function getSupabaseProductBySlug(slug: string): Promise<Product | 
 
   const query = new URLSearchParams({ select: DETAIL_PRODUCT_COLUMNS, slug: `ilike.${slug.toLocaleLowerCase("en-US")}`, limit: "1" });
   const response = await fetch(`${config.url}/rest/v1/products?${query}`, {
-    cache: "no-store",
+    next: { revalidate: 300 },
     signal: AbortSignal.timeout(8_000),
     headers: {
       apikey: config.key,
