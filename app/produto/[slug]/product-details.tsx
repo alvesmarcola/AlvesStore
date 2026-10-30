@@ -1,13 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Check, Heart, Ruler, Truck } from "lucide-react";
 import { ProductGrid } from "@/components/product-grid";
 import { SafeProductImage } from "@/components/safe-product-image";
 import { formatCurrency, productImageAsset } from "@/lib/catalog";
 import { catalogLabel } from "@/lib/catalog-taxonomy";
-import type { Product } from "@/lib/types";
+import type { Product, ProductImage } from "@/lib/types";
 import { storeConfig } from "@/config";
 import { useCart } from "@/store/cart";
 import { classifyProduct, getProductUnitPrice } from "@/lib/product-classification";
@@ -15,6 +15,7 @@ import { getAvailablePatches } from "@/lib/patch-compatibility";
 import type { PatchPosition } from "@/data/patches";
 import { getProductOfferText } from "@/lib/commerce";
 import { allowsCustomization } from "@/lib/formula-one";
+import { detectUniformVariants, cleanAndDeduplicateImages } from "@/lib/uniform-variants";
 
 export function ProductDetails({ product, relatedProducts = [] }: { product: Product; relatedProducts?: Product[] }) {
   const [size, setSize] = useState("");
@@ -26,11 +27,39 @@ export function ProductDetails({ product, relatedProducts = [] }: { product: Pro
   const [activeImage, setActiveImage] = useState(0);
   const [sizeGuideOpen, setSizeGuideOpen] = useState(false);
   const addItem = useCart((state) => state.addItem);
+
+  // Detecção inteligente de múltiplos uniformes misturados (ex: Home/Away, Third/Away)
+  const variants = useMemo(() => detectUniformVariants(product), [product]);
+  const [selectedVariantId, setSelectedVariantId] = useState<string>(variants?.[0]?.id ?? "all");
+
   const related = relatedProducts.filter((item) => item.id !== product.id && ((product.clubeSlug !== "revisar" && item.clubeSlug === product.clubeSlug) || (product.liga !== "revisar" && item.liga === product.liga))).slice(0, 4);
-  const gallery = (product.images?.length ? product.images : [productImageAsset(product), productImageAsset(product, true)])
-    .filter((image, index, all) => all.findIndex((candidate) => candidate.src === image.src) === index)
-    .map((image, index) => ({ ...image, alt: `${product.nome} – ${index === 0 ? "frente" : `detalhe ${index + 1}`}` }));
-  const selectedImage = gallery[Math.min(activeImage, gallery.length - 1)];
+
+  // Galeria filtrada pela variante de uniforme selecionada ou galeria completa deduplicada
+  const gallery = useMemo(() => {
+    let imagesSource: ProductImage[] = product.images?.length
+      ? product.images
+      : [
+          { ...productImageAsset(product), source: product.slug },
+          { ...productImageAsset(product, true), source: product.slug },
+        ];
+
+    if (variants && selectedVariantId !== "all") {
+      const activeVar = variants.find((v) => v.id === selectedVariantId);
+      if (activeVar) {
+        imagesSource = activeVar.images;
+      }
+    }
+
+    return cleanAndDeduplicateImages(imagesSource, product.nome).map((image, index) => ({
+      ...image,
+      alt: `${product.nome} – ${index === 0 ? "frente" : `detalhe ${index + 1}`}`,
+    }));
+  }, [product, variants, selectedVariantId]);
+
+  const selectedImage = gallery[Math.min(activeImage, Math.max(0, gallery.length - 1))] || {
+    ...productImageAsset(product),
+    source: product.slug,
+  };
   const classification = classifyProduct(product);
   const canPersonalize = allowsCustomization(product);
   const availableSizes = product.tamanhos.filter((itemSize) => itemSize !== "3GG");
@@ -53,9 +82,24 @@ export function ProductDetails({ product, relatedProducts = [] }: { product: Pro
     product.temporada !== "revisar" ? `Temporada ${product.temporada}` : "",
   ].filter(Boolean).join(" · ");
 
+  function handleVariantChange(variantId: string) {
+    setSelectedVariantId(variantId);
+    setActiveImage(0);
+  }
+
   function buy() {
     if (!size || !availableSizes.includes(size) || classification.reviewRequired || classification.price === null || (personalize && (!name.trim() || !number.trim()))) return;
-    addItem(product, size, personalize ? { name: name.trim(), number: number.trim() } : undefined, selectedPatches);
+
+    const activeVar = variants?.find((v) => v.id === selectedVariantId);
+    const productToAdd: Product = activeVar && activeVar.id !== "all"
+      ? {
+          ...product,
+          nome: `${product.nome} (${activeVar.name})`,
+          images: activeVar.images,
+        }
+      : product;
+
+    addItem(productToAdd, size, personalize ? { name: name.trim(), number: number.trim() } : undefined, selectedPatches);
     setAdded(true);
     window.setTimeout(() => setAdded(false), 1800);
   }
@@ -74,6 +118,72 @@ export function ProductDetails({ product, relatedProducts = [] }: { product: Pro
         {classification.reviewRequired && <p role="status" className="mt-2 rounded bg-amber-50 p-3 text-sm text-amber-950">A versão e o preço deste produto precisam de confirmação antes da venda.</p>}
         <p className="mt-1 text-xs text-muted">{getProductOfferText(product)}</p>
         {personalize && <p className="mt-1 text-xs text-muted">Personalização: +{formatCurrency(storeConfig.customizationPrice)} por camisa</p>}
+
+        {/* Seletor Inteligente de Uniforme / Versão (para modelos com múltiplos uniformes misturados) */}
+        {variants && variants.length > 1 && (
+          <div className="mt-6 rounded-xl border border-zinc-200 bg-zinc-50/70 p-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xs font-black uppercase tracking-wider text-zinc-900">
+                Modelo / Uniforme
+              </h2>
+              <span className="text-[11px] font-bold text-blue-700">
+                {variants.find((v) => v.id === selectedVariantId)?.name || "Galeria completa"}
+              </span>
+            </div>
+
+            <div className="mt-3 flex flex-wrap gap-2.5">
+              {variants.map((v) => {
+                const isSelected = selectedVariantId === v.id;
+                const previewImg = v.images[0]?.src;
+                return (
+                  <button
+                    key={v.id}
+                    type="button"
+                    onClick={() => handleVariantChange(v.id)}
+                    aria-pressed={isSelected}
+                    className={`flex items-center gap-3 rounded-lg border p-2.5 text-xs font-bold transition-all ${
+                      isSelected
+                        ? "border-pitch bg-pitch text-white shadow-sm ring-1 ring-pitch"
+                        : "border-zinc-200 bg-white text-zinc-900 hover:border-zinc-400"
+                    }`}
+                  >
+                    {previewImg && (
+                      <div className="relative h-10 w-9 shrink-0 overflow-hidden rounded bg-paper">
+                        <SafeProductImage
+                          src={previewImg}
+                          alt={v.name}
+                          fill
+                          sizes="36px"
+                          className="object-cover"
+                        />
+                      </div>
+                    )}
+                    <div className="text-left">
+                      <span className="block">{v.name}</span>
+                      <span className={`block text-[10px] ${isSelected ? "text-zinc-300" : "text-zinc-500"}`}>
+                        {v.images.length} fotos
+                      </span>
+                    </div>
+                  </button>
+                );
+              })}
+
+              <button
+                type="button"
+                onClick={() => handleVariantChange("all")}
+                aria-pressed={selectedVariantId === "all"}
+                className={`flex items-center rounded-lg border px-3 py-2 text-xs font-semibold transition-all ${
+                  selectedVariantId === "all"
+                    ? "border-pitch bg-pitch text-white"
+                    : "border-dashed border-zinc-300 bg-white/70 text-zinc-600 hover:border-zinc-400"
+                }`}
+              >
+                Ver todas ({variants.reduce((acc, v) => acc + v.images.length, 0)} fotos)
+              </button>
+            </div>
+          </div>
+        )}
+
         <div className="mt-6 flex items-center justify-between"><h2 className="text-sm font-black">Tamanho</h2><button type="button" onClick={() => setSizeGuideOpen(true)} className="flex items-center gap-1 text-xs font-bold text-blue-700 underline"><Ruler size={14} /> Guia de medidas</button></div>
         <div className="mt-3 flex flex-wrap gap-2" role="group" aria-label="Tamanhos disponíveis">{availableSizes.map((itemSize) => <button key={itemSize} type="button" aria-pressed={size === itemSize} onClick={() => setSize(itemSize)} className={`grid h-11 min-w-12 place-items-center rounded border px-3 text-xs font-bold transition-colors ${size === itemSize ? "border-pitch bg-pitch text-white" : "border-black/15 hover:border-pitch"}`}>{itemSize}</button>)}</div>
         {!size && product.tamanhos.length > 0 && <p className="mt-2 text-[11px] text-muted">Selecione um tamanho para continuar.</p>}
