@@ -19,6 +19,7 @@ Configure as variáveis abaixo na Vercel para o ambiente desejado. Defina `PAYME
 - `SUPABASE_SECRET_KEY` (preferível) ou `SUPABASE_SERVICE_ROLE_KEY`; somente no servidor.
 - `SITE_URL` (origem pública HTTPS, por exemplo `https://alves-store-green.vercel.app`)
 - `ADMIN_ORDERS_TOKEN` (token forte e privado para `/admin/pedidos`)
+- `REVALIDATE_TOKEN` (token forte e privado para `/api/revalidate`; invalida o cache do catálogo via `revalidateTag("catalog")`)
 - Opcional: `RESEND_API_KEY` e `ORDER_EMAIL_FROM` para e-mail de pagamento aprovado
 
 ### Ativar pagamentos de produção
