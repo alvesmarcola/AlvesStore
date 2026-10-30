@@ -10,3 +10,4 @@ const supabaseAnonKey =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsYmRneWFqaWtiZGhpdndmeXprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIwNjMyMjYsImV4cCI6MjEwNzYzOTIyNn0.ECDTkmjQD1d1qIeZyPEE0Z87TrjrYjWG5pk0JRZdrME";
 
 export const supabase: SupabaseClient = createClient(supabaseUrl, supabaseAnonKey);
+

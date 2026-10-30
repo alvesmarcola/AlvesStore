@@ -112,7 +112,7 @@ export function AvaliacaoForm({ onSuccess, className = "" }: AvaliacaoFormProps)
       });
 
       if (error) {
-        console.error("Erro ao enviar avaliação:", error);
+        console.warn("Erro ao enviar avaliação:", error.message || error);
         setErrorMessage("Não foi possível enviar sua avaliação no momento. Tente novamente.");
         return;
       }
@@ -135,7 +135,7 @@ export function AvaliacaoForm({ onSuccess, className = "" }: AvaliacaoFormProps)
 
       onSuccess?.();
     } catch (err) {
-      console.error("Erro inesperado:", err);
+      console.warn("Erro inesperado ao enviar avaliação:", err);
       setErrorMessage("Ocorreu um erro ao enviar. Verifique sua conexão e tente novamente.");
     } finally {
       setLoading(false);
@@ -311,3 +311,4 @@ export function AvaliacaoForm({ onSuccess, className = "" }: AvaliacaoFormProps)
     </div>
   );
 }
+

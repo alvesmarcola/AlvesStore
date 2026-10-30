@@ -110,7 +110,7 @@ export function CustomerReviews() {
           .order("created_at", { ascending: false });
 
         if (error) {
-          console.error("Erro ao carregar avaliações do Supabase:", error);
+          console.warn("Aviso ao carregar avaliações do Supabase:", error.message || error);
           return;
         }
 
@@ -118,7 +118,7 @@ export function CustomerReviews() {
           setReviews(data);
         }
       } catch (err) {
-        console.error("Erro ao buscar avaliações:", err);
+        console.warn("Aviso ao buscar avaliações:", err);
       } finally {
         if (isMounted) setLoading(false);
       }
