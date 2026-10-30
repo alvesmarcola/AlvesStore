@@ -1,5 +1,6 @@
 import type { Product, ProductImage } from "@/lib/types";
-import bundledProducts from "@/data/products.json";
+const bundledProductsModule = await import("@/data/products.json");
+const bundledProducts = (bundledProductsModule.default ?? bundledProductsModule) as unknown as Product[];
 import f1BundledProducts from "@/data/f1-products.json";
 import { isFeminineProduct, prepareFeminineProduct } from "@/lib/feminine-catalog";
 import { isFormulaOneEvidence, isFormulaOneProduct } from "@/lib/formula-one";

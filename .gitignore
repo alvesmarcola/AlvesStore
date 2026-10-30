@@ -10,3 +10,4 @@ coverage/
 /catalogo-fonte/
 chat.zip
 *.zip
+.mcp.json
