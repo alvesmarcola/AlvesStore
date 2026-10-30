@@ -340,6 +340,51 @@ export async function getSupabaseProductBySlug(slug: string): Promise<Product | 
   return product && isPublishedProduct(product) ? product : bundledProduct;
 }
 
+async function fetchSupabaseProductsFresh(): Promise<Product[]> {
+  const config = supabaseConfig();
+  if (!config) {
+    const catalog = await getBundledCatalog();
+    return catalog.filter(isPublishedProduct);
+  }
+
+  const products: Product[] = [];
+  for (let offset = 0; ; offset += PAGE_SIZE) {
+    const headers = {
+      apikey: config.key,
+      ...(config.key.startsWith("eyJ") ? { Authorization: `Bearer ${config.key}` } : {}),
+    };
+    const query = new URLSearchParams({ select: EXTENDED_LIST_PRODUCT_COLUMNS, order: "slug.asc", limit: String(PAGE_SIZE), offset: String(offset) });
+    let response = await fetch(`${config.url}/rest/v1/products?${query}`, { headers, cache: "no-store" });
+    if (!response.ok) {
+      query.set("select", LIST_PRODUCT_COLUMNS);
+      response = await fetch(`${config.url}/rest/v1/products?${query}`, { headers, cache: "no-store" });
+    }
+    if (!response.ok) {
+      console.error(`Falha ao consultar catálogo Supabase: HTTP ${response.status}.`);
+      throw new Error("Não foi possível carregar o catálogo atual da loja.");
+    }
+    const rows = await response.json() as unknown[];
+    products.push(...rows.map(mapProduct).filter((product): product is Product => product !== null));
+    if (rows.length < PAGE_SIZE) break;
+  }
+  const published = products.filter(isPublishedProduct);
+  if (!published.length) {
+    const catalog = await getBundledCatalog();
+    return catalog.filter(isPublishedProduct);
+  }
+  const mergedBySlug = new Map<string, Product>();
+  const bundled = await getBundledCatalog();
+  for (const product of bundled.filter(isPublishedProduct)) mergedBySlug.set(product.slug, product);
+  for (const product of await getBundledFeminineProducts()) mergedBySlug.set(product.slug, product);
+  for (const product of await getBundledFormulaOneProducts()) mergedBySlug.set(product.slug, product);
+  for (const product of published) mergedBySlug.set(product.slug, product);
+  return [...mergedBySlug.values()];
+}
+
+export async function getSupabaseProductsForCheckout(): Promise<Product[]> {
+  return fetchSupabaseProductsFresh();
+}
+
 export async function getBundledRelatedProducts(product: Product): Promise<Product[]> {
   const catalog = await getBundledCatalog();
   return catalog.filter((item) => isPublishedProduct(item) && item.id !== product.id &&

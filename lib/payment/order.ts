@@ -6,7 +6,7 @@ import type { Product } from "@/lib/types";
 import { classifyProduct, isPackageEligible } from "@/lib/product-classification";
 import { getAvailablePatches } from "@/lib/patch-compatibility";
 import { allowsCustomization } from "@/lib/formula-one";
-import { getSupabaseProducts } from "@/lib/server/supabase-catalog";
+import { getSupabaseProductsForCheckout } from "@/lib/server/supabase-catalog";
 import { getProductSizeSurcharge } from "@/lib/product-classification";
 
 export const orderLinesSchema = z.array(z.object({
@@ -73,7 +73,7 @@ export function validateOrderLines(lines: OrderLineInput[], catalog: Product[]):
 }
 
 export async function validateOrderLinesFromCatalog(lines: OrderLineInput[]) {
-  return validateOrderLines(lines, await getSupabaseProducts());
+  return validateOrderLines(lines, await getSupabaseProductsForCheckout());
 }
 
 export function calculateOrderTotals(lines: VerifiedOrderLine[]) {

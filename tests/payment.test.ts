@@ -336,4 +336,15 @@ test("limite de tentativas bloqueia por IP e libera na janela seguinte", () => {
   assert.deepEqual([1, 2, 3, 4].map(() => isRateLimited(request("1.1.1.1"), bucket, 3, 60_000, 1_000)), [false, false, false, true]);
   assert.equal(isRateLimited(request("2.2.2.2"), bucket, 3, 60_000, 1_000), false);
   assert.equal(isRateLimited(request("1.1.1.1"), bucket, 3, 60_000, 62_000), false);
+test("checkout reflete preço alterado no catálogo imediatamente (sem cache)", () => {
+  const f1 = productFixture("produto-teste-f1-preco", { nome: "Camisa F1 Teste", tipo: "f1", imageSeed: "F1 Teste", preco: 250, tamanhos: ["M"] }, baseProduct);
+  const originalCatalog = [f1];
+  const lines1 = validateOrderLinesWithCatalog([{ productId: f1.id, size: "M", quantity: 1 }], originalCatalog);
+  assert.equal(calculateOrderTotals(lines1).shirtsCents, 25000);
+
+  const changedCatalog = [{ ...f1, preco: 300 }];
+  const lines2 = validateOrderLinesWithCatalog([{ productId: f1.id, size: "M", quantity: 1 }], changedCatalog);
+  assert.equal(calculateOrderTotals(lines2).shirtsCents, 30000);
+});
+
 });
