@@ -73,3 +73,14 @@ export interface SelectedPatch {
   position: PatchPosition;
   priceCents: number;
 }
+
+
+export interface Avaliacao {
+  id: string;
+  created_at: string;
+  nome: string;
+  cidade: string;
+  nota: number;
+  comentario: string;
+  aprovado: boolean;
+}
