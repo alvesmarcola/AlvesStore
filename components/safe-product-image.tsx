@@ -13,7 +13,14 @@ function isYupooSource(source: string) {
   }
 }
 
-export function SafeProductImage({ src, onError, fallbackSrc = "/product-placeholder.svg", ...props }: SafeProductImageProps) {
+export function SafeProductImage({
+  src,
+  onError,
+  fallbackSrc = "/product-placeholder.svg",
+  priority,
+  loading: customLoading,
+  ...props
+}: SafeProductImageProps) {
   const sourceKey = typeof src === "string" ? src : "src" in src ? src.src : src.default.src;
   const isYupooImage = typeof src === "string" && isYupooSource(src);
   const isExternalImage = typeof src === "string" && /^https?:\/\//i.test(src);
@@ -23,12 +30,19 @@ export function SafeProductImage({ src, onError, fallbackSrc = "/product-placeho
   // evitando sobrecarregar /_next/image com muitas otimizações simultâneas.
   const displaySrc = isYupooImage && typeof src === "string" ? `/api/yupoo-image?u=${encodeURIComponent(src)}` : src;
 
+  const isPriority = Boolean(priority);
+  // Se priority estiver definida como true, garante que loading="lazy" não seja enviado para evitar conflitos no Next.js
+  const effectiveLoading = isPriority
+    ? (customLoading === "lazy" ? undefined : customLoading)
+    : (customLoading ?? "lazy");
+
   return <Image
     {...props}
+    priority={priority}
+    {...(effectiveLoading ? { loading: effectiveLoading } : {})}
     src={failed ? fallbackSrc : displaySrc}
     unoptimized={failed ? false : props.unoptimized ?? (isYupooImage || isExternalImage)}
     alt={props.alt}
-    loading={props.loading ?? "lazy"}
     decoding="async"
     placeholder={props.placeholder}
     blurDataURL={props.blurDataURL}
