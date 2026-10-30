@@ -5,6 +5,8 @@ import { toCatalogPreview } from "@/lib/catalog";
 import { isFeminineProduct, prepareFeminineProduct } from "@/lib/feminine-catalog";
 import { sortCatalogProducts } from "@/lib/catalog-order";
 
+export const revalidate = 300;
+
 export const metadata = { title: "Camisas femininas", description: "Camisas femininas e modelos para torcer do seu jeito.", alternates: { canonical: "/feminino" } };
 
 export default async function FemininoPage({ searchParams }: { searchParams: Promise<{ tipo?: string }> }) {
