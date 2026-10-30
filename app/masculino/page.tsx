@@ -3,6 +3,8 @@ import { images } from "@/data/images";
 import { getSupabaseProducts } from "@/lib/server/supabase-catalog";
 import { toCatalogPreview } from "@/lib/catalog";
 
+export const revalidate = 300;
+
 export const metadata = { title: "Camisas masculinas", description: "Encontre camisas masculinas de futebol, versões torcedor, jogador e retrô.", alternates: { canonical: "/masculino" } };
 
 export default async function MasculinoPage({ searchParams }: { searchParams: Promise<{ tipo?: string }> }) {

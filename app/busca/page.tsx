@@ -5,6 +5,8 @@ import { parseSearchIntent, searchProducts } from "@/lib/smart-search";
 
 export const metadata = { title: "Buscar camisas", description: "Busque camisas por clube, liga ou modelo.", alternates: { canonical: "/busca" } };
 
+export const revalidate = 300;
+
 export default async function SearchPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
   const { q = "" } = await searchParams;
   const products = await getSupabaseProducts();
