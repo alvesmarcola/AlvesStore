@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Revisar uniformes – Alves Store</title>
+<style>
+  :root { --bg:#fff; --fg:#111; --muted:#666; --card:#f5f5f5; --line:#ddd; --a:#2563eb; --b:#dc2626; --c:#16a34a; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#111; --fg:#eee; --muted:#999; --card:#1c1c1c; --line:#333; }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; font:14px/1.4 system-ui,sans-serif; background:var(--bg); color:var(--fg); }
+  header { position:sticky; top:0; z-index:5; background:var(--bg); border-bottom:1px solid var(--line); padding:12px 16px; display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+  header h1 { font-size:16px; margin:0 12px 0 0; }
+  input[type=search], select, button { font:inherit; padding:6px 10px; border:1px solid var(--line); border-radius:6px; background:var(--card); color:var(--fg); }
+  button { cursor:pointer; }
+  button.primary { background:var(--a); color:#fff; border-color:var(--a); }
+  #info { color:var(--muted); }
+  #help { padding:12px 16px; color:var(--muted); max-width:900px; }
+  #list { padding:16px; display:grid; gap:14px; grid-template-columns:repeat(auto-fill,minmax(360px,1fr)); }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:12px; }
+  .card.done { opacity:.55; }
+  .card h3 { margin:0 0 2px; font-size:14px; }
+  .slug { color:var(--muted); font-size:11px; word-break:break-all; margin-bottom:8px; }
+  .imgs { display:flex; flex-wrap:wrap; gap:8px; }
+  .th { position:relative; width:110px; cursor:pointer; border:3px solid var(--a); border-radius:8px; overflow:hidden; background:#000; }
+  .th img { display:block; width:100%; height:130px; object-fit:cover; }
+  .th.g1 { border-color:var(--b); }
+  .th.g2 { border-color:var(--c); }
+  .th span { position:absolute; left:0; top:0; background:var(--a); color:#fff; font-size:11px; font-weight:700; padding:1px 6px; border-bottom-right-radius:6px; }
+  .th.g1 span { background:var(--b); }
+  .th.g2 span { background:var(--c); }
+  .labels { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; align-items:center; }
+  .labels label { font-size:12px; }
+  .row { display:flex; gap:6px; align-items:center; font-size:12px; }
+  .dot { width:10px; height:10px; border-radius:50%; display:inline-block; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Revisar uniformes</h1>
+  <input type="file" id="file" accept=".json">
+  <input type="search" id="q" placeholder="Buscar (ex.: alemanha)">
+  <select id="filtro">
+    <option value="pend">Só não revisados</option>
+    <option value="todos">Todos</option>
+    <option value="mexidos">Só os que eu alterei</option>
+  </select>
+  <button class="primary" id="baixar">Baixar splits.json</button>
+  <span id="info"></span>
+</header>
+<div id="help">
+  1) Escolha o arquivo <b>data/products.json</b>. 2) Em cada produto, as fotos começam todas na <b style="color:var(--a)">Camisa A</b>.
+  Clique numa foto para passá-la para a <b style="color:var(--b)">Camisa B</b> (outro uniforme) ou <b style="color:var(--c)">C</b>; clicar de novo volta para A.
+  3) Diga se cada camisa é casa, fora ou terceira. 4) Marque "revisado" quando terminar o produto. 5) Baixe o <b>splits.json</b>.
+  Seu progresso fica salvo neste navegador.
+</div>
+<div id="list"></div>
+
+<script>
+(function () {
+  var KEY = "alves-uniformes-v1";
+  var products = [];
+  var state = {}; // slug -> { g:[grupo por imagem], l:{0:"casa",1:"fora",2:""}, done:bool }
+
+  function load() { try { state = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) { state = {}; } }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+  load();
+
+  function st(p) {
+    if (!state[p.slug]) state[p.slug] = { g: p.images.map(function () { return 0; }), l: {}, done: false };
+    return state[p.slug];
+  }
+  function touched(p) {
+    var s = state[p.slug];
+    if (!s) return false;
+    return s.g.some(function (x) { return x !== 0; }) || Object.keys(s.l).some(function (k) { return s.l[k]; });
+  }
+
+  var LABELS = [["", "— uniforme? —"], ["titular", "Casa (titular)"], ["reserva", "Fora (reserva)"], ["terceiro", "Terceira"], ["quarto", "Quarta"], ["revisar", "Outro / não sei"]];
+  var NAMES = ["A", "B", "C"];
+
+  function render() {
+    var q = document.getElementById("q").value.trim().toLowerCase();
+    var f = document.getElementById("filtro").value;
+    var list = document.getElementById("list");
+    list.innerHTML = "";
+    var shown = 0, done = 0;
+    products.forEach(function (p) {
+      var s = state[p.slug];
+      if (s && s.done) done++;
+      if (q && (p.nome + " " + p.slug).toLowerCase().indexOf(q) < 0) return;
+      if (f === "pend" && s && s.done) return;
+      if (f === "mexidos" && !touched(p)) return;
+      shown++;
+      list.appendChild(card(p));
+    });
+    document.getElementById("info").textContent =
+      products.length ? (shown + " na tela · " + done + "/" + products.length + " revisados") : "";
+  }
+
+  function card(p) {
+    var s = st(p);
+    var el = document.createElement("div");
+    el.className = "card" + (s.done ? " done" : "");
+    var h = document.createElement("h3"); h.textContent = p.nome; el.appendChild(h);
+    var sl = document.createElement("div"); sl.className = "slug"; sl.textContent = p.slug; el.appendChild(sl);
+
+    var imgs = document.createElement("div"); imgs.className = "imgs";
+    p.images.forEach(function (im, i) {
+      var t = document.createElement("div");
+      t.className = "th g" + s.g[i];
+      t.title = im.source || "";
+      t.innerHTML = '<span>' + NAMES[s.g[i]] + '</span><img loading="lazy" src="' + im.src + '" alt="foto ' + (i + 1) + '">';
+      t.onclick = function () { s.g[i] = (s.g[i] + 1) % 3; save(); render(); };
+      imgs.appendChild(t);
+    });
+    el.appendChild(imgs);
+
+    var used = [];
+    s.g.forEach(function (g) { if (used.indexOf(g) < 0) used.push(g); });
+    used.sort();
+    var box = document.createElement("div"); box.className = "labels";
+    used.forEach(function (g) {
+      var r = document.createElement("div"); r.className = "row";
+      r.innerHTML = '<span class="dot" style="background:var(--' + ["a", "b", "c"][g] + ')"></span>Camisa ' + NAMES[g] + ':';
+      var sel = document.createElement("select");
+      LABELS.forEach(function (o) {
+        var op = document.createElement("option"); op.value = o[0]; op.textContent = o[1];
+        if ((s.l[g] || "") === o[0]) op.selected = true;
+        sel.appendChild(op);
+      });
+      sel.onchange = function () { s.l[g] = sel.value; save(); };
+      r.appendChild(sel); box.appendChild(r);
+    });
+    var lab = document.createElement("label");
+    var cb = document.createElement("input"); cb.type = "checkbox"; cb.checked = !!s.done;
+    cb.onchange = function () { s.done = cb.checked; save(); render(); };
+    lab.appendChild(cb); lab.appendChild(document.createTextNode(" revisado"));
+    box.appendChild(lab);
+    el.appendChild(box);
+    return el;
+  }
+
+  document.getElementById("file").onchange = function (e) {
+    var file = e.target.files[0]; if (!file) return;
+    var r = new FileReader();
+    r.onload = function () {
+      try {
+        var all = JSON.parse(r.result);
+        products = all.filter(function (p) { return p.images && p.images.length >= 2; });
+        render();
+      } catch (err) { alert("Não consegui ler esse arquivo: " + err.message); }
+    };
+    r.readAsText(file);
+  };
+  document.getElementById("q").oninput = render;
+  document.getElementById("filtro").onchange = render;
+
+  document.getElementById("baixar").onclick = function () {
+    var out = {};
+    products.forEach(function (p) {
+      var s = state[p.slug];
+      if (!s || !touched(p)) return;
+      var groups = [];
+      [0, 1, 2].forEach(function (g) {
+        var idx = [];
+        s.g.forEach(function (x, i) { if (x === g) idx.push(i); });
+        if (idx.length) groups.push({ imagens: idx, uniforme: s.l[g] || "" });
+      });
+      out[p.slug] = groups;
+    });
+    var blob = new Blob([JSON.stringify(out, null, 2)], { type: "application/json" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob); a.download = "splits.json"; a.click();
+  };
+})();
+</script>
+</body>
+</html>
