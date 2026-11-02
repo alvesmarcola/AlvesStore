@@ -28,7 +28,7 @@ interface CatalogPageProps {
   notice?: string;
 }
 
-export function CatalogPage({ title, description, products, breadcrumb, initialType = "", heroImage, heroEyebrow = "Coleção alves store", quickLinks, initialSearch = "", notice }: CatalogPageProps) {
+export function CatalogPage({ title, description, products, breadcrumb, initialType = "", heroImage, heroEyebrow = "Coleção Alves Imports", quickLinks, initialSearch = "", notice }: CatalogPageProps) {
   const [sort, setSort] = useState("relevancia");
   const [search, setSearch] = useState("");
   const [type, setType] = useState(initialType);
@@ -124,7 +124,7 @@ export function CatalogPage({ title, description, products, breadcrumb, initialT
     <main className={`mx-auto max-w-7xl px-4 py-7 lg:px-8 ${heroImage ? "min-h-[55vh]" : ""}`}>
     {!heroImage && <>
       <nav className="mb-5 flex flex-wrap items-center gap-2 text-xs text-muted" aria-label="Breadcrumb"><Link href="/">Início</Link>{breadcrumb.map((item, index) => <span key={item.name} className="flex items-center gap-2"><ChevronRight size={13} />{item.href && index !== breadcrumb.length - 1 ? <Link href={item.href}>{item.name}</Link> : <span>{item.name}</span>}</span>)}</nav>
-      <div className="mb-7"><p className="text-[10px] font-black uppercase tracking-[.2em] text-blue-600">ALVES STORE · COLEÇÃO</p><h1 className="mt-1 text-3xl font-black tracking-tight sm:text-4xl">{title}</h1><p className="mt-2 max-w-2xl text-sm leading-6 text-muted">{description}</p></div>
+      <div className="mb-7"><p className="text-[10px] font-bold uppercase tracking-wider text-blue-600">ALVES IMPORTS · COLEÇÃO</p><h1 className="mt-1 text-3xl font-bold tracking-normal sm:text-4xl">{title}</h1><p className="mt-2 max-w-2xl text-sm leading-6 text-muted">{description}</p></div>
       {notice && <p role="status" className="mb-5 rounded-lg border border-amber-300 bg-amber-50 p-4 text-sm leading-6 text-amber-950">{notice}</p>}
     </>}
     <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-y py-3">
@@ -140,20 +140,20 @@ export function CatalogPage({ title, description, products, breadcrumb, initialT
     </div>
     <div className="grid gap-6 lg:grid-cols-[205px_1fr]">
       <aside className="hidden h-fit rounded-lg border border-border p-4 lg:block">
-        <h2 className="mb-4 text-sm font-black">Filtrar produtos</h2>
+        <h2 className="mb-4 text-sm font-bold">Filtrar produtos</h2>
         {filterFields}
-        {leagueOptions.length > 0 && <div className="mt-6 border-t pt-4"><h3 className="mb-2 text-xs font-black uppercase">Explore ligas</h3>{leagueOptions.slice(0, 6).map((slug) => <Link className="block py-1.5 text-xs text-muted hover:text-ink" key={slug} href={`/ligas/${slug}`}>{catalogLabel(slug)}</Link>)}</div>}
+        {leagueOptions.length > 0 && <div className="mt-6 border-t pt-4"><h3 className="mb-2 text-xs font-bold uppercase">Explore ligas</h3>{leagueOptions.slice(0, 6).map((slug) => <Link className="block py-1.5 text-xs text-muted hover:text-ink" key={slug} href={`/ligas/${slug}`}>{catalogLabel(slug)}</Link>)}</div>}
       </aside>
       <div>
         <ProductGrid items={filtered.slice(0, visibleCount)} />
-        {visibleCount < filtered.length && <button onClick={() => setVisibleCount((count) => count + 12)} className="primary-button mx-auto mt-8 block px-8 py-3 text-xs font-black uppercase">Ver mais produtos</button>}
+        {visibleCount < filtered.length && <button onClick={() => setVisibleCount((count) => count + 12)} className="primary-button mx-auto mt-8 block px-8 py-3 text-xs font-bold uppercase">Ver mais produtos</button>}
       </div>
     </div>
     {filtersOpen && <div className="fixed inset-0 z-[65] bg-black/50 lg:hidden" onClick={() => setFiltersOpen(false)}>
       <section role="dialog" aria-modal="true" aria-labelledby="mobile-filter-title" className="absolute bottom-0 left-0 right-0 max-h-[85dvh] overflow-y-auto rounded-t-2xl bg-white p-5 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] shadow-xl" onClick={(event) => event.stopPropagation()}>
-        <div className="mb-4 flex items-center justify-between"><h2 id="mobile-filter-title" className="text-lg font-black">Filtros</h2><button onClick={() => setFiltersOpen(false)} className="rounded-lg px-3 py-2 text-sm font-bold">Fechar</button></div>
+        <div className="mb-4 flex items-center justify-between"><h2 id="mobile-filter-title" className="text-lg font-bold">Filtros</h2><button onClick={() => setFiltersOpen(false)} className="rounded-lg px-3 py-2 text-sm font-bold">Fechar</button></div>
         {filterFields}
-        <button onClick={() => setFiltersOpen(false)} className="primary-button mt-5 w-full py-3 text-sm font-black uppercase">Ver {filtered.length} produtos</button>
+        <button onClick={() => setFiltersOpen(false)} className="primary-button mt-5 w-full py-3 text-sm font-bold uppercase">Ver {filtered.length} produtos</button>
       </section>
     </div>}
     </main>

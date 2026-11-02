@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "Dúvidas frequentes | Alves Store",
+  title: "Dúvidas frequentes | Alves Imports",
   description: "Entenda o envio internacional, o prazo do código de rastreio e como acompanhar seu pedido.",
   alternates: { canonical: "/duvidas" },
 };
@@ -21,14 +21,14 @@ const questions = [
   },
   {
     question: "Como acompanho a rota da encomenda?",
-    answer: "Use a página de rastreio da Alves Store com o código do pedido e o e-mail ou CPF cadastrado na compra. Quando o código oficial estiver disponível, ele será exibido junto ao status.",
+    answer: "Use a página de rastreio da Alves Imports com o código do pedido e o e-mail ou CPF cadastrado na compra. Quando o código oficial estiver disponível, ele será exibido junto ao status.",
   },
 ];
 
 export default function QuestionsPage() {
   return <main className="mx-auto max-w-3xl px-5 py-12">
-    <p className="text-[10px] font-black uppercase tracking-[.2em] text-blue-600">ALVES STORE · ATENDIMENTO</p>
-    <h1 className="mt-2 text-3xl font-black">Dúvidas frequentes</h1>
+    <p className="text-[10px] font-bold uppercase tracking-wider text-blue-600">ALVES IMPORTS · ATENDIMENTO</p>
+    <h1 className="mt-2 text-3xl font-bold tracking-tight">Dúvidas frequentes</h1>
     <p className="mt-3 text-sm leading-6 text-muted">Informações sobre envio, liberação logística e acompanhamento do seu pedido.</p>
     <div className="mt-8 space-y-4">
       {questions.map(({ question, answer }) => <details key={question} className="group rounded-xl border border-border p-5 open:bg-paper">
@@ -36,6 +36,6 @@ export default function QuestionsPage() {
         <p className="mt-4 text-sm leading-6 text-muted">{answer}</p>
       </details>)}
     </div>
-    <Link href="/rastreio" className="primary-button mt-7 inline-flex px-6 py-3 text-xs font-black uppercase">Acompanhar meu pedido</Link>
+    <Link href="/rastreio" className="primary-button mt-7 inline-flex px-6 py-3 text-xs font-bold uppercase">Acompanhar meu pedido</Link>
   </main>;
 }

@@ -15,7 +15,7 @@ type InstitutionalPage = {
 const pages: Record<string, InstitutionalPage> = {
   "quem-somos": {
     title: "Quem somos",
-    intro: "A Alvis Store é para quem leva a paixão pelo esporte para além do jogo.",
+    intro: "A Alves Imports é para quem leva a paixão pelo esporte para além do jogo.",
     sections: [
       { heading: "Futebol e automobilismo", paragraphs: [
         "Somos especializados em camisas de futebol importadas — versões torcedor e jogador, modelos retrô e kits infantis — e em artigos de Fórmula 1.",
@@ -29,22 +29,22 @@ const pages: Record<string, InstitutionalPage> = {
   },
   privacidade: {
     title: "Política de privacidade",
-    intro: "Esta política explica como as informações são usadas quando você navega, entra em contato ou faz um pedido na Alvis Store.",
+    intro: "Esta política explica como as informações são usadas quando você navega, entra em contato ou faz um pedido na Alves Imports.",
     sections: [
       { heading: "Dados que recebemos", paragraphs: [
         "Para processar um pedido, podemos tratar nome, CPF, e-mail, telefone, endereço de entrega, itens comprados e informações sobre o pagamento. Se você falar com o atendimento, também usamos os dados que enviar na mensagem.",
         "O site guarda no navegador a opção escolhida no aviso de cookies.",
       ] },
       { heading: "Como usamos os dados", paragraphs: [
-        "Usamos os dados para confirmar e processar pedidos, receber pagamentos, encaminhar a entrega, prestar suporte, informar o rastreio e cumprir obrigações legais. O pagamento é processado pelo Mercado Pago; a Alvis Store não recebe os dados completos do cartão.",
+        "Usamos os dados para confirmar e processar pedidos, receber pagamentos, encaminhar a entrega, prestar suporte, informar o rastreio e cumprir obrigações legais. O pagamento é processado pelo Mercado Pago; a Alves Imports não recebe os dados completos do cartão.",
         "Para concluir a entrega, os dados necessários do pedido são compartilhados com os parceiros responsáveis pelo envio. As informações do pedido ficam armazenadas no sistema operacional da loja. Quando os serviços correspondentes estão configurados, dados mínimos também podem ser enviados aos provedores de e-mail e de notificações transacionais por WhatsApp.",
       ] },
       { heading: "Acesso, segurança e direitos", paragraphs: [
         "Mantemos os dados pelo tempo necessário para atender às finalidades do pedido e às obrigações legais aplicáveis. Adotamos controles de acesso e segurança compatíveis com a operação e limitamos o uso às finalidades informadas.",
-        "Você pode solicitar confirmação de tratamento, acesso, correção ou outras providências previstas na LGPD pelo e-mail atendimento@alvesstore.com.br. Para proteger sua conta e seus dados, poderemos confirmar sua identidade antes de atender à solicitação.",
+        "Você pode solicitar confirmação de tratamento, acesso, correção ou outras providências previstas na LGPD pelo e-mail atendimento@alvesimports.com.br. Para proteger sua conta e seus dados, poderemos confirmar sua identidade antes de atender à solicitação.",
       ] },
       { heading: "Responsável pelo atendimento de privacidade", paragraphs: [
-        "A Alvis Store recebe solicitações de privacidade pelo e-mail atendimento@alvesstore.com.br. Para proteger os dados, o atendimento pode confirmar a identidade de quem faz a solicitação.",
+        "A Alves Imports recebe solicitações de privacidade pelo e-mail atendimento@alvesimports.com.br. Para proteger os dados, o atendimento pode confirmar a identidade de quem faz a solicitação.",
       ] },
     ],
     references: [{ label: "Lei Geral de Proteção de Dados (LGPD)", href: "https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm" }],
@@ -71,7 +71,7 @@ const pages: Record<string, InstitutionalPage> = {
     intro: "Compras online e produtos importados continuam protegidos pelos direitos previstos na legislação brasileira.",
     sections: [
       { heading: "Arrependimento da compra", paragraphs: [
-        "Você pode exercer o direito de arrependimento no prazo legal de 7 dias contado do recebimento do produto, conforme o artigo 49 do Código de Defesa do Consumidor. Para iniciar a solicitação, escreva para atendimento@alvesstore.com.br ou fale com a loja pelo WhatsApp, informando o código do pedido.",
+        "Você pode exercer o direito de arrependimento no prazo legal de 7 dias contado do recebimento do produto, conforme o artigo 49 do Código de Defesa do Consumidor. Para iniciar a solicitação, escreva para atendimento@alvesimports.com.br ou fale com a loja pelo WhatsApp, informando o código do pedido.",
         "A equipe confirma o recebimento da solicitação e orienta os próximos passos para a devolução. Aguarde as instruções antes de enviar qualquer produto.",
       ] },
       { heading: "Tamanho, defeito ou divergência", paragraphs: [
@@ -79,14 +79,14 @@ const pages: Record<string, InstitutionalPage> = {
         "Se o produto apresentar defeito ou não corresponder ao pedido, entre em contato com a loja e descreva o ocorrido. Envie fotos quando isso ajudar a identificar o problema. A solicitação será tratada conforme os direitos e prazos previstos em lei.",
       ] },
       { heading: "Como falar com a loja", paragraphs: [
-        "Use o e-mail atendimento@alvesstore.com.br ou o WhatsApp informado na página de Contato. Inclua o código do pedido para que possamos localizar a compra e orientar o atendimento.",
+        "Use o e-mail atendimento@alvesimports.com.br ou o WhatsApp informado na página de Contato. Inclua o código do pedido para que possamos localizar a compra e orientar o atendimento.",
       ] },
     ],
     references: [{ label: "Código de Defesa do Consumidor, artigo 49", href: "https://www.planalto.gov.br/ccivil_03/leis/l8078compilado.htm" }],
   },
   "termos-de-uso": {
     title: "Termos de uso e compra",
-    intro: "Ao navegar ou comprar na Alvis Store, use o site de forma lícita e confira as informações do pedido antes de pagar.",
+    intro: "Ao navegar ou comprar na Alves Imports, use o site de forma lícita e confira as informações do pedido antes de pagar.",
     sections: [
       { heading: "Produtos e disponibilidade", paragraphs: [
         "As páginas apresentam as descrições, imagens, tamanhos disponíveis e valores cadastrados para cada produto. A disponibilidade pode mudar até a confirmação do pedido; a loja informa qualquer impedimento identificado no processamento.",
@@ -107,7 +107,7 @@ const pages: Record<string, InstitutionalPage> = {
     intro: "As etapas da compra são apresentadas antes da confirmação do pedido.",
     sections: [{ heading: "Pagamento e pedido", paragraphs: [
       "O pagamento é processado pelo Mercado Pago. Confira os produtos, tamanhos, endereço e valores no checkout antes de concluir. Após a aprovação, o pedido é encaminhado ao parceiro responsável pela preparação e envio.",
-      "Para dúvidas sobre uma compra, fale com atendimento@alvesstore.com.br ou use o WhatsApp da página de Contato.",
+      "Para dúvidas sobre uma compra, fale com atendimento@alvesimports.com.br ou use o WhatsApp da página de Contato.",
     ] }],
   },
   "como-comprar": {
@@ -139,7 +139,7 @@ function formatCurrency(value: number) {
   return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(value);
 }
 
-const whatsappUrl = "https://wa.me/5499968814?text=Ol%C3%A1%2C%20Alves%20Store!%20Preciso%20de%20ajuda.";
+const whatsappUrl = "https://wa.me/5499968814?text=Ol%C3%A1%2C%20Alves%20Imports!%20Preciso%20de%20ajuda.";
 
 export function generateStaticParams() {
   return Object.keys(pages).map((pagina) => ({ pagina }));
@@ -158,25 +158,25 @@ export default async function InstitutionalPage({ params }: { params: Promise<{ 
 
   return <main className="mx-auto max-w-4xl px-5 py-10 sm:py-14">
     <header className="rounded-2xl bg-ink px-6 py-8 text-white sm:px-10 sm:py-10">
-      <p className="text-[10px] font-black uppercase tracking-[.22em] text-action">Alvis Store · informações</p>
-      <h1 className="mt-3 text-3xl font-black sm:text-4xl">{page.title}</h1>
+      <p className="text-[10px] font-bold uppercase tracking-wider text-action">Alves Imports · informações</p>
+      <h1 className="mt-3 text-3xl font-bold tracking-normal sm:text-4xl">{page.title}</h1>
       <p className="mt-3 max-w-2xl text-sm leading-6 text-white/75">{page.intro}</p>
     </header>
 
     {pagina === "contato" && <section className="mt-6 grid gap-4 sm:grid-cols-2" aria-label="Canais de contato">
       <a href={`mailto:${storeConfig.email}`} className="group flex min-h-28 items-center gap-4 rounded-xl border border-border bg-white p-5 transition hover:border-blue-300 hover:shadow-sm">
         <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-blue-50 text-blue-700"><Mail size={20} /></span>
-        <span className="min-w-0"><span className="block text-xs font-black uppercase">E-mail</span><span className="mt-1 block break-all text-sm text-muted">{storeConfig.email}</span></span><ArrowUpRight size={16} className="ml-auto shrink-0 text-muted transition group-hover:text-blue-700" />
+        <span className="min-w-0"><span className="block text-xs font-bold uppercase">E-mail</span><span className="mt-1 block break-all text-sm text-muted">{storeConfig.email}</span></span><ArrowUpRight size={16} className="ml-auto shrink-0 text-muted transition group-hover:text-blue-700" />
       </a>
       <a href={whatsappUrl} target="_blank" rel="noreferrer" className="group flex min-h-28 items-center gap-4 rounded-xl border border-border bg-white p-5 transition hover:border-green-300 hover:shadow-sm">
         <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-green-50 text-green-700"><MessageCircle size={20} /></span>
-        <span><span className="block text-xs font-black uppercase">WhatsApp</span><span className="mt-1 block text-sm text-muted">+54 9996-8814 · atendimento rápido</span></span><ArrowUpRight size={16} className="ml-auto shrink-0 text-muted transition group-hover:text-green-700" />
+        <span><span className="block text-xs font-bold uppercase">WhatsApp</span><span className="mt-1 block text-sm text-muted">+54 9996-8814 · atendimento rápido</span></span><ArrowUpRight size={16} className="ml-auto shrink-0 text-muted transition group-hover:text-green-700" />
       </a>
     </section>}
 
     <div className="mt-6 space-y-4">
       {page.sections.map((section) => <section key={section.heading} className="rounded-xl border border-border bg-white p-5 sm:p-7">
-        <h2 className="text-lg font-black">{section.heading}</h2>
+        <h2 className="text-lg font-bold">{section.heading}</h2>
         <div className="mt-3 space-y-3 text-sm leading-7 text-muted">{section.paragraphs.map((paragraph) => <p key={paragraph} className="whitespace-pre-line">{paragraph}</p>)}</div>
       </section>)}
     </div>

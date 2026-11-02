@@ -1,5 +1,5 @@
 export const storeConfig = {
-  name: "ALVES STORE",
+  name: "ALVES IMPORTS",
   fanCommonPrice: 160,
   kidsPrice: 180,
   fanFullPatchPrice: 180,
@@ -15,5 +15,5 @@ export const storeConfig = {
   customizationPrice: 20,
   patchPrice: 10,
   size2GGPrice: 10,
-  email: "atendimento@alvesstore.com.br",
+  email: "atendimento@alvesimports.com.br",
 } as const;

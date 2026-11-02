@@ -48,14 +48,14 @@ export function ProductCard({ product }: { product: Product }) {
     </div>
     <div className="pt-3">
       <p className="line-clamp-2 min-h-10 text-xs font-medium leading-5 text-ink sm:text-sm">{product.nome}</p>
-      <div className="mt-2 flex items-baseline gap-2"><span className="text-base font-black text-ink">{classification.reviewRequired ? classification.priceLabel : `A partir de ${formatCurrency(getProductUnitPrice(product)!)}`}</span></div>
+      <div className="mt-2 flex items-baseline gap-2"><span className="text-base font-bold text-ink">{classification.reviewRequired ? classification.priceLabel : `A partir de ${formatCurrency(getProductUnitPrice(product)!)}`}</span></div>
       <p className="mt-1 text-[10px] leading-4 text-muted">{getProductOfferText(product)}</p>
       <p className="mt-1 text-[10px] text-muted">Tamanho 2GG: +{formatCurrency(storeConfig.size2GGPrice)}</p>
       {allowsCustomization(product) && <p className="mt-1 text-[10px] text-muted">Personalização: +{formatCurrency(storeConfig.customizationPrice)} por camisa</p>}
       <div className="mt-3 flex flex-wrap gap-1" aria-label="Selecione um tamanho">
         {product.tamanhos.slice(0, 6).map((itemSize) => <button key={itemSize} onClick={() => setSize(itemSize)} aria-label={`Tamanho ${itemSize}`} className={`grid h-7 min-w-7 place-items-center rounded-lg border px-1 text-[10px] font-bold ${size === itemSize ? "border-pitch bg-pitch text-white" : "border-border text-ink"}`}>{itemSize}</button>)}
       </div>
-      {!classification.reviewRequired && size ? <button onClick={add} aria-label={"Comprar " + product.nome} className="product-buy mt-3 flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-action py-2.5 text-[11px] font-black uppercase tracking-wide text-white transition hover:bg-action-hover">{added ? <><Check size={15} /> Adicionado!</> : <><ShoppingBag size={15} />Comprar</>}</button> : <Link href={"/produto/" + product.slug} aria-label={"Ver compra de " + product.nome} className="product-buy mt-3 flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-action py-2.5 text-[11px] font-black uppercase tracking-wide text-white transition hover:bg-action-hover"><ShoppingBag size={15} />{classification.price !== null ? "Comprar" : "Ver produto"}</Link>}
+      {!classification.reviewRequired && size ? <button onClick={add} aria-label={"Comprar " + product.nome} className="product-buy mt-3 flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-action py-2.5 text-[11px] font-bold uppercase tracking-wider text-white transition hover:bg-action-hover">{added ? <><Check size={15} /> Adicionado!</> : <><ShoppingBag size={15} />Comprar</>}</button> : <Link href={"/produto/" + product.slug} aria-label={"Ver compra de " + product.nome} className="product-buy mt-3 flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-action py-2.5 text-[11px] font-bold uppercase tracking-wider text-white transition hover:bg-action-hover"><ShoppingBag size={15} />{classification.price !== null ? "Comprar" : "Ver produto"}</Link>}
     </div>
   </article>;
 }

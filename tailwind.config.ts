@@ -17,8 +17,8 @@ const config: Config = {
         danger: "#DC2626",
       },
       fontFamily: {
-        display: ["Impact", "Haettenschweiler", "Arial Narrow", "sans-serif"],
-        sans: ["Inter", "Arial", "Helvetica", "sans-serif"],
+        display: ["Inter", "system-ui", "-apple-system", "sans-serif"],
+        sans: ["Inter", "system-ui", "-apple-system", "sans-serif"],
       },
       boxShadow: {
         card: "0 10px 35px rgba(10, 10, 10, .08)",

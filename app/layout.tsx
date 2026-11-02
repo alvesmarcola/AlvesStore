@@ -10,10 +10,10 @@ import "./globals.css";
 export const revalidate = 300;
 
 export const metadata: Metadata = {
-  title: { default: "ALVES STORE | Vista seu time", template: "%s | ALVES STORE" },
-  description: "Camisas de futebol para vestir seu time. Encontre modelos masculinos, femininos, retrô e seleções.",
+  title: { default: "ALVES IMPORTS | Camisas de Futebol e Artigos Esportivos", template: "%s | ALVES IMPORTS" },
+  description: "Camisas de futebol importadas, versões torcedor, jogador, retrô e F1. Vista as cores do seu time com a Alves Imports.",
   metadataBase: new URL("https://alves-store-green.vercel.app"),
-  openGraph: { title: "ALVES STORE", description: "Vista seu time. Leve o jogo com você.", type: "website", locale: "pt_BR" },
+  openGraph: { title: "ALVES IMPORTS", description: "Vista a paixão pelo seu time com a Alves Imports.", type: "website", locale: "pt_BR" },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

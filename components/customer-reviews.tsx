@@ -137,14 +137,14 @@ export function CustomerReviews() {
           transition={{ duration: reducedMotion ? 0 : 0.55 }}
           className="mb-10 text-center sm:mb-14"
         >
-          <p className="text-[10px] font-black uppercase tracking-[.2em] text-action sm:text-xs">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-action sm:text-xs">
             Prova social
           </p>
-          <h2 id="reviews-title" className="mt-2 text-3xl font-black uppercase tracking-tight sm:text-5xl text-zinc-950">
+          <h2 id="reviews-title" className="mt-2 text-3xl font-bold uppercase tracking-normal sm:text-4xl text-zinc-950">
             O que dizem nossos clientes
           </h2>
           <p className="mx-auto mt-3 max-w-xl text-sm text-zinc-600 sm:text-base">
-            Depoimentos reais de torcedores que vestem as camisas da Alves Store.
+            Depoimentos reais de torcedores que vestem as camisas da Alves Imports.
           </p>
 
           {/* Rating Summary Dinâmico (somente quando há avaliações aprovadas) */}
@@ -214,7 +214,7 @@ export function CustomerReviews() {
               Ainda não há avaliações aprovadas
             </h3>
             <p className="mx-auto mt-1 max-w-md text-xs text-zinc-500 sm:text-sm">
-              Comprou na Alves Store? Seja o primeiro a compartilhar sua experiência preenchendo o formulário abaixo!
+              Comprou na Alves Imports? Seja o primeiro a compartilhar sua experiência preenchendo o formulário abaixo!
             </p>
           </div>
         ) : (
@@ -254,7 +254,7 @@ export function CustomerReviews() {
 
                 {/* Autor: Avatar + Nome + Cidade + Badge */}
                 <div className="mt-5 flex items-center gap-3 border-t border-zinc-100 pt-4">
-                  <div className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-zinc-900 text-xs font-black text-white">
+                  <div className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-zinc-900 text-xs font-bold text-white">
                     {testimonial.nome ? testimonial.nome.charAt(0).toUpperCase() : "A"}
                   </div>
                   <div className="min-w-0">
@@ -277,7 +277,7 @@ export function CustomerReviews() {
               type="button"
               onClick={handleLoadMore}
               disabled={loadingMore}
-              className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border border-zinc-700 bg-zinc-900 px-8 py-3 text-xs font-black uppercase tracking-wider text-white transition hover:bg-zinc-800 hover:border-zinc-600 disabled:cursor-not-allowed disabled:opacity-50 shadow-sm"
+              className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border border-zinc-700 bg-zinc-900 px-8 py-3 text-xs font-bold uppercase tracking-wider text-white transition hover:bg-zinc-800 hover:border-zinc-600 disabled:cursor-not-allowed disabled:opacity-50 shadow-sm"
             >
               {loadingMore ? (
                 <span>Carregando...</span>

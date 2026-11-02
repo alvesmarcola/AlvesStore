@@ -23,10 +23,10 @@ export const metadata: Metadata = { alternates: { canonical: "/" } };
 export const revalidate = 300;
 
 const features: { icon: typeof ShoppingBag; title: string; text: string; link?: { label: string; href: string } }[] = [
-  { icon: ShoppingBag, title: "Condições de envio", text: "R$ 20 (1 ou 2 itens) · grátis a partir de 3", link: { label: "Ver regras completas", href: "/envios-e-prazos" } },
-  { icon: WalletCards, title: "Pagamento", text: "Finalize seu pedido com segurança pelo Mercado Pago." },
-  { icon: Truck, title: "Envio direto", text: "Seu pedido segue do fornecedor ao endereço informado." },
-  { icon: HeartHandshake, title: "Personalização", text: `+${formatCurrency(storeConfig.customizationPrice)} por camisa` },
+  { icon: ShoppingBag, title: "Frete facilitado", text: "R$ 20 (1 ou 2 itens) · Grátis a partir de 3 peças", link: { label: "Ver regras completas", href: "/envios-e-prazos" } },
+  { icon: WalletCards, title: "Pagamento seguro", text: "Pix imediato ou cartão em até 12x via Mercado Pago." },
+  { icon: Truck, title: "Envio rastreado", text: "Acompanhamento completo do despacho até sua casa." },
+  { icon: HeartHandshake, title: "Personalização", text: `Nome e número oficiais por +${formatCurrency(storeConfig.customizationPrice)}.` },
 ];
 
 const collections = [
@@ -36,8 +36,9 @@ const collections = [
 ];
 
 const differentials = [
-  { title: "Clubes e seleções", body: "Explore camisas de clubes e seleções nacionais em categorias separadas.", links: [{ label: "Ver clubes", href: "/clubes" }, { label: "Ver seleções", href: "/selecoes" }] },
-  { title: "Personalização opcional", body: `Adicione nome e número por ${formatCurrency(storeConfig.customizationPrice)} a cada camisa personalizada.`, links: [{ label: "Escolher uma camisa", href: "/masculino" }] },
+  { title: "Clubes e seleções", body: "Explore os principais mantos de clubes do Brasil e do mundo, além de seleções nacionais.", links: [{ label: "Ver clubes", href: "/clubes" }, { label: "Ver seleções", href: "/selecoes" }] },
+  { title: "Personalização oficial", body: `Adicione seu nome e número favorito por apenas ${formatCurrency(storeConfig.customizationPrice)} por camisa.`, links: [{ label: "Escolher uma camisa", href: "/masculino" }] },
+  { title: "Qualidade premium", body: "Tecidos tecnológicos respiráveis, bordados precisos e acabamento de alto padrão para quem vive o esporte.", links: [{ label: "Conhecer a loja", href: "/quem-somos" }] },
 ];
 
 function ProductSection({
@@ -58,10 +59,10 @@ function ProductSection({
       <div className="mx-auto max-w-7xl px-5 py-14 lg:px-8 lg:py-20">
         <Reveal className="mb-7 flex items-end justify-between gap-4 sm:mb-9">
           <div>
-            <p className="text-[10px] font-black uppercase tracking-[.2em] text-action">{kicker}</p>
-            <h2 className="mt-2 text-3xl font-black uppercase tracking-tight sm:text-5xl">{title}</h2>
+            <p className="text-[10px] font-bold uppercase tracking-wider text-action">{kicker}</p>
+            <h2 className="mt-2 text-3xl font-bold uppercase tracking-normal sm:text-4xl">{title}</h2>
           </div>
-          <Link className="mb-1 flex shrink-0 items-center gap-1 text-[10px] font-black uppercase tracking-wide hover:text-action" href={href}>Ver tudo <ArrowRight size={15} /></Link>
+          <Link className="mb-1 flex shrink-0 items-center gap-1 text-[10px] font-bold uppercase tracking-wider hover:text-action" href={href}>Ver tudo <ArrowRight size={15} /></Link>
         </Reveal>
         <ProductGrid items={items} />
       </div>
@@ -116,7 +117,7 @@ export default async function HomePage() {
       <section className="league-marquee bg-action py-4 text-white" aria-label="Ligas disponíveis">
         <div className="league-marquee-track flex w-max whitespace-nowrap">
           {[0, 1].map((copy) => <div className="flex min-w-[100vw] shrink-0 items-center justify-around gap-8 px-4" key={copy} aria-hidden={copy === 1}>
-            {marqueeText.map((label, index) => <span className="flex shrink-0 items-center gap-8" key={`${copy}-${label}-${index}`}><span className="text-[11px] font-black uppercase tracking-[.22em] sm:text-sm">{label}</span><span className="text-lg text-white/50" aria-hidden="true">✳</span></span>)}
+            {marqueeText.map((label, index) => <span className="flex shrink-0 items-center gap-8" key={`${copy}-${label}-${index}`}><span className="text-[11px] font-bold uppercase tracking-wider sm:text-sm">{label}</span><span className="text-lg text-white/50" aria-hidden="true">✳</span></span>)}
           </div>)}
         </div>
       </section>
@@ -128,7 +129,7 @@ export default async function HomePage() {
             <Reveal key={title} delay={index * 0.06} className="h-full">
               <div className="flex h-full min-h-28 items-start gap-3 rounded-xl border border-black/5 bg-white p-4 shadow-sm sm:min-h-32 sm:p-5">
                 <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-ink text-action"><Icon size={19} /></span>
-                <div className="min-w-0"><h2 className="text-xs font-black uppercase">{title}</h2><p className="mt-1 text-[10px] leading-5 text-muted sm:text-xs">{text}</p>{link && <Link href={link.href} className="mt-2 inline-flex text-[10px] font-bold text-blue-700 underline underline-offset-2">{link.label}</Link>}</div>
+                <div className="min-w-0"><h2 className="text-xs font-bold uppercase">{title}</h2><p className="mt-1 text-[10px] leading-5 text-muted sm:text-xs">{text}</p>{link && <Link href={link.href} className="mt-2 inline-flex text-[10px] font-bold text-blue-700 underline underline-offset-2">{link.label}</Link>}</div>
               </div>
             </Reveal>
           ))}
@@ -138,7 +139,7 @@ export default async function HomePage() {
       {/* ─── 4. COLLECTIONS BENTO ─── */}
       <section className="mx-auto max-w-7xl px-5 py-14 lg:px-8 lg:py-20" aria-label="Explore coleções">
         <Reveal className="mb-7 flex items-end justify-between gap-4">
-          <div><p className="text-[10px] font-black uppercase tracking-[.2em] text-action">Escolha o seu lado</p><h2 className="mt-2 text-3xl font-black uppercase sm:text-5xl">O jogo é seu</h2></div>
+          <div><p className="text-[10px] font-bold uppercase tracking-wider text-action">Escolha o seu lado</p><h2 className="mt-2 text-3xl font-bold uppercase tracking-normal sm:text-4xl">O jogo é seu</h2></div>
           <span className="hidden text-[10px] font-bold uppercase tracking-widest text-muted sm:block">Três formas de viver o futebol</span>
         </Reveal>
         <div className="collection-bento grid gap-4 sm:grid-cols-12">
@@ -156,11 +157,11 @@ export default async function HomePage() {
                   style={{ objectPosition: `${item.image.focalPoint.x}% ${item.image.focalPoint.y}%` }}
                 />
                 <span className="collection-shade absolute inset-0 -z-10" />
-                <span aria-hidden="true" className="collection-outline pointer-events-none absolute right-[-.04em] top-0 -z-10 text-[5rem] font-black uppercase leading-none tracking-tighter text-transparent sm:text-[8rem]">{item.title}</span>
-                <span className="text-[10px] font-black uppercase tracking-[.2em] text-blue-200">{item.sub}</span>
+                <span aria-hidden="true" className="collection-outline pointer-events-none absolute right-[-.04em] top-0 -z-10 text-[5rem] font-bold uppercase leading-none tracking-normal text-transparent sm:text-[8rem]">{item.title}</span>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-blue-200">{item.sub}</span>
                 <span className="mt-2 flex items-end justify-between gap-3">
-                  <span className="text-3xl font-black uppercase leading-none sm:text-5xl">{item.title}</span>
-                  <span className="collection-cta inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-wide text-white">Explorar <ArrowRight size={15} /></span>
+                  <span className="text-3xl font-bold uppercase leading-none tracking-normal sm:text-4xl">{item.title}</span>
+                  <span className="collection-cta inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-white">Explorar <ArrowRight size={15} /></span>
                 </span>
               </Link>
             </Reveal>
@@ -178,15 +179,15 @@ export default async function HomePage() {
       <section className="bg-[#F5F5F5] py-14 sm:py-20">
         <div className="mx-auto max-w-7xl px-5 lg:px-8">
           <Reveal>
-            <p className="text-[10px] font-black uppercase tracking-[.2em] text-action">As cores que moram na arquibancada</p>
-            <h2 className="mt-2 text-3xl font-black uppercase sm:text-5xl">Clubes em destaque</h2>
+            <p className="text-[10px] font-bold uppercase tracking-wider text-action">As cores que moram na arquibancada</p>
+            <h2 className="mt-2 text-3xl font-bold uppercase tracking-normal sm:text-4xl">Clubes em destaque</h2>
             <p className="mt-3 max-w-xl text-sm text-muted">Descubra camisas de clubes de várias ligas.</p>
           </Reveal>
           <div className="mt-7 grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 lg:grid-cols-6">
             {clubLinks.map((club, index) => (
               <Reveal key={`${club.league}-${club.slug}`} delay={(index % 6) * 0.04}>
                 <Link href={`/ligas/${club.league}/${club.slug}`} className="club-text-card group flex min-h-20 items-center justify-between gap-2 rounded-lg border border-border bg-white p-3 transition hover:border-action hover:bg-ink hover:text-white">
-                  <span className="min-w-0 text-xs font-black uppercase leading-tight">{club.name}</span>
+                  <span className="min-w-0 text-xs font-bold uppercase leading-tight">{club.name}</span>
                   <ArrowRight size={14} className="shrink-0 text-action transition group-hover:translate-x-1" />
                 </Link>
               </Reveal>
@@ -224,7 +225,7 @@ export default async function HomePage() {
           <Reveal key={item.title} delay={index * 0.08} className="h-full">
             <div className="differential-card h-full rounded-lg border border-border bg-white p-6 sm:p-7">
               <span className="mb-5 block h-1 w-10 bg-action" />
-              <h2 className="text-lg font-black uppercase leading-tight">{item.title}</h2>
+              <h2 className="text-lg font-bold uppercase leading-tight">{item.title}</h2>
               <p className="mt-3 text-sm leading-6 text-muted">{item.body}</p>
               <div className="mt-4 flex flex-wrap gap-4">{item.links.map((link) => <Link key={link.href} href={link.href} className="text-xs font-bold text-blue-700 underline">{link.label}</Link>)}</div>
             </div>

@@ -38,11 +38,11 @@ export function InstagramCTA() {
             <InstagramIcon className="h-10 w-10 sm:h-12 sm:w-12" />
           </motion.div>
 
-          <p className="text-[10px] font-black uppercase tracking-[.3em] text-white/80 sm:text-xs">
-            @alvesstore
+          <p className="text-[10px] font-bold uppercase tracking-widest text-white/80 sm:text-xs">
+            @imports_alvess
           </p>
 
-          <h2 className="mt-4 text-3xl font-black uppercase leading-tight tracking-tight sm:text-5xl">
+          <h2 className="mt-4 text-3xl font-bold uppercase leading-tight tracking-normal sm:text-4xl">
             Siga-nos no Instagram
           </h2>
 
@@ -56,7 +56,7 @@ export function InstagramCTA() {
             href="https://www.instagram.com/imports_alvess/"
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-8 inline-flex items-center gap-3 rounded-full border-2 border-white bg-white px-8 py-4 text-xs font-black uppercase tracking-wider text-[#833ab4] shadow-xl transition-all hover:bg-transparent hover:text-white hover:shadow-2xl sm:text-sm"
+            className="mt-8 inline-flex items-center gap-3 rounded-full border-2 border-white bg-white px-8 py-4 text-xs font-bold uppercase tracking-wider text-[#833ab4] shadow-xl transition-all hover:bg-transparent hover:text-white hover:shadow-2xl sm:text-sm"
             whileHover={reducedMotion ? undefined : { scale: 1.04 }}
             whileTap={reducedMotion ? undefined : { scale: 0.97 }}
           >

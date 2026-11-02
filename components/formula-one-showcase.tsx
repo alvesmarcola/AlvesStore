@@ -71,15 +71,15 @@ export function FormulaOneShowcase({ href = "/f1" }: { href?: string }) {
             transition={{ duration: reduceMotion ? 0 : 0.65, ease: [0.2, 0.7, 0.25, 1] }}
             className="relative z-10"
           >
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[.04] px-3 py-2 text-[9px] font-black uppercase tracking-[.22em] text-white/65 sm:text-[10px]">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[.04] px-3 py-2 text-[9px] font-bold uppercase tracking-wider text-white/65 sm:text-[10px]">
               <span className="relative flex h-2 w-2"><span className="f1-live-pulse absolute inline-flex h-full w-full rounded-full bg-[#e10600] opacity-70" /><span className="relative inline-flex h-2 w-2 rounded-full bg-[#ff3933]" /></span>
               Universo motorsport <span className="text-white/25">/</span> Fórmula 1
             </div>
 
-            <p className="mb-3 flex items-center gap-2 text-[10px] font-black uppercase tracking-[.3em] text-[#ff5550]">
+            <p className="mb-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-[#ff5550]">
               <span className="h-px w-7 bg-[#e10600]" /> Paixão em alta rotação
             </p>
-            <h2 id="f1-title" className="max-w-full text-[clamp(2.75rem,7.2vw,5.75rem)] font-black uppercase leading-[.96] tracking-[-.025em]">
+            <h2 id="f1-title" className="max-w-full text-[clamp(2.5rem,6.5vw,5.25rem)] font-bold uppercase leading-[1.05] tracking-normal">
               Sinta a <span className="f1-title-outline block whitespace-nowrap text-transparent">velocidade.</span>
             </h2>
             <p className="mt-6 max-w-md text-sm leading-6 text-white/60 sm:text-base sm:leading-7">
@@ -88,7 +88,7 @@ export function FormulaOneShowcase({ href = "/f1" }: { href?: string }) {
 
             <Link
               href={href}
-              className="f1-cta mt-8 inline-flex min-h-12 items-center gap-5 rounded-sm bg-[#e10600] px-5 py-3 text-[10px] font-black uppercase tracking-[.14em] text-white transition duration-300 hover:bg-[#ff2019] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#ff514b]"
+              className="f1-cta mt-8 inline-flex min-h-12 items-center gap-5 rounded-sm bg-[#e10600] px-5 py-3 text-[10px] font-bold uppercase tracking-wider text-white transition duration-300 hover:bg-[#ff2019] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#ff514b]"
             >
               Explorar coleção F1 <ArrowUpRight size={15} strokeWidth={2.5} />
             </Link>

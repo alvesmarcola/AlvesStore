@@ -14,7 +14,7 @@ const slides = [
     copy: "Vista a energia do futebol, da arquibancada ao último minuto.",
     cta: "Explore a coleção",
     href: "/masculino",
-    label: "ALVES STORE · EM CAMPO",
+    label: "ALVES IMPORTS · EM CAMPO",
     image: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1920&q=80&auto=format&fit=crop",
     imageAlt: "Estádio de futebol lotado com iluminação noturna",
   },
@@ -121,7 +121,7 @@ export function HeroCarousel() {
 
       <div className="arena-hero-shade absolute inset-0 -z-10" />
       <div className="arena-pitch-lines pointer-events-none absolute inset-0 -z-10" aria-hidden="true" />
-      <span className="hero-outline pointer-events-none absolute bottom-8 right-[-.06em] -z-10 select-none text-[21vw] font-black uppercase leading-none tracking-tighter text-transparent" aria-hidden="true">EM CAMPO</span>
+      <span className="hero-outline pointer-events-none absolute bottom-8 right-[-.06em] -z-10 select-none text-[20vw] font-bold uppercase leading-none tracking-normal text-transparent" aria-hidden="true">EM CAMPO</span>
 
       <div className="mx-auto flex min-h-[100svh] max-w-7xl flex-col justify-center px-5 pb-28 pt-28 lg:px-8">
         <AnimatePresence mode="wait" custom={direction} initial={false}>
@@ -135,11 +135,11 @@ export function HeroCarousel() {
             transition={{ duration: shouldAnimate ? 0.45 : 0, ease: [0.2, 0.7, 0.25, 1] }}
             className="max-w-4xl"
           >
-            <span className="inline-flex items-center gap-3 text-[10px] font-black uppercase tracking-[.26em] text-blue-200 sm:text-xs">
+            <span className="inline-flex items-center gap-3 text-[10px] font-bold uppercase tracking-wider text-blue-200 sm:text-xs">
               <span className="h-px w-8 bg-action" />
               {slide.eyebrow}
             </span>
-            <h1 aria-label={slide.title.join(" ")} className="mt-7 max-w-full text-[clamp(3rem,9vw,8.3rem)] font-black uppercase leading-[.88] tracking-[-.055em]">
+            <h1 aria-label={slide.title.join(" ")} className="mt-7 max-w-full text-[clamp(2.75rem,8vw,7.5rem)] font-bold uppercase leading-[1.05] tracking-tight sm:tracking-normal">
               {slide.title.map((line, index) => (
                 <motion.span
                   key={`${active}-${line}`}
@@ -154,7 +154,7 @@ export function HeroCarousel() {
               ))}
             </h1>
             <p className="mt-7 max-w-lg text-sm leading-6 text-white/75 sm:text-base">{slide.copy}</p>
-            <MagneticLink href={slide.href} className="magnetic-cta mt-8 inline-flex items-center gap-3 rounded-lg bg-action px-6 py-4 text-xs font-black uppercase tracking-wider text-white transition-colors hover:bg-action-hover">
+            <MagneticLink href={slide.href} className="magnetic-cta mt-8 inline-flex items-center gap-3 rounded-lg bg-action px-6 py-4 text-xs font-bold uppercase tracking-wider text-white transition-colors hover:bg-action-hover">
               {slide.cta}
               <ArrowRight size={16} />
             </MagneticLink>
@@ -163,7 +163,7 @@ export function HeroCarousel() {
       </div>
 
       {/* Label bottom-left */}
-      <div className="absolute bottom-7 left-5 flex items-center gap-3 text-[10px] font-black uppercase tracking-[.18em] text-white/60 sm:left-8">
+      <div className="absolute bottom-7 left-5 flex items-center gap-3 text-[10px] font-bold uppercase tracking-wider text-white/60 sm:left-8">
         <span className="h-px w-10 bg-action" />
         {slide.label}
       </div>

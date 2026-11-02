@@ -42,11 +42,11 @@ export function CategoryHero({
             </span>
           ))}
         </nav>
-        <p className="text-[10px] font-black uppercase tracking-[.25em] text-blue-200">{eyebrow}</p>
-        <h1 className="mt-2 max-w-5xl text-5xl font-black uppercase leading-[.9] tracking-tight sm:text-7xl lg:text-8xl">{title}</h1>
+        <p className="text-[10px] font-bold uppercase tracking-wider text-blue-200">{eyebrow}</p>
+        <h1 className="mt-2 max-w-5xl text-4xl font-bold uppercase leading-[1.05] tracking-normal sm:text-6xl lg:text-7xl">{title}</h1>
         <div className="mt-4 flex max-w-3xl items-end justify-between gap-4">
           <p className="max-w-xl text-sm leading-6 text-white/75 sm:text-base">{description}</p>
-          <span className="hidden shrink-0 items-center gap-2 text-[10px] font-black uppercase tracking-wider text-white sm:inline-flex">Vista a arquibancada <ArrowRight size={15} className="text-action" /></span>
+          <span className="hidden shrink-0 items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-white sm:inline-flex">Vista a arquibancada <ArrowRight size={15} className="text-action" /></span>
         </div>
         {quickLinks.length > 0 && <div className="mt-5 flex max-w-full gap-2 overflow-x-auto pb-1" aria-label="Clubes em destaque">{quickLinks.map((club) => <Link key={club.href} href={club.href} className="shrink-0 rounded-full border border-white/30 bg-black/20 px-3 py-2 text-[10px] font-bold text-white transition hover:border-action hover:bg-action">{club.name}</Link>)}</div>}
       </div>

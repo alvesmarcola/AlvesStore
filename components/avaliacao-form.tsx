@@ -145,7 +145,7 @@ export function AvaliacaoForm({ onSuccess, className = "" }: AvaliacaoFormProps)
   return (
     <div className={`rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm sm:p-8 ${className}`}>
       <div className="mb-6 text-center sm:text-left">
-        <h3 className="text-xl font-black uppercase tracking-tight text-zinc-950 sm:text-2xl">
+        <h3 className="text-xl font-bold uppercase tracking-normal text-zinc-950 sm:text-2xl">
           Deixe sua avaliação
         </h3>
         <p className="mt-1 text-xs text-zinc-500 sm:text-sm">
@@ -295,7 +295,7 @@ export function AvaliacaoForm({ onSuccess, className = "" }: AvaliacaoFormProps)
           <button
             type="submit"
             disabled={loading}
-            className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg border border-zinc-800 bg-zinc-950 py-3 text-xs font-black uppercase tracking-wider text-white transition hover:bg-zinc-800 hover:border-zinc-700 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto sm:px-8 shadow-sm"
+            className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg border border-zinc-800 bg-zinc-950 py-3 text-xs font-bold uppercase tracking-wider text-white transition hover:bg-zinc-800 hover:border-zinc-700 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto sm:px-8 shadow-sm"
           >
             {loading ? (
               <span>Enviando...</span>

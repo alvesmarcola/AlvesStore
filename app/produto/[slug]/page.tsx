@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const product = await getSupabaseProductBySlug(slug);
   return product
-    ? { title: product.nome, description: `Confira ${product.nome} no catálogo atualizado da Alves Store.`, alternates: { canonical: `https://alves-store-green.vercel.app/produto/${product.slug}` } }
+    ? { title: product.nome, description: `Garanta a sua ${product.nome} na Alves Imports com qualidade premium e envio para todo o Brasil.`, alternates: { canonical: `https://alves-store-green.vercel.app/produto/${product.slug}` } }
     : { title: "Produto não encontrado" };
 }
 

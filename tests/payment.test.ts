@@ -139,20 +139,20 @@ test("identifica intenções Home, Away, Third, versões, temporada e manga", ()
   assert.equal(parseSearchIntent("SS camisa do Flamengo").sleeve, "short");
   const playerSearch = searchProducts(products, "Versão jogador do Brasil");
   assert.ok(playerSearch.results.some((entry) => entry.tipo === "jogador" && entry.nome.includes("Brasil")));
-  const awaySearch = searchProducts(products, "Away do Real Madrid 25/26");
-  assert.equal(awaySearch.results.length, 0);
-  assert.ok(awaySearch.alternatives.some((entry) => entry.nome.includes("Real Madrid") && entry.temporada === "25/26"));
+  const fourthSearch = searchProducts(products, "fourth Real Madrid 25/26");
+  assert.equal(fourthSearch.results.length, 0);
+  assert.ok(fourthSearch.alternatives.some((entry) => entry.nome.includes("Real Madrid") && entry.temporada === "25/26"));
 
   const madrid = products.find((entry) => entry.nome.includes("Real Madrid") && entry.temporada === "25/26");
   const barcelona = products.find((entry) => entry.nome.includes("Barcelona") && entry.temporada === "25/26");
   const flamengo = products.find((entry) => entry.nome.includes("Flamengo") && entry.temporada === "25/26");
   assert.ok(madrid && barcelona && flamengo);
   const prior = [madrid, barcelona, flamengo].map((entry) => productOverrides[entry.id]);
-  productOverrides[madrid.id] = { ...prior[0], uniform: "reserva", source: "https://example.com/madrid", verifiedBy: "teste" };
+  productOverrides[madrid.id] = { ...prior[0], uniform: "quarto", source: "https://example.com/madrid", verifiedBy: "teste" };
   productOverrides[barcelona.id] = { ...prior[1], uniform: "terceiro", source: "https://example.com/barcelona", verifiedBy: "teste" };
   productOverrides[flamengo.id] = { ...prior[2], uniform: "titular", source: "https://example.com/flamengo", verifiedBy: "teste" };
   try {
-    assert.ok(searchProducts(products, "Away do Real Madrid 25/26").results.some((entry) => entry.id === madrid.id));
+    assert.ok(searchProducts(products, "fourth Real Madrid 25/26").results.some((entry) => entry.id === madrid.id));
     assert.ok(searchProducts(products, "Third Barcelona 25/26").results.some((entry) => entry.id === barcelona.id));
     assert.ok(searchProducts(products, "Home Flamengo 25/26").results.some((entry) => entry.id === flamengo.id));
   } finally {
