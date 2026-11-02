@@ -56,6 +56,20 @@ Preços classificados: torcedor comum R$ 160,00; torcedor full patch R$ 180,00; 
 
 Patches de competição ficam em `data/patches.ts` e custam R$ 10,00 cada, por camisa (`patchPrice` em `config.ts`). Hoje: Brasileirão, Copa do Brasil, Libertadores, Champions League e Campeão do Mundo. Cada patch só aparece para as ligas (`leagueSlugs`) ou clubes/seleções (`clubSlugs`) listados nele, e nunca em camisas retrô ou de Fórmula 1. O cliente marca quantos quiser na página do produto; a escolha vai para o carrinho, é revalidada no servidor (preço, compatibilidade e posição) e fica gravada em `item_lines` do pedido, visível no painel `/admin/pedidos`. Para adicionar um patch novo, inclua um item em `patchOptions`.
 
+### Separar camisas misturadas no mesmo produto (casa/fora/terceira)
+
+Quando um álbum traz camisas diferentes (por exemplo casa e fora do mesmo clube), a separação manual vai em `data/splits.json` (formato descrito no topo de `scripts/aplicar-splits.mjs`) e é aplicada com:
+
+- `npm run catalog:splits:pendentes`: lista os produtos com 2+ fotos que ainda não estão no `splits.json`. Tudo o que aparece aqui continua misturado no site.
+- `npm run catalog:splits`: aplica o `splits.json` e regrava `data/products.json`. Parte sempre de `data/products.backup.json` (catálogo sem divisões), então pode ser repetido sem duplicar nem perder fotos. Avisa se alguma foto ficou fora de todos os grupos.
+- Depois de rodar `npm run catalogar` (que gera produtos sem divisão), use `node scripts/aplicar-splits.mjs --nova-base` para adotar o resultado como nova base e reaplicar as divisões.
+
+O site só mostra o que está no `data/products.json` publicado no deploy: depois de aplicar as divisões, faça commit do `products.json` (e do `splits.json`) na branch que o Vercel publica como Production. Se existir a tabela `products` no Supabase, produtos de lá com o mesmo `slug` prevalecem sobre os do arquivo (ver `getSupabaseProducts`).
+
+### Imagens otimizadas
+
+`public/otimizadas` guarda uma única versão de 800 px (`NN-800.webp`) por foto; é a única que o catálogo referencia. `npm run catalogar` gera só essa. Para remover arquivos que o site não usa (pastas de produtos antigos, tamanhos que não existem mais), rode `npm run catalog:limpar-imagens` (só mostra) e `node scripts/limpar-otimizadas.mjs --apply` (apaga).
+
 ## Pedidos, rastreio e WhatsApp
 
 Os pedidos desta aplicação são armazenados em `store_orders` e `store_order_payments` no Supabase. A API usa uma chave privada apenas no servidor; a tabela aplica RLS e não concede acesso público. O painel `/admin` redireciona para `/admin/pedidos`; use o valor privado de `ADMIN_ORDERS_TOKEN` quando solicitado. O painel lista os 200 pedidos mais recentes e permite atualizar o código de rastreio.

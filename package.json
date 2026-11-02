@@ -9,6 +9,9 @@
     "build": "next build",
     "start": "next start",
     "catalog:override": "tsx scripts/set-product-override.ts",
+    "catalog:splits": "node scripts/aplicar-splits.mjs",
+    "catalog:splits:pendentes": "node scripts/aplicar-splits.mjs --pendentes",
+    "catalog:limpar-imagens": "node scripts/limpar-otimizadas.mjs",
     "test": "tsx --test tests/payment.test.ts",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit"
