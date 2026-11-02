@@ -56,7 +56,9 @@ const allowedExtensions = new Set([".jpg", ".jpeg", ".png", ".webp"]);
 const minFileBytes = 12_000;
 const minWidth = 200;
 const minHeight = 250;
-const sizes = [400, 800, 1600] as const;
+// O catálogo só usa a versão de 800 px (ver `src` em optimizeImage). Gerar 400 e 1600 multiplicava
+// por três os arquivos de public/otimizadas sem que ninguém os carregasse.
+const sizes = [800] as const;
 const reviewFields: ReviewField[] = ["clube", "liga", "publico", "tipo", "temporada", "uniforme"];
 const audiences = new Set<Audience>(["masculino", "feminino", "unissex", "infantil", "revisar"]);
 const productTypes = new Set<ProductType>(["torcedor", "jogador", "goleiro", "retro", "treino", "cropped", "regata", "inverno", "vestido", "revisar"]);
@@ -759,7 +761,7 @@ async function main() {
 
   console.log("\nRelatório de catalogação");
   console.log(`Produtos agrupados: ${products.length}`);
-  console.log(`Imagens válidas/processadas: ${validImages.length} (${dryRun ? "prévia; otimizações não gravadas" : `${optimizedCount} variantes criadas ou atualizadas; 3 tamanhos por imagem`})`);
+  console.log(`Imagens válidas/processadas: ${validImages.length} (${dryRun ? "prévia; otimizações não gravadas" : `${optimizedCount} variantes criadas ou atualizadas; 1 tamanho (800 px) por imagem`})`);
   console.log(`Produtos sem liga identificada: ${noLeague}`);
   console.log(`Produtos sem clube identificado: ${noClub}`);
   console.log(`Produtos com dados para revisar: ${reviewRows.length}`);
