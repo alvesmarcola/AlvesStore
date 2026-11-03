@@ -1965,5 +1965,2466 @@
       ],
       "uniforme": "reserva"
     }
+  ],
+  "camisa-jogador-brasileirao-corinthians-24-25": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "camisa-jogador-brasileirao-corinthians-26-27": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "camisa-jogador-brasileirao-palmeiras-26-27": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": "reserva"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "terceiro"
+    }
+  ],
+  "camisa-jogador-brasileirao-sao-paulo-26-27": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": "reserva"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    }
+  ],
+  "camisa-jogador-campeonato-alemao-bayern-munich-26-27": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": "reserva"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "terceiro"
+    }
+  ],
+  "camisa-jogador-campeonato-argentino-river-plate-26-27": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": "reserva"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    }
+  ],
+  "camisa-jogador-campeonato-da-arabia-al-hilal-25-26": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "camisa-jogador-campeonato-da-arabia-al-nassr-26-27": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "camisa-jogador-campeonato-frances-paris-saint-germain-25-26": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    }
+  ],
+  "camisa-jogador-campeonato-frances-paris-saint-germain-26-27": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    },
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": "terceiro"
+    }
+  ],
+  "camisa-jogador-campeonato-holandes-ajax-26-27": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "camisa-jogador-campeonato-italiano-inter-25-26": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "camisa-jogador-campeonato-italiano-inter-26-27": [
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "reserva"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "terceiro"
+    }
+  ],
+  "camisa-jogador-campeonato-italiano-juventus-25-26": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    }
+  ],
+  "camisa-jogador-campeonato-italiano-milan-26-27": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "camisa-jogador-campeonato-italiano-roma-26-27": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "camisa-jogador-campeonato-portugues-benfica-26-27": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "camisa-jogador-campeonato-portugues-porto-26-27": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    }
+  ],
+  "camisa-jogador-campeonato-turco-galatasaray-26-27-26-27": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "camisa-jogador-la-liga-barcelona-26-27": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    },
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": "terceiro"
+    },
+    {
+      "imagens": [
+        3
+      ],
+      "uniforme": ""
+    }
+  ],
+  "camisa-jogador-liga-mexicana-atlas-26-27-26-27": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "camisa-jogador-liga-mexicana-chivas-26-27-26-27": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "camisa-jogador-liga-mexicana-cruz-azul-26-27-26-27": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "camisa-jogador-liga-mexicana-leon-26-27-26-27": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "camisa-jogador-liga-mexicana-pumas-26-27-26-27": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "camisa-jogador-liga-mexicana-tigres-26-27-26-27": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "camisa-jogador-liga-mexicana-toluca-26-27-26-27": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    }
+  ],
+  "camisa-jogador-premier-league-arsenal-25-26": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": ""
+    }
+  ],
+  "camisa-jogador-premier-league-arsenal-26-27": [
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    }
+  ],
+  "camisa-jogador-premier-league-aston-villa-26-27": [
+    {
+      "imagens": [
+        0,
+        1
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "camisa-jogador-premier-league-chelsea-25-26": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "camisa-jogador-premier-league-manchester-united-26-27": [
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    }
+  ],
+  "camisa-jogador-selecoes-africa-africa-do-sul-26-27-copa-do-mundo-26-27": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "camisa-jogador-selecoes-america-do-norte-central-mexico-26-27": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "camisa-jogador-selecoes-asia-oriente-medio-iraque-26-27-copa-do-mundo-26-27": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "camisa-jogador-selecoes-asia-oriente-medio-japao-26-27": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "camisa-jogador-selecoes-europa-alemanha-26-27": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "camisa-jogador-selecoes-europa-croacia-26-27-copa-do-mundo-26-27": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "camisa-jogador-selecoes-europa-franca-26-27": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "camisa-jogador-selecoes-europa-suica-26-27-copa-do-mundo-26-27": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    }
+  ],
+  "camisa-manga-longa-retro-selecoes-europa-franca": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "camisa-manga-longa-torcedor-campeonato-frances-paris-saint-germain-25-26": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    }
+  ],
+  "camisa-manga-longa-torcedor-la-liga-real-betis-26-27": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    }
+  ],
+  "camisa-manga-longa-torcedor-selecoes-america-do-norte-mexico-26-27": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    },
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": ""
+    }
+  ],
+  "camisa-manga-longa-torcedor-selecoes-america-do-sul-colombia-26-27-copa-do-mundo-26-27": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "camisa-manga-longa-torcedor-selecoes-asia-japao-26-27": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "camisa-manga-longa-torcedor-selecoes-europa-inglaterra-26-27": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "camisa-manga-longa-torcedor-selecoes-europa-portugal-25-26": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "camisa-manga-longa-torcedor-selecoes-europa-portugal-26-27": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": ""
+    }
+  ],
+  "femininas-campeonato-brasileiro-atletico-mineiro-25-26": [
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "reserva"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    }
+  ],
+  "femininas-campeonato-brasileiro-atletico-mineiro-26-27": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "femininas-campeonato-brasileiro-bahia-26-27": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "femininas-campeonato-brasileiro-botafogo-24-25": [
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "terceiro"
+    }
+  ],
+  "femininas-campeonato-brasileiro-botafogo-25-26": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": ""
+    }
+  ],
+  "femininas-campeonato-brasileiro-cruzeiro-24-25": [
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "reserva"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "terceiro"
+    }
+  ],
+  "femininas-campeonato-brasileiro-cruzeiro-26-27": [
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "terceiro"
+    }
+  ],
+  "femininas-campeonato-brasileiro-flamengo-24-25": [
+    {
+      "imagens": [
+        3
+      ],
+      "uniforme": "reserva"
+    },
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": "terceiro"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    }
+  ],
+  "femininas-campeonato-brasileiro-flamengo-26-27": [
+    {
+      "imagens": [
+        3
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "reserva"
+    },
+    {
+      "imagens": [
+        0,
+        4
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": ""
+    }
+  ],
+  "femininas-campeonato-brasileiro-gremio-26-27": [
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    }
+  ],
+  "femininas-campeonato-brasileiro-palmeiras-26-27": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "terceiro"
+    }
+  ],
+  "femininas-campeonato-brasileiro-remo-26-27": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "femininas-campeonato-brasileiro-sao-paulo-24-25": [
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "reserva"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "terceiro"
+    }
+  ],
+  "femininas-campeonato-brasileiro-sao-paulo-25-26": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "terceiro"
+    }
+  ],
+  "femininas-campeonato-brasileiro-sao-paulo-26-27": [
+    {
+      "imagens": [
+        1,
+        2
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "femininas-campeonato-brasileiro-sport-24-25-24-25": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": ""
+    }
+  ],
+  "femininas-campeonato-brasileiro-sport-26-27-26-27": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    }
+  ],
+  "femininas-campeonato-brasileiro-vasco-da-gama-24-25": [
+    {
+      "imagens": [
+        3
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": "reserva"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    }
+  ],
+  "femininas-campeonato-da-arabia-saudita-al-nassr-23-24": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": "reserva"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    }
+  ],
+  "femininas-la-liga-real-madrid-26-27": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": ""
+    }
+  ],
+  "femininas-premier-league-arsenal-26-27": [
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    }
+  ],
+  "femininas-premier-league-liverpool-26-27": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    }
+  ],
+  "femininas-premier-league-manchester-united-26-27": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": ""
+    }
+  ],
+  "femininas-selecoes-europa-holanda-26-27-copa-do-mundo-26-27": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "femininas-selecoes-europa-italia-26-27": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    }
+  ],
+  "femininas-selecoes-europa-portugal-26-27": [
+    {
+      "imagens": [
+        1,
+        2
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        3
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    }
+  ],
+  "kits-infantis-selecoes-africa-africa-do-sul-26-27-copa-do-mundo-26-27": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "kits-infantis-selecoes-africa-tunisia-26-27-copa-do-mundo-26-27": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "kits-infantis-selecoes-america-do-norte-mexico-26-27": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "kits-infantis-selecoes-asia-japao-26-27": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "kits-infantis-selecoes-europa-alemanha-26-27": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "kits-infantis-selecoes-europa-belgica-26-27-copa-do-mundo-26-27": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "kits-infantis-selecoes-europa-escocia-26-27-copa-do-mundo-26-27": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    }
+  ],
+  "kits-infantis-selecoes-europa-espanha-26-27": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "kits-infantis-selecoes-europa-franca-26-27": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "kits-infantis-selecoes-europa-holanda-26-27-copa-do-mundo-26-27": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "kits-infantis-selecoes-europa-italia-24-25": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "kits-infantis-selecoes-europa-italia-26-27": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "kits-infantis-selecoes-europa-portugal-26-27": [
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    }
+  ],
+  "retro-campeonato-brasileiro-bahia-2013": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    }
+  ],
+  "retro-campeonato-brasileiro-botafogo-1995": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "reserva"
+    },
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": ""
+    }
+  ],
+  "retro-campeonato-brasileiro-botafogo-1996": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    }
+  ],
+  "retro-campeonato-brasileiro-corinthians-1997": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "retro-campeonato-brasileiro-corinthians-1998": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "retro-campeonato-brasileiro-corinthians-1999": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "retro-campeonato-brasileiro-corinthians-2000": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "retro-campeonato-brasileiro-corinthians-2005": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "retro-campeonato-brasileiro-corinthians-2009": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": "reserva"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    }
+  ],
+  "retro-campeonato-brasileiro-corinthians-2011": [
+    {
+      "imagens": [
+        1,
+        2
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "retro-campeonato-brasileiro-corinthians-2012": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": "reserva"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    }
+  ],
+  "retro-campeonato-brasileiro-flamengo-2010": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    }
+  ],
+  "retro-campeonato-brasileiro-fluminense": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    },
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": ""
+    }
+  ],
+  "retro-campeonato-brasileiro-palmeiras": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    }
+  ],
+  "retro-campeonato-brasileiro-palmeiras-1996": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "reserva"
+    },
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": ""
+    }
+  ],
+  "retro-campeonato-brasileiro-palmeiras-1999": [
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "reserva"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    }
+  ],
+  "retro-campeonato-brasileiro-santos-2011": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "retro-campeonato-brasileiro-sao-paulo": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        2,
+        3
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        4
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        5
+      ],
+      "uniforme": ""
+    }
+  ],
+  "retro-campeonato-brasileiro-vasco-da-gama": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "retro-campeonato-espanhol-barcelona": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        3
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        4
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        5
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        6
+      ],
+      "uniforme": ""
+    }
+  ],
+  "retro-campeonato-espanhol-barcelona-1998": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    }
+  ],
+  "retro-campeonato-espanhol-real-madrid": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        3
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        4,
+        10
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        5
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        6
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        7
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        8
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        9
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        11
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        12
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        13
+      ],
+      "uniforme": ""
+    }
+  ],
+  "retro-campeonato-italiano-inter": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    }
+  ],
+  "retro-campeonato-italiano-napoli": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "retro-campeonato-italiano-roma-1991": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    }
+  ],
+  "retro-selecoes-africa-jamaica": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "retro-selecoes-africa-nigeria": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    }
+  ],
+  "retro-selecoes-africa-senegal": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    }
+  ],
+  "retro-selecoes-america-do-norte-estados-unidos-2002": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "retro-selecoes-america-do-norte-mexico": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        3
+      ],
+      "uniforme": ""
+    }
+  ],
+  "retro-selecoes-america-do-sul-argentina": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        3
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        4
+      ],
+      "uniforme": ""
+    }
+  ],
+  "retro-selecoes-america-do-sul-brasil": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        3
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        4
+      ],
+      "uniforme": ""
+    }
+  ],
+  "retro-selecoes-america-do-sul-uruguai-2010": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "retro-selecoes-europa-alemanha": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": ""
+    }
+  ],
+  "retro-selecoes-europa-dinamarca": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    }
+  ],
+  "retro-selecoes-europa-espanha": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        3
+      ],
+      "uniforme": ""
+    }
+  ],
+  "retro-selecoes-europa-espanha-2000": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "retro-selecoes-europa-franca": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    }
+  ],
+  "retro-selecoes-europa-franca-1994": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "retro-selecoes-europa-holanda": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        3
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        4
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        5
+      ],
+      "uniforme": ""
+    }
+  ],
+  "retro-selecoes-europa-holanda-2014-2014": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    }
+  ],
+  "retro-selecoes-europa-inglaterra": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        3
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        4
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        5
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        6
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        7
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        8
+      ],
+      "uniforme": ""
+    }
+  ],
+  "selecoes-africa-costa-do-marfim-26-27": [
+    {
+      "imagens": [
+        0,
+        1
+      ],
+      "uniforme": ""
+    }
+  ],
+  "selecoes-america-do-norte-guatemala-26-27-26-27": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": ""
+    }
+  ],
+  "selecoes-america-do-norte-haiti-26-27-copa-do-mundo-26-27": [
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    }
+  ],
+  "selecoes-america-do-norte-jamaica-26-27-26-27": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    }
+  ],
+  "selecoes-america-do-sul-uruguai-24-25": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "selecoes-asia-oceania-oriente-medio-coreia-do-sul-24-25": [
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "selecoes-asia-oceania-oriente-medio-coreia-do-sul-25-26": [
+    {
+      "imagens": [
+        1,
+        2
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    }
+  ],
+  "selecoes-europa-austria-26-27-copa-do-mundo-26-27": [
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    }
+  ],
+  "selecoes-europa-holanda-26-27-copa-do-mundo-26-27": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": "reserva"
+    }
+  ],
+  "selecoes-europa-suica-26-27-copa-do-mundo-26-27": [
+    {
+      "imagens": [
+        0
+      ],
+      "uniforme": "titular"
+    },
+    {
+      "imagens": [
+        1
+      ],
+      "uniforme": ""
+    },
+    {
+      "imagens": [
+        2
+      ],
+      "uniforme": ""
+    }
   ]
 }
