@@ -5,9 +5,11 @@ import { motion, useReducedMotion } from "framer-motion";
 import { Star, Quote, MessageSquarePlus } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import type { Avaliacao } from "@/lib/types";
-import { AvaliacaoForm } from "@/components/avaliacao-form";
+import { AvaliacaoForm, type AvaliacaoEnviada } from "@/components/avaliacao-form";
 
-const PAGE_SIZE = 6;
+const INITIAL_SIZE = 6; // avaliações mostradas de início
+const MAX_ALL = 300; // teto de segurança do "Ver todas as avaliações"
+const REVIEW_COLUMNS = "id, created_at, nome, cidade, nota, comentario, aprovado";
 
 function StarRating({ count }: { count: number }) {
   return (
@@ -42,22 +44,24 @@ export function CustomerReviews() {
   const reducedMotion = useReducedMotion();
   const [reviews, setReviews] = useState<Avaliacao[]>([]);
   const [loading, setLoading] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [hasMore, setHasMore] = useState(false);
+  const [loadingAll, setLoadingAll] = useState(false);
+  const [showingAll, setShowingAll] = useState(false);
   const [totalCount, setTotalCount] = useState<number | null>(null);
+  // Média de TODAS as avaliações publicadas (calculada no banco; não depende de quantas estão na tela).
+  const [average, setAverage] = useState<number | null>(null);
 
   useEffect(() => {
     let isMounted = true;
 
     async function loadInitialReviews() {
       try {
-        // Busca dinâmica de avaliações aprovadas ordenadas por created_at desc (lote inicial de 6)
+        // Só as 6 mais recentes: o resto só é buscado se a pessoa pedir ("Ver todas as avaliações").
         const { data, count, error } = await supabase
           .from("avaliacoes")
-          .select("id, created_at, nome, cidade, nota, comentario, aprovado", { count: "exact" })
+          .select(REVIEW_COLUMNS, { count: "exact" })
           .eq("aprovado", true)
           .order("created_at", { ascending: false })
-          .range(0, PAGE_SIZE - 1);
+          .range(0, INITIAL_SIZE - 1);
 
         if (error) {
           console.warn("Aviso ao carregar avaliações do Supabase:", error.message || error);
@@ -66,9 +70,7 @@ export function CustomerReviews() {
 
         if (isMounted && data) {
           setReviews(data);
-          const total = typeof count === "number" ? count : data.length;
-          setTotalCount(total);
-          setHasMore(data.length < total);
+          setTotalCount(typeof count === "number" ? count : data.length);
         }
       } catch (err) {
         console.warn("Aviso ao buscar avaliações:", err);
@@ -77,54 +79,76 @@ export function CustomerReviews() {
       }
     }
 
+    async function loadSummary() {
+      try {
+        // Função `avaliacoes_resumo` da migração: devolve total e média sem trazer as linhas.
+        const { data, error } = await supabase.rpc("avaliacoes_resumo");
+        const row = Array.isArray(data) ? data[0] : data;
+        if (error || !row || !isMounted) return;
+        const media = Number(row.media);
+        const total = Number(row.total);
+        if (Number.isFinite(media) && media > 0) setAverage(media);
+        if (Number.isFinite(total)) setTotalCount((atual) => Math.max(atual ?? 0, total));
+      } catch {
+        // Sem a função no banco, a média cai para as avaliações exibidas.
+      }
+    }
+
     loadInitialReviews();
+    loadSummary();
 
     return () => {
       isMounted = false;
     };
   }, []);
 
-  async function handleLoadMore() {
-    if (loadingMore || !hasMore) return;
-    setLoadingMore(true);
+  async function handleShowAll() {
+    if (loadingAll || showingAll) return;
+    setLoadingAll(true);
 
     try {
-      const from = reviews.length;
-      const to = from + PAGE_SIZE - 1;
-
-      const { data, count, error } = await supabase
+      const { data, error } = await supabase
         .from("avaliacoes")
-        .select("id, created_at, nome, cidade, nota, comentario, aprovado", { count: "exact" })
+        .select(REVIEW_COLUMNS)
         .eq("aprovado", true)
         .order("created_at", { ascending: false })
-        .range(from, to);
+        .range(0, MAX_ALL - 1);
 
       if (error) {
-        console.warn("Aviso ao carregar mais avaliações:", error.message || error);
+        console.warn("Aviso ao carregar todas as avaliações:", error.message || error);
         return;
       }
 
-      if (data && data.length > 0) {
-        const nextReviews = [...reviews, ...data];
-        setReviews(nextReviews);
-        const total = typeof count === "number" ? count : (totalCount ?? nextReviews.length);
-        setTotalCount(total);
-        setHasMore(nextReviews.length < total);
-      } else {
-        setHasMore(false);
+      if (data) {
+        setReviews(data);
+        setTotalCount((atual) => Math.max(atual ?? 0, data.length));
+        setShowingAll(true);
       }
     } catch (err) {
-      console.warn("Erro ao carregar mais avaliações:", err);
+      console.warn("Erro ao carregar todas as avaliações:", err);
     } finally {
-      setLoadingMore(false);
+      setLoadingAll(false);
     }
   }
 
-  const averageRating = reviews.length > 0
-    ? (reviews.reduce((sum, r) => sum + (Number(r.nota) || 5), 0) / reviews.length).toFixed(1)
-    : null;
+  // A avaliação recém-enviada aparece no topo na hora, sem nova consulta ao banco.
+  function handleReviewSent(nova: AvaliacaoEnviada) {
+    const entrada: Avaliacao = {
+      id: `novo-${Date.now()}`,
+      created_at: new Date().toISOString(),
+      aprovado: true,
+      ...nova,
+    };
+    setReviews((atual) => [entrada, ...atual]);
+    setTotalCount((atual) => (atual ?? 0) + 1);
+    setAverage(null); // a média exata volta a ser calculada com a próxima visita; até lá usa as exibidas
+  }
 
-  const totalReviewsCount = totalCount ?? reviews.length;
+  const shownAverage = reviews.length > 0
+    ? (average ?? reviews.reduce((sum, r) => sum + (Number(r.nota) || 5), 0) / reviews.length).toFixed(1)
+    : null;
+  const totalReviewsCount = Math.max(totalCount ?? 0, reviews.length);
+  const hasMore = !showingAll && totalReviewsCount > reviews.length;
 
   return (
     <section className="bg-[#FAFAFA] py-16 sm:py-20" aria-labelledby="reviews-title">
@@ -147,15 +171,15 @@ export function CustomerReviews() {
             Depoimentos reais de torcedores que vestem as camisas da Alves Imports.
           </p>
 
-          {/* Rating Summary Dinâmico (somente quando há avaliações aprovadas) */}
-          {reviews.length > 0 && averageRating && (
+          {/* Rating Summary Dinâmico (somente quando há avaliações) */}
+          {reviews.length > 0 && shownAverage && (
             <div className="mt-5 inline-flex items-center gap-3 rounded-full border border-zinc-200 bg-white px-5 py-2 shadow-sm">
               <div className="flex gap-0.5">
                 {Array.from({ length: 5 }).map((_, i) => (
                   <Star key={i} size={16} className="fill-amber-400 text-amber-400" />
                 ))}
               </div>
-              <span className="text-sm font-bold text-zinc-900">{averageRating}</span>
+              <span className="text-sm font-bold text-zinc-900">{shownAverage}</span>
               <span className="text-xs text-zinc-500">
                 baseado em {totalReviewsCount} {totalReviewsCount === 1 ? "avaliação real" : "avaliações reais"}
               </span>
@@ -205,13 +229,13 @@ export function CustomerReviews() {
             ))}
           </div>
         ) : reviews.length === 0 ? (
-          /* Estado Vazio elegante: sem avaliações aprovadas ainda */
+          /* Estado Vazio elegante: sem avaliações ainda */
           <div className="rounded-2xl border border-dashed border-zinc-300 bg-white p-8 text-center sm:p-12 shadow-sm">
             <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-zinc-100 text-zinc-600">
               <Quote size={24} className="text-zinc-500" />
             </div>
             <h3 className="mt-4 text-base font-bold text-zinc-900 sm:text-lg">
-              Ainda não há avaliações aprovadas
+              Ainda não há avaliações
             </h3>
             <p className="mx-auto mt-1 max-w-md text-xs text-zinc-500 sm:text-sm">
               Comprou na Alves Imports? Seja o primeiro a compartilhar sua experiência preenchendo o formulário abaixo!
@@ -261,28 +285,25 @@ export function CustomerReviews() {
                     <p className="truncate text-xs font-bold text-zinc-900">{testimonial.nome}</p>
                     <p className="truncate text-[10px] text-zinc-500">{testimonial.cidade}</p>
                   </div>
-                  <span className="ml-auto shrink-0 rounded-full bg-green-50 px-2 py-0.5 text-[9px] font-bold text-green-700">
-                    ✓ Compra verificada
-                  </span>
                 </div>
               </motion.article>
             ))}
           </div>
         )}
 
-        {/* Botão Carregar Mais Avaliações (oculto quando não há mais registros) */}
+        {/* Botão "Ver todas": só busca o restante no banco quando é clicado */}
         {hasMore && (
           <div className="mt-10 flex justify-center">
             <button
               type="button"
-              onClick={handleLoadMore}
-              disabled={loadingMore}
+              onClick={handleShowAll}
+              disabled={loadingAll}
               className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border border-zinc-700 bg-zinc-900 px-8 py-3 text-xs font-bold uppercase tracking-wider text-white transition hover:bg-zinc-800 hover:border-zinc-600 disabled:cursor-not-allowed disabled:opacity-50 shadow-sm"
             >
-              {loadingMore ? (
+              {loadingAll ? (
                 <span>Carregando...</span>
               ) : (
-                <span>Carregar mais avaliações</span>
+                <span>Ver todas as avaliações ({totalReviewsCount})</span>
               )}
             </button>
           </div>
@@ -291,7 +312,7 @@ export function CustomerReviews() {
         {/* Formulário de Envio de Avaliação */}
         <div id="avaliacao-form-section" className="mt-14 sm:mt-16 pt-10 border-t border-zinc-200">
           <div className="mx-auto max-w-2xl">
-            <AvaliacaoForm />
+            <AvaliacaoForm onSuccess={handleReviewSent} />
           </div>
         </div>
       </div>

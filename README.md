@@ -72,6 +72,10 @@ O site só mostra o que está no `data/products.json` publicado no deploy: depoi
 
 `public/otimizadas` guarda uma única versão de 800 px (`NN-800.webp`) por foto; é a única que o catálogo referencia. `npm run catalogar` gera só essa. Para remover arquivos que o site não usa (pastas de produtos antigos, tamanhos que não existem mais), rode `npm run catalog:limpar-imagens` (só mostra) e `node scripts/limpar-otimizadas.mjs --apply` (apaga).
 
+## Avaliações de clientes
+
+As avaliações vão para a tabela `avaliacoes` do Supabase e **são publicadas na hora**, sem aprovação. Aplique uma vez `supabase/migrations/20261103000000_avaliacoes_publicacao_automatica.sql` no SQL Editor (ela troca as políticas antigas, deixa `aprovado` com padrão `true` e cria `avaliacoes_resumo()`, que dá total e média). A página inicial mostra só as 6 mais recentes; "Ver todas as avaliações" busca o restante (até 300) apenas quando clicado. Para tirar uma avaliação do ar (spam, ofensa), marque `aprovado = false` na linha pelo painel do Supabase.
+
 ## Pedidos, rastreio e WhatsApp
 
 Os pedidos desta aplicação são armazenados em `store_orders` e `store_order_payments` no Supabase. A API usa uma chave privada apenas no servidor; a tabela aplica RLS e não concede acesso público. O painel `/admin` redireciona para `/admin/pedidos`; use o valor privado de `ADMIN_ORDERS_TOKEN` quando solicitado. O painel lista os 200 pedidos mais recentes e permite atualizar o código de rastreio.

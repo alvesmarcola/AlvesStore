@@ -7,8 +7,18 @@ import { supabase } from "@/lib/supabase";
 const STORAGE_KEY = "alves_store_review_last_sent";
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 
+export interface AvaliacaoEnviada {
+  nome: string;
+  cidade: string;
+  nota: number;
+  comentario: string;
+}
+
+const MENSAGEM_SUCESSO = "Obrigado! Sua avaliação já está publicada logo acima.";
+
 interface AvaliacaoFormProps {
-  onSuccess?: () => void;
+  /** Chamado após o envio, com os dados enviados, para a lista mostrar a avaliação na hora. */
+  onSuccess?: (avaliacao: AvaliacaoEnviada) => void;
   className?: string;
 }
 
@@ -46,8 +56,8 @@ export function AvaliacaoForm({ onSuccess, className = "" }: AvaliacaoFormProps)
 
     // Anti-spam leve: checagem do honeypot invisível
     if (honeypot.trim() !== "") {
-      // Simula sucesso silencioso para bots
-      setSuccessMessage("Obrigado! Sua avaliação aparecerá no site após a aprovação.");
+      // Simula sucesso silencioso para bots (nada é enviado nem mostrado na lista)
+      setSuccessMessage(MENSAGEM_SUCESSO);
       setNome("");
       setCidade("");
       setComentario("");
@@ -103,7 +113,9 @@ export function AvaliacaoForm({ onSuccess, className = "" }: AvaliacaoFormProps)
     setLoading(true);
 
     try {
-      // Inserção no Supabase SEM usar .select() no final (RLS pública restringe leitura a aprovado = true)
+      // A avaliação entra publicada (a coluna `aprovado` tem padrão true; ver
+      // supabase/migrations/20261103000000_avaliacoes_publicacao_automatica.sql).
+      // Sem .select() no final: a lista recebe os dados enviados via onSuccess.
       const { error } = await supabase.from("avaliacoes").insert({
         nome: cleanNome,
         cidade: cleanCidade,
@@ -126,14 +138,14 @@ export function AvaliacaoForm({ onSuccess, className = "" }: AvaliacaoFormProps)
       }
 
       // Feedback exato de sucesso e limpeza completa do formulário
-      setSuccessMessage("Obrigado! Sua avaliação aparecerá no site após a aprovação.");
+      setSuccessMessage(MENSAGEM_SUCESSO);
       setNome("");
       setCidade("");
       setComentario("");
       setNota(5);
       setHoverNota(0);
 
-      onSuccess?.();
+      onSuccess?.({ nome: cleanNome, cidade: cleanCidade, nota, comentario: cleanComentario });
     } catch (err) {
       console.warn("Erro inesperado ao enviar avaliação:", err);
       setErrorMessage("Ocorreu um erro ao enviar. Verifique sua conexão e tente novamente.");
