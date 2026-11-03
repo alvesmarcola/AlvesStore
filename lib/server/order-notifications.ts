@@ -18,19 +18,20 @@ export type OrderNotice = {
 
 export type OrderNoticeEvent = "order_paid" | "tracking_code_updated";
 
-function whatsappRecipient(event: OrderNoticeEvent, order: OrderNotice) {
-  if (event === "order_paid") return process.env.WHATSAPP_ORDER_RECIPIENT?.replace(/\D/g, "") ?? "";
+function whatsappRecipient(order: OrderNotice) {
   if (order.customer.whatsappUpdates !== true) return "";
-  return String(order.customer.phone ?? "").replace(/\D/g, "");
+  const phone = String(order.customer.phone ?? "").replace(/\D/g, "");
+  if (phone.length === 10 || phone.length === 11) return `55${phone}`;
+  return phone;
 }
 
 /** Sends order events to a configured automation/provider that delivers WhatsApp messages. */
 export async function sendWhatsAppOrderNotice(event: OrderNoticeEvent, order: OrderNotice): Promise<boolean | null> {
   const endpoint = process.env.WHATSAPP_ORDER_WEBHOOK_URL?.trim();
   if (!endpoint) return null;
-  const recipient = whatsappRecipient(event, order);
+  const recipient = whatsappRecipient(order);
   if (!recipient) {
-    console.warn(`Notificação WhatsApp ${event} ignorada: destinatário não configurado ou sem opt-in.`);
+    console.warn(`Notificação WhatsApp ${event} ignorada: cliente sem consentimento ou telefone válido.`);
     return false;
   }
 
@@ -44,10 +45,19 @@ export async function sendWhatsAppOrderNotice(event: OrderNoticeEvent, order: Or
   }
 
   const authorization = process.env.WHATSAPP_ORDER_WEBHOOK_TOKEN?.trim();
+  const orderCode = order.id.slice(0, 8).toUpperCase();
+  const trackingUrl = order.tracking_code
+    ? `https://rastreamento.correios.com.br/app/index.php?codigo=${encodeURIComponent(order.tracking_code)}`
+    : "";
+  const customerName = String(order.customer.fullName ?? "").trim().split(/\s+/)[0] || "cliente";
+  const message = event === "order_paid"
+    ? `Olá, ${customerName}! O pagamento do pedido ${orderCode} foi confirmado. Seu pedido da Resenha Sports Cia já está sendo preparado.`
+    : `Olá, ${customerName}! Seu pedido ${orderCode} da Resenha Sports Cia foi despachado pelos Correios. Código de rastreio: ${order.tracking_code}. Acompanhe a entrega: ${trackingUrl}`;
   const body = {
     event,
     to: recipient,
-    store: "Alves Store",
+    store: "Resenha Sports Cia",
+    message,
     order: {
       id: order.id,
       status: order.status,
@@ -109,8 +119,8 @@ export async function sendTrackingUpdateEmail(order: OrderNotice): Promise<boole
       body: JSON.stringify({
         from,
         to: [email],
-        subject: "Código de rastreio do seu pedido — Alves Store",
-        text: `Olá, ${String(order.customer.fullName ?? "")}! O código de rastreio do pedido ${order.id.slice(0, 8).toUpperCase()} foi informado.\n\n${items}\n\nCódigo de rastreio: ${order.tracking_code}${siteUrl ? `\n\nAcompanhe em ${siteUrl}/rastreio` : ""}`,
+        subject: "Código de rastreio do seu pedido — Resenha Sports Cia",
+        text: `Olá, ${String(order.customer.fullName ?? "")}! O código de rastreio do pedido ${order.id.slice(0, 8).toUpperCase()} foi informado.\n\n${items}\n\nCódigo de rastreio: ${order.tracking_code}\nAcompanhe a entrega: https://rastreamento.correios.com.br/app/index.php?codigo=${encodeURIComponent(order.tracking_code)}${siteUrl ? `\n\nConsulte também seu pedido em ${siteUrl}/rastreio` : ""}`,
       }),
       signal: AbortSignal.timeout(5_000),
     });

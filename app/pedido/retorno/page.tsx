@@ -3,7 +3,7 @@ import { getSupabaseOrdersClient } from "@/lib/server/supabase-orders";
 import { orderCode } from "@/lib/order-code";
 import { OrderReturnActions, RefreshStatusButton } from "./return-actions";
 
-type OrderStatus = "pending" | "approved" | "rejected" | "cancelled" | "refunded";
+type OrderStatus = "pending" | "pago" | "enviado" | "approved" | "rejected" | "cancelled" | "refunded";
 
 const orderStatusText: Record<OrderStatus, { title: string; description: string }> = {
   pending: {
@@ -13,6 +13,14 @@ const orderStatusText: Record<OrderStatus, { title: string; description: string 
   approved: {
     title: "Pagamento confirmado",
     description: "O Mercado Pago confirmou o pagamento deste pedido.",
+  },
+  pago: {
+    title: "Pagamento confirmado",
+    description: "O Mercado Pago confirmou o pagamento deste pedido, que está sendo preparado.",
+  },
+  enviado: {
+    title: "Pedido enviado",
+    description: "O pedido foi despachado. Consulte o código de rastreio no acompanhamento do pedido.",
   },
   rejected: {
     title: "Pagamento não aprovado",
@@ -60,11 +68,11 @@ export default async function OrderReturnPage({
       <p className="mt-1 text-2xl font-black tracking-widest">{orderCode(orderId)}</p>
       <p className="mt-2 text-xs leading-5 text-muted">Guarde este código: ele também foi enviado por e-mail. Use-o em <Link href="/rastreio" className="font-bold text-blue-700 underline">Rastrear pedido</Link>, junto com o e-mail ou CPF da compra.</p>
     </div>}
-    {status === "approved" && <OrderReturnActions />}
+    {["approved", "pago", "enviado"].includes(status) && <OrderReturnActions />}
     <div className="mt-7 flex flex-wrap justify-center gap-3">
       <Link href="/carrinho" className="rounded-lg border border-ink px-5 py-3 text-xs font-black uppercase">Voltar à sacola</Link>
       <Link href="/" className="primary-button px-5 py-3 text-xs font-black uppercase">Voltar à loja</Link>
     </div>
-    {status !== "approved" && <RefreshStatusButton />}
+    {!["approved", "pago", "enviado"].includes(status) && <RefreshStatusButton />}
   </main>;
 }

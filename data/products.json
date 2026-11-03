@@ -9,7 +9,7 @@
     "tipo": "torcedor",
     "temporada": "26/27",
     "uniforme": "titular",
-    "nome": "Camisa Algeria Copa do Mundo 26/27 – Casa",
+    "nome": "Camisa Algeria Copa do Mundo 26/27 – Casa – Casa",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -117,7 +117,7 @@
     "tipo": "torcedor",
     "temporada": "26/27",
     "uniforme": "titular",
-    "nome": "Camisa Cabo Verde Copa do Mundo 26/27 – Casa",
+    "nome": "Camisa Cabo Verde Copa do Mundo 26/27 – Casa – Casa",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -560,7 +560,7 @@
     "tipo": "torcedor",
     "temporada": "26/27",
     "uniforme": "reserva",
-    "nome": "Camisa Marrocos 26/27 – Fora",
+    "nome": "Camisa Marrocos 26/27 – Fora – Fora",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -704,7 +704,7 @@
     "tipo": "torcedor",
     "temporada": "26/27",
     "uniforme": "titular",
-    "nome": "Camisa República do Congo 26/27 – Casa",
+    "nome": "Camisa República do Congo 26/27 – Casa – Casa",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -776,7 +776,7 @@
     "tipo": "torcedor",
     "temporada": "26/27",
     "uniforme": "titular",
-    "nome": "Camisa Senegal 26/27 – Casa",
+    "nome": "Camisa Senegal 26/27 – Casa – Casa",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -1028,7 +1028,7 @@
     "tipo": "torcedor",
     "temporada": "26/27",
     "uniforme": "titular",
-    "nome": "Camisa Curaçao Copa do Mundo 26/27 – Casa",
+    "nome": "Camisa Curaçao Copa do Mundo 26/27 – Casa – Casa",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -1100,7 +1100,7 @@
     "tipo": "torcedor",
     "temporada": "26/27",
     "uniforme": "titular",
-    "nome": "Camisa Estados Unidos 26/27 – Casa",
+    "nome": "Camisa Estados Unidos 26/27 – Casa – Casa",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -1326,16 +1326,16 @@
     ]
   },
   {
-    "id": "catalog-selecoes-america-do-norte-mexico-26-27",
-    "slug": "selecoes-america-do-norte-mexico-26-27",
+    "id": "catalog-selecoes-america-do-norte-mexico-26-27-reserva-2",
+    "slug": "selecoes-america-do-norte-mexico-26-27-reserva-2",
     "clube": "México",
     "clubeSlug": "mexico",
     "liga": "selecoes",
     "publico": "revisar",
     "tipo": "torcedor",
     "temporada": "26/27",
-    "uniforme": "titular",
-    "nome": "Camisa México 26/27 – Casa",
+    "uniforme": "reserva",
+    "nome": "Camisa México 26/27 – Casa – Fora",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -1346,7 +1346,7 @@
       "3GG"
     ],
     "cor": "revisar",
-    "imageSeed": "selecoes-america-do-norte-mexico-26-27",
+    "imageSeed": "selecoes-america-do-norte-mexico-26-27-reserva-2",
     "images": [
       {
         "src": "/otimizadas/selecoes-america-do-norte-mexico-26-27/02-800.webp",
@@ -1542,16 +1542,16 @@
     ]
   },
   {
-    "id": "catalog-selecoes-america-do-sul-argentina-26-27",
-    "slug": "selecoes-america-do-sul-argentina-26-27",
+    "id": "catalog-selecoes-america-do-sul-argentina-26-27-reserva-2",
+    "slug": "selecoes-america-do-sul-argentina-26-27-reserva-2",
     "clube": "Argentina",
     "clubeSlug": "argentina",
     "liga": "selecoes",
     "publico": "revisar",
     "tipo": "torcedor",
     "temporada": "26/27",
-    "uniforme": "titular",
-    "nome": "Camisa Argentina 26/27 – Casa",
+    "uniforme": "reserva",
+    "nome": "Camisa Argentina 26/27 – Casa – Fora",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -1562,7 +1562,7 @@
       "3GG"
     ],
     "cor": "revisar",
-    "imageSeed": "selecoes-america-do-sul-argentina-26-27",
+    "imageSeed": "selecoes-america-do-sul-argentina-26-27-reserva-2",
     "images": [
       {
         "src": "/otimizadas/selecoes-america-do-sul-argentina-26-27/02-800.webp",
@@ -1722,16 +1722,16 @@
     ]
   },
   {
-    "id": "catalog-selecoes-america-do-sul-brasil-24-25",
-    "slug": "selecoes-america-do-sul-brasil-24-25",
+    "id": "catalog-selecoes-america-do-sul-brasil-24-25-titular-2",
+    "slug": "selecoes-america-do-sul-brasil-24-25-titular-2",
     "clube": "Brasil",
     "clubeSlug": "brasil",
     "liga": "selecoes",
     "publico": "revisar",
     "tipo": "torcedor",
     "temporada": "24/25",
-    "uniforme": "reserva",
-    "nome": "Camisa Brasil 24/25 – Fora",
+    "uniforme": "titular",
+    "nome": "Camisa Brasil 24/25 – Fora – Casa",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -1742,7 +1742,7 @@
       "3GG"
     ],
     "cor": "revisar",
-    "imageSeed": "selecoes-america-do-sul-brasil-24-25",
+    "imageSeed": "selecoes-america-do-sul-brasil-24-25-titular-2",
     "images": [
       {
         "src": "/otimizadas/selecoes-america-do-sul-brasil-24-25/02-800.webp",
@@ -1911,7 +1911,7 @@
     "tipo": "torcedor",
     "temporada": "26/27",
     "uniforme": "titular",
-    "nome": "Camisa Brasil 26/27 – Casa",
+    "nome": "Camisa Brasil 26/27 – Casa – Casa",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -2163,7 +2163,7 @@
     "tipo": "torcedor",
     "temporada": "24/25",
     "uniforme": "reserva",
-    "nome": "Camisa Colômbia 24/25 – Fora",
+    "nome": "Camisa Colômbia 24/25 – Fora – Fora",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -2307,7 +2307,7 @@
     "tipo": "torcedor",
     "temporada": "26/27",
     "uniforme": "titular",
-    "nome": "Camisa Colômbia Copa do Mundo 26/27 – Casa",
+    "nome": "Camisa Colômbia Copa do Mundo 26/27 – Casa – Casa",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -2442,16 +2442,16 @@
     ]
   },
   {
-    "id": "catalog-selecoes-america-do-sul-paraguai-26-27-copa-do-mundo-26-27",
-    "slug": "selecoes-america-do-sul-paraguai-26-27-copa-do-mundo-26-27",
+    "id": "catalog-selecoes-america-do-sul-paraguai-26-27-copa-do-mundo-26-27-titular-2",
+    "slug": "selecoes-america-do-sul-paraguai-26-27-copa-do-mundo-26-27-titular-2",
     "clube": "revisar",
     "clubeSlug": "revisar",
     "liga": "selecoes",
     "publico": "revisar",
     "tipo": "torcedor",
     "temporada": "26/27",
-    "uniforme": "reserva",
-    "nome": "Camisa Paraguai Copa do Mundo 26/27 – Fora",
+    "uniforme": "titular",
+    "nome": "Camisa Paraguai Copa do Mundo 26/27 – Fora – Casa",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -2462,7 +2462,7 @@
       "3GG"
     ],
     "cor": "revisar",
-    "imageSeed": "selecoes-america-do-sul-paraguai-26-27-copa-do-mundo-26-27",
+    "imageSeed": "selecoes-america-do-sul-paraguai-26-27-copa-do-mundo-26-27-titular-2",
     "images": [
       {
         "src": "/otimizadas/selecoes-america-do-sul-paraguai-26-27-copa-do-mundo-26-27/02-800.webp",
@@ -2523,7 +2523,7 @@
     "tipo": "torcedor",
     "temporada": "24/25",
     "uniforme": "reserva",
-    "nome": "Camisa Peru 24/25 – Fora",
+    "nome": "Camisa Peru 24/25 – Fora – Fora",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -2678,7 +2678,7 @@
     "tipo": "torcedor",
     "temporada": "26/27",
     "uniforme": "titular",
-    "nome": "Camisa Uruguai 26/27 – Casa",
+    "nome": "Camisa Uruguai 26/27 – Casa – Casa",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -3026,16 +3026,16 @@
     ]
   },
   {
-    "id": "catalog-selecoes-asia-oceania-oriente-medio-iran-26-27-copa-do-mundo-26-27",
-    "slug": "selecoes-asia-oceania-oriente-medio-iran-26-27-copa-do-mundo-26-27",
+    "id": "catalog-selecoes-asia-oceania-oriente-medio-iran-26-27-copa-do-mundo-26-27-reserva-2",
+    "slug": "selecoes-asia-oceania-oriente-medio-iran-26-27-copa-do-mundo-26-27-reserva-2",
     "clube": "revisar",
     "clubeSlug": "revisar",
     "liga": "selecoes",
     "publico": "revisar",
     "tipo": "torcedor",
     "temporada": "26/27",
-    "uniforme": "titular",
-    "nome": "Camisa Iran Copa do Mundo 26/27 – Casa",
+    "uniforme": "reserva",
+    "nome": "Camisa Iran Copa do Mundo 26/27 – Casa – Fora",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -3046,7 +3046,7 @@
       "3GG"
     ],
     "cor": "revisar",
-    "imageSeed": "selecoes-asia-oceania-oriente-medio-iran-26-27-copa-do-mundo-26-27",
+    "imageSeed": "selecoes-asia-oceania-oriente-medio-iran-26-27-copa-do-mundo-26-27-reserva-2",
     "images": [
       {
         "src": "/otimizadas/selecoes-asia-oceania-oriente-medio-iran-26-27-copa-do-mundo-26-27/02-800.webp",
@@ -3098,16 +3098,16 @@
     ]
   },
   {
-    "id": "catalog-selecoes-asia-oceania-oriente-medio-israel-26-27-26-27",
-    "slug": "selecoes-asia-oceania-oriente-medio-israel-26-27-26-27",
+    "id": "catalog-selecoes-asia-oceania-oriente-medio-israel-26-27-26-27-reserva-2",
+    "slug": "selecoes-asia-oceania-oriente-medio-israel-26-27-26-27-reserva-2",
     "clube": "revisar",
     "clubeSlug": "revisar",
     "liga": "selecoes",
     "publico": "revisar",
     "tipo": "torcedor",
     "temporada": "26/27",
-    "uniforme": "titular",
-    "nome": "Camisa Israel 26/27 – Casa",
+    "uniforme": "reserva",
+    "nome": "Camisa Israel 26/27 – Casa – Fora",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -3118,7 +3118,7 @@
       "3GG"
     ],
     "cor": "revisar",
-    "imageSeed": "selecoes-asia-oceania-oriente-medio-israel-26-27-26-27",
+    "imageSeed": "selecoes-asia-oceania-oriente-medio-israel-26-27-26-27-reserva-2",
     "images": [
       {
         "src": "/otimizadas/selecoes-asia-oceania-oriente-medio-israel-26-27-26-27/02-800.webp",
@@ -3215,7 +3215,7 @@
     "tipo": "torcedor",
     "temporada": "26/27",
     "uniforme": "reserva",
-    "nome": "Camisa Japão 26/27 – Fora",
+    "nome": "Camisa Japão 26/27 – Fora – Fora",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -3314,16 +3314,16 @@
     ]
   },
   {
-    "id": "catalog-selecoes-europa-alemanha-24-25",
-    "slug": "selecoes-europa-alemanha-24-25",
+    "id": "catalog-selecoes-europa-alemanha-24-25-reserva-2",
+    "slug": "selecoes-europa-alemanha-24-25-reserva-2",
     "clube": "Alemanha",
     "clubeSlug": "alemanha",
     "liga": "selecoes",
     "publico": "revisar",
     "tipo": "torcedor",
     "temporada": "24/25",
-    "uniforme": "titular",
-    "nome": "Camisa Alemanha 24/25 – Casa",
+    "uniforme": "reserva",
+    "nome": "Camisa Alemanha 24/25 – Casa – Fora",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -3334,7 +3334,7 @@
       "3GG"
     ],
     "cor": "revisar",
-    "imageSeed": "selecoes-europa-alemanha-24-25",
+    "imageSeed": "selecoes-europa-alemanha-24-25-reserva-2",
     "images": [
       {
         "src": "/otimizadas/selecoes-europa-alemanha-24-25/02-800.webp",
@@ -3561,7 +3561,7 @@
     "tipo": "torcedor",
     "temporada": "26/27",
     "uniforme": "titular",
-    "nome": "Camisa Bélgica Copa do Mundo 26/27 – Casa",
+    "nome": "Camisa Bélgica Copa do Mundo 26/27 – Casa – Casa",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -3633,7 +3633,7 @@
     "tipo": "torcedor",
     "temporada": "26/27",
     "uniforme": "titular",
-    "nome": "Camisa Bósnia Copa do Mundo 26/27 – Casa",
+    "nome": "Camisa Bósnia Copa do Mundo 26/27 – Casa – Casa",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -3705,7 +3705,7 @@
     "tipo": "torcedor",
     "temporada": "26/27",
     "uniforme": "titular",
-    "nome": "Camisa Croácia Copa do Mundo 26/27 – Casa",
+    "nome": "Camisa Croácia Copa do Mundo 26/27 – Casa – Casa",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -3777,7 +3777,7 @@
     "tipo": "torcedor",
     "temporada": "26/27",
     "uniforme": "reserva",
-    "nome": "Camisa Escócia Copa do Mundo 26/27 – Fora",
+    "nome": "Camisa Escócia Copa do Mundo 26/27 – Fora – Fora",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -3885,7 +3885,7 @@
     "tipo": "torcedor",
     "temporada": "26/27",
     "uniforme": "titular",
-    "nome": "Camisa Espanha 26/27 – Casa",
+    "nome": "Camisa Espanha 26/27 – Casa – Casa",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -4101,7 +4101,7 @@
     "tipo": "torcedor",
     "temporada": "26/27",
     "uniforme": "titular",
-    "nome": "Camisa Finlândia 26/27 – Casa",
+    "nome": "Camisa Finlândia 26/27 – Casa – Casa",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -4173,7 +4173,7 @@
     "tipo": "torcedor",
     "temporada": "26/27",
     "uniforme": "titular",
-    "nome": "Camisa França 26/27 – Casa",
+    "nome": "Camisa França 26/27 – Casa – Casa",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -4375,7 +4375,7 @@
     "tipo": "torcedor",
     "temporada": "26/27",
     "uniforme": "titular",
-    "nome": "Camisa Inglaterra 26/27 – Casa",
+    "nome": "Camisa Inglaterra 26/27 – Casa – Casa",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -4555,7 +4555,7 @@
     "tipo": "torcedor",
     "temporada": "26/27",
     "uniforme": "reserva",
-    "nome": "Camisa Itália 26/27 – Fora",
+    "nome": "Camisa Itália 26/27 – Fora – Fora",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -4690,16 +4690,16 @@
     ]
   },
   {
-    "id": "catalog-selecoes-europa-noruega-26-27-copa-do-mundo-26-27",
-    "slug": "selecoes-europa-noruega-26-27-copa-do-mundo-26-27",
+    "id": "catalog-selecoes-europa-noruega-26-27-copa-do-mundo-26-27-reserva-2",
+    "slug": "selecoes-europa-noruega-26-27-copa-do-mundo-26-27-reserva-2",
     "clube": "revisar",
     "clubeSlug": "revisar",
     "liga": "selecoes",
     "publico": "revisar",
     "tipo": "torcedor",
     "temporada": "26/27",
-    "uniforme": "titular",
-    "nome": "Camisa Noruega Copa do Mundo 26/27 – Casa",
+    "uniforme": "reserva",
+    "nome": "Camisa Noruega Copa do Mundo 26/27 – Casa – Fora",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -4710,7 +4710,7 @@
       "3GG"
     ],
     "cor": "revisar",
-    "imageSeed": "selecoes-europa-noruega-26-27-copa-do-mundo-26-27",
+    "imageSeed": "selecoes-europa-noruega-26-27-copa-do-mundo-26-27-reserva-2",
     "images": [
       {
         "src": "/otimizadas/selecoes-europa-noruega-26-27-copa-do-mundo-26-27/02-800.webp",
@@ -4989,16 +4989,16 @@
     ]
   },
   {
-    "id": "catalog-selecoes-europa-portugal-26-27",
-    "slug": "selecoes-europa-portugal-26-27",
+    "id": "catalog-selecoes-europa-portugal-26-27-terceiro-2",
+    "slug": "selecoes-europa-portugal-26-27-terceiro-2",
     "clube": "Portugal",
     "clubeSlug": "portugal",
     "liga": "selecoes",
     "publico": "revisar",
     "tipo": "torcedor",
     "temporada": "26/27",
-    "uniforme": "titular",
-    "nome": "Camisa Portugal 26/27 – Casa",
+    "uniforme": "terceiro",
+    "nome": "Camisa Portugal 26/27 – Casa – Terceira",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -5009,7 +5009,7 @@
       "3GG"
     ],
     "cor": "revisar",
-    "imageSeed": "selecoes-europa-portugal-26-27",
+    "imageSeed": "selecoes-europa-portugal-26-27-terceiro-2",
     "images": [
       {
         "src": "/otimizadas/selecoes-europa-portugal-26-27/03-800.webp",
@@ -5097,16 +5097,16 @@
     ]
   },
   {
-    "id": "catalog-selecoes-europa-portugal-26-27-goleiro",
-    "slug": "selecoes-europa-portugal-26-27-goleiro",
+    "id": "catalog-selecoes-europa-portugal-26-27-goleiro-reserva-2",
+    "slug": "selecoes-europa-portugal-26-27-goleiro-reserva-2",
     "clube": "Portugal",
     "clubeSlug": "portugal",
     "liga": "selecoes",
     "publico": "revisar",
     "tipo": "goleiro",
     "temporada": "26/27",
-    "uniforme": "titular",
-    "nome": "Camisa Portugal 26/27 goleiro – Casa",
+    "uniforme": "reserva",
+    "nome": "Camisa Portugal 26/27 goleiro – Casa – Fora",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -5117,7 +5117,7 @@
       "3GG"
     ],
     "cor": "revisar",
-    "imageSeed": "selecoes-europa-portugal-26-27-goleiro",
+    "imageSeed": "selecoes-europa-portugal-26-27-goleiro-reserva-2",
     "images": [
       {
         "src": "/otimizadas/selecoes-europa-portugal-26-27-goleiro/02-800.webp",
@@ -5241,16 +5241,16 @@
     ]
   },
   {
-    "id": "catalog-selecoes-europa-suecia-26-27-copa-do-mundo-26-27",
-    "slug": "selecoes-europa-suecia-26-27-copa-do-mundo-26-27",
+    "id": "catalog-selecoes-europa-suecia-26-27-copa-do-mundo-26-27-reserva-2",
+    "slug": "selecoes-europa-suecia-26-27-copa-do-mundo-26-27-reserva-2",
     "clube": "revisar",
     "clubeSlug": "revisar",
     "liga": "selecoes",
     "publico": "revisar",
     "tipo": "torcedor",
     "temporada": "26/27",
-    "uniforme": "titular",
-    "nome": "Camisa Suécia Copa do Mundo 26/27 – Casa",
+    "uniforme": "reserva",
+    "nome": "Camisa Suécia Copa do Mundo 26/27 – Casa – Fora",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -5261,7 +5261,7 @@
       "3GG"
     ],
     "cor": "revisar",
-    "imageSeed": "selecoes-europa-suecia-26-27-copa-do-mundo-26-27",
+    "imageSeed": "selecoes-europa-suecia-26-27-copa-do-mundo-26-27-reserva-2",
     "images": [
       {
         "src": "/otimizadas/selecoes-europa-suecia-26-27-copa-do-mundo-26-27/02-800.webp",
@@ -5416,7 +5416,7 @@
     "tipo": "jogador",
     "temporada": "26/27",
     "uniforme": "titular",
-    "nome": "Camisa Boca Juniors 26/27 jogador masculino – Casa",
+    "nome": "Camisa Boca Juniors 26/27 jogador masculino – Casa – Casa",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -5609,16 +5609,16 @@
     ]
   },
   {
-    "id": "catalog-camisa-jogador-brasileirao-bahia-26-27",
-    "slug": "camisa-jogador-brasileirao-bahia-26-27",
+    "id": "catalog-camisa-jogador-brasileirao-bahia-26-27-reserva-2",
+    "slug": "camisa-jogador-brasileirao-bahia-26-27-reserva-2",
     "clube": "Bahia",
     "clubeSlug": "bahia",
     "liga": "brasileirao-serie-a",
     "publico": "masculino",
     "tipo": "jogador",
     "temporada": "26/27",
-    "uniforme": "titular",
-    "nome": "Camisa Bahia 26/27 jogador masculino – Casa",
+    "uniforme": "reserva",
+    "nome": "Camisa Bahia 26/27 jogador masculino – Casa – Fora",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -5629,7 +5629,7 @@
       "3GG"
     ],
     "cor": "revisar",
-    "imageSeed": "camisa-jogador-brasileirao-bahia-26-27",
+    "imageSeed": "camisa-jogador-brasileirao-bahia-26-27-reserva-2",
     "images": [
       {
         "src": "/otimizadas/camisa-jogador-brasileirao-bahia-26-27/02-800.webp",
@@ -5892,7 +5892,7 @@
     "tipo": "jogador",
     "temporada": "24/25",
     "uniforme": "reserva",
-    "nome": "Camisa Flamengo 24/25 jogador masculino – Fora",
+    "nome": "Camisa Flamengo 24/25 jogador masculino – Fora – Fora",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -5955,16 +5955,16 @@
     ]
   },
   {
-    "id": "catalog-camisa-jogador-brasileirao-flamengo-25-26",
-    "slug": "camisa-jogador-brasileirao-flamengo-25-26",
+    "id": "catalog-camisa-jogador-brasileirao-flamengo-25-26-terceiro-2",
+    "slug": "camisa-jogador-brasileirao-flamengo-25-26-terceiro-2",
     "clube": "Flamengo",
     "clubeSlug": "flamengo",
     "liga": "brasileirao-serie-a",
     "publico": "masculino",
     "tipo": "jogador",
     "temporada": "25/26",
-    "uniforme": "titular",
-    "nome": "Camisa Flamengo 25/26 jogador masculino – Casa",
+    "uniforme": "terceiro",
+    "nome": "Camisa Flamengo 25/26 jogador masculino – Casa – Terceira",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -5975,7 +5975,7 @@
       "3GG"
     ],
     "cor": "revisar",
-    "imageSeed": "camisa-jogador-brasileirao-flamengo-25-26",
+    "imageSeed": "camisa-jogador-brasileirao-flamengo-25-26-terceiro-2",
     "images": [
       {
         "src": "/otimizadas/camisa-jogador-brasileirao-flamengo-25-26/02-800.webp",
@@ -6191,7 +6191,7 @@
     "tipo": "jogador",
     "temporada": "26/27",
     "uniforme": "titular",
-    "nome": "Camisa Fluminense 26/27 jogador masculino – Casa",
+    "nome": "Camisa Fluminense 26/27 jogador masculino – Casa – Casa",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -6326,16 +6326,16 @@
     ]
   },
   {
-    "id": "catalog-camisa-jogador-brasileirao-palmeiras-24-25",
-    "slug": "camisa-jogador-brasileirao-palmeiras-24-25",
+    "id": "catalog-camisa-jogador-brasileirao-palmeiras-24-25-reserva-2",
+    "slug": "camisa-jogador-brasileirao-palmeiras-24-25-reserva-2",
     "clube": "Palmeiras",
     "clubeSlug": "palmeiras",
     "liga": "brasileirao-serie-a",
     "publico": "masculino",
     "tipo": "jogador",
     "temporada": "24/25",
-    "uniforme": "titular",
-    "nome": "Camisa Palmeiras 24/25 jogador masculino – Casa",
+    "uniforme": "reserva",
+    "nome": "Camisa Palmeiras 24/25 jogador masculino – Casa – Fora",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -6346,7 +6346,7 @@
       "3GG"
     ],
     "cor": "revisar",
-    "imageSeed": "camisa-jogador-brasileirao-palmeiras-24-25",
+    "imageSeed": "camisa-jogador-brasileirao-palmeiras-24-25-reserva-2",
     "images": [
       {
         "src": "/otimizadas/camisa-jogador-brasileirao-palmeiras-24-25/02-800.webp",
@@ -6407,7 +6407,7 @@
     "tipo": "jogador",
     "temporada": "25/26",
     "uniforme": "titular",
-    "nome": "Camisa Palmeiras 25/26 jogador masculino – Casa",
+    "nome": "Camisa Palmeiras 25/26 jogador masculino – Casa – Casa",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -6537,7 +6537,7 @@
     "tipo": "jogador",
     "temporada": "26/27",
     "uniforme": "titular",
-    "nome": "Camisa Santos 26/27 jogador masculino – Casa",
+    "nome": "Camisa Santos 26/27 jogador masculino – Casa – Casa",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -6766,16 +6766,16 @@
     ]
   },
   {
-    "id": "catalog-camisa-jogador-brasileirao-vasco-da-gama-26-27",
-    "slug": "camisa-jogador-brasileirao-vasco-da-gama-26-27",
+    "id": "catalog-camisa-jogador-brasileirao-vasco-da-gama-26-27-titular-2",
+    "slug": "camisa-jogador-brasileirao-vasco-da-gama-26-27-titular-2",
     "clube": "Vasco da Gama",
     "clubeSlug": "vasco-da-gama",
     "liga": "brasileirao-serie-a",
     "publico": "masculino",
     "tipo": "jogador",
     "temporada": "26/27",
-    "uniforme": "reserva",
-    "nome": "Camisa Vasco da Gama 26/27 jogador masculino – Fora",
+    "uniforme": "titular",
+    "nome": "Camisa Vasco da Gama 26/27 jogador masculino – Fora – Casa",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -6786,7 +6786,7 @@
       "3GG"
     ],
     "cor": "revisar",
-    "imageSeed": "camisa-jogador-brasileirao-vasco-da-gama-26-27",
+    "imageSeed": "camisa-jogador-brasileirao-vasco-da-gama-26-27-titular-2",
     "images": [
       {
         "src": "/otimizadas/camisa-jogador-brasileirao-vasco-da-gama-26-27/02-800.webp",
@@ -6968,16 +6968,16 @@
     ]
   },
   {
-    "id": "catalog-camisa-jogador-la-liga-atletico-madrid-25-26",
-    "slug": "camisa-jogador-la-liga-atletico-madrid-25-26",
+    "id": "catalog-camisa-jogador-la-liga-atletico-madrid-25-26-reserva-2",
+    "slug": "camisa-jogador-la-liga-atletico-madrid-25-26-reserva-2",
     "clube": "Atlético Madrid",
     "clubeSlug": "atletico-madrid",
     "liga": "la-liga",
     "publico": "masculino",
     "tipo": "jogador",
     "temporada": "25/26",
-    "uniforme": "titular",
-    "nome": "Camisa Atlético Madrid 25/26 jogador masculino – Casa",
+    "uniforme": "reserva",
+    "nome": "Camisa Atlético Madrid 25/26 jogador masculino – Casa – Fora",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -6988,7 +6988,7 @@
       "3GG"
     ],
     "cor": "revisar",
-    "imageSeed": "camisa-jogador-la-liga-atletico-madrid-25-26",
+    "imageSeed": "camisa-jogador-la-liga-atletico-madrid-25-26-reserva-2",
     "images": [
       {
         "src": "/otimizadas/camisa-jogador-la-liga-atletico-madrid-25-26/02-800.webp",
@@ -7040,16 +7040,16 @@
     ]
   },
   {
-    "id": "catalog-camisa-jogador-la-liga-atletico-madrid-26-27",
-    "slug": "camisa-jogador-la-liga-atletico-madrid-26-27",
+    "id": "catalog-camisa-jogador-la-liga-atletico-madrid-26-27-reserva-2",
+    "slug": "camisa-jogador-la-liga-atletico-madrid-26-27-reserva-2",
     "clube": "Atlético Madrid",
     "clubeSlug": "atletico-madrid",
     "liga": "la-liga",
     "publico": "masculino",
     "tipo": "jogador",
     "temporada": "26/27",
-    "uniforme": "titular",
-    "nome": "Camisa Atlético Madrid 26/27 jogador masculino – Casa",
+    "uniforme": "reserva",
+    "nome": "Camisa Atlético Madrid 26/27 jogador masculino – Casa – Fora",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -7060,7 +7060,7 @@
       "3GG"
     ],
     "cor": "revisar",
-    "imageSeed": "camisa-jogador-la-liga-atletico-madrid-26-27",
+    "imageSeed": "camisa-jogador-la-liga-atletico-madrid-26-27-reserva-2",
     "images": [
       {
         "src": "/otimizadas/camisa-jogador-la-liga-atletico-madrid-26-27/02-800.webp",
@@ -7217,16 +7217,16 @@
     ]
   },
   {
-    "id": "catalog-camisa-jogador-la-liga-real-betis-26-27",
-    "slug": "camisa-jogador-la-liga-real-betis-26-27",
+    "id": "catalog-camisa-jogador-la-liga-real-betis-26-27-reserva-2",
+    "slug": "camisa-jogador-la-liga-real-betis-26-27-reserva-2",
     "clube": "Real Betis",
     "clubeSlug": "real-betis",
     "liga": "la-liga",
     "publico": "masculino",
     "tipo": "jogador",
     "temporada": "26/27",
-    "uniforme": "titular",
-    "nome": "Camisa Real Betis 26/27 jogador masculino – Casa",
+    "uniforme": "reserva",
+    "nome": "Camisa Real Betis 26/27 jogador masculino – Casa – Fora",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -7237,7 +7237,7 @@
       "3GG"
     ],
     "cor": "revisar",
-    "imageSeed": "camisa-jogador-la-liga-real-betis-26-27",
+    "imageSeed": "camisa-jogador-la-liga-real-betis-26-27-reserva-2",
     "images": [
       {
         "src": "/otimizadas/camisa-jogador-la-liga-real-betis-26-27/02-800.webp",
@@ -7289,16 +7289,16 @@
     ]
   },
   {
-    "id": "catalog-camisa-jogador-la-liga-real-madrid-25-26",
-    "slug": "camisa-jogador-la-liga-real-madrid-25-26",
+    "id": "catalog-camisa-jogador-la-liga-real-madrid-25-26-reserva-2",
+    "slug": "camisa-jogador-la-liga-real-madrid-25-26-reserva-2",
     "clube": "Real Madrid",
     "clubeSlug": "real-madrid",
     "liga": "la-liga",
     "publico": "masculino",
     "tipo": "jogador",
     "temporada": "25/26",
-    "uniforme": "titular",
-    "nome": "Camisa Real Madrid 25/26 jogador masculino – Casa",
+    "uniforme": "reserva",
+    "nome": "Camisa Real Madrid 25/26 jogador masculino – Casa – Fora",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -7309,7 +7309,7 @@
       "3GG"
     ],
     "cor": "revisar",
-    "imageSeed": "camisa-jogador-la-liga-real-madrid-25-26",
+    "imageSeed": "camisa-jogador-la-liga-real-madrid-25-26-reserva-2",
     "images": [
       {
         "src": "/otimizadas/camisa-jogador-la-liga-real-madrid-25-26/02-800.webp",
@@ -7370,7 +7370,7 @@
     "tipo": "jogador",
     "temporada": "26/27",
     "uniforme": "titular",
-    "nome": "Camisa Real Madrid 26/27 jogador masculino – Casa",
+    "nome": "Camisa Real Madrid 26/27 jogador masculino – Casa – Casa",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -7469,16 +7469,16 @@
     ]
   },
   {
-    "id": "catalog-camisa-jogador-campeonato-frances-lyon-26-27",
-    "slug": "camisa-jogador-campeonato-frances-lyon-26-27",
+    "id": "catalog-camisa-jogador-campeonato-frances-lyon-26-27-reserva-2",
+    "slug": "camisa-jogador-campeonato-frances-lyon-26-27-reserva-2",
     "clube": "Lyon",
     "clubeSlug": "lyon",
     "liga": "ligue-1",
     "publico": "masculino",
     "tipo": "jogador",
     "temporada": "26/27",
-    "uniforme": "titular",
-    "nome": "Camisa Lyon 26/27 jogador masculino – Casa",
+    "uniforme": "reserva",
+    "nome": "Camisa Lyon 26/27 jogador masculino – Casa – Fora",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -7489,7 +7489,7 @@
       "3GG"
     ],
     "cor": "revisar",
-    "imageSeed": "camisa-jogador-campeonato-frances-lyon-26-27",
+    "imageSeed": "camisa-jogador-campeonato-frances-lyon-26-27-reserva-2",
     "images": [
       {
         "src": "/otimizadas/camisa-jogador-campeonato-frances-lyon-26-27/02-800.webp",
@@ -7541,16 +7541,16 @@
     ]
   },
   {
-    "id": "catalog-camisa-jogador-campeonato-frances-monaco-26-27",
-    "slug": "camisa-jogador-campeonato-frances-monaco-26-27",
+    "id": "catalog-camisa-jogador-campeonato-frances-monaco-26-27-reserva-2",
+    "slug": "camisa-jogador-campeonato-frances-monaco-26-27-reserva-2",
     "clube": "Monaco",
     "clubeSlug": "monaco",
     "liga": "ligue-1",
     "publico": "masculino",
     "tipo": "jogador",
     "temporada": "26/27",
-    "uniforme": "titular",
-    "nome": "Camisa Monaco 26/27 jogador masculino – Casa",
+    "uniforme": "reserva",
+    "nome": "Camisa Monaco 26/27 jogador masculino – Casa – Fora",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -7561,7 +7561,7 @@
       "3GG"
     ],
     "cor": "revisar",
-    "imageSeed": "camisa-jogador-campeonato-frances-monaco-26-27",
+    "imageSeed": "camisa-jogador-campeonato-frances-monaco-26-27-reserva-2",
     "images": [
       {
         "src": "/otimizadas/camisa-jogador-campeonato-frances-monaco-26-27/02-800.webp",
@@ -7622,7 +7622,7 @@
     "tipo": "jogador",
     "temporada": "26/27",
     "uniforme": "titular",
-    "nome": "Camisa Olympique de Marselle 26/27 jogador masculino – Casa",
+    "nome": "Camisa Olympique de Marselle 26/27 jogador masculino – Casa – Casa",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -9054,16 +9054,16 @@
     ]
   },
   {
-    "id": "catalog-camisa-jogador-mls-inter-miami-26-27",
-    "slug": "camisa-jogador-mls-inter-miami-26-27",
+    "id": "catalog-camisa-jogador-mls-inter-miami-26-27-titular-2",
+    "slug": "camisa-jogador-mls-inter-miami-26-27-titular-2",
     "clube": "Inter Miami",
     "clubeSlug": "inter-miami",
     "liga": "mls",
     "publico": "masculino",
     "tipo": "jogador",
     "temporada": "26/27",
-    "uniforme": "reserva",
-    "nome": "Camisa Inter Miami 26/27 jogador masculino – Fora",
+    "uniforme": "titular",
+    "nome": "Camisa Inter Miami 26/27 jogador masculino – Fora – Casa",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -9074,7 +9074,7 @@
       "3GG"
     ],
     "cor": "revisar",
-    "imageSeed": "camisa-jogador-mls-inter-miami-26-27",
+    "imageSeed": "camisa-jogador-mls-inter-miami-26-27-titular-2",
     "images": [
       {
         "src": "/otimizadas/camisa-jogador-mls-inter-miami-26-27/02-800.webp",
@@ -9470,7 +9470,7 @@
     "tipo": "jogador",
     "temporada": "26/27",
     "uniforme": "titular",
-    "nome": "Camisa Estados Unidos 26/27 jogador masculino – Casa",
+    "nome": "Camisa Estados Unidos 26/27 jogador masculino – Casa – Casa",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -9652,16 +9652,16 @@
     ]
   },
   {
-    "id": "catalog-camisa-jogador-selecoes-america-do-sul-argentina-24-25",
-    "slug": "camisa-jogador-selecoes-america-do-sul-argentina-24-25",
+    "id": "catalog-camisa-jogador-selecoes-america-do-sul-argentina-24-25-reserva-2",
+    "slug": "camisa-jogador-selecoes-america-do-sul-argentina-24-25-reserva-2",
     "clube": "Argentina",
     "clubeSlug": "argentina",
     "liga": "selecoes",
     "publico": "masculino",
     "tipo": "jogador",
     "temporada": "24/25",
-    "uniforme": "titular",
-    "nome": "Camisa Argentina 24/25 jogador masculino – Casa",
+    "uniforme": "reserva",
+    "nome": "Camisa Argentina 24/25 jogador masculino – Casa – Fora",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -9672,7 +9672,7 @@
       "3GG"
     ],
     "cor": "revisar",
-    "imageSeed": "camisa-jogador-selecoes-america-do-sul-argentina-24-25",
+    "imageSeed": "camisa-jogador-selecoes-america-do-sul-argentina-24-25-reserva-2",
     "images": [
       {
         "src": "/otimizadas/camisa-jogador-selecoes-america-do-sul-argentina-24-25/02-800.webp",
@@ -9769,7 +9769,7 @@
     "tipo": "jogador",
     "temporada": "26/27",
     "uniforme": "titular",
-    "nome": "Camisa Argentina 26/27 jogador masculino – Casa",
+    "nome": "Camisa Argentina 26/27 jogador masculino – Casa – Casa",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -9877,7 +9877,7 @@
     "tipo": "jogador",
     "temporada": "22/23",
     "uniforme": "reserva",
-    "nome": "Camisa Brasil 22/23 jogador masculino – Fora",
+    "nome": "Camisa Brasil 22/23 jogador masculino – Fora – Fora",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -10021,7 +10021,7 @@
     "tipo": "jogador",
     "temporada": "26/27",
     "uniforme": "titular",
-    "nome": "Camisa Brasil 26/27 jogador masculino – Casa",
+    "nome": "Camisa Brasil 26/27 jogador masculino – Casa – Casa",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -10120,16 +10120,16 @@
     ]
   },
   {
-    "id": "catalog-camisa-jogador-selecoes-america-do-sul-colombia-26-27-copa-do-mundo-26-27",
-    "slug": "camisa-jogador-selecoes-america-do-sul-colombia-26-27-copa-do-mundo-26-27",
+    "id": "catalog-camisa-jogador-selecoes-america-do-sul-colombia-26-27-copa-do-mundo-26-27-reserva-2",
+    "slug": "camisa-jogador-selecoes-america-do-sul-colombia-26-27-copa-do-mundo-26-27-reserva-2",
     "clube": "revisar",
     "clubeSlug": "revisar",
     "liga": "selecoes",
     "publico": "masculino",
     "tipo": "jogador",
     "temporada": "26/27",
-    "uniforme": "titular",
-    "nome": "Camisa Colômbia Copa do Mundo 26/27 jogador masculino – Casa",
+    "uniforme": "reserva",
+    "nome": "Camisa Colômbia Copa do Mundo 26/27 jogador masculino – Casa – Fora",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -10140,7 +10140,7 @@
       "3GG"
     ],
     "cor": "revisar",
-    "imageSeed": "camisa-jogador-selecoes-america-do-sul-colombia-26-27-copa-do-mundo-26-27",
+    "imageSeed": "camisa-jogador-selecoes-america-do-sul-colombia-26-27-copa-do-mundo-26-27-reserva-2",
     "images": [
       {
         "src": "/otimizadas/camisa-jogador-selecoes-america-do-sul-colombia-26-27-copa-do-mundo-26-27/02-800.webp",
@@ -10192,16 +10192,16 @@
     ]
   },
   {
-    "id": "catalog-camisa-jogador-selecoes-america-do-sul-uruguai-26-27",
-    "slug": "camisa-jogador-selecoes-america-do-sul-uruguai-26-27",
+    "id": "catalog-camisa-jogador-selecoes-america-do-sul-uruguai-26-27-titular-2",
+    "slug": "camisa-jogador-selecoes-america-do-sul-uruguai-26-27-titular-2",
     "clube": "Uruguai",
     "clubeSlug": "uruguai",
     "liga": "selecoes",
     "publico": "masculino",
     "tipo": "jogador",
     "temporada": "26/27",
-    "uniforme": "reserva",
-    "nome": "Camisa Uruguai 26/27 jogador masculino – Fora",
+    "uniforme": "titular",
+    "nome": "Camisa Uruguai 26/27 jogador masculino – Fora – Casa",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -10212,7 +10212,7 @@
       "3GG"
     ],
     "cor": "revisar",
-    "imageSeed": "camisa-jogador-selecoes-america-do-sul-uruguai-26-27",
+    "imageSeed": "camisa-jogador-selecoes-america-do-sul-uruguai-26-27-titular-2",
     "images": [
       {
         "src": "/otimizadas/camisa-jogador-selecoes-america-do-sul-uruguai-26-27/02-800.webp",
@@ -10569,7 +10569,7 @@
     "tipo": "jogador",
     "temporada": "26/27",
     "uniforme": "reserva",
-    "nome": "Camisa Espanha 26/27 jogador masculino – Fora",
+    "nome": "Camisa Espanha 26/27 jogador masculino – Fora – Fora",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -10688,7 +10688,7 @@
     "tipo": "jogador",
     "temporada": "26/27",
     "uniforme": "titular",
-    "nome": "Camisa Holanda Copa do Mundo 26/27 jogador masculino – Casa",
+    "nome": "Camisa Holanda Copa do Mundo 26/27 jogador masculino – Casa – Casa",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -10832,7 +10832,7 @@
     "tipo": "jogador",
     "temporada": "26/27",
     "uniforme": "reserva",
-    "nome": "Camisa Itália 26/27 jogador masculino – Fora",
+    "nome": "Camisa Itália 26/27 jogador masculino – Fora – Fora",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -10895,16 +10895,16 @@
     ]
   },
   {
-    "id": "catalog-camisa-jogador-selecoes-europa-noruega-26-27-copa-do-mundo-26-27",
-    "slug": "camisa-jogador-selecoes-europa-noruega-26-27-copa-do-mundo-26-27",
+    "id": "catalog-camisa-jogador-selecoes-europa-noruega-26-27-copa-do-mundo-26-27-reserva-2",
+    "slug": "camisa-jogador-selecoes-europa-noruega-26-27-copa-do-mundo-26-27-reserva-2",
     "clube": "revisar",
     "clubeSlug": "revisar",
     "liga": "selecoes",
     "publico": "masculino",
     "tipo": "jogador",
     "temporada": "26/27",
-    "uniforme": "titular",
-    "nome": "Camisa Noruega Copa do Mundo 26/27 jogador masculino – Casa",
+    "uniforme": "reserva",
+    "nome": "Camisa Noruega Copa do Mundo 26/27 jogador masculino – Casa – Fora",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -10915,7 +10915,7 @@
       "3GG"
     ],
     "cor": "revisar",
-    "imageSeed": "camisa-jogador-selecoes-europa-noruega-26-27-copa-do-mundo-26-27",
+    "imageSeed": "camisa-jogador-selecoes-europa-noruega-26-27-copa-do-mundo-26-27-reserva-2",
     "images": [
       {
         "src": "/otimizadas/camisa-jogador-selecoes-europa-noruega-26-27-copa-do-mundo-26-27/02-800.webp",
@@ -11003,16 +11003,16 @@
     ]
   },
   {
-    "id": "catalog-camisa-jogador-selecoes-europa-portugal-26-27",
-    "slug": "camisa-jogador-selecoes-europa-portugal-26-27",
+    "id": "catalog-camisa-jogador-selecoes-europa-portugal-26-27-reserva-2",
+    "slug": "camisa-jogador-selecoes-europa-portugal-26-27-reserva-2",
     "clube": "Portugal",
     "clubeSlug": "portugal",
     "liga": "selecoes",
     "publico": "masculino",
     "tipo": "jogador",
     "temporada": "26/27",
-    "uniforme": "titular",
-    "nome": "Camisa Portugal 26/27 jogador masculino – Casa",
+    "uniforme": "reserva",
+    "nome": "Camisa Portugal 26/27 jogador masculino – Casa – Fora",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -11023,7 +11023,7 @@
       "3GG"
     ],
     "cor": "revisar",
-    "imageSeed": "camisa-jogador-selecoes-europa-portugal-26-27",
+    "imageSeed": "camisa-jogador-selecoes-europa-portugal-26-27-reserva-2",
     "images": [
       {
         "src": "/otimizadas/camisa-jogador-selecoes-europa-portugal-26-27/02-800.webp",
@@ -11440,16 +11440,16 @@
     ]
   },
   {
-    "id": "catalog-camisa-jogador-premier-league-chelsea-26-27",
-    "slug": "camisa-jogador-premier-league-chelsea-26-27",
+    "id": "catalog-camisa-jogador-premier-league-chelsea-26-27-reserva-2",
+    "slug": "camisa-jogador-premier-league-chelsea-26-27-reserva-2",
     "clube": "Chelsea",
     "clubeSlug": "chelsea",
     "liga": "premier-league",
     "publico": "masculino",
     "tipo": "jogador",
     "temporada": "26/27",
-    "uniforme": "titular",
-    "nome": "Camisa Chelsea 26/27 jogador masculino – Casa",
+    "uniforme": "reserva",
+    "nome": "Camisa Chelsea 26/27 jogador masculino – Casa – Fora",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -11460,7 +11460,7 @@
       "3GG"
     ],
     "cor": "revisar",
-    "imageSeed": "camisa-jogador-premier-league-chelsea-26-27",
+    "imageSeed": "camisa-jogador-premier-league-chelsea-26-27-reserva-2",
     "images": [
       {
         "src": "/otimizadas/camisa-jogador-premier-league-chelsea-26-27/02-800.webp",
@@ -11593,7 +11593,7 @@
     "tipo": "jogador",
     "temporada": "26/27",
     "uniforme": "titular",
-    "nome": "Camisa Liverpool 26/27 jogador masculino – Casa",
+    "nome": "Camisa Liverpool 26/27 jogador masculino – Casa – Casa",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -11939,7 +11939,7 @@
     "tipo": "jogador",
     "temporada": "26/27",
     "uniforme": "titular",
-    "nome": "Camisa Tottenham Hotspur 26/27 jogador masculino – Casa",
+    "nome": "Camisa Tottenham Hotspur 26/27 jogador masculino – Casa – Casa",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -12306,16 +12306,16 @@
     ]
   },
   {
-    "id": "catalog-femininas-campeonato-brasileiro-botafogo-26-27",
-    "slug": "femininas-campeonato-brasileiro-botafogo-26-27",
+    "id": "catalog-femininas-campeonato-brasileiro-botafogo-26-27-reserva-2",
+    "slug": "femininas-campeonato-brasileiro-botafogo-26-27-reserva-2",
     "clube": "Botafogo",
     "clubeSlug": "botafogo",
     "liga": "brasileirao-serie-a",
     "publico": "feminino",
     "tipo": "torcedor",
     "temporada": "26/27",
-    "uniforme": "titular",
-    "nome": "Camisa Botafogo 26/27 feminino – Casa",
+    "uniforme": "reserva",
+    "nome": "Camisa Botafogo 26/27 feminino – Casa – Fora",
     "preco": 160,
     "tamanhos": [
       "PP",
@@ -12326,7 +12326,7 @@
       "2GG"
     ],
     "cor": "revisar",
-    "imageSeed": "femininas-campeonato-brasileiro-botafogo-26-27",
+    "imageSeed": "femininas-campeonato-brasileiro-botafogo-26-27-reserva-2",
     "images": [
       {
         "src": "/otimizadas/femininas-campeonato-brasileiro-botafogo-26-27/02-800.webp",
@@ -12625,7 +12625,7 @@
     "tipo": "torcedor",
     "temporada": "25/26",
     "uniforme": "titular",
-    "nome": "Camisa Cruzeiro 25/26 feminino – Casa",
+    "nome": "Camisa Cruzeiro 25/26 feminino – Casa – Casa",
     "preco": 160,
     "tamanhos": [
       "PP",
@@ -12943,7 +12943,7 @@
     "tipo": "torcedor",
     "temporada": "25/26",
     "uniforme": "titular",
-    "nome": "Camisa Flamengo 25/26 feminino – Casa",
+    "nome": "Camisa Flamengo 25/26 feminino – Casa – Casa",
     "preco": 160,
     "tamanhos": [
       "PP",
@@ -13203,7 +13203,7 @@
     "tipo": "torcedor",
     "temporada": "24/25",
     "uniforme": "reserva",
-    "nome": "Camisa Fluminense 24/25 feminino – Fora",
+    "nome": "Camisa Fluminense 24/25 feminino – Fora – Fora",
     "preco": 160,
     "tamanhos": [
       "PP",
@@ -13513,7 +13513,7 @@
     "tipo": "torcedor",
     "temporada": "25/26",
     "uniforme": "terceiro",
-    "nome": "Camisa Internacional 25/26 feminino – Terceira",
+    "nome": "Camisa Internacional 25/26 feminino – Terceira – Terceira",
     "preco": 160,
     "tamanhos": [
       "PP",
@@ -13576,16 +13576,16 @@
     ]
   },
   {
-    "id": "catalog-femininas-campeonato-brasileiro-internacional-26-27",
-    "slug": "femininas-campeonato-brasileiro-internacional-26-27",
+    "id": "catalog-femininas-campeonato-brasileiro-internacional-26-27-titular-2",
+    "slug": "femininas-campeonato-brasileiro-internacional-26-27-titular-2",
     "clube": "Internacional",
     "clubeSlug": "internacional",
     "liga": "brasileirao-serie-a",
     "publico": "feminino",
     "tipo": "torcedor",
     "temporada": "26/27",
-    "uniforme": "revisar",
-    "nome": "Camisa Internacional 26/27 feminino",
+    "uniforme": "titular",
+    "nome": "Camisa Internacional 26/27 feminino – Casa",
     "preco": 160,
     "tamanhos": [
       "PP",
@@ -13596,7 +13596,7 @@
       "2GG"
     ],
     "cor": "revisar",
-    "imageSeed": "femininas-campeonato-brasileiro-internacional-26-27",
+    "imageSeed": "femininas-campeonato-brasileiro-internacional-26-27-titular-2",
     "images": [
       {
         "src": "/otimizadas/femininas-campeonato-brasileiro-internacional-26-27/02-800.webp",
@@ -13684,16 +13684,16 @@
     ]
   },
   {
-    "id": "catalog-femininas-campeonato-brasileiro-nautico-26-27-26-27",
-    "slug": "femininas-campeonato-brasileiro-nautico-26-27-26-27",
+    "id": "catalog-femininas-campeonato-brasileiro-nautico-26-27-26-27-reserva-2",
+    "slug": "femininas-campeonato-brasileiro-nautico-26-27-26-27-reserva-2",
     "clube": "revisar",
     "clubeSlug": "revisar",
     "liga": "brasileirao-serie-a",
     "publico": "feminino",
     "tipo": "torcedor",
     "temporada": "26/27",
-    "uniforme": "titular",
-    "nome": "Camisa Náutico 26/27 feminino – Casa",
+    "uniforme": "reserva",
+    "nome": "Camisa Náutico 26/27 feminino – Casa – Fora",
     "preco": 160,
     "tamanhos": [
       "PP",
@@ -13704,7 +13704,7 @@
       "2GG"
     ],
     "cor": "revisar",
-    "imageSeed": "femininas-campeonato-brasileiro-nautico-26-27-26-27",
+    "imageSeed": "femininas-campeonato-brasileiro-nautico-26-27-26-27-reserva-2",
     "images": [
       {
         "src": "/otimizadas/femininas-campeonato-brasileiro-nautico-26-27-26-27/02-800.webp",
@@ -13801,7 +13801,7 @@
     "tipo": "torcedor",
     "temporada": "24/25",
     "uniforme": "reserva",
-    "nome": "Camisa Palmeiras 24/25 feminino – Fora",
+    "nome": "Camisa Palmeiras 24/25 feminino – Fora – Fora",
     "preco": 160,
     "tamanhos": [
       "PP",
@@ -13873,7 +13873,7 @@
     "tipo": "torcedor",
     "temporada": "25/26",
     "uniforme": "reserva",
-    "nome": "Camisa Palmeiras 25/26 feminino – Fora",
+    "nome": "Camisa Palmeiras 25/26 feminino – Fora – Fora",
     "preco": 160,
     "tamanhos": [
       "PP",
@@ -14064,7 +14064,7 @@
     "tipo": "torcedor",
     "temporada": "26/27",
     "uniforme": "titular",
-    "nome": "Camisa Paysandu 26/27 feminino – Casa",
+    "nome": "Camisa Paysandu 26/27 feminino – Casa – Casa",
     "preco": 160,
     "tamanhos": [
       "PP",
@@ -14183,7 +14183,7 @@
     "tipo": "torcedor",
     "temporada": "26/27",
     "uniforme": "titular",
-    "nome": "Camisa Santa Cruz 26/27 feminino – Casa",
+    "nome": "Camisa Santa Cruz 26/27 feminino – Casa – Casa",
     "preco": 160,
     "tamanhos": [
       "PP",
@@ -14246,16 +14246,16 @@
     ]
   },
   {
-    "id": "catalog-femininas-campeonato-brasileiro-santos-24-25",
-    "slug": "femininas-campeonato-brasileiro-santos-24-25",
+    "id": "catalog-femininas-campeonato-brasileiro-santos-24-25-reserva-2",
+    "slug": "femininas-campeonato-brasileiro-santos-24-25-reserva-2",
     "clube": "Santos",
     "clubeSlug": "santos",
     "liga": "brasileirao-serie-a",
     "publico": "feminino",
     "tipo": "torcedor",
     "temporada": "24/25",
-    "uniforme": "titular",
-    "nome": "Camisa Santos 24/25 feminino – Casa",
+    "uniforme": "reserva",
+    "nome": "Camisa Santos 24/25 feminino – Casa – Fora",
     "preco": 160,
     "tamanhos": [
       "PP",
@@ -14266,7 +14266,7 @@
       "2GG"
     ],
     "cor": "revisar",
-    "imageSeed": "femininas-campeonato-brasileiro-santos-24-25",
+    "imageSeed": "femininas-campeonato-brasileiro-santos-24-25-reserva-2",
     "images": [
       {
         "src": "/otimizadas/femininas-campeonato-brasileiro-santos-24-25/02-800.webp",
@@ -14363,7 +14363,7 @@
     "tipo": "torcedor",
     "temporada": "26/27",
     "uniforme": "titular",
-    "nome": "Camisa Santos 26/27 feminino – Casa",
+    "nome": "Camisa Santos 26/27 feminino – Casa – Casa",
     "preco": 160,
     "tamanhos": [
       "PP",
@@ -15239,16 +15239,16 @@
     ]
   },
   {
-    "id": "catalog-femininas-selecoes-america-do-norte-estados-unidos-26-27",
-    "slug": "femininas-selecoes-america-do-norte-estados-unidos-26-27",
+    "id": "catalog-femininas-selecoes-america-do-norte-estados-unidos-26-27-reserva-2",
+    "slug": "femininas-selecoes-america-do-norte-estados-unidos-26-27-reserva-2",
     "clube": "Estados Unidos",
     "clubeSlug": "estados-unidos",
     "liga": "selecoes",
     "publico": "feminino",
     "tipo": "torcedor",
     "temporada": "26/27",
-    "uniforme": "titular",
-    "nome": "Camisa Estados Unidos 26/27 feminino – Casa",
+    "uniforme": "reserva",
+    "nome": "Camisa Estados Unidos 26/27 feminino – Casa – Fora",
     "preco": 160,
     "tamanhos": [
       "PP",
@@ -15259,7 +15259,7 @@
       "2GG"
     ],
     "cor": "revisar",
-    "imageSeed": "femininas-selecoes-america-do-norte-estados-unidos-26-27",
+    "imageSeed": "femininas-selecoes-america-do-norte-estados-unidos-26-27-reserva-2",
     "images": [
       {
         "src": "/otimizadas/femininas-selecoes-america-do-norte-estados-unidos-26-27/02-800.webp",
@@ -15311,16 +15311,16 @@
     ]
   },
   {
-    "id": "catalog-femininas-selecoes-america-do-norte-mexico-26-27",
-    "slug": "femininas-selecoes-america-do-norte-mexico-26-27",
+    "id": "catalog-femininas-selecoes-america-do-norte-mexico-26-27-modelo-2-2",
+    "slug": "femininas-selecoes-america-do-norte-mexico-26-27-modelo-2-2",
     "clube": "México",
     "clubeSlug": "mexico",
     "liga": "selecoes",
     "publico": "feminino",
     "tipo": "torcedor",
     "temporada": "26/27",
-    "uniforme": "titular",
-    "nome": "Camisa México 26/27 feminino – Casa",
+    "uniforme": "revisar",
+    "nome": "Camisa México 26/27 feminino – Casa – Modelo 2",
     "preco": 160,
     "tamanhos": [
       "PP",
@@ -15331,7 +15331,7 @@
       "2GG"
     ],
     "cor": "revisar",
-    "imageSeed": "femininas-selecoes-america-do-norte-mexico-26-27",
+    "imageSeed": "femininas-selecoes-america-do-norte-mexico-26-27-modelo-2-2",
     "images": [
       {
         "src": "/otimizadas/femininas-selecoes-america-do-norte-mexico-26-27/02-800.webp",
@@ -15392,7 +15392,7 @@
     "tipo": "torcedor",
     "temporada": "24/25",
     "uniforme": "reserva",
-    "nome": "Camisa Argentina 24/25 feminino – Fora",
+    "nome": "Camisa Argentina 24/25 feminino – Fora – Fora",
     "preco": 160,
     "tamanhos": [
       "PP",
@@ -15536,7 +15536,7 @@
     "tipo": "torcedor",
     "temporada": "22/23",
     "uniforme": "reserva",
-    "nome": "Camisa Brasil 22/23 feminino – Fora",
+    "nome": "Camisa Brasil 22/23 feminino – Fora – Fora",
     "preco": 160,
     "tamanhos": [
       "PP",
@@ -15608,7 +15608,7 @@
     "tipo": "torcedor",
     "temporada": "24/25",
     "uniforme": "titular",
-    "nome": "Camisa Brasil 24/25 feminino – Casa",
+    "nome": "Camisa Brasil 24/25 feminino – Casa – Casa",
     "preco": 160,
     "tamanhos": [
       "PP",
@@ -15680,7 +15680,7 @@
     "tipo": "torcedor",
     "temporada": "26/27",
     "uniforme": "titular",
-    "nome": "Camisa Brasil 26/27 feminino – Casa",
+    "nome": "Camisa Brasil 26/27 feminino – Casa – Casa",
     "preco": 160,
     "tamanhos": [
       "PP",
@@ -15824,7 +15824,7 @@
     "tipo": "torcedor",
     "temporada": "24/25",
     "uniforme": "titular",
-    "nome": "Camisa Colombia 24/25 feminino – Casa",
+    "nome": "Camisa Colombia 24/25 feminino – Casa – Casa",
     "preco": 160,
     "tamanhos": [
       "PP",
@@ -16211,8 +16211,8 @@
     ]
   },
   {
-    "id": "catalog-femininas-selecoes-europa-espanha-26-27",
-    "slug": "femininas-selecoes-europa-espanha-26-27",
+    "id": "catalog-femininas-selecoes-europa-espanha-26-27-modelo-2-2",
+    "slug": "femininas-selecoes-europa-espanha-26-27-modelo-2-2",
     "clube": "Espanha",
     "clubeSlug": "espanha",
     "liga": "selecoes",
@@ -16220,7 +16220,7 @@
     "tipo": "torcedor",
     "temporada": "26/27",
     "uniforme": "revisar",
-    "nome": "Camisa Espanha 26/27 feminino",
+    "nome": "Camisa Espanha 26/27 feminino – Modelo 2",
     "preco": 160,
     "tamanhos": [
       "PP",
@@ -16231,7 +16231,7 @@
       "2GG"
     ],
     "cor": "revisar",
-    "imageSeed": "femininas-selecoes-europa-espanha-26-27",
+    "imageSeed": "femininas-selecoes-europa-espanha-26-27-modelo-2-2",
     "images": [
       {
         "src": "/otimizadas/femininas-selecoes-europa-espanha-26-27/02-800.webp",
@@ -18178,16 +18178,16 @@
     ]
   },
   {
-    "id": "catalog-retro-campeonato-brasileiro-cruzeiro-1994",
-    "slug": "retro-campeonato-brasileiro-cruzeiro-1994",
+    "id": "catalog-retro-campeonato-brasileiro-cruzeiro-1994-reserva-2",
+    "slug": "retro-campeonato-brasileiro-cruzeiro-1994-reserva-2",
     "clube": "Cruzeiro",
     "clubeSlug": "cruzeiro",
     "liga": "brasileirao-serie-a",
     "publico": "revisar",
     "tipo": "retro",
     "temporada": "1994",
-    "uniforme": "titular",
-    "nome": "Camisa Cruzeiro 1994 retro – Casa",
+    "uniforme": "reserva",
+    "nome": "Camisa Cruzeiro 1994 retro – Casa – Fora",
     "preco": 185,
     "tamanhos": [
       "P",
@@ -18198,7 +18198,7 @@
       "3GG"
     ],
     "cor": "revisar",
-    "imageSeed": "retro-campeonato-brasileiro-cruzeiro-1994",
+    "imageSeed": "retro-campeonato-brasileiro-cruzeiro-1994-reserva-2",
     "images": [
       {
         "src": "/otimizadas/retro-campeonato-brasileiro-cruzeiro-1994/02-800.webp",
@@ -18282,22 +18282,72 @@
           "y": 50
         },
         "blurDataURL": "data:image/webp;base64,UklGRoAAAABXRUJQVlA4IHQAAADQAwCdASoQABQAPxFysFAsJqSisAgBgCIJYwDImBjrzfbBAFue1gAA/CRwOG+eNZIo88TuOq/yjjPBxxVlN5yjwA6fZtz556oFCnRMrhr0xUWNvov0sPjHLne6Zcig+dD/rL/g+7/norH1+8Qo4vHSRzAAAA=="
-      },
+      }
+    ]
+  },
+  {
+    "id": "catalog-retro-campeonato-brasileiro-flamengo-modelo-2-2",
+    "slug": "retro-campeonato-brasileiro-flamengo-modelo-2-2",
+    "clube": "Flamengo",
+    "clubeSlug": "flamengo",
+    "liga": "brasileirao-serie-a",
+    "publico": "revisar",
+    "tipo": "retro",
+    "temporada": "revisar",
+    "uniforme": "revisar",
+    "nome": "Camisa Flamengo retro – Modelo 2",
+    "preco": 185,
+    "tamanhos": [
+      "P",
+      "M",
+      "G",
+      "GG",
+      "2GG",
+      "3GG"
+    ],
+    "cor": "revisar",
+    "imageSeed": "retro-campeonato-brasileiro-flamengo-modelo-2-2",
+    "images": [
       {
         "src": "/otimizadas/retro-campeonato-brasileiro-flamengo/04-800.webp",
         "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Flamengo_(3).jpg",
-        "alt": "Camisa Flamengo retro ? foto 2",
+        "alt": "Camisa Flamengo retro ? foto 1",
         "credit": "Origem/autorização do lote ainda não registrada; arquivo local: public/catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Flamengo_(3).jpg.",
         "focalPoint": {
           "x": 50,
           "y": 50
         },
         "blurDataURL": "data:image/webp;base64,UklGRpIAAABXRUJQVlA4IIYAAAAwBACdASoQABQAPxFysFAsJqSisAgBgCIJbAC7ACBj1QaWnqphjkR4SKwA/ox7HJpxKcRugPNAwo8OEkvpl7pnRSvcFXtL/guNQjvjVoDaDmWAOt54cl7087d7Su4/Lf32XEpwIBJ2358JmrRD5fBbS6aA4FFqez12ZRvy4NBE37EoV4jgAA=="
-      },
+      }
+    ]
+  },
+  {
+    "id": "catalog-retro-campeonato-brasileiro-flamengo-modelo-3-2",
+    "slug": "retro-campeonato-brasileiro-flamengo-modelo-3-2",
+    "clube": "Flamengo",
+    "clubeSlug": "flamengo",
+    "liga": "brasileirao-serie-a",
+    "publico": "revisar",
+    "tipo": "retro",
+    "temporada": "revisar",
+    "uniforme": "revisar",
+    "nome": "Camisa Flamengo retro – Modelo 3",
+    "preco": 185,
+    "tamanhos": [
+      "P",
+      "M",
+      "G",
+      "GG",
+      "2GG",
+      "3GG"
+    ],
+    "cor": "revisar",
+    "imageSeed": "retro-campeonato-brasileiro-flamengo-modelo-3-2",
+    "images": [
       {
         "src": "/otimizadas/retro-campeonato-brasileiro-flamengo/05-800.webp",
         "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Flamengo.jpg",
-        "alt": "Camisa Flamengo retro ? foto 3",
+        "alt": "Camisa Flamengo retro ? foto 1",
         "credit": "Origem/autorização do lote ainda não registrada; arquivo local: public/catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Flamengo.jpg.",
         "focalPoint": {
           "x": 50,
@@ -18973,7 +19023,7 @@
     "tipo": "retro",
     "temporada": "2006",
     "uniforme": "titular",
-    "nome": "Camisa Internacional 2006 retro – Casa",
+    "nome": "Camisa Internacional 2006 retro – Casa – Casa",
     "preco": 185,
     "tamanhos": [
       "P",
@@ -19897,7 +19947,7 @@
     "tipo": "retro",
     "temporada": "1998",
     "uniforme": "titular",
-    "nome": "Camisa Vasco da Gama 1998 retro – Casa",
+    "nome": "Camisa Vasco da Gama 1998 retro – Casa – Casa",
     "preco": 185,
     "tamanhos": [
       "P",
@@ -20005,7 +20055,7 @@
     "tipo": "retro",
     "temporada": "revisar",
     "uniforme": "titular",
-    "nome": "Camisa Atlético Madrid retro – Casa",
+    "nome": "Camisa Atlético Madrid retro – Casa – Casa",
     "preco": 185,
     "tamanhos": [
       "P",
@@ -21935,7 +21985,7 @@
     "tipo": "retro",
     "temporada": "1994",
     "uniforme": "reserva",
-    "nome": "Camisa Brasil 1994 retro – Fora",
+    "nome": "Camisa Brasil 1994 retro – Fora – Fora",
     "preco": 185,
     "tamanhos": [
       "P",
@@ -24071,7 +24121,7 @@
     "tipo": "retro",
     "temporada": "revisar",
     "uniforme": "reserva",
-    "nome": "Camisa Portugal retro – Fora",
+    "nome": "Camisa Portugal retro – Fora – Fora",
     "preco": 185,
     "tamanhos": [
       "P",
@@ -26160,16 +26210,16 @@
     ]
   },
   {
-    "id": "catalog-camisa-manga-longa-torcedor-campeonato-brasileiro-cruzeiro-26-27",
-    "slug": "camisa-manga-longa-torcedor-campeonato-brasileiro-cruzeiro-26-27",
+    "id": "catalog-camisa-manga-longa-torcedor-campeonato-brasileiro-cruzeiro-26-27-reserva-2",
+    "slug": "camisa-manga-longa-torcedor-campeonato-brasileiro-cruzeiro-26-27-reserva-2",
     "clube": "Cruzeiro",
     "clubeSlug": "cruzeiro",
     "liga": "brasileirao-serie-a",
     "publico": "masculino",
     "tipo": "inverno",
     "temporada": "26/27",
-    "uniforme": "titular",
-    "nome": "Camisa Cruzeiro 26/27 inverno masculino manga longa – Casa",
+    "uniforme": "reserva",
+    "nome": "Camisa Cruzeiro 26/27 inverno masculino manga longa – Casa – Fora",
     "preco": 190,
     "tamanhos": [
       "P",
@@ -26180,7 +26230,7 @@
       "3GG"
     ],
     "cor": "revisar",
-    "imageSeed": "camisa-manga-longa-torcedor-campeonato-brasileiro-cruzeiro-26-27",
+    "imageSeed": "camisa-manga-longa-torcedor-campeonato-brasileiro-cruzeiro-26-27-reserva-2",
     "images": [
       {
         "src": "/otimizadas/camisa-manga-longa-torcedor-campeonato-brasileiro-cruzeiro-26-27/02-800.webp",
@@ -26277,7 +26327,7 @@
     "tipo": "inverno",
     "temporada": "26/27",
     "uniforme": "titular",
-    "nome": "Camisa Flamengo 26/27 inverno masculino manga longa – Casa",
+    "nome": "Camisa Flamengo 26/27 inverno masculino manga longa – Casa – Casa",
     "preco": 190,
     "tamanhos": [
       "P",
@@ -26664,16 +26714,16 @@
     ]
   },
   {
-    "id": "catalog-camisa-manga-longa-torcedor-la-liga-barcelona-26-27",
-    "slug": "camisa-manga-longa-torcedor-la-liga-barcelona-26-27",
+    "id": "catalog-camisa-manga-longa-torcedor-la-liga-barcelona-26-27-reserva-2",
+    "slug": "camisa-manga-longa-torcedor-la-liga-barcelona-26-27-reserva-2",
     "clube": "Barcelona",
     "clubeSlug": "barcelona",
     "liga": "la-liga",
     "publico": "masculino",
     "tipo": "inverno",
     "temporada": "26/27",
-    "uniforme": "titular",
-    "nome": "Camisa Barcelona 26/27 inverno masculino manga longa – Casa",
+    "uniforme": "reserva",
+    "nome": "Camisa Barcelona 26/27 inverno masculino manga longa – Casa – Fora",
     "preco": 190,
     "tamanhos": [
       "P",
@@ -26684,7 +26734,7 @@
       "3GG"
     ],
     "cor": "revisar",
-    "imageSeed": "camisa-manga-longa-torcedor-la-liga-barcelona-26-27",
+    "imageSeed": "camisa-manga-longa-torcedor-la-liga-barcelona-26-27-reserva-2",
     "images": [
       {
         "src": "/otimizadas/camisa-manga-longa-torcedor-la-liga-barcelona-26-27/02-800.webp",
@@ -26828,7 +26878,7 @@
     "tipo": "inverno",
     "temporada": "26/27",
     "uniforme": "reserva",
-    "nome": "Camisa Real Madrid 26/27 inverno masculino manga longa – Fora",
+    "nome": "Camisa Real Madrid 26/27 inverno masculino manga longa – Fora – Fora",
     "preco": 190,
     "tamanhos": [
       "P",
@@ -26938,16 +26988,16 @@
     ]
   },
   {
-    "id": "catalog-camisa-manga-longa-torcedor-campeonato-frances-paris-saint-germain-26-27",
-    "slug": "camisa-manga-longa-torcedor-campeonato-frances-paris-saint-germain-26-27",
+    "id": "catalog-camisa-manga-longa-torcedor-campeonato-frances-paris-saint-germain-26-27-reserva-2",
+    "slug": "camisa-manga-longa-torcedor-campeonato-frances-paris-saint-germain-26-27-reserva-2",
     "clube": "Paris Saint-Germain",
     "clubeSlug": "paris-saint-germain",
     "liga": "ligue-1",
     "publico": "masculino",
     "tipo": "inverno",
     "temporada": "26/27",
-    "uniforme": "titular",
-    "nome": "Camisa Paris Saint-Germain 26/27 inverno masculino manga longa – Casa",
+    "uniforme": "reserva",
+    "nome": "Camisa Paris Saint-Germain 26/27 inverno masculino manga longa – Casa – Fora",
     "preco": 190,
     "tamanhos": [
       "P",
@@ -26958,7 +27008,7 @@
       "3GG"
     ],
     "cor": "revisar",
-    "imageSeed": "camisa-manga-longa-torcedor-campeonato-frances-paris-saint-germain-26-27",
+    "imageSeed": "camisa-manga-longa-torcedor-campeonato-frances-paris-saint-germain-26-27-reserva-2",
     "images": [
       {
         "src": "/otimizadas/camisa-manga-longa-torcedor-campeonato-frances-paris-saint-germain-26-27/02-800.webp",
@@ -27284,16 +27334,16 @@
     ]
   },
   {
-    "id": "catalog-camisa-manga-longa-torcedor-selecoes-america-do-sul-argentina-26-27",
-    "slug": "camisa-manga-longa-torcedor-selecoes-america-do-sul-argentina-26-27",
+    "id": "catalog-camisa-manga-longa-torcedor-selecoes-america-do-sul-argentina-26-27-reserva-2",
+    "slug": "camisa-manga-longa-torcedor-selecoes-america-do-sul-argentina-26-27-reserva-2",
     "clube": "Argentina",
     "clubeSlug": "argentina",
     "liga": "selecoes",
     "publico": "masculino",
     "tipo": "inverno",
     "temporada": "26/27",
-    "uniforme": "titular",
-    "nome": "Camisa Argentina 26/27 inverno masculino manga longa – Casa",
+    "uniforme": "reserva",
+    "nome": "Camisa Argentina 26/27 inverno masculino manga longa – Casa – Fora",
     "preco": 190,
     "tamanhos": [
       "P",
@@ -27304,7 +27354,7 @@
       "3GG"
     ],
     "cor": "revisar",
-    "imageSeed": "camisa-manga-longa-torcedor-selecoes-america-do-sul-argentina-26-27",
+    "imageSeed": "camisa-manga-longa-torcedor-selecoes-america-do-sul-argentina-26-27-reserva-2",
     "images": [
       {
         "src": "/otimizadas/camisa-manga-longa-torcedor-selecoes-america-do-sul-argentina-26-27/02-800.webp",
@@ -27365,7 +27415,7 @@
     "tipo": "inverno",
     "temporada": "26/27",
     "uniforme": "titular",
-    "nome": "Camisa Brasil 26/27 inverno masculino manga longa – Casa",
+    "nome": "Camisa Brasil 26/27 inverno masculino manga longa – Casa – Casa",
     "preco": 190,
     "tamanhos": [
       "P",
@@ -27522,16 +27572,16 @@
     ]
   },
   {
-    "id": "catalog-camisa-manga-longa-torcedor-selecoes-europa-alemanha-26-27",
-    "slug": "camisa-manga-longa-torcedor-selecoes-europa-alemanha-26-27",
+    "id": "catalog-camisa-manga-longa-torcedor-selecoes-europa-alemanha-26-27-reserva-2",
+    "slug": "camisa-manga-longa-torcedor-selecoes-europa-alemanha-26-27-reserva-2",
     "clube": "Alemanha",
     "clubeSlug": "alemanha",
     "liga": "selecoes",
     "publico": "masculino",
     "tipo": "inverno",
     "temporada": "26/27",
-    "uniforme": "titular",
-    "nome": "Camisa Alemanha 26/27 inverno masculino manga longa – Casa",
+    "uniforme": "reserva",
+    "nome": "Camisa Alemanha 26/27 inverno masculino manga longa – Casa – Fora",
     "preco": 190,
     "tamanhos": [
       "P",
@@ -27542,7 +27592,7 @@
       "3GG"
     ],
     "cor": "revisar",
-    "imageSeed": "camisa-manga-longa-torcedor-selecoes-europa-alemanha-26-27",
+    "imageSeed": "camisa-manga-longa-torcedor-selecoes-europa-alemanha-26-27-reserva-2",
     "images": [
       {
         "src": "/otimizadas/camisa-manga-longa-torcedor-selecoes-europa-alemanha-26-27/02-800.webp",
@@ -27675,7 +27725,7 @@
     "tipo": "inverno",
     "temporada": "26/27",
     "uniforme": "titular",
-    "nome": "Camisa Escócia Copa do Mundo 26/27 inverno masculino manga longa – Casa",
+    "nome": "Camisa Escócia Copa do Mundo 26/27 inverno masculino manga longa – Casa – Casa",
     "preco": 190,
     "tamanhos": [
       "P",
@@ -27774,16 +27824,16 @@
     ]
   },
   {
-    "id": "catalog-camisa-manga-longa-torcedor-selecoes-europa-franca-26-27",
-    "slug": "camisa-manga-longa-torcedor-selecoes-europa-franca-26-27",
+    "id": "catalog-camisa-manga-longa-torcedor-selecoes-europa-franca-26-27-reserva-2",
+    "slug": "camisa-manga-longa-torcedor-selecoes-europa-franca-26-27-reserva-2",
     "clube": "França",
     "clubeSlug": "franca",
     "liga": "selecoes",
     "publico": "masculino",
     "tipo": "inverno",
     "temporada": "26/27",
-    "uniforme": "titular",
-    "nome": "Camisa França 26/27 inverno masculino manga longa – Casa",
+    "uniforme": "reserva",
+    "nome": "Camisa França 26/27 inverno masculino manga longa – Casa – Fora",
     "preco": 190,
     "tamanhos": [
       "P",
@@ -27794,7 +27844,7 @@
       "3GG"
     ],
     "cor": "revisar",
-    "imageSeed": "camisa-manga-longa-torcedor-selecoes-europa-franca-26-27",
+    "imageSeed": "camisa-manga-longa-torcedor-selecoes-europa-franca-26-27-reserva-2",
     "images": [
       {
         "src": "/otimizadas/camisa-manga-longa-torcedor-selecoes-europa-franca-26-27/02-800.webp",
@@ -28034,16 +28084,16 @@
     ]
   },
   {
-    "id": "catalog-camisa-manga-longa-torcedor-premier-league-arsenal-26-27",
-    "slug": "camisa-manga-longa-torcedor-premier-league-arsenal-26-27",
+    "id": "catalog-camisa-manga-longa-torcedor-premier-league-arsenal-26-27-reserva-2",
+    "slug": "camisa-manga-longa-torcedor-premier-league-arsenal-26-27-reserva-2",
     "clube": "Arsenal",
     "clubeSlug": "arsenal",
     "liga": "premier-league",
     "publico": "masculino",
     "tipo": "inverno",
     "temporada": "26/27",
-    "uniforme": "titular",
-    "nome": "Camisa Arsenal 26/27 inverno masculino manga longa – Casa",
+    "uniforme": "reserva",
+    "nome": "Camisa Arsenal 26/27 inverno masculino manga longa – Casa – Fora",
     "preco": 190,
     "tamanhos": [
       "P",
@@ -28054,7 +28104,7 @@
       "3GG"
     ],
     "cor": "revisar",
-    "imageSeed": "camisa-manga-longa-torcedor-premier-league-arsenal-26-27",
+    "imageSeed": "camisa-manga-longa-torcedor-premier-league-arsenal-26-27-reserva-2",
     "images": [
       {
         "src": "/otimizadas/camisa-manga-longa-torcedor-premier-league-arsenal-26-27/02-800.webp",

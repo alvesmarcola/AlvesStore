@@ -1,4 +1,4 @@
--- Marca quando o aviso de "pagamento aprovado" (e-mail ao cliente e WhatsApp à loja) já foi disparado.
+-- Marca quando o aviso de "pagamento aprovado" (e-mail e WhatsApp ao cliente com opt-in) já foi processado.
 -- Assim, se o Mercado Pago repetir a notificação, o aviso sai uma única vez e nunca se perde.
 ALTER TABLE public.store_orders
   ADD COLUMN IF NOT EXISTS paid_notified_at TIMESTAMPTZ;

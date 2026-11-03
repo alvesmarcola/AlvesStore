@@ -45,26 +45,39 @@ export async function PATCH(request: Request) {
     if (!order) return NextResponse.json({ error: "Pedido não encontrado." }, { status: 404 });
 
     const trackingCode = body.trackingCode.trim() || null;
-    // Limpar um código é sempre permitido; cadastrar um novo só depois do pagamento aprovado,
-    // porque o cliente recebe e-mail/WhatsApp assim que o código é salvo.
-    if (trackingCode && order.status !== "approved") {
+    // O pedido só pode ser despachado após a confirmação do pagamento.
+    if (trackingCode && !["pago", "enviado", "approved"].includes(order.status)) {
       return NextResponse.json({ error: "Só é possível cadastrar o rastreio de pedidos com pagamento aprovado." }, { status: 409 });
     }
     const updated = await supabase.from("store_orders")
-      .update({ tracking_code: trackingCode, updated_at: new Date().toISOString() })
+      .update({
+        tracking_code: trackingCode,
+        ...(trackingCode ? { status: "enviado" } : {}),
+        updated_at: new Date().toISOString(),
+      })
       .eq("id", body.orderId)
+      .in("status", ["pago", "enviado", "approved"])
       .select("id")
       .maybeSingle();
     if (updated.error) throw updated.error;
-    if (!updated.data) return NextResponse.json({ error: "Pedido não encontrado." }, { status: 404 });
+    if (!updated.data) return NextResponse.json({ error: "O pedido não foi atualizado. Confirme se ele está pago e tente novamente." }, { status: 409 });
 
+    let whatsappSent: boolean | null = null;
+    let notificationWarning: string | undefined;
     if (trackingCode && trackingCode !== order.tracking_code) {
-      await Promise.all([
-        sendTrackingUpdateEmail({ ...order, tracking_code: trackingCode }),
-        sendWhatsAppOrderNotice("tracking_code_updated", { ...order, tracking_code: trackingCode }),
+      const updatedOrder = { ...order, status: "enviado", tracking_code: trackingCode };
+      const [, whatsappResult] = await Promise.all([
+        sendTrackingUpdateEmail(updatedOrder),
+        sendWhatsAppOrderNotice("tracking_code_updated", updatedOrder),
       ]);
+      whatsappSent = whatsappResult;
+      if (order.customer.whatsappUpdates === true && whatsappResult !== true) {
+        notificationWarning = "O rastreio foi salvo, mas o WhatsApp não foi enviado. Verifique a configuração do provedor.";
+      } else if (order.customer.whatsappUpdates !== true) {
+        notificationWarning = "O rastreio foi salvo. O cliente não autorizou atualizações pelo WhatsApp.";
+      }
     }
-    return NextResponse.json({ updated: true });
+    return NextResponse.json({ updated: true, whatsappSent, message: notificationWarning });
   } catch (error) {
     console.error("Falha ao salvar rastreio:", error instanceof Error ? error.message : "erro desconhecido");
     return NextResponse.json({ error: "Não foi possível salvar o rastreio." }, { status: 503 });

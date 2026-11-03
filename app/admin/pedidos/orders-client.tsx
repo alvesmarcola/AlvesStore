@@ -24,6 +24,8 @@ type Order = {
 
 const statusLabels: Record<string, string> = {
   pending: "Pagamento pendente",
+  pago: "Pago · preparando",
+  enviado: "Enviado",
   approved: "Pagamento aprovado",
   rejected: "Pagamento recusado",
   cancelled: "Cancelado",
@@ -58,7 +60,8 @@ export default function AdminOrders() {
   const [savingId, setSavingId] = useState("");
   const [message, setMessage] = useState("");
   const [onlyPaid, setOnlyPaid] = useState(true);
-  const visibleOrders = onlyPaid ? orders.filter((order) => order.status === "approved") : orders;
+  const paidOrders = orders.filter((order) => ["pago", "enviado", "approved"].includes(order.status));
+  const visibleOrders = onlyPaid ? paidOrders : orders;
 
   async function load() {
     setMessage("");
@@ -89,8 +92,10 @@ export default function AdminOrders() {
       });
       const body = await response.json();
       if (!response.ok) throw new Error(body.error ?? "Não foi possível salvar o rastreio.");
-      setOrders((current) => current.map((item) => item.id === order.id ? { ...item, tracking_code: trackingCode || null } : item));
-      setMessage(`Rastreio do pedido ${order.id.slice(0, 8).toUpperCase()} salvo.`);
+      setOrders((current) => current.map((item) => item.id === order.id
+        ? { ...item, status: trackingCode ? "enviado" : item.status, tracking_code: trackingCode || null }
+        : item));
+      setMessage(body.message ?? `Rastreio do pedido ${order.id.slice(0, 8).toUpperCase()} salvo.`);
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Não foi possível salvar o rastreio.");
     } finally {
@@ -117,7 +122,7 @@ export default function AdminOrders() {
     const url = URL.createObjectURL(new Blob([`\uFEFF${[columns.join(","), ...rows].join("\r\n")}`], { type: "text/csv;charset=utf-8" }));
     const link = document.createElement("a");
     link.href = url;
-    link.download = "pedidos-alves-store.csv";
+    link.download = "pedidos-resenha-sports-cia.csv";
     link.click();
     URL.revokeObjectURL(url);
   }
@@ -126,7 +131,7 @@ export default function AdminOrders() {
     <main className="mx-auto max-w-7xl px-5 py-10 lg:px-8">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="text-[10px] font-black uppercase tracking-[.2em] text-action">Alves Store · administração</p>
+          <p className="text-[10px] font-black uppercase tracking-[.2em] text-action">Resenha Sports Cia · administração</p>
           <h1 className="mt-2 text-3xl font-black">Pedidos recentes</h1>
           <p className="mt-2 text-sm text-muted">Acesso protegido pelo token administrativo do servidor.</p>
         </div>
@@ -140,7 +145,7 @@ export default function AdminOrders() {
       </form>
 
       {message && <p role="status" aria-live="polite" className="mt-4 rounded-lg bg-paper px-4 py-3 text-sm">{message}</p>}
-      {orders.length > 0 && <label className="mt-4 flex w-fit items-center gap-2 text-xs font-bold"><input type="checkbox" checked={onlyPaid} onChange={(event) => setOnlyPaid(event.target.checked)} />Mostrar só pedidos pagos ({orders.filter((order) => order.status === "approved").length} de {orders.length})</label>}
+      {orders.length > 0 && <label className="mt-4 flex w-fit items-center gap-2 text-xs font-bold"><input type="checkbox" checked={onlyPaid} onChange={(event) => setOnlyPaid(event.target.checked)} />Mostrar só pedidos pagos ({paidOrders.length} de {orders.length})</label>}
       {orders.length === 0 ? (
         <div className="mt-6 rounded-xl border border-dashed border-border px-5 py-12 text-center text-sm text-muted">Informe o token e carregue os pedidos recentes.</div>
       ) : visibleOrders.length === 0 ? (
@@ -159,8 +164,8 @@ export default function AdminOrders() {
                   <td className="max-w-64 px-4 py-4"><ul className="grid gap-2">{order.item_lines.map((item, index) => <li key={`${item.title}-${index}`} className="leading-5">{itemDescription(item)}</li>)}</ul></td>
                   <td className="max-w-60 whitespace-pre-line px-4 py-4 leading-5 text-muted">{address(order.customer)}</td>
                   <td className="whitespace-nowrap px-4 py-4"><span className="font-black">{money.format(order.total_cents / 100)}</span><span className="mt-1 block text-[10px] text-muted">Frete: {money.format(order.shipping_cents / 100)}</span></td>
-                  <td className="px-4 py-4"><span className={`inline-flex rounded-full px-2.5 py-1 text-[10px] font-bold ${order.status === "approved" ? "bg-green-50 text-green-700" : "bg-paper text-ink"}`}>{statusLabels[order.status] ?? order.status}</span></td>
-                  <td className="min-w-52 px-4 py-4"><label className="sr-only" htmlFor={`tracking-${order.id}`}>Código de rastreio do pedido {order.id.slice(0, 8)}</label><input id={`tracking-${order.id}`} value={trackingValues[order.id] ?? ""} onChange={(event) => setTrackingValues((current) => ({ ...current, [order.id]: event.target.value }))} maxLength={80} disabled={order.status !== "approved"} className="w-full rounded-md border border-border px-3 py-2 disabled:bg-paper disabled:text-muted" placeholder={order.status === "approved" ? "Código de rastreio" : "Disponível após o pagamento"}/><button disabled={order.status !== "approved" || savingId === order.id || (trackingValues[order.id] ?? "") === (order.tracking_code ?? "")} onClick={() => void saveTracking(order)} className="mt-2 rounded-md bg-ink px-3 py-2 text-[10px] font-bold text-white disabled:cursor-not-allowed disabled:opacity-40">{savingId === order.id ? "Salvando…" : "Salvar rastreio"}</button></td>
+                  <td className="px-4 py-4"><span className={`inline-flex rounded-full px-2.5 py-1 text-[10px] font-bold ${["pago", "enviado", "approved"].includes(order.status) ? "bg-green-50 text-green-700" : "bg-paper text-ink"}`}>{statusLabels[order.status] ?? order.status}</span></td>
+                  <td className="min-w-52 px-4 py-4"><label className="sr-only" htmlFor={`tracking-${order.id}`}>Código de rastreio do pedido {order.id.slice(0, 8)}</label><input id={`tracking-${order.id}`} value={trackingValues[order.id] ?? ""} onChange={(event) => setTrackingValues((current) => ({ ...current, [order.id]: event.target.value }))} maxLength={80} disabled={!["pago", "enviado", "approved"].includes(order.status)} className="w-full rounded-md border border-border px-3 py-2 disabled:bg-paper disabled:text-muted" placeholder={["pago", "enviado", "approved"].includes(order.status) ? "Código de rastreio" : "Disponível após o pagamento"}/><button disabled={!["pago", "enviado", "approved"].includes(order.status) || savingId === order.id || (trackingValues[order.id] ?? "") === (order.tracking_code ?? "")} onClick={() => void saveTracking(order)} className="mt-2 rounded-md bg-ink px-3 py-2 text-[10px] font-bold text-white disabled:cursor-not-allowed disabled:opacity-40">{savingId === order.id ? "Salvando…" : "Salvar rastreio"}</button></td>
                 </tr>
               ))}
             </tbody>

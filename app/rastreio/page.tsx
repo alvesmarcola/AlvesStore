@@ -4,7 +4,7 @@ import { useState } from "react";
 import { PackageCheck } from "lucide-react";
 
 type TrackedOrder = { code: string; status: string; trackingCode: string | null; shipping: string; createdAt: string };
-const statusLabels: Record<string, string> = { approved: "Pagamento aprovado", pending: "Pagamento pendente", rejected: "Pagamento recusado", cancelled: "Pedido cancelado", refunded: "Pagamento reembolsado" };
+const statusLabels: Record<string, string> = { pago: "Pagamento confirmado · preparando pedido", enviado: "Enviado pelos Correios", approved: "Pagamento aprovado", pending: "Pagamento pendente", rejected: "Pagamento recusado", cancelled: "Pedido cancelado", refunded: "Pagamento reembolsado" };
 
 export default function TrackingPage() {
   const [order, setOrder] = useState<TrackedOrder | null>(null);

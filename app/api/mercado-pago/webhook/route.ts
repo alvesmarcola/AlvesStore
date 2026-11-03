@@ -83,10 +83,11 @@ export async function POST(request: Request) {
       // O aviso é "reservado" de forma atômica: só uma notificação por pedido consegue marcar
       // paid_notified_at. Isso evita avisos duplicados e também não perde o aviso quando o Mercado
       // Pago repete a notificação depois de uma falha (o status já estaria "approved" nesse caso).
+      const notifiedAt = new Date().toISOString();
       const claim = await supabase.from("store_orders")
-        .update({ paid_notified_at: new Date().toISOString() })
+        .update({ paid_notified_at: notifiedAt })
         .eq("id", payment.external_reference)
-        .eq("status", "approved")
+        .in("status", ["pago", "enviado", "approved"])
         .is("paid_notified_at", null)
         .select("id")
         .maybeSingle();
@@ -94,7 +95,7 @@ export async function POST(request: Request) {
       if (claim.error) {
         // Provavelmente a migração 20261019000000_order_paid_notice.sql ainda não foi aplicada.
         console.error("Não foi possível reservar o aviso de pagamento aprovado:", claim.error.message);
-        shouldNotify = order.previous_status !== "approved";
+        shouldNotify = !["pago", "enviado", "approved"].includes(order.previous_status);
       } else {
         shouldNotify = Boolean(claim.data);
       }
@@ -102,13 +103,27 @@ export async function POST(request: Request) {
       if (shouldNotify) {
         const notice: OrderNotice = {
           id: payment.external_reference,
-          status: "approved",
+          status: "pago",
           customer: order.customer,
           item_lines: order.item_lines,
           shipping_cents: Number(order.shipping_cents),
           total_cents: Number(order.total_cents),
         };
-        await sendWhatsAppOrderNotice("order_paid", notice);
+        const whatsappSent = await sendWhatsAppOrderNotice("order_paid", notice);
+        if (notice.customer.whatsappUpdates === true && whatsappSent !== true) {
+          if (claim.data) {
+            const released = await supabase.from("store_orders")
+              .update({ paid_notified_at: null })
+              .eq("id", payment.external_reference)
+              .eq("paid_notified_at", notifiedAt)
+              .select("id")
+              .maybeSingle();
+            if (released.error) {
+              console.error("Não foi possível liberar a tentativa de notificação WhatsApp:", released.error.message);
+            }
+          }
+          throw new Error("WhatsApp de pagamento não enviado; a notificação será tentada novamente.");
+        }
         await sendOrderEmail(String(notice.customer.email ?? ""), buildOrderPaidEmail({
           orderId: notice.id,
           customerName: String(notice.customer.fullName ?? ""),

@@ -10,6 +10,7 @@ import { classifyProduct, isPackageEligible } from "@/lib/product-classification
 import { getAvailablePatches } from "@/lib/patch-compatibility";
 import { isCompleteOrderCode, normalizeOrderCodeInput, orderCode } from "@/lib/order-code";
 import { buildOrderPaidEmail, buildOrderReceivedEmail } from "@/lib/server/order-emails";
+import { sendWhatsAppOrderNotice, type OrderNotice } from "@/lib/server/order-notifications";
 import { isRateLimited } from "@/lib/server/rate-limit";
 import { inferProductTypeFromSource } from "@/lib/catalog-source-classification";
 import { prioritizeClubs, prioritizeEditorialProducts, sortCatalogProducts } from "@/lib/catalog-order";
@@ -332,6 +333,45 @@ test("e-mails do pedido trazem o código e as instruções de rastreio", () => {
   const received = buildOrderReceivedEmail({ ...base, shippingCents: 2000 });
   assert.match(received.text, /Código do seu pedido: A1B2C3D4/);
   assert.match(received.text, /Frete: R\$ 20,00/);
+});
+
+test("notificações WhatsApp vão ao cliente optado e incluem mensagens de pagamento e rastreio", async () => {
+  const previousEndpoint = process.env.WHATSAPP_ORDER_WEBHOOK_URL;
+  const originalFetch = globalThis.fetch;
+  const sentMessages: Record<string, unknown>[] = [];
+  process.env.WHATSAPP_ORDER_WEBHOOK_URL = "https://whatsapp.example.test/messages";
+  globalThis.fetch = async (_input, init) => {
+    sentMessages.push(JSON.parse(String(init?.body)) as Record<string, unknown>);
+    return new Response(null, { status: 200 });
+  };
+
+  const order: OrderNotice = {
+    id: "a1b2c3d4-1111-4222-8333-444455556666",
+    status: "pago",
+    customer: { fullName: "Marina Silva", phone: "11987654321", whatsappUpdates: true },
+    item_lines: [],
+    shipping_cents: 0,
+    total_cents: 18000,
+    tracking_code: "AB123456789BR",
+  };
+
+  try {
+    assert.equal(await sendWhatsAppOrderNotice("order_paid", order), true);
+    assert.equal(await sendWhatsAppOrderNotice("tracking_code_updated", { ...order, status: "enviado" }), true);
+    assert.equal(sentMessages[0]?.to, "5511987654321");
+    assert.match(String(sentMessages[0]?.message), /pagamento.*confirmado/i);
+    assert.match(String(sentMessages[1]?.message), /AB123456789BR/);
+    assert.match(String(sentMessages[1]?.message), /rastreamento\.correios\.com\.br/);
+    assert.equal(await sendWhatsAppOrderNotice("order_paid", {
+      ...order,
+      customer: { ...order.customer, whatsappUpdates: false },
+    }), false);
+    assert.equal(sentMessages.length, 2);
+  } finally {
+    globalThis.fetch = originalFetch;
+    if (previousEndpoint === undefined) delete process.env.WHATSAPP_ORDER_WEBHOOK_URL;
+    else process.env.WHATSAPP_ORDER_WEBHOOK_URL = previousEndpoint;
+  }
 });
 
 test("limite de tentativas bloqueia por IP e libera na janela seguinte", () => {
