@@ -97,6 +97,7 @@ export async function POST(request: Request) {
       patches_cents: totals.patchesCents,
       shipping_cents: finalShippingCents,
       total_cents: totalCents,
+      operational_status: "aguardando_pagamento",
     }, { onConflict: "idempotency_key", ignoreDuplicates: true })
       .select("id, request_hash, checkout_url, status")
       .maybeSingle();

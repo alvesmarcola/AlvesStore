@@ -23,7 +23,7 @@ export async function POST(request: Request) {
   const cpf = contact.replace(/\D/g, "");
   const prefix = normalizeOrderCodeInput(input.data.code);
   try {
-    const { data, error } = await getSupabaseOrdersClient().rpc("find_store_order_for_tracking", {
+    const { data, error } = await getSupabaseOrdersClient().rpc("find_store_order_tracking_details", {
       p_prefix: prefix,
       p_email: contact,
       p_cpf: cpf,
@@ -31,10 +31,21 @@ export async function POST(request: Request) {
     if (error) throw error;
     if (!Array.isArray(data) || data.length !== 1) return NextResponse.json({ error: "Não encontramos um pedido com esses dados." }, { status: 404 });
     const order = data[0];
+    const operationalStatus = order.operational_status ?? (
+      order.status === "enviado"
+        ? "enviado"
+        : order.status === "cancelled"
+          ? "cancelado"
+        : ["pago", "approved"].includes(order.status)
+          ? "aguardando_fornecedor"
+          : "aguardando_pagamento"
+    );
     return NextResponse.json({ order: {
       code: orderCode(String(order.id)),
       status: order.status,
+      operationalStatus,
       trackingCode: order.tracking_code,
+      trackingUrl: order.tracking_url,
       shipping: order.shipping?.label ?? "Frete fixo",
       createdAt: order.created_at,
     } }, { headers: { "Cache-Control": "no-store" } });

@@ -70,6 +70,8 @@ export async function POST(request: Request) {
       .update({
         mercado_pago_status: payment.status ?? status,
         mercado_pago_id: String(payment.id ?? paymentId),
+        payment_method_id: payment.payment_method_id ?? null,
+        payment_type_id: payment.payment_type_id ?? null,
         updated_at: new Date().toISOString(),
       })
       .eq("id", payment.external_reference)
@@ -80,6 +82,14 @@ export async function POST(request: Request) {
     }
 
     if (status === "approved") {
+      const operationalUpdate = await supabase.from("store_orders")
+        .update({ operational_status: "aguardando_fornecedor", updated_at: new Date().toISOString() })
+        .eq("id", payment.external_reference)
+        .or("operational_status.is.null,operational_status.eq.aguardando_pagamento")
+        .select("id")
+        .maybeSingle();
+      if (operationalUpdate.error) throw operationalUpdate.error;
+
       // O aviso é "reservado" de forma atômica: só uma notificação por pedido consegue marcar
       // paid_notified_at. Isso evita avisos duplicados e também não perde o aviso quando o Mercado
       // Pago repete a notificação depois de uma falha (o status já estaria "approved" nesse caso).

@@ -17,6 +17,7 @@ import { prioritizeClubs, prioritizeEditorialProducts, sortCatalogProducts } fro
 import { parseSearchIntent, searchProducts } from "@/lib/smart-search";
 import { patchOptions } from "@/data/patches";
 import { productOverrides } from "@/data/product-overrides";
+import { manualProductSchema } from "@/lib/admin/product-validation";
 import { storeConfig } from "@/config";
 import type { Product } from "@/lib/types";
 
@@ -299,6 +300,29 @@ test("valida assinatura do webhook e converte estados de pagamento", () => {
   assert.equal(normalizedPaymentStatus("approved"), "approved");
   assert.equal(normalizedPaymentStatus("in_process"), "pending");
   assert.equal(normalizedPaymentStatus("rejected"), "rejected");
+});
+
+test("valida cadastro manual e estoques por tamanho sem alterar regra do checkout", () => {
+  const product = {
+    slug: "camisa-teste-clube",
+    nome: "Camisa Teste Clube 2026",
+    description: "Produto cadastrado no painel.",
+    preco: 179.9,
+    publico: "masculino",
+    tipo: "torcedor",
+    liga: "brasileirao-serie-a",
+    clube: "Clube Teste",
+    temporada: "2026",
+    uniforme: "titular",
+    cor: "Azul",
+    tamanhos: ["P", "M"],
+    stock_by_size: { P: 1, M: 3 },
+    imageUrls: ["https://rlbdgyajikbdhivwfyzk.supabase.co/storage/v1/object/public/produtos/manual/test/photo.webp"],
+  };
+  assert.equal(manualProductSchema.safeParse(product).success, true);
+  assert.equal(manualProductSchema.safeParse({ ...product, tamanhos: ["3GG"] }).success, false);
+  assert.equal(manualProductSchema.safeParse({ ...product, stock_by_size: { P: -1, M: 3 } }).success, false);
+  assert.equal(manualProductSchema.safeParse({ ...product, stock_by_size: { P: 1, G: 3 } }).success, false);
 });
 
 test("código do pedido aceita código curto e UUID, e rejeita códigos incompletos", () => {

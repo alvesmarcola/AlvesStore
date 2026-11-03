@@ -114,6 +114,7 @@ export function ProductDetails({ product, relatedProducts = [] }: { product: Pro
       <div>
         {productContext && <p className="text-[10px] font-bold uppercase tracking-wider text-blue-600">{productContext}</p>}
         <h1 className="mt-2 text-2xl font-bold leading-tight tracking-normal sm:text-3xl">{product.nome}</h1>
+        {product.description && <p className="mt-3 whitespace-pre-line text-sm leading-6 text-muted">{product.description}</p>}
         <div className="mt-5 flex items-baseline gap-3"><span className="text-3xl font-bold tracking-tight">{classification.reviewRequired ? classification.priceLabel : formatCurrency(price + selectedPatchTotal)}</span></div>
         {classification.reviewRequired && <p role="status" className="mt-2 rounded bg-amber-50 p-3 text-sm text-amber-950">A versão e o preço deste produto precisam de confirmação antes da venda.</p>}
         <p className="mt-1 text-xs text-muted">{getProductOfferText(product)}</p>

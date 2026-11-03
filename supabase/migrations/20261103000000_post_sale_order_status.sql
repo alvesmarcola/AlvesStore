@@ -5,10 +5,6 @@ ALTER TABLE public.store_orders
   ADD CONSTRAINT store_orders_status_check
   CHECK (status IN ('pending', 'pago', 'enviado', 'approved', 'rejected', 'cancelled', 'refunded'));
 
-UPDATE public.store_orders
-SET status = 'pago'
-WHERE status = 'approved';
-
 CREATE OR REPLACE FUNCTION public.apply_store_payment(
   p_payment_id TEXT,
   p_order_id UUID,
@@ -59,7 +55,10 @@ BEGIN
       WHEN EXISTS (
         SELECT 1 FROM public.store_order_payments AS payments
         WHERE payments.order_id = p_order_id AND payments.status = 'approved'
-      ) THEN CASE WHEN current_order.status = 'enviado' THEN 'enviado' ELSE 'pago' END
+      ) THEN CASE
+        WHEN current_order.status IN ('enviado', 'approved') THEN current_order.status
+        ELSE 'pago'
+      END
       WHEN EXISTS (
         SELECT 1 FROM public.store_order_payments AS payments
         WHERE payments.order_id = p_order_id AND payments.status = 'pending'

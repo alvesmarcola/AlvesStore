@@ -9,7 +9,8 @@ const PAGE_SIZE = 100;
 const PRODUCT_COLUMNS = "id,slug,clube,clubeSlug,liga,publico,tipo,temporada,uniforme,nome,preco,tamanhos,cor,imageSeed";
 const LIST_PRODUCT_COLUMNS = `${PRODUCT_COLUMNS},images`;
 const EXTENDED_LIST_PRODUCT_COLUMNS = `${LIST_PRODUCT_COLUMNS},category,gender,league,subcategory,tags,title,name,model,version`;
-const DETAIL_PRODUCT_COLUMNS = `${PRODUCT_COLUMNS},images`;
+const MANAGEMENT_PRODUCT_COLUMNS = `${EXTENDED_LIST_PRODUCT_COLUMNS},description,stock_by_size,brand`;
+const DETAIL_PRODUCT_COLUMNS = `${PRODUCT_COLUMNS},images,description,stock_by_size,brand`;
 const bundledCatalog = [...(bundledProducts as unknown as Product[]), ...(f1BundledProducts as unknown as Product[])];
 
 export function getBundledFormulaOneProducts(): Product[] {
@@ -19,6 +20,11 @@ export function getBundledFormulaOneProducts(): Product[] {
 export function getBundledFeminineProducts(): Product[] {
   return bundledCatalog.filter((product) => isPublishedProduct(product) && isFeminineProduct(product))
     .map(prepareFeminineProduct);
+}
+
+export function hasBundledProductSlug(slug: string) {
+  const normalized = slug.toLocaleLowerCase("en-US");
+  return bundledCatalog.some((product) => product.slug.toLocaleLowerCase("en-US") === normalized);
 }
 
 function supabaseConfig() {
@@ -213,6 +219,16 @@ function mapProduct(value: unknown): Product | null {
     league: typeof value.league === "string" ? value.league : undefined,
     subcategory: typeof value.subcategory === "string" ? value.subcategory : undefined,
     tags: tags.length ? tags : undefined,
+    description: typeof value.description === "string" ? value.description : undefined,
+    stock_by_size: isRecord(value.stock_by_size)
+      ? Object.entries(value.stock_by_size).reduce<Record<string, number>>((stock, [size, count]) => {
+        if (typeof count === "number" && Number.isInteger(count) && count >= 0) stock[size] = count;
+        return stock;
+      }, {})
+      : undefined,
+    brand: typeof value.brand === "string" ? value.brand : undefined,
+    supplier_name: typeof value.supplier_name === "string" ? value.supplier_name : undefined,
+    supplier_cost: Number.isFinite(Number(value.supplier_cost)) ? Number(value.supplier_cost) : undefined,
     title: typeof value.title === "string" ? value.title : undefined,
     name: typeof value.name === "string" ? value.name : undefined,
     model: typeof value.model === "string" ? value.model : undefined,
@@ -260,12 +276,16 @@ async function fetchSupabaseProducts(): Promise<Product[]> {
       apikey: config.key,
       ...(config.key.startsWith("eyJ") ? { Authorization: `Bearer ${config.key}` } : {}),
     };
-    const query = new URLSearchParams({ select: EXTENDED_LIST_PRODUCT_COLUMNS, order: "slug.asc", limit: String(PAGE_SIZE), offset: String(offset) });
-    let response = await fetch(`${config.url}/rest/v1/products?${query}`, { headers, next: { revalidate: 300 } });
+    const query = new URLSearchParams({ select: MANAGEMENT_PRODUCT_COLUMNS, order: "slug.asc", limit: String(PAGE_SIZE), offset: String(offset) });
+    let response = await fetch(`${config.url}/rest/v1/products?${query}`, { headers, next: { revalidate: 300, tags: ["catalog"] } });
     if (!response.ok) {
-      // Older products schemas may not have optional category/tag columns.
+      query.set("select", EXTENDED_LIST_PRODUCT_COLUMNS);
+      response = await fetch(`${config.url}/rest/v1/products?${query}`, { headers, next: { revalidate: 300, tags: ["catalog"] } });
+    }
+    if (!response.ok) {
+      // Older products schemas may not have optional category/tag/inventory columns.
       query.set("select", LIST_PRODUCT_COLUMNS);
-      response = await fetch(`${config.url}/rest/v1/products?${query}`, { headers, next: { revalidate: 300 } });
+      response = await fetch(`${config.url}/rest/v1/products?${query}`, { headers, next: { revalidate: 300, tags: ["catalog"] } });
     }
     if (!response.ok) {
       console.error(`Falha ao consultar catálogo Supabase: HTTP ${response.status}.`);
@@ -302,8 +322,8 @@ export async function getSupabaseProductBySlug(slug: string): Promise<Product | 
   if (!config) return bundledProduct;
 
   const query = new URLSearchParams({ select: DETAIL_PRODUCT_COLUMNS, slug: `ilike.${slug.toLocaleLowerCase("en-US")}`, limit: "1" });
-  const response = await fetch(`${config.url}/rest/v1/products?${query}`, {
-    next: { revalidate: 300 },
+  let response = await fetch(`${config.url}/rest/v1/products?${query}`, {
+    next: { revalidate: 300, tags: ["catalog"] },
     signal: AbortSignal.timeout(8_000),
     headers: {
       apikey: config.key,
@@ -315,7 +335,22 @@ export async function getSupabaseProductBySlug(slug: string): Promise<Product | 
   });
   if (!response) return bundledProduct;
   if (!response.ok) {
-    console.error(`Falha ao consultar produto Supabase: HTTP ${response.status}.`);
+    query.set("select", `${PRODUCT_COLUMNS},images`);
+    response = await fetch(`${config.url}/rest/v1/products?${query}`, {
+      next: { revalidate: 300, tags: ["catalog"] },
+      signal: AbortSignal.timeout(8_000),
+      headers: {
+        apikey: config.key,
+        ...(config.key.startsWith("eyJ") ? { Authorization: "Bearer " + config.key } : {}),
+      },
+    }).catch((error: unknown) => {
+      console.error("Falha ao consultar produto no schema legado do Supabase.", error);
+      return null;
+    });
+  }
+  if (!response || !response.ok) {
+    const responseStatus = response ? response.status : "sem resposta";
+    console.error("Falha ao consultar produto Supabase: HTTP " + responseStatus + ".");
     return bundledProduct;
   }
   const rows = await response.json() as unknown[];

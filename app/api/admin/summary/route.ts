@@ -1,0 +1,90 @@
+import { NextResponse } from "next/server";
+import { isAuthorizedAdmin } from "@/lib/server/admin-auth";
+import { getSupabaseOrdersClient } from "@/lib/server/supabase-orders";
+
+export const runtime = "nodejs";
+
+function configured(value: string | undefined) {
+  return Boolean(value?.trim());
+}
+
+export async function GET(request: Request) {
+  if (!isAuthorizedAdmin(request)) return NextResponse.json({ error: "Acesso não autorizado." }, { status: 401 });
+  try {
+    const supabase = getSupabaseOrdersClient();
+    const [metrics, orders, orderSuppliers, productSuppliers] = await Promise.all([
+      supabase.from("store_order_admin_metrics").select("*").single(),
+      supabase.from("store_orders")
+        .select("id,status,mercado_pago_status,operational_status,total_cents,supplier_name,supplier_status,supplier_cost_cents,shipping_cost_cents,other_expenses_cents,created_at")
+        .order("created_at", { ascending: false })
+        .limit(300),
+      supabase.from("store_orders")
+        .select("supplier_name,supplier_cost_cents")
+        .not("supplier_name", "is", null)
+        .limit(5000),
+      supabase.from("admin_product_supplier_details")
+        .select("supplier_name,supplier_cost")
+        .neq("supplier_name", "")
+        .limit(5000),
+    ]);
+    if (metrics.error) throw metrics.error;
+    if (orders.error) throw orders.error;
+    if (orderSuppliers.error) throw orderSuppliers.error;
+    if (productSuppliers.error) throw productSuppliers.error;
+
+    const suppliers = new Map<string, { name: string; orders: number; products: number; supplierSpendCents: number }>();
+    for (const row of orderSuppliers.data ?? []) {
+      const name = row.supplier_name?.trim();
+      if (!name) continue;
+      const key = name.toLocaleLowerCase("pt-BR");
+      const entry = suppliers.get(key) ?? { name, orders: 0, products: 0, supplierSpendCents: 0 };
+      entry.orders += 1;
+      entry.supplierSpendCents += Number(row.supplier_cost_cents ?? 0);
+      suppliers.set(key, entry);
+    }
+    for (const row of productSuppliers.data ?? []) {
+      const name = row.supplier_name?.trim();
+      if (!name) continue;
+      const key = name.toLocaleLowerCase("pt-BR");
+      const entry = suppliers.get(key) ?? { name, orders: 0, products: 0, supplierSpendCents: 0 };
+      entry.products += 1;
+      suppliers.set(key, entry);
+    }
+    const totals = metrics.data;
+    const revenueCents = Number(totals.revenue_cents ?? 0);
+    const expensesCents = Number(totals.supplier_cost_cents ?? 0)
+      + Number(totals.shipping_cost_cents ?? 0)
+      + Number(totals.other_expenses_cents ?? 0);
+
+    return NextResponse.json({
+      metrics: {
+        orderCount: Number(totals.order_count ?? 0),
+        paidOrderCount: Number(totals.paid_order_count ?? 0),
+        awaitingSupplierCount: Number(totals.awaiting_supplier_count ?? 0),
+        shippedOrderCount: Number(totals.shipped_order_count ?? 0),
+        revenueCents,
+        supplierCostCents: Number(totals.supplier_cost_cents ?? 0),
+        shippingCostCents: Number(totals.shipping_cost_cents ?? 0),
+        otherExpensesCents: Number(totals.other_expenses_cents ?? 0),
+        estimatedProfitCents: revenueCents - expensesCents,
+      },
+      orders: orders.data ?? [],
+      suppliers: [...suppliers.values()].sort((a, b) => a.name.localeCompare(b.name, "pt-BR")),
+      configuration: {
+        supabase: (configured(process.env.SUPABASE_URL) || configured(process.env.NEXT_PUBLIC_SUPABASE_URL))
+          && configured(process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.SUPABASE_SECRET_KEY
+            ?? process.env.SUPABASE_SERVICE_KEY ?? process.env.SUPABASE_ROLE_KEY),
+        mercadoPago: configured(process.env.MERCADO_PAGO_ACCESS_TOKEN),
+        mercadoPagoWebhook: configured(process.env.MERCADO_PAGO_WEBHOOK_SECRET),
+        whatsapp: configured(process.env.WHATSAPP_ORDER_WEBHOOK_URL),
+        whatsappToken: configured(process.env.WHATSAPP_ORDER_WEBHOOK_TOKEN),
+        adminToken: configured(process.env.ADMIN_ORDERS_TOKEN),
+      },
+    }, { headers: { "Cache-Control": "no-store", "X-Robots-Tag": "noindex, nofollow" } });
+  } catch (error) {
+    console.error("Falha ao carregar visão administrativa:", error instanceof Error ? error.message : "erro desconhecido");
+    return NextResponse.json({
+      error: "Não foi possível carregar o resumo. Verifique se a migração de gestão administrativa foi aplicada.",
+    }, { status: 503, headers: { "Cache-Control": "no-store" } });
+  }
+}

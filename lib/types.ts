@@ -33,6 +33,11 @@ export interface Product {
   cor: string;
   imageSeed: string;
   images?: ProductImage[];
+  description?: string;
+  stock_by_size?: Record<string, number>;
+  brand?: string;
+  supplier_name?: string;
+  supplier_cost?: number;
   category?: string;
   gender?: string;
   league?: string;

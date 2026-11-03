@@ -9,11 +9,13 @@ type OrderItemNotice = {
 export type OrderNotice = {
   id: string;
   status: string;
+  operational_status?: string | null;
   customer: Record<string, string | boolean>;
   item_lines: OrderItemNotice[];
   shipping_cents: number;
   total_cents: number;
   tracking_code?: string | null;
+  tracking_url?: string | null;
 };
 
 export type OrderNoticeEvent = "order_paid" | "tracking_code_updated";
@@ -47,7 +49,7 @@ export async function sendWhatsAppOrderNotice(event: OrderNoticeEvent, order: Or
   const authorization = process.env.WHATSAPP_ORDER_WEBHOOK_TOKEN?.trim();
   const orderCode = order.id.slice(0, 8).toUpperCase();
   const trackingUrl = order.tracking_code
-    ? `https://rastreamento.correios.com.br/app/index.php?codigo=${encodeURIComponent(order.tracking_code)}`
+    ? order.tracking_url || `https://rastreamento.correios.com.br/app/index.php?codigo=${encodeURIComponent(order.tracking_code)}`
     : "";
   const customerName = String(order.customer.fullName ?? "").trim().split(/\s+/)[0] || "cliente";
   const message = event === "order_paid"
@@ -61,6 +63,7 @@ export async function sendWhatsAppOrderNotice(event: OrderNoticeEvent, order: Or
     order: {
       id: order.id,
       status: order.status,
+      operationalStatus: order.operational_status ?? null,
       items: order.item_lines,
       customer: {
         name: order.customer.fullName,
@@ -79,6 +82,7 @@ export async function sendWhatsAppOrderNotice(event: OrderNoticeEvent, order: Or
       shippingCents: order.shipping_cents,
       totalCents: order.total_cents,
       trackingCode: order.tracking_code ?? null,
+      trackingUrl: order.tracking_url ?? trackingUrl,
     },
   };
 
@@ -110,6 +114,7 @@ export async function sendTrackingUpdateEmail(order: OrderNotice): Promise<boole
   if (!apiKey || !from || !email) return null;
   if (!order.tracking_code) return null;
   const siteUrl = process.env.SITE_URL?.replace(/\/$/, "") ?? "";
+  const trackingUrl = order.tracking_url || `https://rastreamento.correios.com.br/app/index.php?codigo=${encodeURIComponent(order.tracking_code)}`;
   const items = order.item_lines.map((item) => `${item.title} · tamanho ${item.size} · ${item.quantity} un.`).join("\n");
 
   try {
@@ -120,7 +125,7 @@ export async function sendTrackingUpdateEmail(order: OrderNotice): Promise<boole
         from,
         to: [email],
         subject: "Código de rastreio do seu pedido — Resenha Sports Cia",
-        text: `Olá, ${String(order.customer.fullName ?? "")}! O código de rastreio do pedido ${order.id.slice(0, 8).toUpperCase()} foi informado.\n\n${items}\n\nCódigo de rastreio: ${order.tracking_code}\nAcompanhe a entrega: https://rastreamento.correios.com.br/app/index.php?codigo=${encodeURIComponent(order.tracking_code)}${siteUrl ? `\n\nConsulte também seu pedido em ${siteUrl}/rastreio` : ""}`,
+        text: `Olá, ${String(order.customer.fullName ?? "")}! O código de rastreio do pedido ${order.id.slice(0, 8).toUpperCase()} foi informado.\n\n${items}\n\nCódigo de rastreio: ${order.tracking_code}\nAcompanhe a entrega: ${trackingUrl}${siteUrl ? `\n\nConsulte também seu pedido em ${siteUrl}/rastreio` : ""}`,
       }),
       signal: AbortSignal.timeout(5_000),
     });

@@ -8,6 +8,9 @@ const nextConfig: NextConfig = {
     { protocol: "https", hostname: "images.yupoo.com", pathname: "/**" },
     { protocol: "https", hostname: "**.yupoo.com" },
     { protocol: "https", hostname: "images.unsplash.com" },
+    { protocol: "https", hostname: "**.cdninstagram.com" },
+    { protocol: "https", hostname: "**.fbcdn.net" },
+    { protocol: "https", hostname: "**.instagram.com" },
   ] },
   async redirects() {
     return [{ source: "/login", destination: "/", permanent: true }];

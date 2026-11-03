@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
+import AdminSummaryClient from "./admin-summary-client";
 
 export const metadata: Metadata = {
   title: "Administração",
@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function AdminPage() {
-  redirect("/admin/pedidos");
+  return <AdminSummaryClient current="overview" />;
 }

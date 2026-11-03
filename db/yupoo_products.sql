@@ -7,7 +7,7 @@ create table if not exists public.products (
   "clubeSlug" text not null,
   liga text not null,
   publico text not null check (publico in ('masculino','feminino','unissex','infantil','revisar')),
-  tipo text not null check (tipo in ('torcedor','jogador','goleiro','retro','treino','cropped','regata','inverno','vestido','revisar')),
+  tipo text not null check (tipo in ('torcedor','jogador','goleiro','retro','treino','cropped','regata','inverno','vestido','f1','revisar')),
   temporada text not null,
   uniforme text not null check (uniforme in ('titular','reserva','terceiro','quarto','revisar')),
   nome text not null,
@@ -16,6 +16,8 @@ create table if not exists public.products (
   cor text not null default 'revisar',
   "imageSeed" text not null,
   images jsonb not null default '[]'::jsonb check (jsonb_typeof(images) = 'array'),
+  description text not null default '',
+  stock_by_size jsonb not null default '{}'::jsonb check (jsonb_typeof(stock_by_size) = 'object'),
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
