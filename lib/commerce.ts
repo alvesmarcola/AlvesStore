@@ -2,6 +2,7 @@ import { storeConfig } from "@/config";
 import type { CartItem } from "@/lib/types";
 import { classifyProduct, getProductSizeSurcharge, isPackageEligible } from "@/lib/product-classification";
 import { getAvailablePatches } from "@/lib/patch-compatibility";
+import { formatCustomization } from "@/lib/customization";
 
 export function getPackagePrice(units: number) {
   const normalizedUnits = Math.max(0, Math.floor(units));
@@ -28,7 +29,7 @@ export function getCartPricing(items: CartItem[]) {
   const baseShirtsTotal = classified.reduce((sum, row) => sum + ((row.facts.price ?? 0) + getProductSizeSurcharge(row.item.size)) * row.item.quantity, 0);
   const packageEligibleBase = classified.reduce((sum, row) => sum + (isPackageEligible(row.item.product) ? storeConfig.fanCommonPrice * row.item.quantity : 0), 0);
   const customizationTotal = items.reduce(
-    (sum, item) => sum + (item.customization ? storeConfig.customizationPrice : 0) * item.quantity,
+    (sum, item) => sum + (formatCustomization(item.customization) ? storeConfig.customizationPrice : 0) * item.quantity,
     0,
   );
   const shipping = getShippingCents(units) / 100;

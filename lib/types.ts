@@ -85,7 +85,9 @@ export interface Avaliacao {
   created_at: string;
   nome: string;
   cidade: string;
+  produto?: string;
   nota: number;
   comentario: string;
-  aprovado: boolean;
+  status: "pending" | "approved" | "rejected";
+  aprovado?: boolean;
 }

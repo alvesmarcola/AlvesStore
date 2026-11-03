@@ -8,15 +8,31 @@ import { getAvailablePatches } from "@/lib/patch-compatibility";
 import { allowsCustomization } from "@/lib/formula-one";
 import { getSupabaseProducts } from "@/lib/server/supabase-catalog";
 import { getProductSizeSurcharge } from "@/lib/product-classification";
+import { CUSTOMIZATION_NAME_MAX_LENGTH, sanitizeCustomizationName } from "@/lib/customization";
+
+const customizationSchema = z.preprocess((value) => {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) return value;
+  const customization = value as Record<string, unknown>;
+  return {
+    ...customization,
+    ...(typeof customization.name === "string" ? { name: sanitizeCustomizationName(customization.name) } : {}),
+  };
+}, z.object({
+  name: z.string().trim().max(CUSTOMIZATION_NAME_MAX_LENGTH, `O nome pode ter no máximo ${CUSTOMIZATION_NAME_MAX_LENGTH} caracteres.`).optional().default(""),
+  number: z.string().trim()
+    .max(3, "O número deve ter de 1 a 3 dígitos.")
+    .regex(/^\d{0,3}$/, "O número deve conter apenas dígitos.")
+    .optional().default(""),
+}).strict().refine(
+  (customization) => Boolean(customization.name || customization.number),
+  "Informe o nome, o número ou os dois.",
+));
 
 export const orderLinesSchema = z.array(z.object({
   productId: z.string().min(1).max(100),
   size: z.string().trim().min(1).max(12),
   quantity: z.number().int().min(1).max(20),
-  customization: z.object({
-    name: z.string().trim().min(1).max(12),
-    number: z.string().trim().regex(/^\d{1,2}$/),
-  }).strict().optional(),
+  customization: customizationSchema.optional(),
   patches: z.array(z.object({ id: z.string().min(1).max(80), position: z.enum(["manga-esquerda", "manga-direita", "peito"]) }).strict()).max(4).optional(),
 }).strict()).min(1).max(20);
 

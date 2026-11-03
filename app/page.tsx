@@ -37,7 +37,7 @@ const collections = [
 
 const differentials = [
   { title: "Clubes e seleções", body: "Explore os principais mantos de clubes do Brasil e do mundo, além de seleções nacionais.", links: [{ label: "Ver clubes", href: "/clubes" }, { label: "Ver seleções", href: "/selecoes" }] },
-  { title: "Personalização oficial", body: `Adicione seu nome e número favorito por apenas ${formatCurrency(storeConfig.customizationPrice)} por camisa.`, links: [{ label: "Escolher uma camisa", href: "/masculino" }] },
+  { title: "Personalização oficial", body: `Adicione seu nome, número ou ambos por apenas ${formatCurrency(storeConfig.customizationPrice)} por camisa.`, links: [{ label: "Escolher uma camisa", href: "/masculino" }] },
   { title: "Qualidade premium", body: "Tecidos tecnológicos respiráveis, bordados precisos e acabamento de alto padrão para quem vive o esporte.", links: [{ label: "Conhecer a loja", href: "/quem-somos" }] },
 ];
 

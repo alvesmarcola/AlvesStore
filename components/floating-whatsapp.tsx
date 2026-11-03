@@ -1,5 +1,7 @@
+import { whatsappLink } from "@/lib/whatsapp";
+
 const WHATSAPP_URL =
-  "https://wa.me/555499968814?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20Alves%20Imports%20e%20preciso%20de%20ajuda%20com%20um%20produto.";
+  whatsappLink("Olá! Vim pelo site da Alves Imports e preciso de ajuda com um produto.");
 
 export function FloatingWhatsApp() {
   return (

@@ -1,8 +1,10 @@
+import { formatCustomization } from "@/lib/customization";
+
 type OrderItemNotice = {
   title: string;
   size: string;
   quantity: number;
-  customization?: { name: string; number: string } | null;
+  customization?: { name?: string; number?: string } | null;
   patches?: { name: string; position: string }[];
 };
 
@@ -52,9 +54,13 @@ export async function sendWhatsAppOrderNotice(event: OrderNoticeEvent, order: Or
     ? order.tracking_url || `https://rastreamento.correios.com.br/app/index.php?codigo=${encodeURIComponent(order.tracking_code)}`
     : "";
   const customerName = String(order.customer.fullName ?? "").trim().split(/\s+/)[0] || "cliente";
+  const items = order.item_lines.map((item) => {
+    const customization = formatCustomization(item.customization);
+    return `${item.title} · tam. ${item.size} × ${item.quantity}${customization ? ` · ${customization}` : ""}`;
+  }).join("; ");
   const message = event === "order_paid"
-    ? `Olá, ${customerName}! O pagamento do pedido ${orderCode} foi confirmado. Seu pedido da Resenha Sports Cia já está sendo preparado.`
-    : `Olá, ${customerName}! Seu pedido ${orderCode} da Resenha Sports Cia foi despachado pelos Correios. Código de rastreio: ${order.tracking_code}. Acompanhe a entrega: ${trackingUrl}`;
+    ? `Olá, ${customerName}! O pagamento do pedido ${orderCode} foi confirmado. Seu pedido da Resenha Sports Cia já está sendo preparado.${items ? ` Itens: ${items}.` : ""}`
+    : `Olá, ${customerName}! Seu pedido ${orderCode} da Resenha Sports Cia foi despachado pelos Correios.${items ? ` Itens: ${items}.` : ""} Código de rastreio: ${order.tracking_code}. Acompanhe a entrega: ${trackingUrl}`;
   const body = {
     event,
     to: recipient,
@@ -115,7 +121,10 @@ export async function sendTrackingUpdateEmail(order: OrderNotice): Promise<boole
   if (!order.tracking_code) return null;
   const siteUrl = process.env.SITE_URL?.replace(/\/$/, "") ?? "";
   const trackingUrl = order.tracking_url || `https://rastreamento.correios.com.br/app/index.php?codigo=${encodeURIComponent(order.tracking_code)}`;
-  const items = order.item_lines.map((item) => `${item.title} · tamanho ${item.size} · ${item.quantity} un.`).join("\n");
+  const items = order.item_lines.map((item) => {
+    const customization = formatCustomization(item.customization);
+    return `${item.title} · tamanho ${item.size} · ${item.quantity} un.${customization ? ` · ${customization}` : ""}`;
+  }).join("\n");
 
   try {
     const response = await fetch("https://api.resend.com/emails", {

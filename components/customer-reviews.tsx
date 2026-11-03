@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Star, Quote, MessageSquarePlus } from "lucide-react";
-import { supabase } from "@/lib/supabase";
 import type { Avaliacao } from "@/lib/types";
 import { AvaliacaoForm } from "@/components/avaliacao-form";
 
@@ -45,33 +44,26 @@ export function CustomerReviews() {
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(false);
   const [totalCount, setTotalCount] = useState<number | null>(null);
+  const [averageRating, setAverageRating] = useState<number | null>(null);
+  const [loadError, setLoadError] = useState("");
 
   useEffect(() => {
     let isMounted = true;
 
     async function loadInitialReviews() {
       try {
-        // Busca dinâmica de avaliações aprovadas ordenadas por created_at desc (lote inicial de 6)
-        const { data, count, error } = await supabase
-          .from("avaliacoes")
-          .select("id, created_at, nome, cidade, nota, comentario, aprovado", { count: "exact" })
-          .eq("aprovado", true)
-          .order("created_at", { ascending: false })
-          .range(0, PAGE_SIZE - 1);
-
-        if (error) {
-          console.warn("Aviso ao carregar avaliações do Supabase:", error.message || error);
-          return;
-        }
-
-        if (isMounted && data) {
-          setReviews(data);
-          const total = typeof count === "number" ? count : data.length;
-          setTotalCount(total);
-          setHasMore(data.length < total);
+        const response = await fetch("/api/reviews?page=0", { cache: "no-store" });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error ?? "Não foi possível carregar as avaliações.");
+        if (isMounted) {
+          setReviews(result.reviews as Avaliacao[]);
+          setTotalCount(Number(result.total));
+          setAverageRating(Number(result.average) || null);
+          setHasMore(Boolean(result.hasMore));
         }
       } catch (err) {
         console.warn("Aviso ao buscar avaliações:", err);
+        if (isMounted) setLoadError("As avaliações não puderam ser carregadas agora.");
       } finally {
         if (isMounted) setLoading(false);
       }
@@ -89,40 +81,25 @@ export function CustomerReviews() {
     setLoadingMore(true);
 
     try {
-      const from = reviews.length;
-      const to = from + PAGE_SIZE - 1;
-
-      const { data, count, error } = await supabase
-        .from("avaliacoes")
-        .select("id, created_at, nome, cidade, nota, comentario, aprovado", { count: "exact" })
-        .eq("aprovado", true)
-        .order("created_at", { ascending: false })
-        .range(from, to);
-
-      if (error) {
-        console.warn("Aviso ao carregar mais avaliações:", error.message || error);
-        return;
-      }
-
-      if (data && data.length > 0) {
+      const page = Math.floor(reviews.length / PAGE_SIZE);
+      const response = await fetch(`/api/reviews?page=${page}`, { cache: "no-store" });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error ?? "Não foi possível carregar mais avaliações.");
+      const data = result.reviews as Avaliacao[];
+      if (data.length > 0) {
         const nextReviews = [...reviews, ...data];
         setReviews(nextReviews);
-        const total = typeof count === "number" ? count : (totalCount ?? nextReviews.length);
-        setTotalCount(total);
-        setHasMore(nextReviews.length < total);
+        setHasMore(Boolean(result.hasMore));
       } else {
         setHasMore(false);
       }
     } catch (err) {
       console.warn("Erro ao carregar mais avaliações:", err);
+      setLoadError("Não foi possível carregar mais avaliações. Tente novamente.");
     } finally {
       setLoadingMore(false);
     }
   }
-
-  const averageRating = reviews.length > 0
-    ? (reviews.reduce((sum, r) => sum + (Number(r.nota) || 5), 0) / reviews.length).toFixed(1)
-    : null;
 
   const totalReviewsCount = totalCount ?? reviews.length;
 
@@ -148,14 +125,14 @@ export function CustomerReviews() {
           </p>
 
           {/* Rating Summary Dinâmico (somente quando há avaliações aprovadas) */}
-          {reviews.length > 0 && averageRating && (
+          {reviews.length > 0 && averageRating !== null && (
             <div className="mt-5 inline-flex items-center gap-3 rounded-full border border-zinc-200 bg-white px-5 py-2 shadow-sm">
               <div className="flex gap-0.5">
                 {Array.from({ length: 5 }).map((_, i) => (
                   <Star key={i} size={16} className="fill-amber-400 text-amber-400" />
                 ))}
               </div>
-              <span className="text-sm font-bold text-zinc-900">{averageRating}</span>
+              <span className="text-sm font-bold text-zinc-900">{averageRating.toFixed(1)}</span>
               <span className="text-xs text-zinc-500">
                 baseado em {totalReviewsCount} {totalReviewsCount === 1 ? "avaliação real" : "avaliações reais"}
               </span>
@@ -203,6 +180,10 @@ export function CustomerReviews() {
                 </div>
               </div>
             ))}
+          </div>
+        ) : loadError ? (
+          <div role="status" className="rounded-2xl border border-red-200 bg-white p-8 text-center text-sm text-red-800 shadow-sm">
+            {loadError}
           </div>
         ) : reviews.length === 0 ? (
           /* Estado Vazio elegante: sem avaliações aprovadas ainda */

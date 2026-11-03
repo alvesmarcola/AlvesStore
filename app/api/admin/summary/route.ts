@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { isAuthorizedAdmin } from "@/lib/server/admin-auth";
+import { getAdminAuthFailure } from "@/lib/server/admin-auth";
 import { getSupabaseOrdersClient } from "@/lib/server/supabase-orders";
 
 export const runtime = "nodejs";
@@ -9,7 +9,8 @@ function configured(value: string | undefined) {
 }
 
 export async function GET(request: Request) {
-  if (!isAuthorizedAdmin(request)) return NextResponse.json({ error: "Acesso não autorizado." }, { status: 401 });
+  const authFailure = getAdminAuthFailure(request);
+  if (authFailure) return NextResponse.json({ error: authFailure.message }, { status: authFailure.status });
   try {
     const supabase = getSupabaseOrdersClient();
     const [metrics, orders, orderSuppliers, productSuppliers] = await Promise.all([

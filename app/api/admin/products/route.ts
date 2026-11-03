@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 import { manualProductSchema, type ManualProductInput } from "@/lib/admin/product-validation";
-import { isAuthorizedAdmin } from "@/lib/server/admin-auth";
+import { getAdminAuthFailure } from "@/lib/server/admin-auth";
 import { hasBundledProductSlug } from "@/lib/server/supabase-catalog";
 import { getSupabaseOrdersClient } from "@/lib/server/supabase-orders";
 
@@ -80,7 +80,8 @@ function jsonError(message: string, status: number) {
 }
 
 export async function GET(request: Request) {
-  if (!isAuthorizedAdmin(request)) return jsonError("Acesso não autorizado.", 401);
+  const authFailure = getAdminAuthFailure(request);
+  if (authFailure) return jsonError(authFailure.message, authFailure.status);
   try {
     const { data, error } = await getSupabaseOrdersClient().from("products")
       .select(PRODUCT_COLUMNS)
@@ -110,7 +111,8 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  if (!isAuthorizedAdmin(request)) return jsonError("Acesso não autorizado.", 401);
+  const authFailure = getAdminAuthFailure(request);
+  if (authFailure) return jsonError(authFailure.message, authFailure.status);
   const parsed = manualProductSchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) return jsonError("Revise os dados do produto e os estoques por tamanho.", 400);
   if (parsed.data.imageUrls.length === 0) return jsonError("Envie pelo menos uma foto antes de cadastrar o produto.", 400);
@@ -138,7 +140,8 @@ export async function POST(request: Request) {
 }
 
 export async function PATCH(request: Request) {
-  if (!isAuthorizedAdmin(request)) return jsonError("Acesso não autorizado.", 401);
+  const authFailure = getAdminAuthFailure(request);
+  if (authFailure) return jsonError(authFailure.message, authFailure.status);
   const parsed = manualProductSchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success || !parsed.data.id) return jsonError("Revise os dados do produto que deseja atualizar.", 400);
   if (hasBundledProductSlug(parsed.data.slug)) return jsonError("Esse endereço já pertence a um produto atual da loja. Escolha outro slug.", 409);

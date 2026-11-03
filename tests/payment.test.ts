@@ -11,6 +11,7 @@ import { getAvailablePatches } from "@/lib/patch-compatibility";
 import { isCompleteOrderCode, normalizeOrderCodeInput, orderCode } from "@/lib/order-code";
 import { buildOrderPaidEmail, buildOrderReceivedEmail } from "@/lib/server/order-emails";
 import { sendWhatsAppOrderNotice, type OrderNotice } from "@/lib/server/order-notifications";
+import { getAdminAuthFailure } from "@/lib/server/admin-auth";
 import { isRateLimited } from "@/lib/server/rate-limit";
 import { inferProductTypeFromSource } from "@/lib/catalog-source-classification";
 import { prioritizeClubs, prioritizeEditorialProducts, sortCatalogProducts } from "@/lib/catalog-order";
@@ -18,6 +19,10 @@ import { parseSearchIntent, searchProducts } from "@/lib/smart-search";
 import { patchOptions } from "@/data/patches";
 import { productOverrides } from "@/data/product-overrides";
 import { manualProductSchema } from "@/lib/admin/product-validation";
+import { filterPublicReviews, publicReviewsPayload, reviewSubmissionSchema, sanitizeReviewText } from "@/lib/reviews";
+import { filterCustomizationNumber, formatCustomization, getCustomizationError, sanitizeCustomizationName } from "@/lib/customization";
+import { GET as getAdminReviews } from "@/app/api/admin/reviews/route";
+import { POST as createCheckout } from "@/app/api/checkout/route";
 import { storeConfig } from "@/config";
 import type { Product } from "@/lib/types";
 
@@ -274,6 +279,78 @@ test("valida produto, tamanho e campos de linha pelo catálogo do servidor", () 
   assert.equal(orderLinesSchema.safeParse([{ ...validLine, quantity: -1 }]).success, false);
 });
 
+test("personalização aceita nome, número ou ambos e rejeita combinações inválidas no servidor", () => {
+  for (const customization of [
+    { name: "ANA", number: "" },
+    { name: "", number: "7" },
+    { name: "ANA", number: "123" },
+  ]) {
+    assert.equal(orderLinesSchema.safeParse([{ ...validLine, customization }]).success, true);
+  }
+  const empty = orderLinesSchema.safeParse([{ ...validLine, customization: { name: "", number: "" } }]);
+  assert.equal(empty.success, false);
+  if (!empty.success) assert.equal(empty.error.issues[0]?.message, "Informe o nome, o número ou os dois.");
+  for (const number of ["1A", "1!", "1234"]) {
+    assert.equal(orderLinesSchema.safeParse([{ ...validLine, customization: { name: "ANA", number } }]).success, false);
+  }
+  assert.equal(sanitizeCustomizationName("  <b>ANA</b>  "), "ANA");
+  assert.equal(filterCustomizationNumber("1a!23"), "123");
+  assert.equal(filterCustomizationNumber("1234"), "123");
+  assert.equal(orderLinesSchema.safeParse([{ ...validLine, customization: { name: "<b>ANA</b>", number: "" } }]).success, true);
+});
+
+test("a rota de checkout rejeita personalização ativa vazia com mensagem amigável", async () => {
+  const idempotencyKey = "c6f43356-3120-4b4d-a1da-7d3396636291";
+  const response = await createCheckout(new Request("https://loja.test/api/checkout", {
+    method: "POST",
+    headers: { "content-type": "application/json", "idempotency-key": idempotencyKey },
+    body: JSON.stringify({
+      idempotencyKey,
+      items: [{ ...validLine, customization: { name: "", number: "" } }],
+      customer: {
+        whatsappUpdates: false,
+        fullName: "Teste Comprador",
+        email: "comprador@example.com",
+        cpf: "529.982.247-25",
+        phone: "11999999999",
+        cep: "01001000",
+        street: "Rua Teste",
+        number: "1",
+        complement: "",
+        neighborhood: "Centro",
+        city: "São Paulo",
+        state: "SP",
+      },
+    }),
+  }));
+  assert.equal(response.status, 400);
+  assert.equal((await response.json()).error, "Informe o nome, o número ou os dois.");
+});
+
+test("personalização só cobra uma vez por camisa quando há nome ou número", () => {
+  const noCustomization = validateOrderLines([{ ...validLine, quantity: 2 }]);
+  const nameOnly = validateOrderLines([{ ...validLine, quantity: 2, customization: { name: "ANA", number: "" } }]);
+  const numberOnly = validateOrderLines([{ ...validLine, quantity: 2, customization: { name: "", number: "99" } }]);
+  assert.equal(calculateOrderTotals(noCustomization).customizationCents, 0);
+  assert.equal(calculateOrderTotals(nameOnly).customizationCents, 2 * storeConfig.customizationPrice * 100);
+  assert.equal(calculateOrderTotals(numberOnly).customizationCents, 2 * storeConfig.customizationPrice * 100);
+
+  const cartItem = { lineId: "personalizado", product, size: validLine.size, quantity: 1, customization: { name: "ANA", number: "" } };
+  const plainCartItem = { ...cartItem, customization: undefined };
+  assert.equal(getCartPricing([cartItem]).grandTotal - getCartPricing([plainCartItem]).grandTotal, storeConfig.customizationPrice);
+  assert.equal(getCartPricing([{ ...plainCartItem, customization: { name: "", number: "" } }]).grandTotal, getCartPricing([plainCartItem]).grandTotal);
+});
+
+test("carrinho, pedido e e-mail mostram somente os campos de personalização preenchidos", () => {
+  assert.equal(getCustomizationError(true, { name: "", number: "" }), "Informe o nome, o número ou os dois.");
+  assert.equal(getCustomizationError(false, { name: "", number: "" }), "");
+  assert.equal(getCustomizationError(true, { name: "ANA", number: "" }), "");
+  assert.equal(formatCustomization({ name: "ANA", number: "" }), "Nome: ANA");
+  assert.equal(formatCustomization({ name: "", number: "10" }), "Número: 10");
+  assert.equal(formatCustomization({ name: "ANA", number: "10" }), "Nome: ANA · Número: 10");
+  assert.equal(formatCustomization({ name: "", number: "" }), "");
+});
+
 test("rejeita frete do navegador e checkout não depende de configuração de transportadora", () => {
   const parsed = paymentRequestSchema.safeParse({
     idempotencyKey: "c6f43356-3120-4b4d-a1da-7d3396636291", items: [validLine],
@@ -300,6 +377,73 @@ test("valida assinatura do webhook e converte estados de pagamento", () => {
   assert.equal(normalizedPaymentStatus("approved"), "approved");
   assert.equal(normalizedPaymentStatus("in_process"), "pending");
   assert.equal(normalizedPaymentStatus("rejected"), "rejected");
+});
+
+test("distingue token administrativo ausente de senha inválida e aceita espaços externos", () => {
+  const previousToken = process.env.ADMIN_ORDERS_TOKEN;
+  try {
+    delete process.env.ADMIN_ORDERS_TOKEN;
+    const missing = getAdminAuthFailure(new Request("https://store.example/api/admin/orders"));
+    assert.equal(missing?.status, 503);
+
+    process.env.ADMIN_ORDERS_TOKEN = "admin-secret";
+    const invalid = getAdminAuthFailure(new Request("https://store.example/api/admin/orders", {
+      headers: { authorization: "Bearer wrong-secret" },
+    }));
+    assert.equal(invalid?.status, 401);
+
+    const valid = getAdminAuthFailure(new Request("https://store.example/api/admin/orders", {
+      headers: { authorization: "Bearer  admin-secret  " },
+    }));
+    assert.equal(valid, null);
+  } finally {
+    if (previousToken === undefined) delete process.env.ADMIN_ORDERS_TOKEN;
+    else process.env.ADMIN_ORDERS_TOKEN = previousToken;
+  }
+});
+
+test("a resposta pública inclui aprovadas e exclui pendentes e rejeitadas", () => {
+  const rows = [
+    { id: "pending", status: "pending", comentario: "Ainda em revisão" },
+    { id: "approved", status: "approved", comentario: "Ótimo atendimento" },
+    { id: "rejected", status: "rejected", comentario: "Rejeitada" },
+  ];
+  assert.deepEqual(filterPublicReviews(rows), [rows[1]]);
+  assert.deepEqual(publicReviewsPayload(rows, 1, 5, 0, 6), {
+    reviews: [rows[1]],
+    total: 1,
+    average: 5,
+    hasMore: false,
+  });
+});
+
+test("valida avaliação, remove HTML e limita nota e tamanho do comentário", () => {
+  const valid = reviewSubmissionSchema.safeParse({
+    nome: "Ana Silva",
+    cidade: "São Paulo, SP",
+    nota: 5,
+    comentario: "Ótimo produto e atendimento.",
+  });
+  assert.equal(valid.success, true);
+  assert.equal(sanitizeReviewText("<script>alert(1)</script>Camisa <b>ótima</b>"), "Camisa ótima");
+  assert.equal(reviewSubmissionSchema.safeParse({
+    nome: "Ana Silva", cidade: "São Paulo", nota: 6, comentario: "Nota fora de faixa.",
+  }).success, false);
+  assert.equal(reviewSubmissionSchema.safeParse({
+    nome: "Ana Silva", cidade: "São Paulo", nota: 5, comentario: "x".repeat(501),
+  }).success, false);
+});
+
+test("a rota de moderação retorna 401 sem token administrativo", async () => {
+  const previousToken = process.env.ADMIN_ORDERS_TOKEN;
+  try {
+    process.env.ADMIN_ORDERS_TOKEN = "admin-test-token";
+    const response = await getAdminReviews(new Request("https://store.example/api/admin/reviews"));
+    assert.equal(response.status, 401);
+  } finally {
+    if (previousToken === undefined) delete process.env.ADMIN_ORDERS_TOKEN;
+    else process.env.ADMIN_ORDERS_TOKEN = previousToken;
+  }
 });
 
 test("valida cadastro manual e estoques por tamanho sem alterar regra do checkout", () => {
@@ -353,7 +497,12 @@ test("e-mails do pedido trazem o código e as instruções de rastreio", () => {
   assert.match(paid.text, /Frete: grátis/);
   assert.match(paid.text, /Total: R\$ 340,00/);
   assert.match(paid.text, /patches: Brasileirão \(manga-esquerda\)/);
-  assert.match(paid.text, /personalizado ANA 10/);
+  assert.match(paid.text, /personalização: Nome: ANA · Número: 10/);
+  assert.match(buildOrderPaidEmail({
+    ...base,
+    items: [{ title: "Camisa Teste", size: "M", quantity: 1, customization: { name: "ANA", number: "" } }],
+    shippingCents: 0,
+  }).text, /personalização: Nome: ANA/);
   const received = buildOrderReceivedEmail({ ...base, shippingCents: 2000 });
   assert.match(received.text, /Código do seu pedido: A1B2C3D4/);
   assert.match(received.text, /Frete: R\$ 20,00/);
@@ -373,7 +522,10 @@ test("notificações WhatsApp vão ao cliente optado e incluem mensagens de paga
     id: "a1b2c3d4-1111-4222-8333-444455556666",
     status: "pago",
     customer: { fullName: "Marina Silva", phone: "11987654321", whatsappUpdates: true },
-    item_lines: [],
+    item_lines: [
+      { title: "Camisa Clube", size: "M", quantity: 1, customization: { name: "ANA", number: "" } },
+      { title: "Camisa Visitante", size: "G", quantity: 1, customization: { name: "", number: "99" } },
+    ],
     shipping_cents: 0,
     total_cents: 18000,
     tracking_code: "AB123456789BR",
@@ -384,6 +536,8 @@ test("notificações WhatsApp vão ao cliente optado e incluem mensagens de paga
     assert.equal(await sendWhatsAppOrderNotice("tracking_code_updated", { ...order, status: "enviado" }), true);
     assert.equal(sentMessages[0]?.to, "5511987654321");
     assert.match(String(sentMessages[0]?.message), /pagamento.*confirmado/i);
+    assert.match(String(sentMessages[0]?.message), /Nome: ANA/);
+    assert.match(String(sentMessages[0]?.message), /Número: 99/);
     assert.match(String(sentMessages[1]?.message), /AB123456789BR/);
     assert.match(String(sentMessages[1]?.message), /rastreamento\.correios\.com\.br/);
     assert.equal(await sendWhatsAppOrderNotice("order_paid", {

@@ -1,10 +1,11 @@
 import { orderCode } from "@/lib/order-code";
+import { formatCustomization } from "@/lib/customization";
 
 export type EmailItem = {
   title: string;
   size: string;
   quantity: number;
-  customization?: { name: string; number: string } | null;
+  customization?: { name?: string; number?: string } | null;
   patches?: { name: string; position?: string }[];
 };
 
@@ -22,7 +23,8 @@ const money = (cents: number) => `R$ ${(cents / 100).toFixed(2).replace(".", ","
 export function describeEmailItems(items: EmailItem[]) {
   return items.map((item) => {
     const parts = [`${item.title} · tamanho ${item.size} · ${item.quantity} un.`];
-    if (item.customization) parts.push(`personalizado ${item.customization.name} ${item.customization.number}`);
+    const customization = formatCustomization(item.customization);
+    if (customization) parts.push(`personalização: ${customization}`);
     if (item.patches?.length) parts.push(`patches: ${item.patches.map((patch) => patch.position ? `${patch.name} (${patch.position})` : patch.name).join(", ")}`);
     return parts.join(" · ");
   }).join("\n");

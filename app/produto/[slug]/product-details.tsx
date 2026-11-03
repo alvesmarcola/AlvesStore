@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState, useMemo } from "react";
-import { Check, Heart, Ruler, Truck } from "lucide-react";
+import { Check, Heart, MessageCircle, Ruler, Truck } from "lucide-react";
 import { ProductGrid } from "@/components/product-grid";
 import { SafeProductImage } from "@/components/safe-product-image";
 import { formatCurrency, productImageAsset } from "@/lib/catalog";
@@ -16,6 +16,8 @@ import type { PatchPosition } from "@/data/patches";
 import { getProductOfferText } from "@/lib/commerce";
 import { allowsCustomization } from "@/lib/formula-one";
 import { detectUniformVariants, cleanAndDeduplicateImages } from "@/lib/uniform-variants";
+import { CUSTOMIZATION_NAME_MAX_LENGTH, filterCustomizationNumber, formatCustomization, getCustomizationError, sanitizeCustomizationName } from "@/lib/customization";
+import { whatsappLink } from "@/lib/whatsapp";
 
 export function ProductDetails({ product, relatedProducts = [] }: { product: Product; relatedProducts?: Product[] }) {
   const [size, setSize] = useState("");
@@ -64,7 +66,11 @@ export function ProductDetails({ product, relatedProducts = [] }: { product: Pro
   const canPersonalize = allowsCustomization(product);
   const availableSizes = product.tamanhos.filter((itemSize) => itemSize !== "3GG");
   const unitPrice = getProductUnitPrice(product, size) ?? 0;
-  const price = unitPrice + (personalize ? storeConfig.customizationPrice : 0);
+  const cleanName = sanitizeCustomizationName(name);
+  const customization = formatCustomization({ name: cleanName, number });
+  const hasCustomization = personalize && Boolean(customization);
+  const personalizationError = getCustomizationError(personalize, { name: cleanName, number });
+  const price = unitPrice + (hasCustomization ? storeConfig.customizationPrice : 0);
   const compatiblePatches = getAvailablePatches(product);
   const selectedPatchTotal = compatiblePatches.filter((patch) => selectedPatches.some((selected) => selected.id === patch.id)).reduce((sum, patch) => sum + patch.priceCents, 0) / 100;
   const audienceLabels = { masculino: "masculino", feminino: "feminino", unissex: "unissex", infantil: "infantil", revisar: "" };
@@ -88,7 +94,7 @@ export function ProductDetails({ product, relatedProducts = [] }: { product: Pro
   }
 
   function buy() {
-    if (!size || !availableSizes.includes(size) || classification.reviewRequired || classification.price === null || (personalize && (!name.trim() || !number.trim()))) return;
+    if (!size || !availableSizes.includes(size) || classification.reviewRequired || classification.price === null || personalizationError) return;
 
     const activeVar = variants?.find((v) => v.id === selectedVariantId);
     const productToAdd: Product = activeVar && activeVar.id !== "all"
@@ -99,7 +105,7 @@ export function ProductDetails({ product, relatedProducts = [] }: { product: Pro
         }
       : product;
 
-    addItem(productToAdd, size, personalize ? { name: name.trim(), number: number.trim() } : undefined, selectedPatches);
+    addItem(productToAdd, size, hasCustomization ? { name: cleanName, number } : undefined, selectedPatches);
     setAdded(true);
     window.setTimeout(() => setAdded(false), 1800);
   }
@@ -188,10 +194,11 @@ export function ProductDetails({ product, relatedProducts = [] }: { product: Pro
         <div className="mt-6 flex items-center justify-between"><h2 className="text-sm font-bold">Tamanho</h2><button type="button" onClick={() => setSizeGuideOpen(true)} className="flex items-center gap-1 text-xs font-bold text-blue-700 underline"><Ruler size={14} /> Guia de medidas</button></div>
         <div className="mt-3 flex flex-wrap gap-2" role="group" aria-label="Tamanhos disponíveis">{availableSizes.map((itemSize) => <button key={itemSize} type="button" aria-pressed={size === itemSize} onClick={() => setSize(itemSize)} className={`grid h-11 min-w-12 place-items-center rounded border px-3 text-xs font-bold transition-colors ${size === itemSize ? "border-pitch bg-pitch text-white" : "border-black/15 hover:border-pitch"}`}>{itemSize}</button>)}</div>
         {!size && product.tamanhos.length > 0 && <p className="mt-2 text-[11px] text-muted">Selecione um tamanho para continuar.</p>}
-        {canPersonalize && <div className="mt-6 rounded-lg border p-4"><label className="flex items-center gap-2 text-sm font-bold"><input type="checkbox" checked={personalize} onChange={(event) => setPersonalize(event.target.checked)} />Quero personalizar (+{formatCurrency(storeConfig.customizationPrice)} por camisa)</label>{personalize && <div className="mt-3 grid grid-cols-2 gap-3"><label className="text-xs font-semibold">Nome<input maxLength={12} value={name} onChange={(event) => setName(event.target.value)} placeholder="Ex.: ALEX" className="mt-1 w-full rounded border px-3 py-2 text-sm uppercase" /></label><label className="text-xs font-semibold">Número<input inputMode="numeric" maxLength={2} value={number} onChange={(event) => setNumber(event.target.value.replace(/\D/g, ""))} placeholder="10" className="mt-1 w-full rounded border px-3 py-2 text-sm" /></label></div>}</div>}
+        {canPersonalize && <div className="mt-6 rounded-lg border p-4"><label className="flex items-center gap-2 text-sm font-bold"><input type="checkbox" checked={personalize} onChange={(event) => { setPersonalize(event.target.checked); if (!event.target.checked) { setName(""); setNumber(""); } }} />Quero personalizar (+{formatCurrency(storeConfig.customizationPrice)} por camisa)</label>{personalize && <div className="mt-3 grid grid-cols-2 gap-3"><label className="text-xs font-semibold">Nome (opcional)<input maxLength={CUSTOMIZATION_NAME_MAX_LENGTH} value={name} onChange={(event) => setName(sanitizeCustomizationName(event.target.value).slice(0, CUSTOMIZATION_NAME_MAX_LENGTH))} placeholder="Ex.: ALEX" className="mt-1 w-full rounded border px-3 py-2 text-sm uppercase" /></label><label className="text-xs font-semibold">Número (opcional)<input inputMode="numeric" maxLength={3} value={number} onChange={(event) => setNumber(filterCustomizationNumber(event.target.value))} placeholder="10" className="mt-1 w-full rounded border px-3 py-2 text-sm" /></label>{personalizationError && <p role="status" className="col-span-2 text-xs text-red-700">{personalizationError}</p>}</div>}</div>}
+        {canPersonalize && <a href={whatsappLink(`Olá! Quero uma personalização especial na camisa ${product.nome}.`)} target="_blank" rel="noopener noreferrer" className="mt-3 flex min-h-12 items-center gap-2 rounded-lg border border-[#25D366]/30 bg-[#25D366]/5 px-4 py-3 text-xs leading-5 text-ink transition hover:bg-[#25D366]/10"><MessageCircle size={18} className="shrink-0 text-[#16853d]" /><span>Quer uma personalização especial, como uma frase nas costas? <span className="font-bold text-[#16853d] underline">Chame a gente no WhatsApp!</span></span></a>}
         {compatiblePatches.length > 0 && <section className="mt-5 rounded-lg border p-4"><h2 className="text-sm font-bold">Personalize com patches</h2><p className="mt-1 text-xs text-muted">Opcional: marque os que quiser, ou nenhum. Cada patch adiciona {formatCurrency(storeConfig.patchPrice)} por camisa.</p><div className="mt-3 grid gap-2">{compatiblePatches.map((patch) => { const selected = selectedPatches.find((item) => item.id === patch.id); const shortName = patch.shortName ?? patch.name.slice(0, 3).toUpperCase(); return <label key={patch.id} className="flex cursor-pointer items-center gap-3 rounded border p-3"><input type="checkbox" checked={Boolean(selected)} onChange={(event) => setSelectedPatches((items) => event.target.checked ? [...items, { id: patch.id, position: patch.positions[0] }] : items.filter((item) => item.id !== patch.id))} /><span aria-hidden="true" className="grid h-9 w-11 place-items-center rounded bg-paper text-[10px] font-bold">{shortName}</span><span className="text-xs font-bold">{patch.name}<span className="mt-1 block font-normal text-muted">+ {formatCurrency(patch.priceCents / 100)}</span></span></label>; })}</div></section>}
-        {selectedPatches.length > 0 && <p className="mt-3 rounded bg-paper p-3 text-xs">Resumo: {product.nome}{personalize ? ` · nome ${name} · número ${number}` : ""} · {selectedPatches.length} patch(es) · adicionais {formatCurrency(selectedPatchTotal + (personalize ? storeConfig.customizationPrice : 0))} por camisa.</p>}
-        <button type="button" disabled={!size || !availableSizes.includes(size) || classification.reviewRequired || classification.price === null || (personalize && (!name.trim() || !number.trim()))} onClick={buy} className="mt-5 hidden w-full items-center justify-center gap-2 rounded bg-action py-4 text-sm font-bold uppercase tracking-wider hover:bg-[#b6e351] disabled:bg-gray-200 disabled:text-gray-500 sm:flex">{classification.reviewRequired ? "Preço em revisão" : added ? <><Check size={18} /> Adicionado ao carrinho!</> : "Adicionar à sacola"}</button>
+        {selectedPatches.length > 0 && <p className="mt-3 rounded bg-paper p-3 text-xs">Resumo: {product.nome}{hasCustomization ? ` · ${customization}` : ""} · {selectedPatches.length} patch(es) · adicionais {formatCurrency(selectedPatchTotal + (hasCustomization ? storeConfig.customizationPrice : 0))} por camisa.</p>}
+        <button type="button" disabled={!size || !availableSizes.includes(size) || classification.reviewRequired || classification.price === null || Boolean(personalizationError)} onClick={buy} className="mt-5 hidden w-full items-center justify-center gap-2 rounded bg-action py-4 text-sm font-bold uppercase tracking-wider hover:bg-[#b6e351] disabled:bg-gray-200 disabled:text-gray-500 sm:flex">{classification.reviewRequired ? "Preço em revisão" : added ? <><Check size={18} /> Adicionado ao carrinho!</> : "Adicionar à sacola"}</button>
         <p className="mt-5 rounded-lg bg-paper p-4 text-xs leading-5 text-muted">{getProductOfferText(product)}</p>
         <div className="mt-5 grid gap-3 text-xs text-muted"><p className="flex items-center gap-2"><Truck size={17} />Frete grátis no pacote de {storeConfig.freeShippingQuantity} camisas</p>{canPersonalize && <p className="flex items-center gap-2"><Heart size={17} />Personalização opcional por {formatCurrency(storeConfig.customizationPrice)} por camisa</p>}</div>
         {verifiedMetadata.length > 0 && <details className="mt-6 border-t py-4"><summary className="cursor-pointer text-sm font-bold">Informações do produto</summary><ul className="mt-3 space-y-1 text-sm leading-6 text-muted">{verifiedMetadata.map((item) => <li key={item}>{item}</li>)}</ul></details>}
@@ -199,7 +206,7 @@ export function ProductDetails({ product, relatedProducts = [] }: { product: Pro
     </div>
     {related.length > 0 && <section className="mt-14"><h2 className="mb-5 text-2xl font-bold tracking-tight">{product.clube !== "revisar" ? `Mais camisas de ${product.clube}` : "Mais produtos desta categoria"}</h2><ProductGrid items={related} /></section>}
     {sizeGuideOpen && <div className="fixed inset-0 z-[80] grid place-items-center bg-black/60 p-4" onClick={() => setSizeGuideOpen(false)}><section role="dialog" aria-modal="true" aria-labelledby="size-guide-title" className="max-h-[90dvh] w-full max-w-2xl overflow-y-auto rounded-xl bg-white p-5 shadow-xl sm:p-7" onClick={(event) => event.stopPropagation()}><div className="flex items-start justify-between gap-3"><div><h2 id="size-guide-title" className="text-xl font-bold tracking-tight">Guia de tamanhos</h2><p className="mt-2 text-sm leading-6 text-muted">Consulte as medidas de referência para cada categoria. As medidas podem variar entre modelos.</p></div><button type="button" onClick={() => setSizeGuideOpen(false)} aria-label="Fechar guia de medidas" className="rounded-lg border border-border px-3 py-2 text-sm font-bold">Fechar</button></div><Link href="/guia-de-medidas" onClick={() => setSizeGuideOpen(false)} className="mt-4 inline-block text-xs font-bold text-blue-700 underline">Ver informações sobre tamanhos</Link></section></div>}
-    <button type="button" disabled={!size || !availableSizes.includes(size) || classification.reviewRequired || classification.price === null || (personalize && (!name.trim() || !number.trim()))} onClick={buy} className="fixed bottom-0 left-0 right-0 z-30 flex items-center justify-center gap-2 bg-action py-4 text-sm font-bold uppercase tracking-wider shadow-lg disabled:bg-gray-300 sm:hidden">{added ? "Adicionado ao carrinho!" : classification.reviewRequired ? "Preço em revisão" : `Adicionar à sacola · ${formatCurrency(price + selectedPatchTotal)}`}</button>
+    <button type="button" disabled={!size || !availableSizes.includes(size) || classification.reviewRequired || classification.price === null || Boolean(personalizationError)} onClick={buy} className="fixed bottom-0 left-0 right-0 z-30 flex items-center justify-center gap-2 bg-action py-4 text-sm font-bold uppercase tracking-wider shadow-lg disabled:bg-gray-300 sm:hidden">{added ? "Adicionado ao carrinho!" : classification.reviewRequired ? "Preço em revisão" : `Adicionar à sacola · ${formatCurrency(price + selectedPatchTotal)}`}</button>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "Product", name: product.nome, image: gallery.map((image) => new URL(image.src, "https://alves-store-green.vercel.app").toString()), ...(classification.price === null ? {} : { offers: { "@type": "Offer", url: `https://alves-store-green.vercel.app/produto/${product.slug}`, priceCurrency: "BRL", price: classification.price, availability: product.tamanhos.length ? "https://schema.org/InStock" : "https://schema.org/OutOfStock" } }) }).replace(/</g, "\\u003c") }} />
   </main>;
 }

@@ -2,7 +2,7 @@ import { z } from "zod";
 import { NextResponse } from "next/server";
 import { getSupabaseOrdersClient } from "@/lib/server/supabase-orders";
 import { sendTrackingUpdateEmail, sendWhatsAppOrderNotice, type OrderNotice } from "@/lib/server/order-notifications";
-import { isAuthorizedAdmin } from "@/lib/server/admin-auth";
+import { getAdminAuthFailure } from "@/lib/server/admin-auth";
 
 export const runtime = "nodejs";
 
@@ -48,7 +48,8 @@ function jsonError(message: string, status: number) {
 }
 
 export async function GET(request: Request) {
-  if (!isAuthorizedAdmin(request)) return jsonError("Acesso não autorizado.", 401);
+  const authFailure = getAdminAuthFailure(request);
+  if (authFailure) return jsonError(authFailure.message, authFailure.status);
   try {
     const { data, error } = await getSupabaseOrdersClient().from("store_orders")
       .select("id,status,item_lines,customer,shipping,shipping_cents,total_cents,tracking_code,tracking_url,shipped_at,operational_status,supplier_name,supplier_status,supplier_ordered_at,supplier_cost_cents,shipping_cost_cents,other_expenses_cents,internal_notes,payment_method_id,payment_type_id,mercado_pago_status,mercado_pago_id,created_at,updated_at")
@@ -63,7 +64,8 @@ export async function GET(request: Request) {
 }
 
 export async function PATCH(request: Request) {
-  if (!isAuthorizedAdmin(request)) return jsonError("Acesso não autorizado.", 401);
+  const authFailure = getAdminAuthFailure(request);
+  if (authFailure) return jsonError(authFailure.message, authFailure.status);
   const parsed = orderPatchSchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) return jsonError("Revise os dados enviados para o pedido.", 400);
 

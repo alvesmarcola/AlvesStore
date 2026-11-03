@@ -2,7 +2,6 @@
 
 import { useEffect, useState, type FormEvent } from "react";
 import { Star, Send, CheckCircle2, AlertCircle } from "lucide-react";
-import { supabase } from "@/lib/supabase";
 
 const STORAGE_KEY = "alves_store_review_last_sent";
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
@@ -15,6 +14,7 @@ interface AvaliacaoFormProps {
 export function AvaliacaoForm({ onSuccess, className = "" }: AvaliacaoFormProps) {
   const [nome, setNome] = useState("");
   const [cidade, setCidade] = useState("");
+  const [produto, setProduto] = useState("");
   const [comentario, setComentario] = useState("");
   const [nota, setNota] = useState(5);
   const [hoverNota, setHoverNota] = useState(0);
@@ -47,7 +47,7 @@ export function AvaliacaoForm({ onSuccess, className = "" }: AvaliacaoFormProps)
     // Anti-spam leve: checagem do honeypot invisível
     if (honeypot.trim() !== "") {
       // Simula sucesso silencioso para bots
-      setSuccessMessage("Obrigado! Sua avaliação aparecerá no site após a aprovação.");
+      setSuccessMessage("Sua avaliação foi enviada e aparecerá após aprovação");
       setNome("");
       setCidade("");
       setComentario("");
@@ -103,19 +103,20 @@ export function AvaliacaoForm({ onSuccess, className = "" }: AvaliacaoFormProps)
     setLoading(true);
 
     try {
-      // Inserção no Supabase SEM usar .select() no final (RLS pública restringe leitura a aprovado = true)
-      const { error } = await supabase.from("avaliacoes").insert({
-        nome: cleanNome,
-        cidade: cleanCidade,
-        nota,
-        comentario: cleanComentario,
+      const response = await fetch("/api/reviews", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          nome: cleanNome,
+          cidade: cleanCidade,
+          produto,
+          nota,
+          comentario: cleanComentario,
+          website: honeypot,
+        }),
       });
-
-      if (error) {
-        console.warn("Erro ao enviar avaliação:", error.message || error);
-        setErrorMessage("Não foi possível enviar sua avaliação no momento. Tente novamente.");
-        return;
-      }
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error ?? "Não foi possível enviar sua avaliação no momento.");
 
       // Gravando trava de 1 envio por dia por navegador no localStorage
       try {
@@ -126,9 +127,10 @@ export function AvaliacaoForm({ onSuccess, className = "" }: AvaliacaoFormProps)
       }
 
       // Feedback exato de sucesso e limpeza completa do formulário
-      setSuccessMessage("Obrigado! Sua avaliação aparecerá no site após a aprovação.");
+      setSuccessMessage("Sua avaliação foi enviada e aparecerá após aprovação");
       setNome("");
       setCidade("");
+      setProduto("");
       setComentario("");
       setNota(5);
       setHoverNota(0);
@@ -136,7 +138,7 @@ export function AvaliacaoForm({ onSuccess, className = "" }: AvaliacaoFormProps)
       onSuccess?.();
     } catch (err) {
       console.warn("Erro inesperado ao enviar avaliação:", err);
-      setErrorMessage("Ocorreu um erro ao enviar. Verifique sua conexão e tente novamente.");
+      setErrorMessage(err instanceof Error ? err.message : "Ocorreu um erro ao enviar. Verifique sua conexão e tente novamente.");
     } finally {
       setLoading(false);
     }
@@ -189,6 +191,21 @@ export function AvaliacaoForm({ onSuccess, className = "" }: AvaliacaoFormProps)
           </div>
 
           {/* Seletor de estrelas clicáveis de 1 a 5 com efeito visual de hover */}
+          <div>
+            <label htmlFor="avaliacao-produto" className="block text-xs font-bold uppercase tracking-wider text-zinc-900">
+              Produto avaliado (opcional)
+            </label>
+            <input
+              id="avaliacao-produto"
+              type="text"
+              maxLength={120}
+              placeholder="Ex.: camisa do seu time"
+              value={produto}
+              onChange={(e) => setProduto(e.target.value)}
+              className="mt-1.5 block w-full rounded-lg border border-zinc-300 bg-zinc-50/50 px-3.5 py-2.5 text-sm text-zinc-900 placeholder:text-zinc-400 transition focus:border-zinc-900 focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900"
+            />
+          </div>
+
           <div>
             <span className="block text-xs font-bold uppercase tracking-wider text-zinc-900">
               Sua nota *

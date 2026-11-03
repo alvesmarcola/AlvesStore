@@ -44,8 +44,9 @@ export async function POST(request: Request) {
 
   const parsed = paymentRequestSchema.safeParse(rawBody);
   if (!parsed.success) {
+    const customizationIssue = parsed.error.issues.find((issue) => issue.path.includes("customization"));
     return NextResponse.json({
-      error: "Confira os dados do pedido e tente novamente.",
+      error: customizationIssue?.message ?? "Confira os dados do pedido e tente novamente.",
       details: parsed.error.issues.map((issue) => ({ field: issue.path.join("."), message: issue.message })),
     }, { status: 400, headers: { "Cache-Control": "no-store" } });
   }

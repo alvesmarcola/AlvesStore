@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { NextResponse } from "next/server";
-import { isAuthorizedAdmin } from "@/lib/server/admin-auth";
+import { getAdminAuthFailure } from "@/lib/server/admin-auth";
 import { getSupabaseOrdersClient } from "@/lib/server/supabase-orders";
 
 export const runtime = "nodejs";
@@ -22,7 +22,8 @@ function jsonError(message: string, status: number) {
 }
 
 export async function POST(request: Request) {
-  if (!isAuthorizedAdmin(request)) return jsonError("Acesso não autorizado.", 401);
+  const authFailure = getAdminAuthFailure(request);
+  if (authFailure) return jsonError(authFailure.message, authFailure.status);
   let form: FormData;
   try {
     form = await request.formData();

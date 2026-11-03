@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { AdminNavigation, type AdminSection } from "@/components/admin-navigation";
+import { AdminSkeleton, EmptyState, ErrorState, LockedState, StatCard } from "@/components/admin-states";
+import { BarChart3, CircleDollarSign, PackageOpen, Truck } from "lucide-react";
 
 type Summary = {
   metrics: {
@@ -43,33 +45,44 @@ const configLabels: Record<string, string> = {
   adminToken: "Token administrativo",
 };
 
-function Card({ label, value, detail }: { label: string; value: string; detail?: string }) {
-  return <article className="rounded-xl border border-border bg-white p-5"><p className="text-[10px] font-black uppercase tracking-wider text-muted">{label}</p><p className="mt-2 text-2xl font-black">{value}</p>{detail && <p className="mt-1 text-[11px] text-muted">{detail}</p>}</article>;
-}
-
 export default function AdminSummaryClient({ current }: { current: AdminSection }) {
   const [token, setToken] = useState("");
   const [summary, setSummary] = useState<Summary | null>(null);
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
+  const [authorized, setAuthorized] = useState(false);
+  const [error, setError] = useState("");
+  const [authRejected, setAuthRejected] = useState(false);
 
-  async function load(event: React.FormEvent) {
-    event.preventDefault();
+  async function load() {
     setLoading(true);
-    setMessage("");
+    setError("");
     try {
       const response = await fetch("/api/admin/summary", {
         headers: { authorization: `Bearer ${token}` },
         cache: "no-store",
       });
       const body = await response.json();
+      if (response.status === 401) {
+        setAuthorized(false);
+        setAuthRejected(true);
+        setError(body.error ?? "Token inválido. Confira e tente novamente.");
+        return;
+      }
       if (!response.ok) throw new Error(body.error ?? "Não foi possível carregar os dados administrativos.");
       setSummary(body as Summary);
+      setAuthorized(true);
+      setAuthRejected(false);
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Não foi possível carregar os dados administrativos.");
+      setAuthRejected(false);
+      setError(error instanceof Error ? error.message : "Não foi possível carregar os dados administrativos.");
     } finally {
       setLoading(false);
     }
+  }
+
+  function submit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    void load();
   }
 
   const metrics = summary?.metrics;
@@ -79,33 +92,32 @@ export default function AdminSummaryClient({ current }: { current: AdminSection 
       <AdminNavigation current={current} />
       <p className="text-[10px] font-black uppercase tracking-[.2em] text-action">AlvesStore · administração</p>
       <h1 className="mt-2 text-3xl font-black">{heading}</h1>
-      <p className="mt-2 text-sm text-muted">Painel protegido. Configure o token administrativo para carregar dados privados da loja.</p>
-      <form onSubmit={(event) => void load(event)} className="mt-6 flex max-w-xl flex-wrap gap-2">
-        <label className="sr-only" htmlFor={`summary-token-${current}`}>Token administrativo</label>
-        <input id={`summary-token-${current}`} type="password" autoComplete="current-password" required value={token} onChange={(event) => setToken(event.target.value)} className="min-w-0 flex-1 rounded-lg border border-border px-4 py-3 text-sm" placeholder="Token administrativo" />
-        <button disabled={loading} className="rounded-lg bg-ink px-5 py-3 text-xs font-black uppercase text-white disabled:opacity-50">{loading ? "Carregando..." : summary ? "Atualizar dados" : "Carregar dados"}</button>
-      </form>
-      {message && <p role="status" className="mt-4 rounded-lg bg-paper px-4 py-3 text-sm">{message}</p>}
+      <p className="mt-2 text-sm text-muted">{current === "overview" ? "Resumo da operação e dos indicadores da loja." : "Dados internos disponíveis somente para a equipe administrativa."}</p>
+      {!authorized && !loading && (!error || authRejected) && <LockedState token={token} onTokenChange={setToken} onSubmit={submit} loading={loading} message={error || undefined} />}
+      {loading && <AdminSkeleton cards={current === "finance" ? 4 : 3} />}
+      {!loading && error && !authRejected && <div className="mt-8"><ErrorState message={error} onRetry={() => void load()} /></div>}
 
-      {summary && current === "overview" && metrics && (
+      {authorized && summary && !loading && !error && current === "overview" && metrics && (
+        metrics.orderCount === 0 ? <div className="mt-8"><EmptyState icon={PackageOpen} title="Ainda não há pedidos" description="Os indicadores aparecerão aqui assim que a loja receber pedidos." /></div> :
         <section className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <Card label="Faturamento recebido" value={money.format(metrics.revenueCents / 100)} detail={`${metrics.paidOrderCount} pedidos com pagamento aprovado`} />
-          <Card label="Gasto com fornecedores" value={money.format(metrics.supplierCostCents / 100)} />
-          <Card label="Lucro estimado" value={money.format(metrics.estimatedProfitCents / 100)} detail="Faturamento aprovado menos custos registrados" />
-          <Card label="Pedidos" value={String(metrics.orderCount)} />
-          <Card label="Aguardando fornecedor" value={String(metrics.awaitingSupplierCount)} />
-          <Card label="Pedidos enviados" value={String(metrics.shippedOrderCount)} />
+          <StatCard label="Faturamento recebido" value={money.format(metrics.revenueCents / 100)} detail={`${metrics.paidOrderCount} pedidos com pagamento aprovado`} icon={CircleDollarSign} />
+          <StatCard label="Gasto com fornecedores" value={money.format(metrics.supplierCostCents / 100)} icon={BarChart3} />
+          <StatCard label="Lucro estimado" value={money.format(metrics.estimatedProfitCents / 100)} detail="Faturamento aprovado menos custos registrados" icon={CircleDollarSign} />
+          <StatCard label="Pedidos" value={String(metrics.orderCount)} icon={PackageOpen} />
+          <StatCard label="Aguardando fornecedor" value={String(metrics.awaitingSupplierCount)} icon={PackageOpen} />
+          <StatCard label="Pedidos enviados" value={String(metrics.shippedOrderCount)} icon={Truck} />
           <div className="rounded-xl border border-border bg-paper p-5 text-xs leading-6 text-muted sm:col-span-2 lg:col-span-3">O faturamento considera somente pedidos aprovados no Mercado Pago. O lucro é estimado e considera os custos registrados nos pedidos pagos; custos ainda não informados não são estimados automaticamente.</div>
         </section>
       )}
 
-      {summary && current === "finance" && metrics && (
+      {authorized && summary && !loading && !error && current === "finance" && metrics && (
         <section className="mt-8">
+          {metrics.orderCount === 0 ? <EmptyState icon={CircleDollarSign} title="Sem movimentação financeira" description="Vendas e custos registrados serão resumidos aqui." /> : <>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <Card label="Faturamento aprovado" value={money.format(metrics.revenueCents / 100)} />
-            <Card label="Fornecedores" value={money.format(metrics.supplierCostCents / 100)} />
-            <Card label="Frete e outras despesas" value={money.format((metrics.shippingCostCents + metrics.otherExpensesCents) / 100)} />
-            <Card label="Lucro estimado" value={money.format(metrics.estimatedProfitCents / 100)} />
+            <StatCard label="Faturamento aprovado" value={money.format(metrics.revenueCents / 100)} icon={CircleDollarSign} />
+            <StatCard label="Fornecedores" value={money.format(metrics.supplierCostCents / 100)} icon={BarChart3} />
+            <StatCard label="Frete e outras despesas" value={money.format((metrics.shippingCostCents + metrics.otherExpensesCents) / 100)} icon={Truck} />
+            <StatCard label="Lucro estimado" value={money.format(metrics.estimatedProfitCents / 100)} icon={CircleDollarSign} />
           </div>
           <h2 className="mt-8 text-lg font-black">Pedidos recentes e custos registrados</h2>
           <div className="mt-3 overflow-x-auto rounded-xl border border-border bg-white">
@@ -120,13 +132,14 @@ export default function AdminSummaryClient({ current }: { current: AdminSection 
             </table>
           </div>
           <p className="mt-2 text-[11px] text-muted">A tabela lista até 300 pedidos recentes; os indicadores acima abrangem todos os pedidos.</p>
+          </>}
         </section>
       )}
 
-      {summary && current === "suppliers" && (
+      {authorized && summary && !loading && !error && current === "suppliers" && (
         <section className="mt-8">
           <p className="text-sm text-muted">Fornecedores encontrados nos produtos e nos pedidos. Os dados são internos e não aparecem na vitrine.</p>
-          {summary.suppliers.length === 0 ? <p className="mt-4 rounded-lg border border-dashed border-border p-8 text-center text-sm text-muted">Nenhum fornecedor cadastrado. Informe o fornecedor padrão no cadastro de produto ou nos detalhes do pedido.</p> : (
+          {summary.suppliers.length === 0 ? <div className="mt-4"><EmptyState icon={PackageOpen} title="Nenhum fornecedor cadastrado" description="Adicione o fornecedor padrão em um produto ou nos detalhes do pedido para acompanhar sua operação." /></div> : (
             <div className="mt-4 overflow-x-auto rounded-xl border border-border bg-white">
               <table className="w-full min-w-[680px] text-left text-xs">
                 <thead className="bg-paper text-[10px] uppercase text-muted"><tr>{["Fornecedor", "Produtos", "Pedidos", "Custos de fornecedor registrados"].map((heading) => <th key={heading} className="px-4 py-3">{heading}</th>)}</tr></thead>
@@ -137,7 +150,7 @@ export default function AdminSummaryClient({ current }: { current: AdminSection 
         </section>
       )}
 
-      {summary && current === "settings" && (
+      {authorized && summary && !loading && !error && current === "settings" && (
         <section className="mt-8 max-w-2xl rounded-xl border border-border bg-white p-5">
           <h2 className="text-lg font-black">Presença das variáveis de ambiente</h2>
           <p className="mt-1 text-xs leading-5 text-muted">Este painel verifica somente se há valores configurados no servidor; não testa credenciais nem chama os provedores.</p>

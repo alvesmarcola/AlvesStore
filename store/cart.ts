@@ -4,6 +4,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { CartItem, Product } from "@/lib/types";
 import { getAvailablePatches } from "@/lib/patch-compatibility";
+import { CUSTOMIZATION_NAME_MAX_LENGTH, sanitizeCustomizationName } from "@/lib/customization";
 
 interface CartState {
   items: CartItem[];
@@ -30,11 +31,14 @@ function migratePersistedCart(value: unknown): Pick<CartState, "items"> {
       const product = restoreCatalogProduct(storedProduct);
       if (!product || !product.tamanhos.includes(entry.size)) return [];
 
-      const customization = isRecord(entry.customization)
-        && typeof entry.customization.name === "string"
-        && typeof entry.customization.number === "string"
-        ? { name: entry.customization.name, number: entry.customization.number }
-        : undefined;
+      const savedCustomization = isRecord(entry.customization) ? entry.customization : {};
+      const name = typeof savedCustomization.name === "string"
+        ? sanitizeCustomizationName(savedCustomization.name).slice(0, CUSTOMIZATION_NAME_MAX_LENGTH)
+        : "";
+      const number = typeof savedCustomization.number === "string" && /^\d{1,3}$/.test(savedCustomization.number)
+        ? savedCustomization.number
+        : "";
+      const customization = name || number ? { name, number } : undefined;
       const allowed = getAvailablePatches(product);
       const patches = Array.isArray(entry.patches) ? entry.patches.flatMap((candidate) => {
         if (!isRecord(candidate) || typeof candidate.id !== "string" || typeof candidate.position !== "string") return [];

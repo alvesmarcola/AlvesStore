@@ -3,6 +3,8 @@
 import Image from "next/image";
 import { useState } from "react";
 import { AdminNavigation } from "@/components/admin-navigation";
+import { AdminSkeleton, EmptyState, ErrorState, LockedState, StatCard, StatusBadge } from "@/components/admin-states";
+import { PackageOpen } from "lucide-react";
 import type { Audience, ProductType, Uniform } from "@/lib/types";
 
 type ProductPhoto = { src: string; alt?: string };
@@ -115,20 +117,33 @@ export default function AdminProducts() {
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
+  const [authorized, setAuthorized] = useState(false);
+  const [loadError, setLoadError] = useState("");
+  const [authRejected, setAuthRejected] = useState(false);
 
   async function loadProducts() {
     setLoading(true);
     setMessage("");
+    setLoadError("");
     try {
       const response = await fetch("/api/admin/products", {
         headers: { authorization: `Bearer ${token}` },
         cache: "no-store",
       });
       const body = await response.json();
+      if (response.status === 401) {
+        setAuthorized(false);
+        setAuthRejected(true);
+        setLoadError(body.error ?? "Token inválido. Confira e tente novamente.");
+        return;
+      }
       if (!response.ok) throw new Error(body.error ?? "Não foi possível carregar os produtos.");
       setProducts(body.products as ManualProduct[]);
+      setAuthorized(true);
+      setAuthRejected(false);
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Não foi possível carregar os produtos.");
+      setAuthRejected(false);
+      setLoadError(error instanceof Error ? error.message : "Não foi possível carregar os produtos.");
     } finally {
       setLoading(false);
     }
@@ -204,6 +219,12 @@ export default function AdminProducts() {
         body: formData,
       });
       const body = await response.json();
+      if (response.status === 401) {
+        setAuthorized(false);
+        setAuthRejected(true);
+        setLoadError(body.error ?? "Token inválido. Confira e tente novamente.");
+        return;
+      }
       if (!response.ok) throw new Error(body.error ?? "Não foi possível enviar as fotos.");
       setDraft((current) => ({ ...current, imageUrls: [...current.imageUrls, ...body.images.map((image: { url: string }) => image.url)] }));
       setMessage(`${body.images.length} foto(s) enviadas. Salve o produto para publicá-las na vitrine.`);
@@ -229,6 +250,12 @@ export default function AdminProducts() {
         body: JSON.stringify(payload),
       });
       const body = await response.json();
+      if (response.status === 401) {
+        setAuthorized(false);
+        setAuthRejected(true);
+        setLoadError(body.error ?? "Token inválido. Confira e tente novamente.");
+        return;
+      }
       if (!response.ok) throw new Error(body.error ?? "Não foi possível salvar o produto.");
       const savedProduct = body.product as ManualProduct;
       setProducts((current) => {
@@ -249,6 +276,19 @@ export default function AdminProducts() {
   return (
     <main className="mx-auto max-w-7xl px-5 py-10 lg:px-8">
       <AdminNavigation current="products" />
+      {!authorized && !loading && (!loadError || authRejected) ? (
+        <LockedState
+          token={token}
+          onTokenChange={setToken}
+          onSubmit={(event) => { event.preventDefault(); void loadProducts(); }}
+          loading={loading}
+          message={loadError || undefined}
+        />
+      ) : loading ? (
+        <AdminSkeleton cards={3} />
+      ) : loadError ? (
+        <ErrorState message={loadError} onRetry={() => void loadProducts()} />
+      ) : <>
       <div>
         <p className="text-[10px] font-black uppercase tracking-[.2em] text-action">AlvesStore · administração</p>
         <h1 className="mt-2 text-3xl font-black">Produtos e estoque</h1>
@@ -257,13 +297,11 @@ export default function AdminProducts() {
         </p>
       </div>
 
-      <form onSubmit={(event) => { event.preventDefault(); void loadProducts(); }} className="mt-6 flex max-w-xl flex-wrap gap-2">
-        <label className="sr-only" htmlFor="admin-products-token">Token administrativo</label>
-        <input id="admin-products-token" type="password" autoComplete="current-password" required value={token} onChange={(event) => setToken(event.target.value)} className="min-w-0 flex-1 rounded-lg border border-border px-4 py-3 text-sm" placeholder="Token administrativo" />
-        <button disabled={loading} className="rounded-lg bg-ink px-5 py-3 text-xs font-black uppercase text-white disabled:opacity-50">{loading ? "Carregando…" : "Carregar produtos"}</button>
-      </form>
-
       {message && <p role="status" aria-live="polite" className="mt-4 rounded-lg bg-paper px-4 py-3 text-sm">{message}</p>}
+      <section className="mt-7 grid gap-3 sm:grid-cols-2">
+        <StatCard label="Produtos manuais" value={String(products.length)} detail="Produtos importados seguem preservados" icon={PackageOpen} />
+        <StatCard label="Estoque informativo" value={String(products.reduce((sum, product) => sum + Object.values(product.stock_by_size ?? {}).reduce((subtotal, count) => subtotal + count, 0), 0))} detail="Não é reservado nem descontado no checkout" />
+      </section>
 
       <section className="mt-8 rounded-xl border border-border bg-white p-5 sm:p-7">
         <div className="flex flex-wrap items-start justify-between gap-3">
@@ -366,7 +404,7 @@ export default function AdminProducts() {
           {products.length > 0 && <p className="text-xs text-muted">Estoque total registrado: {products.reduce((sum, product) => sum + Object.values(product.stock_by_size ?? {}).reduce((subtotal, count) => subtotal + count, 0), 0)} unidades</p>}
         </div>
         {products.length === 0 ? (
-          <div className="mt-4 rounded-xl border border-dashed border-border px-5 py-10 text-center text-sm text-muted">{loading ? "Carregando produtos…" : "Carregue a lista com seu token administrativo para gerenciar produtos manuais."}</div>
+          <div className="mt-4"><EmptyState icon={PackageOpen} title="Nenhum produto manual ainda" description="Cadastre seu primeiro produto no formulário acima. O catálogo importado continua preservado." /></div>
         ) : (
           <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
             {products.map((product) => (
@@ -379,13 +417,15 @@ export default function AdminProducts() {
                   <p className="mt-1 text-xs text-muted">{product.clube} · {product.temporada} · {audienceLabels[product.publico as keyof typeof audienceLabels] ?? product.publico}</p>
                   <p className="mt-2 text-sm font-black">{currency.format(Number(product.preco))}</p>
                   <p className="mt-1 text-[11px] text-muted">{product.tamanhos.map((size) => `${size}: ${product.stock_by_size?.[size] ?? 0}`).join(" · ")}</p>
-                  <button type="button" onClick={() => editProduct(product)} className="mt-3 rounded-md border border-border px-3 py-1.5 text-[10px] font-bold hover:bg-paper">Editar produto e estoque</button>
+                  <div className="mt-2"><StatusBadge tone="blue">Publicado na vitrine</StatusBadge></div>
+                  <button type="button" onClick={() => editProduct(product)} className="mt-3 min-h-11 rounded-md border border-border px-3 py-2 text-xs font-bold hover:bg-paper">Editar produto e estoque</button>
                 </div>
               </article>
             ))}
           </div>
         )}
       </section>
+      </>}
     </main>
   );
 }

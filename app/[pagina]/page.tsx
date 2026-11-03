@@ -121,8 +121,8 @@ const pages: Record<string, InstitutionalPage> = {
   "politica-de-personalizacao": {
     title: "Política de personalização",
     intro: "Confira os dados de personalização com atenção antes de concluir o pedido.",
-    sections: [{ heading: "Nome e número", paragraphs: [
-      `A personalização de nome e número custa ${formatCurrency(storeConfig.customizationPrice)} por camisa, quando disponível no produto. Verifique a grafia e o número informado antes de pagar.`,
+    sections: [{ heading: "Nome ou número", paragraphs: [
+      `Informe o nome, o número ou ambos. A personalização custa ${formatCurrency(storeConfig.customizationPrice)} por camisa, quando disponível no produto. Verifique os dados informados antes de pagar.`,
       "Se precisar corrigir um dado, entre em contato imediatamente pelo e-mail ou WhatsApp da loja. Direitos relativos a defeito, erro de produção, divergência do pedido ou arrependimento são tratados conforme a legislação aplicável.",
     ] }],
   },

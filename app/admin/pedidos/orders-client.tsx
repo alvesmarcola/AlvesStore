@@ -2,12 +2,15 @@
 
 import { useState } from "react";
 import { AdminNavigation } from "@/components/admin-navigation";
+import { AdminSkeleton, EmptyState, ErrorState, LockedState, StatCard, StatusBadge } from "@/components/admin-states";
+import { PackageOpen } from "lucide-react";
+import { formatCustomization } from "@/lib/customization";
 
 type OrderItem = {
   title: string;
   size: string;
   quantity: number;
-  customization?: { name: string; number: string } | null;
+  customization?: { name?: string; number?: string } | null;
   patches?: { name: string; position: string; priceCents: number }[];
 };
 type Order = {
@@ -93,7 +96,7 @@ function itemDescription(item: OrderItem) {
   const options = [
     `Tam. ${item.size}`,
     `${item.quantity} un.`,
-    item.customization ? `${item.customization.name} ${item.customization.number}` : "",
+    formatCustomization(item.customization),
     item.patches?.length ? item.patches.map((patch) => `${patch.name} (${patch.position})`).join(", ") : "",
   ].filter(Boolean);
   return `${item.title} · ${options.join(" · ")}`;
@@ -198,22 +201,38 @@ export default function AdminOrders() {
   const [trackingUrls, setTrackingUrls] = useState<Record<string, string>>({});
   const [savingId, setSavingId] = useState("");
   const [message, setMessage] = useState("");
+  const [authorized, setAuthorized] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [loadError, setLoadError] = useState("");
+  const [authRejected, setAuthRejected] = useState(false);
   const [onlyPaid, setOnlyPaid] = useState(true);
   const paidOrders = orders.filter(isPaid);
   const visibleOrders = onlyPaid ? paidOrders : orders;
 
   async function load() {
-    setMessage("");
+    setLoading(true);
+    setLoadError("");
     try {
       const response = await fetch("/api/admin/orders", { headers: { authorization: `Bearer ${token}` }, cache: "no-store" });
       const body = await response.json();
+      if (response.status === 401) {
+        setAuthorized(false);
+        setAuthRejected(true);
+        setLoadError(body.error ?? "Token inválido. Confira e tente novamente.");
+        return;
+      }
       if (!response.ok) throw new Error(body.error ?? "Não foi possível carregar os pedidos.");
       const rows = body.orders as Order[];
       setOrders(rows);
       setTrackingValues(Object.fromEntries(rows.map((order) => [order.id, order.tracking_code ?? ""])));
       setTrackingUrls(Object.fromEntries(rows.map((order) => [order.id, order.tracking_url ?? ""])));
+      setAuthorized(true);
+      setAuthRejected(false);
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Não foi possível carregar os pedidos.");
+      setAuthRejected(false);
+      setLoadError(error instanceof Error ? error.message : "Não foi possível carregar os pedidos.");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -229,6 +248,12 @@ export default function AdminOrders() {
         body: JSON.stringify({ orderId: order.id, action: "save_shipping", trackingCode, trackingUrl }),
       });
       const body = await response.json();
+      if (response.status === 401) {
+        setAuthorized(false);
+        setAuthRejected(true);
+        setLoadError(body.error ?? "Token inválido. Confira e tente novamente.");
+        return;
+      }
       if (!response.ok) throw new Error(body.error ?? "Não foi possível salvar o rastreio.");
       setOrders((current) => current.map((item) => item.id === order.id
         ? { ...item, tracking_code: trackingCode || null, tracking_url: trackingUrl || null }
@@ -251,6 +276,12 @@ export default function AdminOrders() {
         body: JSON.stringify({ orderId: order.id, action: "mark_shipped" }),
       });
       const body = await response.json();
+      if (response.status === 401) {
+        setAuthorized(false);
+        setAuthRejected(true);
+        setLoadError(body.error ?? "Token inválido. Confira e tente novamente.");
+        return;
+      }
       if (!response.ok) throw new Error(body.error ?? "Não foi possível marcar o pedido como enviado.");
       setOrders((current) => current.map((item) => item.id === order.id
         ? { ...item, operational_status: "enviado", shipped_at: new Date().toISOString() }
@@ -286,25 +317,32 @@ export default function AdminOrders() {
   return (
     <main className="mx-auto max-w-7xl px-5 py-10 lg:px-8">
       <AdminNavigation current="orders" />
-      <div className="flex flex-wrap items-end justify-between gap-4">
+      <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="text-[10px] font-black uppercase tracking-[.2em] text-action">Resenha Sports Cia · administração</p>
           <h1 className="mt-2 text-3xl font-black">Pedidos recentes</h1>
           <p className="mt-2 text-sm text-muted">Pagamento é acompanhado separadamente do andamento operacional.</p>
         </div>
         {orders.length > 0 && <button onClick={exportCsv} className="rounded-lg border border-border px-4 py-2.5 text-xs font-bold hover:bg-paper">Exportar CSV</button>}
-      </div>
-      <form onSubmit={(event) => { event.preventDefault(); void load(); }} className="mt-6 flex max-w-xl flex-wrap gap-2">
-        <label className="sr-only" htmlFor="admin-token">Token administrativo</label>
-        <input id="admin-token" type="password" autoComplete="current-password" required value={token} onChange={(event) => setToken(event.target.value)} className="min-w-0 flex-1 rounded-lg border border-border px-4 py-3 text-sm" placeholder="Token administrativo" />
-        <button className="rounded-lg bg-ink px-5 py-3 text-xs font-black uppercase text-white">Carregar pedidos</button>
-      </form>
+      </header>
+      {!authorized && !loading && (!loadError || authRejected) ? (
+        <LockedState token={token} onTokenChange={setToken} onSubmit={(event) => { event.preventDefault(); void load(); }} loading={loading} message={loadError || undefined} />
+      ) : loading ? (
+        <AdminSkeleton cards={4} />
+      ) : loadError ? (
+        <div className="mt-8"><ErrorState message={loadError} onRetry={() => void load()} /></div>
+      ) : <>
+      <section className="mt-7 grid gap-3 sm:grid-cols-3">
+        <StatCard label="Pedidos no painel" value={String(orders.length)} icon={PackageOpen} />
+        <StatCard label="Pagamentos aprovados" value={String(paidOrders.length)} detail="Status financeiro" />
+        <StatCard label="Pedidos enviados" value={String(orders.filter((order) => getOperationalStatus(order) === "enviado").length)} detail="Andamento operacional" />
+      </section>
       {message && <p role="status" aria-live="polite" className="mt-4 rounded-lg bg-paper px-4 py-3 text-sm">{message}</p>}
       {orders.length > 0 && <label className="mt-4 flex w-fit items-center gap-2 text-xs font-bold"><input type="checkbox" checked={onlyPaid} onChange={(event) => setOnlyPaid(event.target.checked)} />Mostrar só pedidos pagos ({paidOrders.length} de {orders.length})</label>}
       {orders.length === 0 ? (
-        <div className="mt-6 rounded-xl border border-dashed border-border px-5 py-12 text-center text-sm text-muted">Informe o token e carregue os pedidos recentes.</div>
+        <div className="mt-6"><EmptyState icon={PackageOpen} title="Ainda não há pedidos" description="Os pedidos novos aparecerão aqui assim que um cliente finalizar o checkout." /></div>
       ) : visibleOrders.length === 0 ? (
-        <div className="mt-6 rounded-xl border border-dashed border-border px-5 py-12 text-center text-sm text-muted">Nenhum pedido correspondente. Desmarque o filtro para ver os demais.</div>
+        <div className="mt-6"><EmptyState icon={PackageOpen} title="Nenhum pedido pago" description="Desative o filtro de pagamentos aprovados para ver pedidos aguardando pagamento." /></div>
       ) : (
         <div className="mt-6 overflow-x-auto rounded-xl border border-border bg-white">
           <table className="w-full min-w-[1350px] border-collapse text-left text-xs">
@@ -326,7 +364,7 @@ export default function AdminOrders() {
                     <td className="whitespace-nowrap px-4 py-4"><span className="font-black">{isPaid(order) ? money.format(order.total_cents / 100) : "Não pago"}</span><span className="mt-1 block text-[10px] text-muted">{isPaid(order) ? `Frete cobrado: ${money.format(order.shipping_cents / 100)}` : `Total: ${money.format(order.total_cents / 100)}`}</span></td>
                     <td className="px-4 py-4"><span className="font-bold">{statusLabels[paymentStatus] ?? paymentStatus}</span><span className="mt-1 block text-[10px] text-muted">{paymentLabels[order.payment_type_id ?? ""] ?? paymentLabels[order.payment_method_id ?? ""] ?? order.payment_method_id ?? "Forma não informada"}</span>{order.mercado_pago_id && <span className="mt-1 block text-[10px] text-muted">ID {order.mercado_pago_id}</span>}</td>
                     <td className="min-w-72 px-4 py-4">
-                      <span className={`inline-flex rounded-full px-2.5 py-1 text-[10px] font-bold ${operationalStatus === "enviado" ? "bg-green-50 text-green-700" : "bg-paper text-ink"}`}>{operationalLabel}</span>
+                      <StatusBadge tone={operationalStatus === "enviado" ? "green" : operationalStatus === "cancelado" ? "red" : operationalStatus === "aguardando_fornecedor" ? "amber" : "neutral"}>{operationalLabel}</StatusBadge>
                       {order.supplier_name && <span className="mt-1 block text-[10px] text-muted">Fornecedor: {order.supplier_name}</span>}
                       <OrderOperations key={`${order.id}-${order.updated_at}-${order.operational_status}`} order={order} token={token} onSaved={() => void load()} />
                     </td>
@@ -347,6 +385,7 @@ export default function AdminOrders() {
           </table>
         </div>
       )}
+      </>}
     </main>
   );
 }
