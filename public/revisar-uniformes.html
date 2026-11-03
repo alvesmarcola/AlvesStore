@@ -40,7 +40,8 @@
 <body>
 <header>
   <h1>Revisar uniformes</h1>
-  <input type="file" id="file" accept=".json">
+  <label title="Catálogo SEM divisões: data/products.backup.json">1) products.backup.json <input type="file" id="file" accept=".json"></label>
+  <label title="Opcional, mas recomendado: o splits.json que já está no projeto">2) splits.json atual <input type="file" id="filesplits" accept=".json"></label>
   <input type="search" id="q" placeholder="Buscar (ex.: alemanha)">
   <select id="filtro">
     <option value="pend">Só não revisados</option>
@@ -51,10 +52,14 @@
   <span id="info"></span>
 </header>
 <div id="help">
-  1) Escolha o arquivo <b>data/products.json</b>. 2) Em cada produto, as fotos começam todas na <b style="color:var(--a)">Camisa A</b>.
+  <b>Use sempre o arquivo <u>data/products.backup.json</u></b> (o catálogo sem divisões), <b>nunca</b> o data/products.json: depois de aplicada
+  a separação, o products.json já está cortado e os números das fotos deixam de bater com o splits.json. A tela recusa esse arquivo.<br>
+  1) Escolha o <b>products.backup.json</b>. 2) Escolha também o <b>data/splits.json</b> atual: o que já foi decidido aparece pronto e
+  <b>é mantido</b> no arquivo que você baixar (sem isso, o download só levaria o que você mexeu neste navegador e apagaria o resto).
+  3) Em cada produto, as fotos começam todas na <b style="color:var(--a)">Camisa A</b>.
   Clique numa foto para passá-la para a <b style="color:var(--b)">Camisa B</b> (outro uniforme) ou <b style="color:var(--c)">C</b>; clicar de novo volta para A.
-  3) Diga se cada camisa é casa, fora ou terceira. 4) Marque "revisado" quando terminar o produto. 5) Baixe o <b>splits.json</b>.
-  Seu progresso fica salvo neste navegador.
+  4) Diga se cada camisa é casa, fora ou terceira. 5) Marque "revisado" quando terminar o produto. 6) Baixe o <b>splits.json</b>, troque-o em <b>data/splits.json</b> e rode <code>npm run catalog:splits</code>.
+  Seu progresso fica salvo neste navegador (e cada endereço do site, como o de preview e o de produção, guarda o seu: baixe o arquivo antes de trocar de endereço).
 </div>
 <div id="list"></div>
 
@@ -63,13 +68,28 @@
   var KEY = "alves-uniformes-v1";
   var products = [];
   var state = {}; // slug -> { g:[grupo por imagem], l:{0:"casa",1:"fora",2:""}, done:bool }
+  var existing = {}; // splits.json atual do projeto: slug -> [{imagens:[...], uniforme:"..."}]
 
   function load() { try { state = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) { state = {}; } }
   function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
   load();
 
+  // Converte uma entrada do splits.json no estado da tela (até 3 grupos; com mais, devolve null e a entrada é mantida como está).
+  function fromExisting(p) {
+    var groups = existing[p.slug];
+    if (!groups || groups.length > 3) return null;
+    var g = p.images.map(function () { return 0; }), l = {};
+    groups.forEach(function (grp, n) {
+      (grp.imagens || []).forEach(function (i) { if (i >= 0 && i < g.length) g[i] = n; });
+      l[n] = grp.uniforme || "";
+    });
+    return { g: g, l: l, done: true };
+  }
   function st(p) {
-    if (!state[p.slug]) state[p.slug] = { g: p.images.map(function () { return 0; }), l: {}, done: false };
+    var s = state[p.slug];
+    // Estado guardado de um arquivo com outro número de fotos não serve mais: recomeça.
+    if (s && s.g.length !== p.images.length) { delete state[p.slug]; s = null; }
+    if (!s) state[p.slug] = fromExisting(p) || { g: p.images.map(function () { return 0; }), l: {}, done: false };
     return state[p.slug];
   }
   function touched(p) {
@@ -149,9 +169,36 @@
     r.onload = function () {
       try {
         var all = JSON.parse(r.result);
+        if (all.some(function (p) { return p.divididoDe; })) {
+          alert("Este arquivo já está com as camisas separadas (tem produtos com 'divididoDe'). " +
+            "Use o data/products.backup.json, que é o catálogo sem divisões; com este o splits.json sairia errado.");
+          products = []; render(); return;
+        }
         products = all.filter(function (p) { return p.images && p.images.length >= 2; });
+        products.forEach(st); // aplica o splits.json já carregado e descarta estados desatualizados
+        save();
         render();
       } catch (err) { alert("Não consegui ler esse arquivo: " + err.message); }
+    };
+    r.readAsText(file);
+  };
+  document.getElementById("filesplits").onchange = function (e) {
+    var file = e.target.files[0]; if (!file) return;
+    var r = new FileReader();
+    r.onload = function () {
+      try {
+        var parsed = JSON.parse(r.result);
+        if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) throw new Error("não é um splits.json");
+        existing = parsed;
+        // Entradas do projeto passam a valer na tela, a não ser que você já tenha mexido nelas aqui.
+        products.forEach(function (p) {
+          var s = state[p.slug];
+          if (!s || !touched(p)) { delete state[p.slug]; }
+        });
+        products.forEach(st);
+        save(); render();
+        alert(Object.keys(existing).length + " produtos já decididos no splits.json foram carregados e serão mantidos no download.");
+      } catch (err) { alert("Não consegui ler esse splits.json: " + err.message); }
     };
     r.readAsText(file);
   };
@@ -159,7 +206,8 @@
   document.getElementById("filtro").onchange = render;
 
   document.getElementById("baixar").onclick = function () {
-    var out = {};
+    // Parte do splits.json atual: o que não foi mexido aqui continua exatamente como estava.
+    var out = JSON.parse(JSON.stringify(existing));
     products.forEach(function (p) {
       var s = state[p.slug];
       if (!s || !touched(p)) return;

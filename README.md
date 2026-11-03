@@ -64,6 +64,8 @@ Quando um álbum traz camisas diferentes (por exemplo casa e fora do mesmo clube
 - `npm run catalog:splits`: aplica o `splits.json` e regrava `data/products.json`. Parte sempre de `data/products.backup.json` (catálogo sem divisões), então pode ser repetido sem duplicar nem perder fotos. Avisa se alguma foto ficou fora de todos os grupos.
 - Depois de rodar `npm run catalogar` (que gera produtos sem divisão), use `node scripts/aplicar-splits.mjs --nova-base` para adotar o resultado como nova base e reaplicar as divisões.
 
+A tela de separação é `/revisar-uniformes.html`. Carregue nela o `data/products.backup.json` (**nunca** o `data/products.json`, que depois de aplicado já está dividido e deixa os números das fotos errados; a tela recusa esse arquivo) e, junto, o `data/splits.json` atual: assim o que já foi decidido aparece pronto e o `splits.json` baixado mantém tudo, não só o que foi mexido naquele navegador. O progresso fica no navegador de cada endereço (preview e produção guardam separado), então baixe o arquivo antes de trocar de endereço.
+
 O site só mostra o que está no `data/products.json` publicado no deploy: depois de aplicar as divisões, faça commit do `products.json` (e do `splits.json`) na branch que o Vercel publica como Production. Se existir a tabela `products` no Supabase, produtos de lá com o mesmo `slug` prevalecem sobre os do arquivo (ver `getSupabaseProducts`).
 
 ### Imagens otimizadas

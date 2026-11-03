@@ -12902,16 +12902,16 @@
     "divididoDe": "camisa-jogador-premier-league-arsenal-25-26"
   },
   {
-    "id": "catalog-camisa-jogador-premier-league-arsenal-25-26-modelo-2",
-    "slug": "camisa-jogador-premier-league-arsenal-25-26-modelo-2",
+    "id": "catalog-camisa-jogador-premier-league-arsenal-25-26-reserva",
+    "slug": "camisa-jogador-premier-league-arsenal-25-26-reserva",
     "clube": "Arsenal",
     "clubeSlug": "arsenal",
     "liga": "premier-league",
     "publico": "masculino",
     "tipo": "jogador",
     "temporada": "25/26",
-    "uniforme": "revisar",
-    "nome": "Camisa Arsenal 25/26 jogador masculino – Modelo 2",
+    "uniforme": "reserva",
+    "nome": "Camisa Arsenal 25/26 jogador masculino – Fora",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -12922,7 +12922,7 @@
       "3GG"
     ],
     "cor": "revisar",
-    "imageSeed": "camisa-jogador-premier-league-arsenal-25-26-modelo-2",
+    "imageSeed": "camisa-jogador-premier-league-arsenal-25-26-reserva",
     "images": [
       {
         "src": "/otimizadas/camisa-jogador-premier-league-arsenal-25-26/02-800.webp",
@@ -12939,16 +12939,16 @@
     "divididoDe": "camisa-jogador-premier-league-arsenal-25-26"
   },
   {
-    "id": "catalog-camisa-jogador-premier-league-arsenal-25-26-modelo-3",
-    "slug": "camisa-jogador-premier-league-arsenal-25-26-modelo-3",
+    "id": "catalog-camisa-jogador-premier-league-arsenal-25-26-terceiro",
+    "slug": "camisa-jogador-premier-league-arsenal-25-26-terceiro",
     "clube": "Arsenal",
     "clubeSlug": "arsenal",
     "liga": "premier-league",
     "publico": "masculino",
     "tipo": "jogador",
     "temporada": "25/26",
-    "uniforme": "revisar",
-    "nome": "Camisa Arsenal 25/26 jogador masculino – Modelo 3",
+    "uniforme": "terceiro",
+    "nome": "Camisa Arsenal 25/26 jogador masculino – Terceira",
     "preco": 160,
     "tamanhos": [
       "P",
@@ -12959,7 +12959,7 @@
       "3GG"
     ],
     "cor": "revisar",
-    "imageSeed": "camisa-jogador-premier-league-arsenal-25-26-modelo-3",
+    "imageSeed": "camisa-jogador-premier-league-arsenal-25-26-terceiro",
     "images": [
       {
         "src": "/otimizadas/camisa-jogador-premier-league-arsenal-25-26/03-800.webp",
