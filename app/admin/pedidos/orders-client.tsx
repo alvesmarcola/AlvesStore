@@ -309,7 +309,7 @@ export default function AdminOrders() {
     const url = URL.createObjectURL(new Blob([`\uFEFF${[columns.map(quote).join(","), ...rows].join("\r\n")}`], { type: "text/csv;charset=utf-8" }));
     const link = document.createElement("a");
     link.href = url;
-    link.download = "pedidos-resenha-sports-cia.csv";
+    link.download = "pedidos-imports-alves.csv";
     link.click();
     URL.revokeObjectURL(url);
   }
@@ -319,7 +319,7 @@ export default function AdminOrders() {
       <AdminNavigation current="orders" />
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="text-[10px] font-black uppercase tracking-[.2em] text-action">Resenha Sports Cia · administração</p>
+          <p className="text-[10px] font-black uppercase tracking-[.2em] text-action">Imports Alves · administração</p>
           <h1 className="mt-2 text-3xl font-black">Pedidos recentes</h1>
           <p className="mt-2 text-sm text-muted">Pagamento é acompanhado separadamente do andamento operacional.</p>
         </div>

@@ -135,7 +135,7 @@ export async function POST(request: Request) {
       ...(siteUrl.startsWith("https://") ? { auto_return: "approved" } : {}),
       payment_methods: { installments: 12 },
       notification_url: siteUrl.startsWith("https://") ? `${siteUrl}/api/webhooks/mercadopago` : undefined,
-      statement_descriptor: "ALVES STORE",
+      statement_descriptor: "Imports Alves",
     }, requestData.idempotencyKey);
 
     const checkoutUrl = preference.init_point || preference.sandbox_init_point;
@@ -154,7 +154,7 @@ export async function POST(request: Request) {
           console.error("Preferência criada, mas não foi possível persistir preference_id/checkout_url:", savedPreference.error ?? "pedido não encontrado");
         }
       } catch (error) {
-        console.error("Preferência criada, mas a persistência em store_orders falhou:", error instanceof Error ? error.message : "erro desconhecido");
+        console.error("Preferência criada, mas a persistência em store_orders falhou:", describeSupabaseError(error));
       }
     });
     await sendOrderEmail(requestData.customer.email, buildOrderReceivedEmail({
@@ -187,26 +187,17 @@ export async function POST(request: Request) {
     console.error(`Falha no checkout (${stage}):`, error instanceof Error ? error.message : "erro desconhecido");
     if (stage === "mercado-pago") {
       if (error instanceof MercadoPagoApiError) {
-        const providerReason = error.message || error.providerCause || error.rawText || "Resposta sem detalhes.";
-        const message = `O Mercado Pago não conseguiu gerar o link de pagamento (HTTP ${error.status}: ${providerReason}).`;
         console.error("Mercado Pago recusou a preferência:", {
           status: error.status,
-          message: error.message,
-          cause: error.providerCause,
-          response: error.rawText,
         });
         return NextResponse.json({
-          error: message,
+          error: "O Mercado Pago não conseguiu gerar o link de pagamento. Tente novamente.",
           code: "MERCADO_PAGO_PREFERENCE_FAILED",
-          httpStatus: error.status,
-          mpErrorMessage: error.message,
-          mpErrorCause: error.providerCause,
-          rawText: error.rawText,
         }, { status: 502, headers: { "Cache-Control": "no-store" } });
       }
-      const reason = error instanceof Error ? error.message : "Erro de comunicação desconhecido.";
+      console.error("Falha de comunicação com o Mercado Pago.");
       return NextResponse.json({
-        error: "O Mercado Pago não conseguiu gerar o link de pagamento (falha de comunicação: " + reason + ").",
+        error: "O Mercado Pago não conseguiu gerar o link de pagamento. Tente novamente.",
         code: "MERCADO_PAGO_PREFERENCE_FAILED",
       }, { status: 502, headers: { "Cache-Control": "no-store" } });
     }
@@ -214,11 +205,8 @@ export async function POST(request: Request) {
       const databaseError = describeSupabaseError(error);
       console.error("Falha ao gravar/atualizar pedido em store_orders:", databaseError);
       return NextResponse.json({
-        error: databaseError.message,
+        error: "Não foi possível registrar seu pedido agora. Tente novamente.",
         code: "SUPABASE_ORDER_WRITE_FAILED",
-        details: databaseError.details,
-        hint: databaseError.hint,
-        databaseCode: databaseError.code,
       }, { status: 503, headers: { "Cache-Control": "no-store" } });
     }
     return publicError("Não foi possível validar o pedido agora. Tente novamente.", 503);

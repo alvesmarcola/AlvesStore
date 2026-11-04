@@ -5,6 +5,11 @@ export type AdminAuthFailure = {
   message: string;
 };
 
+export const ADMIN_PRIVATE_HEADERS = {
+  "Cache-Control": "no-store",
+  "X-Robots-Tag": "noindex, nofollow",
+} as const;
+
 export function getAdminAuthFailure(request: Request): AdminAuthFailure | null {
   const expected = process.env.ADMIN_ORDERS_TOKEN?.trim();
   if (!expected) {

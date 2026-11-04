@@ -25,6 +25,7 @@ import { filterPublicReviews, publicReviewsPayload, reviewSubmissionSchema, sani
 import { filterCustomizationNumber, formatCustomization, getCustomizationError, sanitizeCustomizationName } from "@/lib/customization";
 import { GET as getAdminReviews } from "@/app/api/admin/reviews/route";
 import { POST as createCheckout } from "@/app/api/checkout/route";
+import { GET as getYupooImage } from "@/app/api/yupoo-image/route";
 import { storeConfig } from "@/config";
 import type { Product } from "@/lib/types";
 
@@ -232,7 +233,6 @@ test("não atribui preço a categorias não confirmadas", () => {
 test("usa R$ 180 para torcedor full patch somente com classificação administrativa", () => {
   const original = productOverrides[product.id];
   productOverrides[product.id] = { version: "fan", fullPatch: true, source: "https://example.com", verifiedBy: "teste" };
-  console.log("TEST product.id:", product.id, "override found:", !!productOverrides[product.id]);
   try {
     assert.equal(classifyProduct(product).price, 180);
   } finally {
@@ -476,6 +476,28 @@ test("a rota de moderação retorna 401 sem token administrativo", async () => {
   } finally {
     if (previousToken === undefined) delete process.env.ADMIN_ORDERS_TOKEN;
     else process.env.ADMIN_ORDERS_TOKEN = previousToken;
+  }
+});
+
+test("proxy Yupoo rejeita hosts externos e limita o corpo transmitido", async () => {
+  const originalFetch = globalThis.fetch;
+  let fetchCalls = 0;
+  globalThis.fetch = async () => {
+    fetchCalls += 1;
+    return new Response(new Uint8Array(8 * 1024 * 1024 + 1), {
+      headers: { "content-type": "image/webp" },
+    });
+  };
+  try {
+    const invalidHost = await getYupooImage(new Request("https://store.example/api/yupoo-image?u=https%3A%2F%2Fexample.com%2Fimage.webp"));
+    assert.equal(invalidHost.status, 400);
+    assert.equal(fetchCalls, 0);
+
+    const tooLarge = await getYupooImage(new Request("https://store.example/api/yupoo-image?u=https%3A%2F%2Fphoto.yupoo.com%2Fimage.webp"));
+    assert.equal(tooLarge.status, 502);
+    assert.equal(fetchCalls, 1);
+  } finally {
+    globalThis.fetch = originalFetch;
   }
 });
 

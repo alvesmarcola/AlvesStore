@@ -1,4 +1,4 @@
--- Alves Store product catalog imported from Yupoo. Run once in Supabase SQL Editor.
+-- Imports Alves product catalog imported from Yupoo. Run once in Supabase SQL Editor.
 create table if not exists public.products (
   id text primary key,
   yupoo_id text not null unique,

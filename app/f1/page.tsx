@@ -7,8 +7,8 @@ import type { Product } from "@/lib/types";
 import { images } from "@/data/images";
 
 export const metadata = {
-  title: "F1 | Alves Imports",
-  description: "Explore os produtos e camisetas de F1 disponíveis na Alves Imports.",
+  title: "F1 | Imports Alves",
+  description: "Explore os produtos e camisetas de F1 disponíveis na Imports Alves.",
   alternates: { canonical: "/f1" },
 };
 export const revalidate = 300;
@@ -25,6 +25,6 @@ export default async function FormulaOnePage() {
     products={products.map(toCatalogPreview)}
     breadcrumb={[{ name: "F1" }]}
     heroImage={images.f1.cover}
-    heroEyebrow={`${products.length} produtos · Coleção F1 · Alves Imports`}
+    heroEyebrow={`${products.length} produtos · Coleção F1 · Imports Alves`}
   />;
 }

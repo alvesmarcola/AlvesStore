@@ -290,7 +290,7 @@ export default function AdminProducts() {
         <ErrorState message={loadError} onRetry={() => void loadProducts()} />
       ) : <>
       <div>
-        <p className="text-[10px] font-black uppercase tracking-[.2em] text-action">AlvesStore · administração</p>
+        <p className="text-[10px] font-black uppercase tracking-[.2em] text-action">Imports Alves · administração</p>
         <h1 className="mt-2 text-3xl font-black">Produtos e estoque</h1>
         <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">
           Cadastre produtos manuais no mesmo catálogo Supabase usado pela vitrine. O estoque é informativo e editado manualmente; não reserva nem desconta unidades no checkout.

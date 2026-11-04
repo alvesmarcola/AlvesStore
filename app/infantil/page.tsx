@@ -6,8 +6,8 @@ import { toCatalogPreview } from "@/lib/catalog";
 export const revalidate = 300;
 
 export const metadata = {
-  title: "Kits infantis | Alves Imports",
-  description: "Explore a linha de kits e camisas infantis da Alves Imports.",
+  title: "Kits infantis | Imports Alves",
+  description: "Explore a linha de kits e camisas infantis da Imports Alves.",
   alternates: { canonical: "/infantil" },
 };
 
@@ -20,6 +20,6 @@ export default async function KidsPage() {
     products={kidsProducts.map(toCatalogPreview)}
     breadcrumb={[{ name: "Infantil" }]}
     heroImage={images.categories.female}
-    heroEyebrow="Coleção infantil · Alves Imports"
+    heroEyebrow="Coleção infantil · Imports Alves"
   />;
 }

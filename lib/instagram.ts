@@ -14,7 +14,7 @@ export const INSTAGRAM_HANDLE = "@imports_alvess";
 export const FALLBACK_INSTAGRAM_POSTS: InstagramPost[] = [
   {
     id: "fallback-flamengo-25-26",
-    caption: "Manto titular 25/26 com acabamento premium e tecnologia de respirabilidade. Garanta já o seu na Alves Imports! 🔥⚽",
+    caption: "Manto titular 25/26 com acabamento premium e tecnologia de respirabilidade. Garanta já o seu na Imports Alves! 🔥⚽",
     media_type: "IMAGE",
     media_url: "/otimizadas/camisa-jogador-brasileirao-flamengo-25-26/01-800.webp",
     permalink: INSTAGRAM_PROFILE_URL,
@@ -54,7 +54,7 @@ export const FALLBACK_INSTAGRAM_POSTS: InstagramPost[] = [
   },
   {
     id: "fallback-fluminense-26-27",
-    caption: "Vista as cores da sua torcida com orgulho. Acompanhe nossos stories e lançamentos no @imports_alvess! 🥇",
+    caption: "Vista as cores da sua torcida com orgulho. Acompanhe nossos stories e lançamentos por aqui! 🥇",
     media_type: "IMAGE",
     media_url: "/otimizadas/camisa-jogador-brasileirao-fluminense-26-27/01-800.webp",
     permalink: INSTAGRAM_PROFILE_URL,
@@ -163,4 +163,3 @@ export async function getInstagramFeed(limit = 6): Promise<InstagramFeedResponse
     };
   }
 }
-

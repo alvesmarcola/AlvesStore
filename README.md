@@ -1,4 +1,4 @@
-# Alves Store
+# Imports Alves
 
 Loja de camisas de futebol feita com Next.js 15, TypeScript, Zustand, Supabase e Mercado Pago Checkout Pro.
 
@@ -17,7 +17,7 @@ Configure as variáveis abaixo na Vercel para o ambiente desejado. Defina `PAYME
 - `MERCADO_PAGO_WEBHOOK_SECRET`
 - `SUPABASE_URL` (ou `NEXT_PUBLIC_SUPABASE_URL`)
 - `SUPABASE_SECRET_KEY` (preferível) ou `SUPABASE_SERVICE_ROLE_KEY`; somente no servidor.
-- `SITE_URL` (origem pública HTTPS, por exemplo `https://alves-store-green.vercel.app`)
+- `SITE_URL` (origem pública HTTPS, por exemplo `https://importsalves.com.br`)
 - `ADMIN_ORDERS_TOKEN` (token forte e privado para `/admin/pedidos`)
 - `WHATSAPP_ORDER_WEBHOOK_URL` (URL HTTPS do provedor/automação conectado à API WhatsApp Business)
 - `WHATSAPP_ORDER_WEBHOOK_TOKEN` (opcional, token Bearer para autenticar o webhook)
@@ -28,7 +28,7 @@ Para a gestão administrativa, mantenha configurada a credencial privada do Supa
 ### Ativar pagamentos de produção
 
 1. No Mercado Pago, obtenha o Access Token de produção `APP_USR-` e configure `PAYMENT_ENVIRONMENT=production` e `MERCADO_PAGO_ACCESS_TOKEN` no ambiente Production da Vercel. Não configure o token `TEST-` nesse ambiente.
-2. Cadastre no painel do Mercado Pago a URL `https://alves-store-green.vercel.app/api/webhooks/mercadopago` para notificações de pagamento. Copie a chave secreta de assinatura do webhook de produção para `MERCADO_PAGO_WEBHOOK_SECRET`.
+2. Cadastre no painel do Mercado Pago a URL `https://importsalves.com.br/api/webhooks/mercadopago` para notificações de pagamento. Copie a chave secreta de assinatura do webhook de produção para `MERCADO_PAGO_WEBHOOK_SECRET`.
 3. Em um banco novo, aplique as migrações em ordem. Em um banco já existente, aplique somente as migrações ainda não aplicadas, sem recriar tabelas nem reexecutar migrações anteriores. Configure também a chave secreta do Supabase no ambiente Production da Vercel.
 4. Faça Redeploy de Production na Vercel e valide com uma compra real controlada. O checkout redireciona para `init_point` e usa `sandbox_init_point` apenas como fallback se o primeiro não vier; o webhook recusa pagamentos com `live_mode` incompatível.
 

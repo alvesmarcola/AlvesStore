@@ -144,7 +144,7 @@ export default function AdminReviews() {
     <main className="mx-auto max-w-7xl px-5 py-8 sm:py-10 lg:px-8">
       <AdminNavigation current="reviews" />
       <header>
-        <p className="text-[10px] font-black uppercase tracking-[.2em] text-action">AlvesStore · administração</p>
+        <p className="text-[10px] font-black uppercase tracking-[.2em] text-action">Imports Alves · administração</p>
         <h1 className="mt-2 text-3xl font-black">Avaliações</h1>
         <p className="mt-2 text-sm text-muted">Revise os comentários enviados antes de publicá-los na loja.</p>
       </header>

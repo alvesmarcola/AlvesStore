@@ -2,7 +2,6 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {
   getInstagramFeed,
-  FALLBACK_INSTAGRAM_POSTS,
   INSTAGRAM_PROFILE_URL,
   INSTAGRAM_HANDLE,
 } from "../lib/instagram";
@@ -40,4 +39,3 @@ test("Instagram feed limits number of fallback posts", async () => {
     }
   }
 });
-

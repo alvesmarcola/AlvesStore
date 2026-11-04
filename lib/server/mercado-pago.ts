@@ -1,6 +1,6 @@
 import { MercadoPagoConfig, Payment } from "mercadopago";
 
-const DEFAULT_SITE_URL = "https://alves-store-green.vercel.app";
+const DEFAULT_SITE_URL = "https://importsalves.com.br";
 
 export class PaymentConfigurationError extends Error {
   constructor(message: string, readonly missing: string[] = []) {

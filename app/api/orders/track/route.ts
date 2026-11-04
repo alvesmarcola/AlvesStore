@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { getSupabaseOrdersClient } from "@/lib/server/supabase-orders";
+import { describeSupabaseError, getSupabaseOrdersClient } from "@/lib/server/supabase-orders";
 import { isRateLimited } from "@/lib/server/rate-limit";
 import { isCompleteOrderCode, normalizeOrderCodeInput, orderCode } from "@/lib/order-code";
 
@@ -50,7 +50,7 @@ export async function POST(request: Request) {
       createdAt: order.created_at,
     } }, { headers: { "Cache-Control": "no-store" } });
   } catch (error) {
-    console.error("Falha ao consultar pedido:", error instanceof Error ? error.message : "erro desconhecido");
+    console.error("Falha ao consultar pedido:", describeSupabaseError(error));
     return NextResponse.json({ error: "Não foi possível consultar o pedido agora." }, { status: 503 });
   }
 }

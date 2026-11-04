@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getPaymentClient, getSiteUrl, isProductionPaymentEnvironment } from "@/lib/server/mercado-pago";
-import { getSupabaseOrdersClient } from "@/lib/server/supabase-orders";
+import { describeSupabaseError, getSupabaseOrdersClient } from "@/lib/server/supabase-orders";
 import { isValidMercadoPagoSignature, normalizedPaymentStatus } from "@/lib/server/webhook-signature";
 import { sendWhatsAppOrderNotice, type OrderNotice } from "@/lib/server/order-notifications";
 import { buildOrderPaidEmail, sendOrderEmail } from "@/lib/server/order-emails";
@@ -147,7 +147,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ received: true });
   } catch (error) {
-    console.error("Falha ao validar notificação do Mercado Pago:", error instanceof Error ? error.message : "erro desconhecido");
+    console.error("Falha ao validar notificação do Mercado Pago:", describeSupabaseError(error));
     return NextResponse.json({ error: "Não foi possível confirmar a notificação." }, { status: 500 });
   }
 }

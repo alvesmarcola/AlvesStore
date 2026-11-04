@@ -14,7 +14,7 @@ const slides = [
     copy: "Vista a energia do futebol, da arquibancada ao último minuto.",
     cta: "Explore a coleção",
     href: "/masculino",
-    label: "ALVES IMPORTS · EM CAMPO",
+    label: "Imports Alves · EM CAMPO",
     image: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1920&q=80&auto=format&fit=crop",
     imageAlt: "Estádio de futebol lotado com iluminação noturna",
   },

@@ -1,8 +1,12 @@
 import { z } from "zod";
 import { NextResponse } from "next/server";
-import { getSupabaseOrdersClient } from "@/lib/server/supabase-orders";
+import {
+  describeSupabaseError,
+  getSupabaseOrdersClient,
+  SupabaseOrdersConfigurationError,
+} from "@/lib/server/supabase-orders";
 import { sendTrackingUpdateEmail, sendWhatsAppOrderNotice, type OrderNotice } from "@/lib/server/order-notifications";
-import { getAdminAuthFailure } from "@/lib/server/admin-auth";
+import { ADMIN_PRIVATE_HEADERS, getAdminAuthFailure } from "@/lib/server/admin-auth";
 
 export const runtime = "nodejs";
 
@@ -43,8 +47,15 @@ const paid = (status: string, mercadoPagoStatus: string | null) =>
 function jsonError(message: string, status: number) {
   return NextResponse.json({ error: message }, {
     status,
-    headers: { "Cache-Control": "no-store", "X-Robots-Tag": "noindex, nofollow" },
+    headers: ADMIN_PRIVATE_HEADERS,
   });
+}
+
+function reportFailure(operation: string, error: unknown) {
+  console.error(operation, describeSupabaseError(error));
+  return error instanceof SupabaseOrdersConfigurationError
+    ? "Supabase não configurado neste ambiente. Verifique as variáveis de ambiente do servidor."
+    : undefined;
 }
 
 export async function GET(request: Request) {
@@ -56,10 +67,10 @@ export async function GET(request: Request) {
       .order("created_at", { ascending: false })
       .limit(500);
     if (error) throw error;
-    return NextResponse.json({ orders: data }, { headers: { "Cache-Control": "no-store", "X-Robots-Tag": "noindex, nofollow" } });
+    return NextResponse.json({ orders: data }, { headers: ADMIN_PRIVATE_HEADERS });
   } catch (error) {
-    console.error("Falha ao carregar pedidos administrativos:", error instanceof Error ? error.message : "erro desconhecido");
-    return jsonError("Não foi possível carregar os pedidos. Verifique se a migração de gestão administrativa foi aplicada.", 503);
+    const configurationError = reportFailure("Falha ao carregar pedidos administrativos:", error);
+    return jsonError(configurationError ?? "Não foi possível carregar os pedidos. Verifique se a migração de gestão administrativa foi aplicada.", 503);
   }
 }
 
@@ -100,12 +111,12 @@ export async function PATCH(request: Request) {
         .maybeSingle();
       if (error) throw error;
       if (!data) return jsonError("O pedido não foi atualizado. Recarregue a lista e tente novamente.", 409);
-      return NextResponse.json({ updated: true, message: "Informações de rastreamento salvas." });
+      return NextResponse.json({ updated: true, message: "Informações de rastreamento salvas." }, { headers: ADMIN_PRIVATE_HEADERS });
     }
 
     if (parsed.data.action === "mark_shipped") {
       if (order.operational_status === "enviado" || order.status === "enviado") {
-        return NextResponse.json({ updated: true, message: "O pedido já está marcado como enviado." });
+        return NextResponse.json({ updated: true, message: "O pedido já está marcado como enviado." }, { headers: ADMIN_PRIVATE_HEADERS });
       }
       if (!paid(order.status, order.mercado_pago_status)) {
         return jsonError("Só é possível marcar como enviado após a confirmação do pagamento.", 409);
@@ -132,7 +143,7 @@ export async function PATCH(request: Request) {
         : order.customer.whatsappUpdates !== true
           ? "Pedido marcado como enviado. O cliente não autorizou atualizações pelo WhatsApp."
           : undefined;
-      return NextResponse.json({ updated: true, whatsappSent: whatsappResult, message });
+      return NextResponse.json({ updated: true, whatsappSent: whatsappResult, message }, { headers: ADMIN_PRIVATE_HEADERS });
     }
 
     const values = parsed.data;
@@ -156,9 +167,9 @@ export async function PATCH(request: Request) {
       .maybeSingle();
     if (error) throw error;
     if (!data) return jsonError("O pedido não foi atualizado. Recarregue a lista e tente novamente.", 409);
-    return NextResponse.json({ updated: true });
+    return NextResponse.json({ updated: true }, { headers: ADMIN_PRIVATE_HEADERS });
   } catch (error) {
-    console.error("Falha ao atualizar pedido administrativo:", error instanceof Error ? error.message : "erro desconhecido");
-    return jsonError("Não foi possível atualizar o pedido. Verifique se a migração de gestão administrativa foi aplicada.", 503);
+    const configurationError = reportFailure("Falha ao atualizar pedido administrativo:", error);
+    return jsonError(configurationError ?? "Não foi possível atualizar o pedido. Verifique se a migração de gestão administrativa foi aplicada.", 503);
   }
 }

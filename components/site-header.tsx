@@ -63,8 +63,8 @@ export function SiteHeader({ leagues }: { leagues: Pick<CatalogLeague, "slug" | 
       <header className="site-header sticky top-0 z-40 border-b border-white/10 bg-ink text-white">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 lg:px-8">
           <button className="header-icon lg:hidden" aria-label="Abrir menu" onClick={() => setMenuOpen(true)}><Menu size={23} /></button>
-          <Link href="/" className="shrink-0 leading-none" aria-label="Alves Imports - início">
-            <span className="block text-[22px] font-bold uppercase tracking-tight text-white sm:text-[27px]">ALVES <span className="text-action">IMPORTS</span></span>
+          <Link href="/" className="shrink-0 leading-none" aria-label="Imports Alves - início">
+            <span className="block text-[22px] font-bold tracking-tight text-white sm:text-[27px]">Imports <span className="text-action">Alves</span></span>
           </Link>
           <div className="relative hidden max-w-xl flex-1 md:block">
             <form onSubmit={search} role="search" className="flex items-center rounded-full border border-white/10 bg-graphite px-4 py-2.5 focus-within:border-action">
