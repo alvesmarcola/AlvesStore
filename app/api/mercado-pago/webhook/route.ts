@@ -1,9 +1,8 @@
-import { NextResponse } from "next/server";
-import { getPaymentClient, getSiteUrl, isProductionPaymentEnvironment } from "@/lib/server/mercado-pago";
-import { describeSupabaseError, getSupabaseOrdersClient } from "@/lib/server/supabase-orders";
-import { isValidMercadoPagoSignature, normalizedPaymentStatus } from "@/lib/server/webhook-signature";
-import { sendWhatsAppOrderNotice, type OrderNotice } from "@/lib/server/order-notifications";
-import { buildOrderPaidEmail, sendOrderEmail } from "@/lib/server/order-emails";
+import { after, NextResponse } from "next/server";
+import { applyMercadoPagoPayment } from "@/lib/server/mercado-pago-payments";
+import { dispatchOrderNotificationOutbox } from "@/lib/server/order-notification-outbox";
+import { describeSupabaseError } from "@/lib/server/supabase-orders";
+import { isValidMercadoPagoSignature } from "@/lib/server/webhook-signature";
 
 export const runtime = "nodejs";
 
@@ -27,122 +26,30 @@ export async function POST(request: Request) {
   if (eventType !== "payment" || !/^\d{1,30}$/.test(paymentId)) return NextResponse.json({ received: true });
 
   const secret = process.env.MERCADO_PAGO_WEBHOOK_SECRET;
-  const requestId = request.headers.get("x-request-id");
   if (!secret || !isValidMercadoPagoSignature({
     secret,
     signature: request.headers.get("x-signature"),
-    requestId,
+    requestId: request.headers.get("x-request-id"),
     dataId: paymentId,
   })) {
     return NextResponse.json({ error: "Assinatura de webhook inválida." }, { status: 401 });
   }
 
   try {
-    const payment = await getPaymentClient().get({ id: paymentId });
-    if (payment.live_mode !== isProductionPaymentEnvironment() || payment.currency_id !== "BRL"
-      || !payment.external_reference || !/^[0-9a-f-]{36}$/i.test(payment.external_reference)) {
+    const result = await applyMercadoPagoPayment(paymentId);
+    if (!result.applied) {
+      console.warn("Webhook Mercado Pago ignorado: pagamento não corresponde a pedido/valor/ambiente válidos.");
       return NextResponse.json({ received: true });
     }
 
-    const status = normalizedPaymentStatus(payment.status);
-    const amountCents = typeof payment.transaction_amount === "number"
-      ? Math.round(payment.transaction_amount * 100)
-      : undefined;
-    if (!status || amountCents === undefined || amountCents < 0) return NextResponse.json({ received: true });
-
-    const supabase = getSupabaseOrdersClient();
-    const result = await supabase.rpc("apply_store_payment", {
-      p_payment_id: paymentId,
-      p_order_id: payment.external_reference,
-      p_status: status,
-      p_amount_cents: amountCents,
-      p_currency: payment.currency_id,
-      p_live_mode: payment.live_mode,
-    });
-    if (result.error) throw result.error;
-    const order = Array.isArray(result.data) ? result.data[0] : null;
-    if (!order?.applied) {
-      console.warn("Webhook Mercado Pago ignorado: pedido ausente, valor divergente ou pagamento associado a outro pedido.");
-      return NextResponse.json({ received: true });
-    }
-
-    const orderPayment = await supabase.from("store_orders")
-      .update({
-        mercado_pago_status: payment.status ?? status,
-        mercado_pago_id: String(payment.id ?? paymentId),
-        payment_method_id: payment.payment_method_id ?? null,
-        payment_type_id: payment.payment_type_id ?? null,
-        updated_at: new Date().toISOString(),
-      })
-      .eq("id", payment.external_reference)
-      .select("id")
-      .maybeSingle();
-    if (orderPayment.error || !orderPayment.data) {
-      throw orderPayment.error ?? new Error("Pedido não encontrado ao persistir os dados do Mercado Pago.");
-    }
-
-    if (status === "approved") {
-      const operationalUpdate = await supabase.from("store_orders")
-        .update({ operational_status: "aguardando_fornecedor", updated_at: new Date().toISOString() })
-        .eq("id", payment.external_reference)
-        .or("operational_status.is.null,operational_status.eq.aguardando_pagamento")
-        .select("id")
-        .maybeSingle();
-      if (operationalUpdate.error) throw operationalUpdate.error;
-
-      // O aviso é "reservado" de forma atômica: só uma notificação por pedido consegue marcar
-      // paid_notified_at. Isso evita avisos duplicados e também não perde o aviso quando o Mercado
-      // Pago repete a notificação depois de uma falha (o status já estaria "approved" nesse caso).
-      const notifiedAt = new Date().toISOString();
-      const claim = await supabase.from("store_orders")
-        .update({ paid_notified_at: notifiedAt })
-        .eq("id", payment.external_reference)
-        .in("status", ["pago", "enviado", "approved"])
-        .is("paid_notified_at", null)
-        .select("id")
-        .maybeSingle();
-      let shouldNotify: boolean;
-      if (claim.error) {
-        // Provavelmente a migração 20261019000000_order_paid_notice.sql ainda não foi aplicada.
-        console.error("Não foi possível reservar o aviso de pagamento aprovado:", claim.error.message);
-        shouldNotify = !["pago", "enviado", "approved"].includes(order.previous_status);
-      } else {
-        shouldNotify = Boolean(claim.data);
-      }
-
-      if (shouldNotify) {
-        const notice: OrderNotice = {
-          id: payment.external_reference,
-          status: "pago",
-          customer: order.customer,
-          item_lines: order.item_lines,
-          shipping_cents: Number(order.shipping_cents),
-          total_cents: Number(order.total_cents),
-        };
-        const whatsappSent = await sendWhatsAppOrderNotice("order_paid", notice);
-        if (notice.customer.whatsappUpdates === true && whatsappSent !== true) {
-          if (claim.data) {
-            const released = await supabase.from("store_orders")
-              .update({ paid_notified_at: null })
-              .eq("id", payment.external_reference)
-              .eq("paid_notified_at", notifiedAt)
-              .select("id")
-              .maybeSingle();
-            if (released.error) {
-              console.error("Não foi possível liberar a tentativa de notificação WhatsApp:", released.error.message);
-            }
-          }
-          throw new Error("WhatsApp de pagamento não enviado; a notificação será tentada novamente.");
+    if (result.status === "approved" && result.orderId) {
+      after(async () => {
+        try {
+          await dispatchOrderNotificationOutbox({ orderId: result.orderId });
+        } catch (error) {
+          console.error("Notificações do pedido ficaram pendentes no outbox:", describeSupabaseError(error));
         }
-        await sendOrderEmail(String(notice.customer.email ?? ""), buildOrderPaidEmail({
-          orderId: notice.id,
-          customerName: String(notice.customer.fullName ?? ""),
-          items: notice.item_lines,
-          shippingCents: notice.shipping_cents,
-          totalCents: notice.total_cents,
-          siteUrl: getSiteUrl(),
-        }));
-      }
+      });
     }
 
     return NextResponse.json({ received: true });

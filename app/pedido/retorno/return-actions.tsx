@@ -2,10 +2,14 @@
 
 import { useEffect } from "react";
 import { useCart } from "@/store/cart";
+import { clearCheckoutAttempt } from "@/lib/payment/checkout-attempt";
 
 export function OrderReturnActions() {
   const clearCart = useCart((state) => state.clearCart);
-  useEffect(() => clearCart(), [clearCart]);
+  useEffect(() => {
+    clearCart();
+    clearCheckoutAttempt();
+  }, [clearCart]);
   return null;
 }
 

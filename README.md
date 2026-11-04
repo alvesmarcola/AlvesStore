@@ -10,11 +10,12 @@ O frete é calculado pelo servidor pela quantidade total de unidades de todas as
 
 ## Variáveis de ambiente
 
-Configure as variáveis abaixo na Vercel para o ambiente desejado. Defina `PAYMENT_ENVIRONMENT=test` ou `production` de acordo com a credencial e a conta Mercado Pago usadas. O prefixo `APP_USR-` sozinho não distingue produção de teste: a documentação oficial também usa esse prefixo nos Access Tokens de contas de teste do Checkout Pro.
+Configure as variáveis abaixo na Vercel para o ambiente desejado. `PAYMENT_ENVIRONMENT` é obrigatório e aceita exclusivamente `test` ou `production`; o ambiente nunca é inferido pelo prefixo do Access Token.
 
 - `PAYMENT_ENVIRONMENT=test` ou `production`
 - `MERCADO_PAGO_ACCESS_TOKEN`
 - `MERCADO_PAGO_WEBHOOK_SECRET`
+- `CRON_SECRET` (segredo forte para autorizar a rotina agendada de reconciliação)
 - `SUPABASE_URL` (ou `NEXT_PUBLIC_SUPABASE_URL`)
 - `SUPABASE_SECRET_KEY` (preferível) ou `SUPABASE_SERVICE_ROLE_KEY`; somente no servidor.
 - `SITE_URL` (origem pública HTTPS, por exemplo `https://importsalves.com.br`)
@@ -23,18 +24,21 @@ Configure as variáveis abaixo na Vercel para o ambiente desejado. Defina `PAYME
 - `WHATSAPP_ORDER_WEBHOOK_TOKEN` (opcional, token Bearer para autenticar o webhook)
 - Opcional: `RESEND_API_KEY` e `ORDER_EMAIL_FROM` para e-mail de pagamento aprovado
 
-Para a gestão administrativa, mantenha configurada a credencial privada do Supabase (`SUPABASE_SECRET_KEY` ou `SUPABASE_SERVICE_ROLE_KEY`). Em uma instalação existente, aplique as migrações ainda pendentes, em ordem: `20261103000000_post_sale_order_status.sql`, `20261103000001_manual_product_fields.sql`, `20261103000002_order_operations_finance.sql` e `20261103000003_review_moderation.sql`. Elas não recriam nem apagam pedidos ou produtos. A migração de avaliações adiciona metadados de moderação e restringe a leitura pública a avaliações aprovadas; revise e aplique-a no projeto Supabase antes de publicar o novo fluxo. O catálogo e o bucket públicos de fotos já usados pela importação permanecem os mesmos.
+Para a gestão administrativa, mantenha configurada a credencial privada do Supabase (`SUPABASE_SECRET_KEY` ou `SUPABASE_SERVICE_ROLE_KEY`). Em uma instalação existente, aplique somente as migrações ainda pendentes, em ordem: `20261103000000_post_sale_order_status.sql`, `20261103000001_manual_product_fields.sql`, `20261103000002_order_operations_finance.sql`, `20261103000003_review_moderation.sql` e `20261104000000_mercado_pago_reliability.sql`. Elas não recriam nem apagam pedidos ou produtos. A migração de avaliações adiciona metadados de moderação e restringe a leitura pública a avaliações aprovadas; revise e aplique as migrações pendentes no projeto Supabase antes de publicar o novo fluxo. O catálogo e o bucket públicos de fotos já usados pela importação permanecem os mesmos.
 
 ### Ativar pagamentos de produção
 
-1. No Mercado Pago, obtenha o Access Token de produção `APP_USR-` e configure `PAYMENT_ENVIRONMENT=production` e `MERCADO_PAGO_ACCESS_TOKEN` no ambiente Production da Vercel. Não configure o token `TEST-` nesse ambiente.
+1. No Mercado Pago, obtenha as credenciais do ambiente desejado e configure explicitamente `PAYMENT_ENVIRONMENT=test` para testes ou `PAYMENT_ENVIRONMENT=production` para produção, junto com `MERCADO_PAGO_ACCESS_TOKEN` no ambiente correspondente da Vercel.
 2. Cadastre no painel do Mercado Pago a URL `https://importsalves.com.br/api/webhooks/mercadopago` para notificações de pagamento. Copie a chave secreta de assinatura do webhook de produção para `MERCADO_PAGO_WEBHOOK_SECRET`.
-3. Em um banco novo, aplique as migrações em ordem. Em um banco já existente, aplique somente as migrações ainda não aplicadas, sem recriar tabelas nem reexecutar migrações anteriores. Configure também a chave secreta do Supabase no ambiente Production da Vercel.
-4. Faça Redeploy de Production na Vercel e valide com uma compra real controlada. O checkout redireciona para `init_point` e usa `sandbox_init_point` apenas como fallback se o primeiro não vier; o webhook recusa pagamentos com `live_mode` incompatível.
+3. Configure `SITE_URL=https://importsalves.com.br` e um `CRON_SECRET` forte na Vercel. `vercel.json` agenda a reconciliação a cada cinco minutos; a rotina valida um header de autenticação bearer usando esse segredo.
+4. Em um banco novo, aplique as migrações em ordem. Em um banco já existente, aplique somente as migrações ainda não aplicadas, sem recriar tabelas nem reexecutar migrações anteriores. A nova migração `20261104000000_mercado_pago_reliability.sql` adiciona a fila privada de notificações e o controle de tentativas de reconciliação sem apagar pedidos existentes.
+5. Faça Redeploy de Production na Vercel e valide primeiro em ambiente de teste. O checkout usa exclusivamente `init_point`; o webhook e a reconciliação consultam o pagamento na API, validam moeda, valor, referência e modo antes de atualizar o pedido.
+
+Em desenvolvimento local, `SITE_URL` pode ficar vazio para gerar URLs de retorno HTTP em `localhost`; `auto_return` e webhook não são configurados para URLs locais. Fora de localhost, HTTPS é obrigatório. Falhas de webhook são cobertas pela rotina agendada, que busca pagamentos dos pedidos pendentes; avisos de pagamento ficam em uma outbox privada com tentativas persistentes.
 
 ## Banco de pedidos
 
-Os pedidos ficam em `store_orders` e os pagamentos em `store_order_payments` no Supabase. `status` e `mercado_pago_status` continuam descrevendo a situação financeira compatível com os registros antigos; `operational_status` guarda separadamente o fluxo `aguardando_pagamento`, `pagamento_aprovado`, `aguardando_fornecedor`, `pedido_realizado`, `em_preparacao`, `enviado` e `cancelado`. O webhook só promove o andamento operacional de pedidos novos/ainda aguardando pagamento para `aguardando_fornecedor`, sem substituir uma escolha operacional já feita. A migração adiciona os novos campos sem reescrever ou apagar pedidos existentes.
+Os pedidos ficam em `store_orders` e os pagamentos em `store_order_payments` no Supabase. `status` e `mercado_pago_status` continuam descrevendo a situação financeira compatível com os registros antigos; `operational_status` guarda separadamente o fluxo `aguardando_pagamento`, `pagamento_aprovado`, `aguardando_fornecedor`, `pedido_realizado`, `em_preparacao`, `enviado` e `cancelado`. O webhook e a reconciliação só promovem o andamento operacional de pedidos novos/ainda aguardando pagamento para `aguardando_fornecedor`, sem substituir uma escolha operacional já feita. A migração adiciona os novos campos e a outbox privada sem reescrever ou apagar pedidos existentes.
 
 ## Operação
 

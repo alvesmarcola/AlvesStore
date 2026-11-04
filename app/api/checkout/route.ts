@@ -1,7 +1,7 @@
 import { createHash, randomUUID } from "node:crypto";
-import { after, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { InvalidOrderError, paymentRequestSchema, validateOrderLinesFromCatalog, calculateOrderTotals, calculateOrderFingerprint } from "@/lib/payment/order";
-import { createMercadoPagoPreference, getSiteUrl, MercadoPagoApiError, PaymentConfigurationError, validateMercadoPagoAccessToken } from "@/lib/server/mercado-pago";
+import { createMercadoPagoPreference, getCheckoutUrl, getSiteUrl, MercadoPagoApiError, PaymentConfigurationError, validateMercadoPagoAccessToken } from "@/lib/server/mercado-pago";
 import { SupabaseOrdersConfigurationError, describeSupabaseError, getSupabaseOrdersClient } from "@/lib/server/supabase-orders";
 import { buildPreferenceItems } from "@/lib/payment/preference-items";
 import { buildOrderReceivedEmail, sendOrderEmail } from "@/lib/server/order-emails";
@@ -61,7 +61,7 @@ export async function POST(request: Request) {
     const lines = await validateOrderLinesFromCatalog(requestData.items);
     const totals = calculateOrderTotals(lines);
     const requestHash = createHash("sha256").update(calculateOrderFingerprint(requestData)).digest("hex");
-    const siteUrl = getSiteUrl();
+    const siteUrl = getSiteUrl(request.url);
     validateMercadoPagoAccessToken();
     const supabase = getSupabaseOrdersClient();
     stage = "supabase";
@@ -85,80 +85,70 @@ export async function POST(request: Request) {
       })),
     }));
 
-    const inserted = await supabase.from("store_orders").upsert({
-      id: randomUUID(),
-      idempotency_key: requestData.idempotencyKey,
-      request_hash: requestHash,
-      item_lines: savedLines,
-      customer: requestData.customer,
-      shipping: { label: shippingLabel, priceCents: finalShippingCents },
-      shirt_quantity: totals.quantity,
-      shirts_cents: totals.shirtsCents,
-      customization_cents: totals.customizationCents,
-      patches_cents: totals.patchesCents,
-      shipping_cents: finalShippingCents,
-      total_cents: totalCents,
-      operational_status: "aguardando_pagamento",
-    }, { onConflict: "idempotency_key", ignoreDuplicates: true })
-      .select("id, request_hash, checkout_url, status")
-      .maybeSingle();
-    if (inserted.error) throw inserted.error;
-
-    let order = inserted.data;
-    if (!order) {
-      const existing = await supabase.from("store_orders")
-        .select("id, request_hash, checkout_url, status")
-        .eq("idempotency_key", requestData.idempotencyKey)
-        .maybeSingle();
-      if (existing.error) throw existing.error;
-      order = existing.data;
-    }
-    if (!order?.id) throw new Error("Supabase não retornou o pedido gravado.");
-    if (String(order.request_hash).trim() !== requestHash) {
+    const prepared = await supabase.rpc("prepare_store_order", {
+      p_id: randomUUID(),
+      p_idempotency_key: requestData.idempotencyKey,
+      p_request_hash: requestHash,
+      p_item_lines: savedLines,
+      p_customer: requestData.customer,
+      p_shipping: { label: shippingLabel, priceCents: finalShippingCents },
+      p_shirt_quantity: totals.quantity,
+      p_shirts_cents: totals.shirtsCents,
+      p_customization_cents: totals.customizationCents,
+      p_patches_cents: totals.patchesCents,
+      p_shipping_cents: finalShippingCents,
+      p_total_cents: totalCents,
+    });
+    if (prepared.error) throw prepared.error;
+    const order = Array.isArray(prepared.data) ? prepared.data[0] : null;
+    if (!order?.order_id) throw new Error("Supabase não retornou o pedido gravado.");
+    const orderId = String(order.order_id);
+    if (String(order.saved_request_hash).trim() !== requestHash) {
       return publicError("Esta chave de pedido já foi usada com dados diferentes. Recarregue o checkout.", 409);
     }
-    if (order.checkout_url) return NextResponse.json({ checkoutUrl: order.checkout_url, reused: true }, { headers: { "Cache-Control": "no-store" } });
+    if (!["pending", "rejected", "cancelled"].includes(String(order.order_status))) {
+      return NextResponse.json({
+        error: "Este pedido já foi processado. Consulte o status antes de iniciar outro pagamento.",
+        code: "ORDER_ALREADY_PROCESSED",
+      }, { status: 409, headers: { "Cache-Control": "no-store" } });
+    }
+    if (order.checkout_url) return NextResponse.json({ checkoutUrl: order.checkout_url, orderId, reused: true }, { headers: { "Cache-Control": "no-store" } });
 
     stage = "mercado-pago";
     const preference = await createMercadoPagoPreference({
-      items: buildPreferenceItems(order.id, lines, totals),
+      items: buildPreferenceItems(orderId, lines, totals),
       ...(finalShippingCents > 0 ? {
         shipments: { mode: "not_specified", cost: jsonPrice(finalShippingCents) },
       } : {}),
-      external_reference: String(order.id),
-      metadata: { store_order_id: String(order.id) },
+      external_reference: orderId,
+      metadata: { store_order_id: orderId },
       back_urls: {
-        success: `${siteUrl}/pedido/retorno?order_id=${order.id}&return=approved`,
-        pending: `${siteUrl}/pedido/retorno?order_id=${order.id}&return=pending`,
-        failure: `${siteUrl}/pedido/retorno?order_id=${order.id}&return=rejected`,
+        success: `${siteUrl}/pedido/retorno?order_id=${orderId}&return=approved`,
+        pending: `${siteUrl}/pedido/retorno?order_id=${orderId}&return=pending`,
+        failure: `${siteUrl}/pedido/retorno?order_id=${orderId}&return=rejected`,
       },
       ...(siteUrl.startsWith("https://") ? { auto_return: "approved" } : {}),
       payment_methods: { installments: 12 },
-      notification_url: siteUrl.startsWith("https://") ? `${siteUrl}/api/webhooks/mercadopago` : undefined,
+      ...(siteUrl.startsWith("https://") ? { notification_url: `${siteUrl}/api/webhooks/mercadopago` } : {}),
       statement_descriptor: "Imports Alves",
     }, requestData.idempotencyKey);
 
-    const checkoutUrl = preference.init_point || preference.sandbox_init_point;
-    if (!preference.id || !checkoutUrl || !checkoutUrl.startsWith("https://")) {
+    const checkoutUrl = getCheckoutUrl(preference);
+    if (!preference.id || !checkoutUrl) {
       throw new Error("O Mercado Pago não retornou um link seguro do Checkout Pro.");
     }
 
-    after(async () => {
-      try {
-        const savedPreference = await supabase.from("store_orders")
-        .update({ preference_id: preference.id, checkout_url: checkoutUrl, updated_at: new Date().toISOString() })
-        .eq("id", order.id)
-        .select("id")
-        .maybeSingle();
-        if (savedPreference.error || !savedPreference.data) {
-          console.error("Preferência criada, mas não foi possível persistir preference_id/checkout_url:", savedPreference.error ?? "pedido não encontrado");
-        }
-      } catch (error) {
-        console.error("Preferência criada, mas a persistência em store_orders falhou:", describeSupabaseError(error));
-      }
-    });
+    const savedPreference = await supabase.from("store_orders")
+      .update({ preference_id: preference.id, checkout_url: checkoutUrl, updated_at: new Date().toISOString() })
+      .eq("id", orderId)
+      .select("id")
+      .maybeSingle();
+    if (savedPreference.error || !savedPreference.data) {
+      throw savedPreference.error ?? new Error("Não foi possível vincular a preferência ao pedido.");
+    }
+
     await sendOrderEmail(requestData.customer.email, buildOrderReceivedEmail({
-      orderId: String(order.id),
+      orderId,
       customerName: requestData.customer.fullName,
       items: lines.map((line) => ({
         title: line.product.nome,
@@ -172,7 +162,7 @@ export async function POST(request: Request) {
       siteUrl,
     }));
 
-    return NextResponse.json({ checkoutUrl, orderId: order.id }, { headers: { "Cache-Control": "no-store" } });
+    return NextResponse.json({ checkoutUrl, orderId }, { headers: { "Cache-Control": "no-store" } });
   } catch (error) {
     if (error instanceof InvalidOrderError) return publicError(error.message, 400);
     if (error instanceof PaymentConfigurationError || error instanceof SupabaseOrdersConfigurationError) {

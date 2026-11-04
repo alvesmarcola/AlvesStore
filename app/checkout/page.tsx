@@ -13,6 +13,7 @@ import { getAvailablePatches } from "@/lib/patch-compatibility";
 import { useCart } from "@/store/cart";
 import { formatCustomization } from "@/lib/customization";
 import { checkoutSchema, type CheckoutValues } from "@/lib/validation";
+import { clearCheckoutAttempt, fingerprintCheckoutAttempt, getCheckoutAttemptKey } from "@/lib/payment/checkout-attempt";
 
 const stepFields: Path<CheckoutValues>[][] = [
   ["fullName", "email", "cpf", "phone"],
@@ -56,6 +57,7 @@ export default function CheckoutPage() {
   const [cepLoading, setCepLoading] = useState(false);
   const [checkoutError, setCheckoutError] = useState("");
   const idempotencyKey = useRef<string | null>(null);
+  const attemptFingerprint = useRef<string | null>(null);
   const { subtotal, bundleDiscount, shipping, grandTotal, needsReview } = getCartPricing(items);
   const { register, handleSubmit, trigger, watch, setValue, setError, formState: { errors, isSubmitting } } = useForm<CheckoutValues>({
     resolver: zodResolver(checkoutSchema),
@@ -100,8 +102,26 @@ export default function CheckoutPage() {
 
   async function placeOrder(values: CheckoutValues) {
     setCheckoutError("");
-    idempotencyKey.current ??= globalThis.crypto.randomUUID();
     try {
+      const payload = {
+        items: items.map((item) => ({
+          productId: item.product.id,
+          size: item.size,
+          quantity: item.quantity,
+          ...(formatCustomization(item.customization) ? { customization: item.customization } : {}),
+          ...(item.patches?.length ? { patches: item.patches } : {}),
+        })),
+        customer: values,
+      };
+      const fingerprint = await fingerprintCheckoutAttempt(payload);
+      let storage: Storage | undefined;
+      try { storage = window.sessionStorage; } catch { storage = undefined; }
+      if (storage) {
+        idempotencyKey.current = getCheckoutAttemptKey(fingerprint, storage);
+      } else if (attemptFingerprint.current !== fingerprint || !idempotencyKey.current) {
+        idempotencyKey.current = globalThis.crypto.randomUUID();
+      }
+      attemptFingerprint.current = fingerprint;
       const response = await fetch("/api/checkout", {
         method: "POST",
         headers: {
@@ -110,24 +130,23 @@ export default function CheckoutPage() {
         },
         body: JSON.stringify({
           idempotencyKey: idempotencyKey.current,
-          items: items.map((item) => ({
-            productId: item.product.id,
-            size: item.size,
-            quantity: item.quantity,
-            ...(formatCustomization(item.customization) ? { customization: item.customization } : {}),
-            ...(item.patches?.length ? { patches: item.patches } : {}),
-          })),
-          customer: values,
+          ...payload,
         }),
       });
       const result = await response.json().catch(() => ({})) as {
         checkoutUrl?: string;
         error?: string;
+        code?: string;
         mpErrorMessage?: string;
         mpErrorCause?: string;
         rawText?: string;
       };
       if (!response.ok) {
+        if (result.code === "ORDER_ALREADY_PROCESSED") {
+          clearCheckoutAttempt();
+          idempotencyKey.current = null;
+          attemptFingerprint.current = null;
+        }
         const providerMessage = result.error || result.mpErrorMessage || result.mpErrorCause || result.rawText;
         throw new Error(providerMessage ?? `Não foi possível iniciar o pagamento (HTTP ${response.status}).`);
       }
