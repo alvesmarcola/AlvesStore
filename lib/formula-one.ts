@@ -8,6 +8,15 @@ export function isFormulaOneEvidence(value: string) {
   return FORMULA_ONE_TERM.test(normalized);
 }
 
+export function isJacketFormulaOneProduct(product: Product) {
+  if (!isFormulaOneProduct(product)) return false;
+  return /\bjacket\b/i.test([
+    product.nome,
+    product.title ?? "",
+    product.name ?? "",
+  ].join(" "));
+}
+
 /** Camisas de Fórmula 1 não aceitam personalização de nome e número. */
 export function allowsCustomization(product: Product) {
   return !isFormulaOneProduct(product);

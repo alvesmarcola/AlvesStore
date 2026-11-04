@@ -18,6 +18,8 @@ import { prioritizeClubs, prioritizeEditorialProducts, sortCatalogProducts } fro
 import { parseSearchIntent, searchProducts } from "@/lib/smart-search";
 import { patchOptions } from "@/data/patches";
 import { productOverrides } from "@/data/product-overrides";
+import { isJacketFormulaOneProduct } from "@/lib/formula-one";
+import { getBundledFormulaOneProducts } from "@/lib/server/supabase-catalog";
 import { manualProductSchema } from "@/lib/admin/product-validation";
 import { filterPublicReviews, publicReviewsPayload, reviewSubmissionSchema, sanitizeReviewText } from "@/lib/reviews";
 import { filterCustomizationNumber, formatCustomization, getCustomizationError, sanitizeCustomizationName } from "@/lib/customization";
@@ -134,6 +136,37 @@ test("camisa de Fórmula 1 tem tamanhos, mas não aceita personalização", () =
   } finally {
     products.pop();
   }
+});
+
+test("somente produtos F1 com Jacket no nome ou título ficam indisponíveis", () => {
+  const jacket = productFixture("f1-jacket", {
+    nome: "Ferrari Racing Jacket",
+    tipo: "f1",
+    imageSeed: "ferrari-racing",
+  });
+  const nonF1Jacket = productFixture("casual-jacket", {
+    nome: "Racing Jacket",
+    tipo: "torcedor",
+    imageSeed: "casual-jacket",
+  });
+  const normalF1 = productFixture("f1-shirt", {
+    nome: "Ferrari Racing Polo",
+    tipo: "f1",
+    imageSeed: "ferrari-racing",
+  });
+  const titleJacket = { ...normalF1, title: "Ferrari Jacket" };
+
+  assert.equal(isJacketFormulaOneProduct(jacket), true);
+  assert.equal(isJacketFormulaOneProduct(titleJacket), true);
+  assert.equal(isJacketFormulaOneProduct(nonF1Jacket), false);
+  assert.equal(isJacketFormulaOneProduct(normalF1), false);
+});
+
+test("catálogo F1 publicado omite Jacket e mantém os demais produtos", () => {
+  const f1Products = getBundledFormulaOneProducts();
+  assert.ok(f1Products.length > 0);
+  assert.equal(f1Products.some(isJacketFormulaOneProduct), false);
+  assert.ok(f1Products.some((item) => item.nome.includes("Ferrari") && !/jacket/i.test(item.nome)));
 });
 
 test("identifica intenções Home, Away, Third, versões, temporada e manga", () => {

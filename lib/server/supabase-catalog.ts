@@ -2,7 +2,7 @@ import type { Product, ProductImage } from "@/lib/types";
 import bundledProducts from "@/data/products.json";
 import f1BundledProducts from "@/data/f1-products.json";
 import { isFeminineProduct, prepareFeminineProduct } from "@/lib/feminine-catalog";
-import { isFormulaOneEvidence, isFormulaOneProduct } from "@/lib/formula-one";
+import { isFormulaOneEvidence, isFormulaOneProduct, isJacketFormulaOneProduct } from "@/lib/formula-one";
 import { unstable_cache } from "next/cache";
 
 const PAGE_SIZE = 100;
@@ -255,6 +255,7 @@ function hasStorefrontImages(product: Product) {
 }
 
 function isPublishedProduct(product: Product) {
+  if (isJacketFormulaOneProduct(product)) return false;
   const hasImage = (product.tipo === "f1" || product.tipo === "formula1" || product.liga === "f1" || isFormulaOneProduct(product))
     ? true
     : hasStorefrontImages(product);
@@ -312,7 +313,7 @@ async function fetchSupabaseProducts(): Promise<Product[]> {
 
 export const getSupabaseProducts = unstable_cache(
   fetchSupabaseProducts,
-  ["supabase-products-v1"],
+  ["supabase-products-v2"],
   { revalidate: 300, tags: ["catalog"] },
 );
 

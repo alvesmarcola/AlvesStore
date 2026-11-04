@@ -4,6 +4,7 @@ import { isFormulaOneProduct } from "@/lib/formula-one";
 import { getBundledFormulaOneProducts, getSupabaseProducts } from "@/lib/server/supabase-catalog";
 import { sortCatalogProducts } from "@/lib/catalog-order";
 import type { Product } from "@/lib/types";
+import { images } from "@/data/images";
 
 export const metadata = {
   title: "F1 | Alves Imports",
@@ -23,6 +24,7 @@ export default async function FormulaOnePage() {
     description="Produtos para quem acompanha a velocidade e a emoção da F1."
     products={products.map(toCatalogPreview)}
     breadcrumb={[{ name: "F1" }]}
+    heroImage={images.f1.cover}
     heroEyebrow={`${products.length} produtos · Coleção F1 · Alves Imports`}
   />;
 }

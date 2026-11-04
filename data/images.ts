@@ -49,6 +49,12 @@ export const images = {
      placeholder("/arena/homeImg.jpg", "Ilustração de partida antiga em tratamento sépia", { x: 59, y: 50 }),
     ),
   },
+  f1: {
+    cover: themeImage(
+      "f1.cover",
+      placeholder("/arena/f1-cover.svg", "Carro de corrida de Fórmula 1 em uma pista iluminada", { x: 60, y: 50 }),
+    ),
+  },
   leagues: {
     brazil: themeImage("league.brazil",placeholder("/arena/homeImg.jpg", "Estádio para clubes brasileiros")),
     england: themeImage("league.england",placeholder("/arena/homeImg.jpg", "Arena para clubes ingleses")),
