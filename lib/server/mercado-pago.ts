@@ -1,6 +1,6 @@
 import { MercadoPagoConfig, Payment } from "mercadopago";
 
-const DEFAULT_SITE_URL = "https://alves-store-green.vercel.app";
+const DEFAULT_SITE_URL = "https://importsalves.com.br";
 
 export class PaymentConfigurationError extends Error {
   constructor(message: string, readonly missing: string[] = []) {
@@ -8,6 +8,8 @@ export class PaymentConfigurationError extends Error {
     this.name = "PaymentConfigurationError";
   }
 }
+
+export type PaymentEnvironment = "test" | "production";
 
 export class MercadoPagoApiError extends Error {
   constructor(
@@ -24,7 +26,6 @@ export class MercadoPagoApiError extends Error {
 export type MercadoPagoPreference = {
   id?: string;
   init_point?: string;
-  sandbox_init_point?: string;
 };
 
 function cleanEnvValue(value: string | undefined) {
@@ -61,7 +62,36 @@ function getAccessToken() {
 }
 
 export function validateMercadoPagoAccessToken() {
+  getPaymentEnvironment();
   getAccessToken();
+}
+
+export function getPaymentEnvironment(): PaymentEnvironment {
+  const environment = cleanEnvValue(process.env.PAYMENT_ENVIRONMENT);
+  if (environment !== "test" && environment !== "production") {
+    throw new PaymentConfigurationError(
+      "PAYMENT_ENVIRONMENT é obrigatório e deve ser exatamente 'test' ou 'production'.",
+      ["PAYMENT_ENVIRONMENT"],
+    );
+  }
+  return environment;
+}
+
+export function getCheckoutUrl(preference: MercadoPagoPreference) {
+  if (!preference.init_point) return undefined;
+  try {
+    const url = new URL(preference.init_point);
+    const host = url.hostname.toLowerCase();
+    const trustedHost = host === "mercadopago.com.br"
+      || host.endsWith(".mercadopago.com.br")
+      || host === "mercadopago.com"
+      || host.endsWith(".mercadopago.com");
+    return url.protocol === "https:" && !url.username && !url.password && !url.port && trustedHost
+      ? url.toString()
+      : undefined;
+  } catch {
+    return undefined;
+  }
 }
 
 function firstString(value: unknown): string | undefined {
@@ -132,33 +162,51 @@ export async function createMercadoPagoPreference(
 }
 
 export function isProductionPaymentEnvironment() {
-  const explicit = cleanEnvValue(process.env.PAYMENT_ENVIRONMENT).toLowerCase();
-  if (explicit === "production" || explicit === "prod") return true;
-  if (explicit === "test" || explicit === "sandbox") return false;
-  return readAccessToken().startsWith("APP_USR-");
+  return getPaymentEnvironment() === "production";
 }
 
 export function getPaymentClient() {
+  getPaymentEnvironment();
   return new Payment(new MercadoPagoConfig({
     accessToken: getAccessToken(),
     options: { timeout: 10_000 },
   }));
 }
 
-export function getSiteUrl() {
+export function resolveSiteUrl(configured: string | undefined, requestUrl: string | undefined, development: boolean) {
+  const value = cleanEnvValue(configured);
+  if (value) {
+    let url: URL;
+    try {
+      url = new URL(value);
+    } catch {
+      throw new PaymentConfigurationError("SITE_URL deve ser uma URL válida.");
+    }
+
+    const loopback = ["localhost", "127.0.0.1", "::1"].includes(url.hostname.toLowerCase());
+    if (url.username || url.password || (url.protocol !== "https:" && !(development && loopback && url.protocol === "http:"))) {
+      throw new PaymentConfigurationError("SITE_URL deve usar HTTPS; HTTP só é permitido para localhost em desenvolvimento.");
+    }
+    return url.origin;
+  }
+
+  if (development && requestUrl) {
+    try {
+      const requestOrigin = new URL(requestUrl);
+      if (["localhost", "127.0.0.1", "::1"].includes(requestOrigin.hostname.toLowerCase())
+        && (requestOrigin.protocol === "http:" || requestOrigin.protocol === "https:")) {
+        return requestOrigin.origin;
+      }
+    } catch {
+      throw new PaymentConfigurationError("Não foi possível determinar a URL local do checkout.");
+    }
+  }
+
+  return development ? "http://localhost:3000" : DEFAULT_SITE_URL;
+}
+
+export function getSiteUrl(requestUrl?: string) {
   const configured = cleanEnvValue(process.env.SITE_URL)
     || cleanEnvValue(process.env.NEXT_PUBLIC_SITE_URL);
-  if (!configured) return DEFAULT_SITE_URL;
-
-  let candidate = configured.replace(/\/+$/, "");
-  if (/^http:\/\//i.test(candidate)) candidate = candidate.replace(/^http:\/\//i, "https://");
-  else if (!/^https:\/\//i.test(candidate)) candidate = "https://" + candidate;
-
-  try {
-    const parsed = new URL(candidate);
-    if (parsed.protocol === "https:" && parsed.hostname) return parsed.origin;
-  } catch {
-    // Usa o domínio fixo seguro abaixo quando a variável não formar uma origem HTTPS.
-  }
-  return DEFAULT_SITE_URL;
+  return resolveSiteUrl(configured, requestUrl, process.env.NODE_ENV === "development");
 }

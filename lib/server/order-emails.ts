@@ -40,14 +40,14 @@ function summary(input: OrderEmailInput) {
 
 export function buildOrderReceivedEmail(input: OrderEmailInput) {
   return {
-    subject: `Pedido ${orderCode(input.orderId)} recebido — Alves Store`,
+    subject: `Pedido ${orderCode(input.orderId)} recebido — Imports Alves`,
     text: `Olá, ${input.customerName}! Recebemos seu pedido. O pagamento ainda precisa ser concluído no Mercado Pago.\n\n${summary(input)}\n\n${trackingInstructions(input)}`,
   };
 }
 
 export function buildOrderPaidEmail(input: OrderEmailInput) {
   return {
-    subject: `Pagamento aprovado — pedido ${orderCode(input.orderId)} — Alves Store`,
+    subject: `Pagamento aprovado — pedido ${orderCode(input.orderId)} — Imports Alves`,
     text: `Olá, ${input.customerName}! Seu pagamento foi aprovado e o pedido será preparado.\n\n${summary(input)}\n\n${trackingInstructions(input)}`,
   };
 }

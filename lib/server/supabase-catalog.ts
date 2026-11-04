@@ -238,7 +238,7 @@ function mapProduct(value: unknown): Product | null {
 
 function isYupooImageUrl(value: string) {
   try {
-    const hostname = new URL(value, "https://alves-store.invalid").hostname.toLocaleLowerCase("en-US");
+    const hostname = new URL(value, "https://catalog-image.invalid").hostname.toLocaleLowerCase("en-US");
     return hostname === "yupoo.com" || hostname.endsWith(".yupoo.com");
   } catch {
     return false;

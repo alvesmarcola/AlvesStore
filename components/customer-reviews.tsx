@@ -121,7 +121,7 @@ export function CustomerReviews() {
             O que dizem nossos clientes
           </h2>
           <p className="mx-auto mt-3 max-w-xl text-sm text-zinc-600 sm:text-base">
-            Depoimentos reais de torcedores que vestem as camisas da Alves Imports.
+            Depoimentos reais de torcedores que vestem as camisas da Imports Alves.
           </p>
 
           {/* Rating Summary Dinâmico (somente quando há avaliações aprovadas) */}
@@ -195,7 +195,7 @@ export function CustomerReviews() {
               Ainda não há avaliações aprovadas
             </h3>
             <p className="mx-auto mt-1 max-w-md text-xs text-zinc-500 sm:text-sm">
-              Comprou na Alves Imports? Seja o primeiro a compartilhar sua experiência preenchendo o formulário abaixo!
+              Comprou na Imports Alves? Seja o primeiro a compartilhar sua experiência preenchendo o formulário abaixo!
             </p>
           </div>
         ) : (

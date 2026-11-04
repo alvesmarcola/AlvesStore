@@ -10,7 +10,10 @@ type Product = {
   tipo: string;
 };
 
-const SIGNALS: { key: string; regex: RegExp; version: string }[] = [
+type Signal = { key: string; regex: RegExp; version: string };
+type ProductSignal = Pick<Signal, "key" | "version">;
+
+const SIGNALS: Signal[] = [
   { key: "jogador/player/authentic/match", regex: /\b(jogador|player|authentic|match)\b/i, version: "jogador" },
   { key: "retrô/retro/vintage", regex: /\b(retro|retrô|vintage)\b/i, version: "retro" },
   { key: "manga longa/long sleeve", regex: /\b(manga longa|long sleeve)\b/i, version: "torcedor (manga longa)" },
@@ -21,13 +24,25 @@ const SIGNALS: { key: string; regex: RegExp; version: string }[] = [
   { key: "goleiro/goalkeeper", regex: /\b(goleiro|goalkeeper|keeper|\bgk\b)\b/i, version: "goleiro" },
 ];
 
+function isProduct(value: unknown): value is Product {
+  if (typeof value !== "object" || value === null) return false;
+  const product = value as Record<string, unknown>;
+  return typeof product.id === "string"
+    && typeof product.slug === "string"
+    && typeof product.nome === "string"
+    && typeof product.tipo === "string"
+    && (product.title === undefined || typeof product.title === "string")
+    && (product.tags === undefined || (Array.isArray(product.tags) && product.tags.every((tag) => typeof tag === "string")))
+    && (product.imageSeed === undefined || typeof product.imageSeed === "string");
+}
+
 function normalize(value: unknown) {
   return String(value ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("pt-BR");
 }
 
 function signalsFor(product: Product) {
   const text = normalize([product.nome, product.title, product.slug, ...(product.tags ?? []), product.imageSeed].join(" "));
-  const found: { key: string; version: string }[] = [];
+  const found: ProductSignal[] = [];
   for (const signal of SIGNALS) {
     if (signal.regex.test(text)) found.push({ key: signal.key, version: signal.version });
   }
@@ -42,13 +57,13 @@ async function fetchSupabaseRevisar() {
   const url = (process.env.NEXT_PUBLIC_SUPABASE_URL || "").trim().replace(/\/$/, "");
   const key = (process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || "").trim();
   if (!url || !key) throw new Error("Supabase env vars ausentes.");
-  const rows: any[] = [];
+  const rows: Product[] = [];
   let offset = 0;
   while (true) {
     const q = new URLSearchParams({ select: "id,nome,slug,imageSeed,tipo", tipo: "eq.revisar", limit: "1000", offset: String(offset) });
     const r = await fetch(`${url}/rest/v1/products?${q}`, { headers: { apikey: key, Authorization: `Bearer ${key}` } });
-    const data = await r.json();
-    if (!Array.isArray(data)) throw new Error("Resposta inválida do Supabase.");
+    const data: unknown = await r.json();
+    if (!Array.isArray(data) || !data.every(isProduct)) throw new Error("Resposta inválida do Supabase.");
     rows.push(...data);
     if (data.length < 1000) break;
     offset += 1000;
@@ -61,11 +76,15 @@ async function main() {
   console.log(`Modo: ${dryRun ? "DRY-RUN (simulação)" : "APLICAR"}`);
   console.log("");
 
-  const products = JSON.parse(readFileSync("data/products.json", "utf8"));
-  const revisarProducts = products.filter((p: any) => p.tipo === "revisar");
+  const parsedProducts: unknown = JSON.parse(readFileSync("data/products.json", "utf8"));
+  if (!Array.isArray(parsedProducts) || !parsedProducts.every(isProduct)) {
+    throw new Error("O catálogo local contém produtos inválidos.");
+  }
+  const products = parsedProducts;
+  const revisarProducts = products.filter((product) => product.tipo === "revisar");
 
-  const toTorcedor: any[] = [];
-  const exceptions: { product: any; signals: { key: string; version: string }[] }[] = [];
+  const toTorcedor: Product[] = [];
+  const exceptions: { product: Product; signals: ProductSignal[] }[] = [];
 
   for (const product of revisarProducts) {
     const found = signalsFor(product);
@@ -85,7 +104,7 @@ async function main() {
   }
 
   if (!dryRun) {
-    const approvedIds = new Set(toTorcedor.map((p: any) => p.id));
+    const approvedIds = new Set(toTorcedor.map((product) => product.id));
     for (const product of products) {
       if (approvedIds.has(product.id)) product.tipo = "torcedor";
     }
@@ -97,10 +116,10 @@ async function main() {
   if (wantsSupabase()) {
     console.log("\n=== Supabase ===");
     const sbProducts = await fetchSupabaseRevisar();
-    const sbToTorcedor: any[] = [];
-    const sbExceptions: { product: any; signals: { key: string; version: string }[] }[] = [];
+    const sbToTorcedor: Product[] = [];
+    const sbExceptions: { product: Product; signals: ProductSignal[] }[] = [];
     for (const product of sbProducts) {
-      const found = signalsFor(product as any);
+      const found = signalsFor(product);
       if (found.length === 0) sbToTorcedor.push(product);
       else sbExceptions.push({ product, signals: found });
     }
@@ -115,7 +134,7 @@ async function main() {
 
     if (wantsGenerateSql() && !dryRun) {
       const date = new Date().toISOString().slice(0, 10).replace(/-/g, "");
-      const approvedIds = sbToTorcedor.map((p: any) => p.id);
+      const approvedIds = sbToTorcedor.map((product) => product.id);
       const sql = `-- Reclassificação de produtos tipo 'revisar' -> 'torcedor'\n-- Gerado por scripts/reclassificar-revisar.ts\n-- Apenas produtos sem sinal de outra versão.\n\n-- Backup da coluna tipo (executar antes)\nCREATE TABLE IF NOT EXISTS products_tipo_backup_${date} AS\nSELECT id, tipo FROM products WHERE tipo = 'revisar';\n\n-- Contagem antes\nSELECT tipo, COUNT(*) AS total FROM products WHERE tipo = 'revisar' GROUP BY tipo;\n\n-- Reclassificação (apenas aprovados)\nUPDATE products\nSET tipo = 'torcedor'\nWHERE tipo = 'revisar'\n  AND id IN (\n    ${approvedIds.map((id: string) => `'${id.replace(/'/g, "''")}'`).join(",\n    ")}\n  );\n\n-- Contagem depois\nSELECT tipo, COUNT(*) AS total FROM products WHERE tipo IN ('revisar', 'torcedor') GROUP BY tipo;\n`;
       const path = `supabase/migrations/${date}_reclassificar_revisar.sql`;
       writeFileSync(path, sql, "utf8");

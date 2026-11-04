@@ -1,16 +1,26 @@
 import { NextResponse } from "next/server";
-import { getAdminAuthFailure } from "@/lib/server/admin-auth";
-import { getSupabaseOrdersClient } from "@/lib/server/supabase-orders";
+import { ADMIN_PRIVATE_HEADERS, getAdminAuthFailure } from "@/lib/server/admin-auth";
+import {
+  describeSupabaseError,
+  getSupabaseOrdersClient,
+  SupabaseOrdersConfigurationError,
+} from "@/lib/server/supabase-orders";
 
 export const runtime = "nodejs";
+const privateJson = (body: unknown, status = 200) =>
+  NextResponse.json(body, { status, headers: ADMIN_PRIVATE_HEADERS });
 
 function configured(value: string | undefined) {
   return Boolean(value?.trim());
 }
 
+function configuredAny(...values: (string | undefined)[]) {
+  return values.some(configured);
+}
+
 export async function GET(request: Request) {
   const authFailure = getAdminAuthFailure(request);
-  if (authFailure) return NextResponse.json({ error: authFailure.message }, { status: authFailure.status });
+  if (authFailure) return privateJson({ error: authFailure.message }, authFailure.status);
   try {
     const supabase = getSupabaseOrdersClient();
     const [metrics, orders, orderSuppliers, productSuppliers] = await Promise.all([
@@ -57,7 +67,7 @@ export async function GET(request: Request) {
       + Number(totals.shipping_cost_cents ?? 0)
       + Number(totals.other_expenses_cents ?? 0);
 
-    return NextResponse.json({
+    return privateJson({
       metrics: {
         orderCount: Number(totals.order_count ?? 0),
         paidOrderCount: Number(totals.paid_order_count ?? 0),
@@ -72,20 +82,24 @@ export async function GET(request: Request) {
       orders: orders.data ?? [],
       suppliers: [...suppliers.values()].sort((a, b) => a.name.localeCompare(b.name, "pt-BR")),
       configuration: {
-        supabase: (configured(process.env.SUPABASE_URL) || configured(process.env.NEXT_PUBLIC_SUPABASE_URL))
-          && configured(process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.SUPABASE_SECRET_KEY
-            ?? process.env.SUPABASE_SERVICE_KEY ?? process.env.SUPABASE_ROLE_KEY),
-        mercadoPago: configured(process.env.MERCADO_PAGO_ACCESS_TOKEN),
+        supabase: configuredAny(process.env.SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_URL)
+          && configuredAny(process.env.SUPABASE_SERVICE_ROLE_KEY, process.env.SUPABASE_SECRET_KEY,
+            process.env.SUPABASE_SERVICE_KEY, process.env.SUPABASE_ROLE_KEY),
+        mercadoPago: configuredAny(process.env.MERCADO_PAGO_ACCESS_TOKEN, process.env.MERCADOPAGO_ACCESS_TOKEN,
+          process.env.MP_ACCESS_TOKEN, process.env.MP_TOKEN),
         mercadoPagoWebhook: configured(process.env.MERCADO_PAGO_WEBHOOK_SECRET),
         whatsapp: configured(process.env.WHATSAPP_ORDER_WEBHOOK_URL),
         whatsappToken: configured(process.env.WHATSAPP_ORDER_WEBHOOK_TOKEN),
         adminToken: configured(process.env.ADMIN_ORDERS_TOKEN),
       },
-    }, { headers: { "Cache-Control": "no-store", "X-Robots-Tag": "noindex, nofollow" } });
+    });
   } catch (error) {
-    console.error("Falha ao carregar visão administrativa:", error instanceof Error ? error.message : "erro desconhecido");
-    return NextResponse.json({
-      error: "Não foi possível carregar o resumo. Verifique se a migração de gestão administrativa foi aplicada.",
-    }, { status: 503, headers: { "Cache-Control": "no-store" } });
+    const details = describeSupabaseError(error);
+    console.error("Falha ao carregar visão administrativa:", details);
+    return privateJson({
+      error: error instanceof SupabaseOrdersConfigurationError
+        ? "Supabase não configurado neste ambiente. Verifique as variáveis de ambiente do servidor."
+        : "Não foi possível carregar o resumo. Verifique se a migração de gestão administrativa foi aplicada.",
+    }, 503);
   }
 }

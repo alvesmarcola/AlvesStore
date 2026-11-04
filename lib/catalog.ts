@@ -5,7 +5,7 @@ const neutralBlur = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53M
 const missingProductImage: ImageAsset = {
   src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 800'%3E%3Crect width='640' height='800' fill='%23f5f5f5'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23666' font-family='Arial,sans-serif' font-size='32'%3EFoto em breve%3C/text%3E%3C/svg%3E",
   alt: "Imagem do produto indisponível",
-  credit: "Alves Store",
+  credit: "Imports Alves",
   focalPoint: { x: 50, y: 50 },
   blurDataURL: neutralBlur,
 };

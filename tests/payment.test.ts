@@ -5,6 +5,9 @@ import { getCartPricing, getPackagePrice, getProductCategoryKey, getProductOffer
 import { orderLinesSchema, paymentRequestSchema, validateOrderLines as validateOrderLinesWithCatalog, calculateOrderTotals } from "@/lib/payment/order";
 import { buildPreferenceItems } from "@/lib/payment/preference-items";
 import { isValidMercadoPagoSignature, normalizedPaymentStatus } from "@/lib/server/webhook-signature";
+import { getCheckoutUrl, getPaymentEnvironment, PaymentConfigurationError, resolveSiteUrl } from "@/lib/server/mercado-pago";
+import { clearCheckoutAttempt, fingerprintCheckoutAttempt, getCheckoutAttemptKey } from "@/lib/payment/checkout-attempt";
+import { validateMercadoPagoPayment } from "@/lib/payment/mercado-pago-validation";
 import productsData from "@/data/products.json";
 import { classifyProduct, isPackageEligible } from "@/lib/product-classification";
 import { getAvailablePatches } from "@/lib/patch-compatibility";
@@ -25,6 +28,7 @@ import { filterPublicReviews, publicReviewsPayload, reviewSubmissionSchema, sani
 import { filterCustomizationNumber, formatCustomization, getCustomizationError, sanitizeCustomizationName } from "@/lib/customization";
 import { GET as getAdminReviews } from "@/app/api/admin/reviews/route";
 import { POST as createCheckout } from "@/app/api/checkout/route";
+import { GET as getYupooImage } from "@/app/api/yupoo-image/route";
 import { storeConfig } from "@/config";
 import type { Product } from "@/lib/types";
 
@@ -232,7 +236,6 @@ test("não atribui preço a categorias não confirmadas", () => {
 test("usa R$ 180 para torcedor full patch somente com classificação administrativa", () => {
   const original = productOverrides[product.id];
   productOverrides[product.id] = { version: "fan", fullPatch: true, source: "https://example.com", verifiedBy: "teste" };
-  console.log("TEST product.id:", product.id, "override found:", !!productOverrides[product.id]);
   try {
     assert.equal(classifyProduct(product).price, 180);
   } finally {
@@ -401,6 +404,87 @@ test("itens do Mercado Pago refletem exatamente os preços dos produtos", () => 
   assert.equal(items.reduce((sum, item) => sum + Math.round(item.unit_price * 100) * item.quantity, 0), totals.productsTotalCents);
 });
 
+test("Mercado Pago exige ambiente explícito e aceita somente test ou production", () => {
+  const priorEnvironment = process.env.PAYMENT_ENVIRONMENT;
+  try {
+    process.env.PAYMENT_ENVIRONMENT = "test";
+    assert.equal(getPaymentEnvironment(), "test");
+    process.env.PAYMENT_ENVIRONMENT = "production";
+    assert.equal(getPaymentEnvironment(), "production");
+
+    for (const invalid of ["", "TEST", "sandbox", "live"]) {
+      process.env.PAYMENT_ENVIRONMENT = invalid;
+      assert.throws(() => getPaymentEnvironment(), PaymentConfigurationError);
+    }
+    delete process.env.PAYMENT_ENVIRONMENT;
+    assert.throws(() => getPaymentEnvironment(), /PAYMENT_ENVIRONMENT é obrigatório/);
+  } finally {
+    if (priorEnvironment === undefined) delete process.env.PAYMENT_ENVIRONMENT;
+    else process.env.PAYMENT_ENVIRONMENT = priorEnvironment;
+  }
+});
+
+test("checkout usa somente init_point HTTPS de host oficial do Mercado Pago", () => {
+  assert.equal(
+    getCheckoutUrl({ init_point: "https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=123" }),
+    "https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=123",
+  );
+  assert.equal(getCheckoutUrl({}), undefined);
+  assert.equal(getCheckoutUrl({ init_point: "http://www.mercadopago.com.br/checkout" }), undefined);
+  assert.equal(getCheckoutUrl({ init_point: "https://mercadopago.com.br.attacker.example/checkout" }), undefined);
+  assert.equal(getCheckoutUrl({ init_point: "https://user@mercadopago.com.br/checkout" }), undefined);
+  assert.equal(getCheckoutUrl({ init_point: "https://mercadopago.com.br:8443/checkout" }), undefined);
+});
+
+test("URLs de retorno locais preservam HTTP e produção exige HTTPS", () => {
+  assert.equal(resolveSiteUrl(undefined, "http://localhost:3000/api/checkout", true), "http://localhost:3000");
+  assert.equal(resolveSiteUrl("http://127.0.0.1:3100", undefined, true), "http://127.0.0.1:3100");
+  assert.throws(() => resolveSiteUrl("http://localhost:3000", undefined, false), /SITE_URL deve usar HTTPS/);
+  assert.equal(resolveSiteUrl(undefined, undefined, false), "https://importsalves.com.br");
+});
+
+test("tentativa de checkout reutiliza chave após reload sem armazenar dados pessoais", async () => {
+  const state = new Map<string, string>();
+  const storage = {
+    getItem: (key: string) => state.get(key) ?? null,
+    setItem: (key: string, value: string) => { state.set(key, value); },
+    removeItem: (key: string) => { state.delete(key); },
+  };
+  const payload = { customer: { email: "private@example.com" }, items: [validLine] };
+  const fingerprint = await fingerprintCheckoutAttempt(payload);
+  const key = getCheckoutAttemptKey(fingerprint, storage, () => "c6f43356-3120-4b4d-a1da-7d3396636291");
+  const reloadedKey = getCheckoutAttemptKey(fingerprint, storage, () => "a6f43356-3120-4b4d-a1da-7d3396636291");
+  const changedPayloadKey = getCheckoutAttemptKey(
+    await fingerprintCheckoutAttempt({ ...payload, items: [{ ...validLine, quantity: 2 }] }),
+    storage,
+    () => "b6f43356-3120-4b4d-a1da-7d3396636291",
+  );
+  assert.equal(reloadedKey, key);
+  assert.notEqual(changedPayloadKey, key);
+  assert.equal(JSON.stringify([...state.values()]).includes("private@example.com"), false);
+  clearCheckoutAttempt(storage);
+  assert.equal(state.size, 0);
+});
+
+test("reconciliação aceita somente pagamento correspondente ao pedido, ambiente e valor", () => {
+  const paymentId = "998877";
+  const orderId = "c6f43356-3120-4b4d-a1da-7d3396636291";
+  const payment = {
+    id: paymentId,
+    status: "approved",
+    currency_id: "BRL",
+    live_mode: false,
+    external_reference: orderId,
+    transaction_amount: 180,
+  };
+  assert.equal(validateMercadoPagoPayment(paymentId, payment, "test")?.orderId, orderId);
+  assert.equal(validateMercadoPagoPayment(paymentId, { ...payment, id: "998878" }, "test"), undefined);
+  assert.equal(validateMercadoPagoPayment(paymentId, { ...payment, live_mode: true }, "test"), undefined);
+  assert.equal(validateMercadoPagoPayment(paymentId, { ...payment, currency_id: "USD" }, "test"), undefined);
+  assert.equal(validateMercadoPagoPayment(paymentId, { ...payment, external_reference: "other" }, "test"), undefined);
+  assert.equal(validateMercadoPagoPayment(paymentId, { ...payment, transaction_amount: 0 }, "test"), undefined);
+});
+
 test("valida assinatura do webhook e converte estados de pagamento", () => {
   const secret = "webhook-test-secret", requestId = "request-123", dataId = "998877", timestamp = "1781200000";
   const manifest = `id:${dataId};request-id:${requestId};ts:${timestamp};`;
@@ -476,6 +560,28 @@ test("a rota de moderação retorna 401 sem token administrativo", async () => {
   } finally {
     if (previousToken === undefined) delete process.env.ADMIN_ORDERS_TOKEN;
     else process.env.ADMIN_ORDERS_TOKEN = previousToken;
+  }
+});
+
+test("proxy Yupoo rejeita hosts externos e limita o corpo transmitido", async () => {
+  const originalFetch = globalThis.fetch;
+  let fetchCalls = 0;
+  globalThis.fetch = async () => {
+    fetchCalls += 1;
+    return new Response(new Uint8Array(8 * 1024 * 1024 + 1), {
+      headers: { "content-type": "image/webp" },
+    });
+  };
+  try {
+    const invalidHost = await getYupooImage(new Request("https://store.example/api/yupoo-image?u=https%3A%2F%2Fexample.com%2Fimage.webp"));
+    assert.equal(invalidHost.status, 400);
+    assert.equal(fetchCalls, 0);
+
+    const tooLarge = await getYupooImage(new Request("https://store.example/api/yupoo-image?u=https%3A%2F%2Fphoto.yupoo.com%2Fimage.webp"));
+    assert.equal(tooLarge.status, 502);
+    assert.equal(fetchCalls, 1);
+  } finally {
+    globalThis.fetch = originalFetch;
   }
 });
 

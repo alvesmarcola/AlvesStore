@@ -1,7 +1,11 @@
 import { z } from "zod";
 import { NextResponse } from "next/server";
-import { getAdminAuthFailure } from "@/lib/server/admin-auth";
-import { getSupabaseOrdersClient } from "@/lib/server/supabase-orders";
+import { ADMIN_PRIVATE_HEADERS, getAdminAuthFailure } from "@/lib/server/admin-auth";
+import {
+  describeSupabaseError,
+  getSupabaseOrdersClient,
+  SupabaseOrdersConfigurationError,
+} from "@/lib/server/supabase-orders";
 import { reviewStatusSchema } from "@/lib/reviews";
 
 export const runtime = "nodejs";
@@ -16,8 +20,16 @@ const statuses = ["pending", "approved", "rejected"] as const;
 function jsonError(message: string, status: number) {
   return NextResponse.json({ error: message }, {
     status,
-    headers: { "Cache-Control": "no-store", "X-Robots-Tag": "noindex, nofollow" },
+    headers: ADMIN_PRIVATE_HEADERS,
   });
+}
+
+function reportFailure(operation: string, error: unknown) {
+  const details = describeSupabaseError(error);
+  console.error(operation, details);
+  return error instanceof SupabaseOrdersConfigurationError
+    ? "Supabase não configurado neste ambiente. Verifique as variáveis de ambiente do servidor."
+    : undefined;
 }
 
 export async function GET(request: Request) {
@@ -44,11 +56,11 @@ export async function GET(request: Request) {
     if (countError) throw countError;
     const counts = Object.fromEntries(statuses.map((status, index) => [status, countResults[index].count ?? 0]));
     return NextResponse.json({ reviews: reviewsResult.data ?? [], counts }, {
-      headers: { "Cache-Control": "no-store", "X-Robots-Tag": "noindex, nofollow" },
+      headers: ADMIN_PRIVATE_HEADERS,
     });
   } catch (error) {
-    console.error("Falha ao carregar avaliações para moderação:", error instanceof Error ? error.message : "erro desconhecido");
-    return jsonError("Não foi possível carregar as avaliações. Verifique a migração de moderação.", 503);
+    const configurationError = reportFailure("Falha ao carregar avaliações para moderação:", error);
+    return jsonError(configurationError ?? "Não foi possível carregar as avaliações. Verifique a migração de moderação.", 503);
   }
 }
 
@@ -70,10 +82,10 @@ export async function PATCH(request: Request) {
       .maybeSingle();
     if (error) throw error;
     if (!data) return jsonError("Avaliação não encontrada.", 404);
-    return NextResponse.json({ review: data }, { headers: { "Cache-Control": "no-store" } });
+    return NextResponse.json({ review: data }, { headers: ADMIN_PRIVATE_HEADERS });
   } catch (error) {
-    console.error("Falha ao moderar avaliação:", error instanceof Error ? error.message : "erro desconhecido");
-    return jsonError("Não foi possível atualizar a avaliação.", 503);
+    const configurationError = reportFailure("Falha ao moderar avaliação:", error);
+    return jsonError(configurationError ?? "Não foi possível atualizar a avaliação.", 503);
   }
 }
 
@@ -90,9 +102,9 @@ export async function DELETE(request: Request) {
       .maybeSingle();
     if (error) throw error;
     if (!data) return jsonError("Avaliação não encontrada.", 404);
-    return NextResponse.json({ deleted: true }, { headers: { "Cache-Control": "no-store" } });
+    return NextResponse.json({ deleted: true }, { headers: ADMIN_PRIVATE_HEADERS });
   } catch (error) {
-    console.error("Falha ao excluir avaliação:", error instanceof Error ? error.message : "erro desconhecido");
-    return jsonError("Não foi possível excluir a avaliação.", 503);
+    const configurationError = reportFailure("Falha ao excluir avaliação:", error);
+    return jsonError(configurationError ?? "Não foi possível excluir a avaliação.", 503);
   }
 }

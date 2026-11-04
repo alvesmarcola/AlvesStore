@@ -2,9 +2,13 @@ import { randomUUID } from "node:crypto";
 import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 import { manualProductSchema, type ManualProductInput } from "@/lib/admin/product-validation";
-import { getAdminAuthFailure } from "@/lib/server/admin-auth";
+import { ADMIN_PRIVATE_HEADERS, getAdminAuthFailure } from "@/lib/server/admin-auth";
 import { hasBundledProductSlug } from "@/lib/server/supabase-catalog";
-import { getSupabaseOrdersClient } from "@/lib/server/supabase-orders";
+import {
+  describeSupabaseError,
+  getSupabaseOrdersClient,
+  SupabaseOrdersConfigurationError,
+} from "@/lib/server/supabase-orders";
 
 export const runtime = "nodejs";
 
@@ -24,7 +28,7 @@ function publicImageRecords(imageUrls: string[], productName: string) {
       src: image.toString(),
       source: image.toString(),
       alt: `${productName} · foto ${index + 1}`,
-      credit: "Resenha Sports Cia",
+      credit: "Imports Alves",
       focalPoint: { x: 50, y: 50 },
       blurDataURL: "",
     };
@@ -75,8 +79,15 @@ async function saveSupplierDetails(supabase: ReturnType<typeof getSupabaseOrders
 function jsonError(message: string, status: number) {
   return NextResponse.json({ error: message }, {
     status,
-    headers: { "Cache-Control": "no-store", "X-Robots-Tag": "noindex, nofollow" },
+    headers: ADMIN_PRIVATE_HEADERS,
   });
+}
+
+function reportFailure(operation: string, error: unknown) {
+  console.error(operation, describeSupabaseError(error));
+  return error instanceof SupabaseOrdersConfigurationError
+    ? "Supabase não configurado neste ambiente. Verifique as variáveis de ambiente do servidor."
+    : undefined;
 }
 
 export async function GET(request: Request) {
@@ -102,11 +113,11 @@ export async function GET(request: Request) {
       supplier_cost: detailsByProduct.get(product.id)?.supplier_cost ?? 0,
     }));
     return NextResponse.json({ products }, {
-      headers: { "Cache-Control": "no-store", "X-Robots-Tag": "noindex, nofollow" },
+      headers: ADMIN_PRIVATE_HEADERS,
     });
   } catch (error) {
-    console.error("Falha ao carregar produtos manuais:", error instanceof Error ? error.message : "erro desconhecido");
-    return jsonError("Não foi possível carregar os produtos. Verifique se as migrações de produtos e gestão administrativa foram aplicadas.", 503);
+    const configurationError = reportFailure("Falha ao carregar produtos manuais:", error);
+    return jsonError(configurationError ?? "Não foi possível carregar os produtos. Verifique se as migrações de produtos e gestão administrativa foram aplicadas.", 503);
   }
 }
 
@@ -129,13 +140,13 @@ export async function POST(request: Request) {
     if (error) throw error;
     await saveSupplierDetails(supabase, id, parsed.data);
     revalidateTag("catalog");
-    return NextResponse.json({ product: { ...data, supplier_name: parsed.data.supplier_name, supplier_cost: parsed.data.supplier_cost } }, { status: 201, headers: { "Cache-Control": "no-store" } });
+    return NextResponse.json({ product: { ...data, supplier_name: parsed.data.supplier_name, supplier_cost: parsed.data.supplier_cost } }, { status: 201, headers: ADMIN_PRIVATE_HEADERS });
   } catch (error) {
+    const configurationError = reportFailure("Falha ao cadastrar produto manual:", error);
     const code = typeof error === "object" && error !== null && "code" in error
       ? String(error.code) : "";
     if (code === "23505") return jsonError("Já existe um produto com esse endereço (slug). Escolha outro.", 409);
-    console.error("Falha ao cadastrar produto manual:", error instanceof Error ? error.message : "erro desconhecido");
-    return jsonError("Não foi possível cadastrar o produto. Confirme se as migrações de produtos e gestão administrativa foram aplicadas.", 503);
+    return jsonError(configurationError ?? "Não foi possível cadastrar o produto. Confirme se as migrações de produtos e gestão administrativa foram aplicadas.", 503);
   }
 }
 
@@ -194,12 +205,13 @@ export async function PATCH(request: Request) {
     if (error) throw error;
     await saveSupplierDetails(supabase, parsed.data.id, parsed.data);
     revalidateTag("catalog");
-    return NextResponse.json({ product: { ...data, supplier_name: parsed.data.supplier_name, supplier_cost: parsed.data.supplier_cost } }, { headers: { "Cache-Control": "no-store" } });
+    return NextResponse.json({ product: { ...data, supplier_name: parsed.data.supplier_name, supplier_cost: parsed.data.supplier_cost } }, { headers: ADMIN_PRIVATE_HEADERS });
   } catch (error) {
+    const configurationError = reportFailure("Falha ao atualizar produto manual:", error);
     const code = typeof error === "object" && error !== null && "code" in error
       ? String(error.code) : "";
     if (code === "23505") return jsonError("Já existe um produto com esse endereço (slug). Escolha outro.", 409);
-    console.error("Falha ao atualizar produto manual:", error instanceof Error ? error.message : "erro desconhecido");
+    if (configurationError) return jsonError(configurationError, 503);
     return jsonError("Não foi possível atualizar o produto. Confirme se as migrações de produtos e gestão administrativa foram aplicadas.", 503);
   }
 }

@@ -404,7 +404,7 @@ function fieldValue(product: Product, field: ReviewField) {
   return product.uniforme;
 }
 
-function correctedValue(field: ReviewField, value: unknown) {
+function correctedValue(value: unknown) {
   return typeof value === "string" ? value : "";
 }
 
@@ -616,13 +616,13 @@ async function main() {
 
     const savedCorrections = correctionLedger[slug] ?? {};
     for (const field of ["liga", "clube", "publico", "tipo", "temporada", "uniforme"] as ReviewField[]) {
-      const savedValue = correctedValue(field, savedCorrections[field]);
+      const savedValue = correctedValue(savedCorrections[field]);
       if (savedValue && savedValue !== "revisar") applyCorrection(product, field, savedValue, leagues, clubsSorted);
     }
     const csvRow = reviewBySlug.get(slug);
     if (csvRow) {
       for (const field of ["liga", "clube", "publico", "tipo", "temporada", "uniforme"] as ReviewField[]) {
-        const value = correctedValue(field, csvRow[field]);
+        const value = correctedValue(csvRow[field]);
         if (!value) continue;
         const oldValue = oldBySlug.get(slug) ? fieldValue(oldBySlug.get(slug)!, field) : undefined;
         const changedByUser = oldValue === undefined

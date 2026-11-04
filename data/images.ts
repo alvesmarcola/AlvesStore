@@ -11,7 +11,7 @@ export interface ImageAsset {
 
 const blurDataURL =
   "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxIDEiPjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiMxNzE3MTciLz48L3N2Zz4=";
-const originalIllustration = "Ilustração original da alves store; sem ativos de terceiros.";
+const originalIllustration = "Ilustração original da Imports Alves; sem ativos de terceiros.";
 const catalogImages = catalogImageData as Record<string, ImageAsset>;
 
 function placeholder(src: string, alt: string, focalPoint = { x: 50, y: 50 }): ImageAsset {

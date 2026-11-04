@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { searchProducts } from "@/lib/smart-search";
+import { describeSupabaseError } from "@/lib/server/supabase-orders";
 import { getSupabaseProducts } from "@/lib/server/supabase-catalog";
 
 export const runtime = "nodejs";
@@ -14,7 +15,8 @@ export async function GET(request: Request) {
     const rows = alternativesOnly ? search.alternatives : search.results;
     const suggestions = rows.slice(0, 5).map(({ id, slug, nome, clube, temporada }) => ({ id, slug, nome, clube, temporada }));
     return NextResponse.json({ suggestions, alternativesOnly }, { headers: { "Cache-Control": "no-store" } });
-  } catch {
+  } catch (error) {
+    console.error("Falha ao carregar produtos para a busca:", describeSupabaseError(error));
     return NextResponse.json({ error: "Busca temporariamente indisponível." }, { status: 503, headers: { "Cache-Control": "no-store" } });
   }
 }

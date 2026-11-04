@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { getSupabaseOrdersClient } from "@/lib/server/supabase-orders";
-import { clientIp, isRateLimited } from "@/lib/server/rate-limit";
+import { describeSupabaseError, getSupabaseOrdersClient } from "@/lib/server/supabase-orders";
+import { isRateLimited } from "@/lib/server/rate-limit";
 import {
   publicReviewsPayload,
   reviewSubmissionSchema,
@@ -49,7 +49,7 @@ export async function GET(request: Request) {
     );
     return NextResponse.json(payload, { headers: { "Cache-Control": "no-store" } });
   } catch (error) {
-    console.error("Falha ao carregar avaliações públicas:", error instanceof Error ? error.message : "erro desconhecido");
+    console.error("Falha ao carregar avaliações públicas:", describeSupabaseError(error));
     return jsonError("Não foi possível carregar as avaliações agora.", 503);
   }
 }
@@ -86,7 +86,7 @@ export async function POST(request: Request) {
       message: "Sua avaliação foi enviada e aparecerá após aprovação.",
     }, { status: 201, headers: { "Cache-Control": "no-store" } });
   } catch (error) {
-    console.error("Falha ao receber avaliação:", error instanceof Error ? error.message : "erro desconhecido", { ip: clientIp(request) });
+    console.error("Falha ao receber avaliação:", describeSupabaseError(error));
     return jsonError("Não foi possível enviar sua avaliação agora. Tente novamente mais tarde.", 503);
   }
 }

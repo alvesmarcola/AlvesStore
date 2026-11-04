@@ -3,7 +3,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { Star, Send, CheckCircle2, AlertCircle } from "lucide-react";
 
-const STORAGE_KEY = "alves_store_review_last_sent";
+const STORAGE_KEY = "imports_alves_review_last_sent";
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 
 interface AvaliacaoFormProps {

@@ -7,7 +7,7 @@ type SafeProductImageProps = ImageProps & { fallbackSrc?: string };
 
 function isYupooSource(source: string) {
   try {
-    return /(?:^|\.)yupoo\.com$/i.test(new URL(source, "https://alves-store.invalid").hostname);
+    return /(?:^|\.)yupoo\.com$/i.test(new URL(source, "https://image-source.invalid").hostname);
   } catch {
     return false;
   }

@@ -1,5 +1,5 @@
 {
-  "name": "alves-store",
+  "name": "imports-alves",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -15,7 +15,6 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.9.1",
-    "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.117.3",
     "framer-motion": "^14.1.0",
     "lucide-react": "^0.468.0",
@@ -39,5 +38,8 @@
     "tailwindcss": "^3.4.16",
     "tsx": "^4.23.15",
     "typescript": "^5.7.2"
+  },
+  "overrides": {
+    "postcss": "$postcss"
   }
 }

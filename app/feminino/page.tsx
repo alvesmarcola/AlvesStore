@@ -7,7 +7,7 @@ import { sortCatalogProducts } from "@/lib/catalog-order";
 
 export const revalidate = 300;
 
-export const metadata = { title: "Camisas femininas | Alves Imports", description: "Camisas femininas e modelos exclusivos para torcer na Alves Imports.", alternates: { canonical: "/feminino" } };
+export const metadata = { title: "Camisas femininas | Imports Alves", description: "Camisas femininas e modelos exclusivos para torcer na Imports Alves.", alternates: { canonical: "/feminino" } };
 
 export default async function FemininoPage({ searchParams }: { searchParams: Promise<{ tipo?: string }> }) {
   const { tipo = "" } = await searchParams;
@@ -18,5 +18,5 @@ export default async function FemininoPage({ searchParams }: { searchParams: Pro
     feminineBySlug.set(product.slug, product);
   }
   const feminineProducts = sortCatalogProducts([...feminineBySlug.values()]);
-  return <CatalogPage title="Feminino" description="Camisas e peças para viver o futebol com o seu jeito e a sua torcida." products={feminineProducts.map(toCatalogPreview)} breadcrumb={[{ name: "Feminino" }]} initialType={initialType} heroImage={images.categories.female} heroEyebrow={`${feminineProducts.length} produtos · Coleção feminina · Alves Imports`} />;
+  return <CatalogPage title="Feminino" description="Camisas e peças para viver o futebol com o seu jeito e a sua torcida." products={feminineProducts.map(toCatalogPreview)} breadcrumb={[{ name: "Feminino" }]} initialType={initialType} heroImage={images.categories.female} heroEyebrow={`${feminineProducts.length} produtos · Coleção feminina · Imports Alves`} />;
 }

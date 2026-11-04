@@ -31,7 +31,7 @@ export function cleanAndDeduplicateImages(rawImages: ProductImage[], defaultAlt:
         src: highResSrc,
         source: img.source || "",
         alt: img.alt || defaultAlt,
-        credit: img.credit || "Alves Store",
+        credit: img.credit || "Imports Alves",
         focalPoint: img.focalPoint || { x: 50, y: 50 },
         blurDataURL: img.blurDataURL || "",
       });

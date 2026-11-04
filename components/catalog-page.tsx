@@ -28,7 +28,7 @@ interface CatalogPageProps {
   notice?: string;
 }
 
-export function CatalogPage({ title, description, products, breadcrumb, initialType = "", heroImage, heroEyebrow = "Coleção Alves Imports", quickLinks, initialSearch = "", notice }: CatalogPageProps) {
+export function CatalogPage({ title, description, products, breadcrumb, initialType = "", heroImage, heroEyebrow = "Coleção Imports Alves", quickLinks, initialSearch = "", notice }: CatalogPageProps) {
   const [sort, setSort] = useState("relevancia");
   const [search, setSearch] = useState("");
   const [type, setType] = useState(initialType);
@@ -124,7 +124,7 @@ export function CatalogPage({ title, description, products, breadcrumb, initialT
     <main className={`mx-auto max-w-7xl px-4 py-7 lg:px-8 ${heroImage ? "min-h-[55vh]" : ""}`}>
     {!heroImage && <>
       <nav className="mb-5 flex flex-wrap items-center gap-2 text-xs text-muted" aria-label="Breadcrumb"><Link href="/">Início</Link>{breadcrumb.map((item, index) => <span key={item.name} className="flex items-center gap-2"><ChevronRight size={13} />{item.href && index !== breadcrumb.length - 1 ? <Link href={item.href}>{item.name}</Link> : <span>{item.name}</span>}</span>)}</nav>
-      <div className="mb-7"><p className="text-[10px] font-bold uppercase tracking-wider text-blue-600">ALVES IMPORTS · COLEÇÃO</p><h1 className="mt-1 text-3xl font-bold tracking-normal sm:text-4xl">{title}</h1><p className="mt-2 max-w-2xl text-sm leading-6 text-muted">{description}</p></div>
+      <div className="mb-7"><p className="text-[10px] font-bold uppercase tracking-wider text-blue-600">Imports Alves · COLEÇÃO</p><h1 className="mt-1 text-3xl font-bold tracking-normal sm:text-4xl">{title}</h1><p className="mt-2 max-w-2xl text-sm leading-6 text-muted">{description}</p></div>
       {notice && <p role="status" className="mb-5 rounded-lg border border-amber-300 bg-amber-50 p-4 text-sm leading-6 text-amber-950">{notice}</p>}
     </>}
     <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-y py-3">

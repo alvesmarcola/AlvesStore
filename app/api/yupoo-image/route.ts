@@ -36,7 +36,7 @@ export async function GET(request: Request) {
         signal: AbortSignal.timeout(10_000),
         headers: {
           Referer: "https://photo.yupoo.com/",
-          "User-Agent": "Mozilla/5.0 (compatible; AlvesStoreImageProxy/1.0)",
+          "User-Agent": "Mozilla/5.0 (compatible; ImportsAlvesImageProxy/1.0)",
           Accept: "image/avif,image/webp,image/*,*/*;q=0.8",
         },
       });
@@ -54,10 +54,33 @@ export async function GET(request: Request) {
     if (!contentType.toLocaleLowerCase("en-US").startsWith("image/")) {
       return NextResponse.json({ error: "Resposta não é uma imagem." }, { status: 502 });
     }
-    const body = await upstream.arrayBuffer();
-    if (body.byteLength === 0 || body.byteLength > MAX_BYTES) {
+    const contentLength = Number(upstream.headers.get("content-length"));
+    if (Number.isFinite(contentLength) && contentLength > MAX_BYTES) {
       return NextResponse.json({ error: "Imagem fora do tamanho permitido." }, { status: 502 });
     }
+    const reader = upstream.body?.getReader();
+    if (!reader) return NextResponse.json({ error: "Imagem indisponível." }, { status: 502 });
+
+    const chunks: Uint8Array[] = [];
+    let size = 0;
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      size += value.byteLength;
+      if (size > MAX_BYTES) {
+        await reader.cancel();
+        return NextResponse.json({ error: "Imagem fora do tamanho permitido." }, { status: 502 });
+      }
+      chunks.push(value);
+    }
+    if (size === 0) return NextResponse.json({ error: "Imagem indisponível." }, { status: 502 });
+    const body = new Uint8Array(size);
+    let offset = 0;
+    for (const chunk of chunks) {
+      body.set(chunk, offset);
+      offset += chunk.byteLength;
+    }
+
     return new NextResponse(body, {
       status: 200,
       headers: {
@@ -67,6 +90,7 @@ export async function GET(request: Request) {
       },
     });
   } catch {
+    console.error("Falha ao buscar imagem remota do Yupoo.");
     return NextResponse.json({ error: "Falha ao carregar a imagem." }, { status: 502 });
   }
 }

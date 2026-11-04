@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { deriveCatalogLeagues } from "@/lib/catalog-taxonomy";
 import { getSupabaseProducts } from "@/lib/server/supabase-catalog";
 
-const baseUrl = "https://alves-store-green.vercel.app";
+const baseUrl = "https://importsalves.com.br";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const products = await getSupabaseProducts();

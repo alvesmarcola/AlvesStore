@@ -1,7 +1,7 @@
 import { whatsappLink } from "@/lib/whatsapp";
 
 const WHATSAPP_URL =
-  whatsappLink("Olá! Vim pelo site da Alves Imports e preciso de ajuda com um produto.");
+  whatsappLink("Olá! Vim pelo site da Imports Alves e preciso de ajuda com um produto.");
 
 export function FloatingWhatsApp() {
   return (

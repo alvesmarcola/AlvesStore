@@ -59,12 +59,12 @@ export async function sendWhatsAppOrderNotice(event: OrderNoticeEvent, order: Or
     return `${item.title} · tam. ${item.size} × ${item.quantity}${customization ? ` · ${customization}` : ""}`;
   }).join("; ");
   const message = event === "order_paid"
-    ? `Olá, ${customerName}! O pagamento do pedido ${orderCode} foi confirmado. Seu pedido da Resenha Sports Cia já está sendo preparado.${items ? ` Itens: ${items}.` : ""}`
-    : `Olá, ${customerName}! Seu pedido ${orderCode} da Resenha Sports Cia foi despachado pelos Correios.${items ? ` Itens: ${items}.` : ""} Código de rastreio: ${order.tracking_code}. Acompanhe a entrega: ${trackingUrl}`;
+    ? `Olá, ${customerName}! O pagamento do pedido ${orderCode} foi confirmado. Seu pedido da Imports Alves já está sendo preparado.${items ? ` Itens: ${items}.` : ""}`
+    : `Olá, ${customerName}! Seu pedido ${orderCode} da Imports Alves foi despachado pelos Correios.${items ? ` Itens: ${items}.` : ""} Código de rastreio: ${order.tracking_code}. Acompanhe a entrega: ${trackingUrl}`;
   const body = {
     event,
     to: recipient,
-    store: "Resenha Sports Cia",
+    store: "Imports Alves",
     message,
     order: {
       id: order.id,
@@ -133,7 +133,7 @@ export async function sendTrackingUpdateEmail(order: OrderNotice): Promise<boole
       body: JSON.stringify({
         from,
         to: [email],
-        subject: "Código de rastreio do seu pedido — Resenha Sports Cia",
+        subject: "Código de rastreio do seu pedido — Imports Alves",
         text: `Olá, ${String(order.customer.fullName ?? "")}! O código de rastreio do pedido ${order.id.slice(0, 8).toUpperCase()} foi informado.\n\n${items}\n\nCódigo de rastreio: ${order.tracking_code}\nAcompanhe a entrega: ${trackingUrl}${siteUrl ? `\n\nConsulte também seu pedido em ${siteUrl}/rastreio` : ""}`,
       }),
       signal: AbortSignal.timeout(5_000),
