@@ -1,10 +1,12 @@
 "use client";
 
+import { SITE_NAME } from "@/lib/site";
+
 export function ContactForm({ email }: { email: string }) {
   function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const subject = encodeURIComponent(`Atendimento Imports Alves — ${data.get("name")}`);
+    const subject = encodeURIComponent(`Atendimento ${SITE_NAME} — ${data.get("name")}`);
     const body = encodeURIComponent(`Nome: ${data.get("name")}\nE-mail: ${data.get("email")}\n\n${data.get("message")}`);
     window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
   }

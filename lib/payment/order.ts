@@ -6,7 +6,7 @@ import type { Product } from "@/lib/types";
 import { classifyProduct, isPackageEligible } from "@/lib/product-classification";
 import { getAvailablePatches } from "@/lib/patch-compatibility";
 import { allowsCustomization } from "@/lib/formula-one";
-import { getSupabaseProducts } from "@/lib/server/supabase-catalog";
+import { getSupabaseProducts, hasSupabaseCatalogConfiguration } from "@/lib/server/supabase-catalog";
 import { getProductSizeSurcharge } from "@/lib/product-classification";
 import { CUSTOMIZATION_NAME_MAX_LENGTH, sanitizeCustomizationName } from "@/lib/customization";
 
@@ -54,7 +54,7 @@ export function validateOrderLines(lines: OrderLineInput[], catalog: Product[]):
   let quantityTotal = 0;
 
   const verified = lines.map((line) => {
-    const product = catalog.find((candidate) => candidate.id === line.productId);
+    const product = catalog.find((candidate) => candidate.id === line.productId || candidate.slug === line.productId);
     if (!product) throw new InvalidOrderError("Um dos produtos não está mais disponível.");
     if (line.size === "3GG" || !product.tamanhos.includes(line.size)) throw new InvalidOrderError("Um dos tamanhos selecionados não está disponível.");
     if (line.customization && !allowsCustomization(product)) throw new InvalidOrderError("Camisas de Fórmula 1 não podem ser personalizadas.");
@@ -89,6 +89,9 @@ export function validateOrderLines(lines: OrderLineInput[], catalog: Product[]):
 }
 
 export async function validateOrderLinesFromCatalog(lines: OrderLineInput[]) {
+  if (!hasSupabaseCatalogConfiguration()) {
+    throw new Error("Não é possível iniciar um pagamento sem validar o catálogo atual do Supabase.");
+  }
   return validateOrderLines(lines, await getSupabaseProducts());
 }
 

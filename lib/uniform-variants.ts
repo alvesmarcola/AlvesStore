@@ -1,5 +1,6 @@
 import type { Product, ProductImage } from "@/lib/types";
 import { productImageAsset } from "@/lib/catalog";
+import { SITE_NAME } from "@/lib/site";
 
 export interface UniformVariant {
   id: string;
@@ -31,7 +32,7 @@ export function cleanAndDeduplicateImages(rawImages: ProductImage[], defaultAlt:
         src: highResSrc,
         source: img.source || "",
         alt: img.alt || defaultAlt,
-        credit: img.credit || "Imports Alves",
+        credit: img.credit || SITE_NAME,
         focalPoint: img.focalPoint || { x: 50, y: 50 },
         blurDataURL: img.blurDataURL || "",
       });
@@ -108,4 +109,3 @@ export function detectUniformVariants(product: Product): UniformVariant[] | null
 
   return null;
 }
-

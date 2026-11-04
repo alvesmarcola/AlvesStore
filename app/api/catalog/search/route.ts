@@ -13,7 +13,7 @@ export async function GET(request: Request) {
     const search = searchProducts(products, query);
     const alternativesOnly = search.results.length === 0 && search.alternatives.length > 0;
     const rows = alternativesOnly ? search.alternatives : search.results;
-    const suggestions = rows.slice(0, 5).map(({ id, slug, nome, clube, temporada }) => ({ id, slug, nome, clube, temporada }));
+    const suggestions = rows.slice(0, 5).map(({ slug, nome, clube, temporada }) => ({ slug, nome, clube, temporada }));
     return NextResponse.json({ suggestions, alternativesOnly }, { headers: { "Cache-Control": "no-store" } });
   } catch (error) {
     console.error("Falha ao carregar produtos para a busca:", describeSupabaseError(error));

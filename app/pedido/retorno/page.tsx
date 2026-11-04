@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getSupabaseOrdersClient } from "@/lib/server/supabase-orders";
 import { orderCode } from "@/lib/order-code";
+import { SITE_NAME } from "@/lib/site";
 import { OrderReturnActions, RefreshStatusButton } from "./return-actions";
 
 type OrderStatus = "pending" | "pago" | "enviado" | "approved" | "rejected" | "cancelled" | "refunded";
@@ -58,7 +59,7 @@ export default async function OrderReturnPage({
     ? orderStatusText[status]
     : undefined;
   return <main className="mx-auto max-w-2xl px-5 py-20 text-center">
-    <p className="text-[10px] font-black uppercase tracking-[.2em] text-action">Imports Alves · Mercado Pago</p>
+    <p className="text-[10px] font-black uppercase tracking-[.2em] text-action">{SITE_NAME} · Mercado Pago</p>
     <h1 className="mt-3 text-3xl font-black">{details?.title ?? "Consulte o status do pedido"}</h1>
     <p className="mt-3 text-sm leading-6 text-muted">{details?.description ?? (status === "unavailable"
       ? "Não foi possível consultar o banco de pedidos agora. O retorno do navegador não confirma pagamento; atualize a página em instantes."

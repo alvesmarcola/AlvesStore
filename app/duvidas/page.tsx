@@ -1,7 +1,8 @@
 import Link from "next/link";
+import { SITE_NAME } from "@/lib/site";
 
 export const metadata = {
-  title: "Dúvidas frequentes | Imports Alves",
+  title: `Dúvidas frequentes | ${SITE_NAME}`,
   description: "Entenda o envio internacional, o prazo do código de rastreio e como acompanhar seu pedido.",
   alternates: { canonical: "/duvidas" },
 };
@@ -21,13 +22,13 @@ const questions = [
   },
   {
     question: "Como acompanho a rota da encomenda?",
-    answer: "Use a página de rastreio da Imports Alves com o código do pedido e o e-mail ou CPF cadastrado na compra. Quando o código oficial estiver disponível, ele será exibido junto ao status.",
+    answer: `Use a página de rastreio da ${SITE_NAME} com o código do pedido e o e-mail ou CPF cadastrado na compra. Quando o código oficial estiver disponível, ele será exibido junto ao status.`,
   },
 ];
 
 export default function QuestionsPage() {
   return <main className="mx-auto max-w-3xl px-5 py-12">
-    <p className="text-[10px] font-bold uppercase tracking-wider text-blue-600">Imports Alves · ATENDIMENTO</p>
+    <p className="text-[10px] font-bold uppercase tracking-wider text-blue-600">{SITE_NAME} · ATENDIMENTO</p>
     <h1 className="mt-2 text-3xl font-bold tracking-tight">Dúvidas frequentes</h1>
     <p className="mt-3 text-sm leading-6 text-muted">Informações sobre envio, liberação logística e acompanhamento do seu pedido.</p>
     <div className="mt-8 space-y-4">

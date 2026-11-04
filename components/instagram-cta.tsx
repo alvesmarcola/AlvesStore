@@ -9,6 +9,7 @@ import {
   INSTAGRAM_PROFILE_URL,
   type InstagramPost,
 } from "@/lib/instagram";
+import { SITE_NAME } from "@/lib/site";
 
 function InstagramIcon({ className }: { className?: string }) {
   return (
@@ -103,7 +104,7 @@ export function InstagramCTA() {
   return (
     <section
       className="relative overflow-hidden bg-gradient-to-br from-[#833ab4] via-[#fd1d1d] to-[#fcb045] py-16 sm:py-20"
-      aria-label="Instagram da Imports Alves"
+      aria-label={`Instagram da ${SITE_NAME}`}
     >
       {/* Elementos decorativos de fundo */}
       <div aria-hidden="true" className="pointer-events-none absolute -left-20 -top-20 h-80 w-80 rounded-full bg-white/10 blur-3xl" />
@@ -122,7 +123,7 @@ export function InstagramCTA() {
             href={INSTAGRAM_PROFILE_URL}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Visitar perfil oficial da Imports Alves no Instagram"
+            aria-label={`Visitar perfil oficial da ${SITE_NAME} no Instagram`}
             className="mb-6 grid h-20 w-20 place-items-center rounded-2xl border border-white/30 bg-white/10 shadow-lg backdrop-blur-md transition-colors hover:border-white/50 hover:bg-white/20 sm:h-24 sm:w-24 sm:rounded-3xl"
             whileHover={reducedMotion ? undefined : { scale: 1.08, rotate: 3 }}
             whileTap={reducedMotion ? undefined : { scale: 0.95 }}
@@ -183,7 +184,7 @@ export function InstagramCTA() {
                     aria-label={
                       post.caption
                         ? `Ver post no Instagram: ${post.caption.slice(0, 60)}`
-                        : "Ver post no Instagram da Imports Alves"
+                        : `Ver post no Instagram da ${SITE_NAME}`
                     }
                     initial={reducedMotion ? false : { opacity: 0, scale: 0.9 }}
                     whileInView={{ opacity: 1, scale: 1 }}
@@ -202,7 +203,7 @@ export function InstagramCTA() {
                     ) : (
                       <Image
                         src={imageUrl}
-                        alt={post.caption ? post.caption.slice(0, 80) : "Publicação Imports Alves"}
+                        alt={post.caption ? post.caption.slice(0, 80) : `Publicação ${SITE_NAME}`}
                         fill
                         sizes="(max-width: 640px) 33vw, 16vw"
                         unoptimized

@@ -5,10 +5,11 @@ import { getBundledFormulaOneProducts, getSupabaseProducts } from "@/lib/server/
 import { sortCatalogProducts } from "@/lib/catalog-order";
 import type { Product } from "@/lib/types";
 import { images } from "@/data/images";
+import { SITE_NAME } from "@/lib/site";
 
 export const metadata = {
-  title: "F1 | Imports Alves",
-  description: "Explore os produtos e camisetas de F1 disponíveis na Imports Alves.",
+  title: `F1 | ${SITE_NAME}`,
+  description: `Explore os produtos e camisetas de F1 disponíveis na ${SITE_NAME}.`,
   alternates: { canonical: "/f1" },
 };
 export const revalidate = 300;
@@ -25,6 +26,6 @@ export default async function FormulaOnePage() {
     products={products.map(toCatalogPreview)}
     breadcrumb={[{ name: "F1" }]}
     heroImage={images.f1.cover}
-    heroEyebrow={`${products.length} produtos · Coleção F1 · Imports Alves`}
+    heroEyebrow={`${products.length} produtos · Coleção F1 · ${SITE_NAME}`}
   />;
 }

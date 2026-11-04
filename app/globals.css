@@ -45,6 +45,13 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .form-error { margin-top: 4px; color: var(--danger); font-size: 12px; }
 .primary-button { border-radius: 8px; background: var(--brand-blue); color: white; transition: transform .2s; }
 .primary-button:hover { background: var(--brand-blue-hover); }
+#admin-shell { min-width: 0; overflow-x: clip; }
+#admin-shell input:not([type="checkbox"]):not([type="radio"]), #admin-shell select { max-width: 100%; min-height: 44px; font-size: 16px; }
+#admin-shell textarea { max-width: 100%; min-height: 88px; font-size: 16px; }
+#admin-shell button { min-height: 44px; }
+#admin-shell table { max-width: 100%; }
+#admin-shell th, #admin-shell td { overflow-wrap: anywhere; }
+body:has(#admin-shell) { overflow-x: hidden; }
 ::selection { background: var(--brand-blue-soft); color: var(--brand-black); }
 
 .arena-hero { min-height: 100svh; }

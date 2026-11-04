@@ -5,6 +5,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { Star, Quote, MessageSquarePlus } from "lucide-react";
 import type { Avaliacao } from "@/lib/types";
 import { AvaliacaoForm } from "@/components/avaliacao-form";
+import { SITE_NAME } from "@/lib/site";
 
 const PAGE_SIZE = 6;
 
@@ -121,7 +122,7 @@ export function CustomerReviews() {
             O que dizem nossos clientes
           </h2>
           <p className="mx-auto mt-3 max-w-xl text-sm text-zinc-600 sm:text-base">
-            Depoimentos reais de torcedores que vestem as camisas da Imports Alves.
+            Depoimentos reais de torcedores que vestem as camisas da {SITE_NAME}.
           </p>
 
           {/* Rating Summary Dinâmico (somente quando há avaliações aprovadas) */}
@@ -195,7 +196,7 @@ export function CustomerReviews() {
               Ainda não há avaliações aprovadas
             </h3>
             <p className="mx-auto mt-1 max-w-md text-xs text-zinc-500 sm:text-sm">
-              Comprou na Imports Alves? Seja o primeiro a compartilhar sua experiência preenchendo o formulário abaixo!
+              Comprou na {SITE_NAME}? Seja o primeiro a compartilhar sua experiência preenchendo o formulário abaixo!
             </p>
           </div>
         ) : (

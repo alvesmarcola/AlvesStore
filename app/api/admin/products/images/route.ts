@@ -6,6 +6,7 @@ import {
   getSupabaseOrdersClient,
   SupabaseOrdersConfigurationError,
 } from "@/lib/server/supabase-orders";
+import { isValidProductImage } from "@/lib/server/image-upload-validation";
 
 export const runtime = "nodejs";
 
@@ -39,7 +40,8 @@ export async function POST(request: Request) {
     return jsonError("Selecione entre 1 e 6 fotos válidas.", 400);
   }
   const photos = files as File[];
-  if (photos.some((file) => !allowedTypes.has(file.type) || file.size === 0 || file.size > MAX_FILE_SIZE)) {
+  if (photos.some((file) => !allowedTypes.has(file.type) || file.size === 0 || file.size > MAX_FILE_SIZE)
+    || !(await Promise.all(photos.map(isValidProductImage))).every(Boolean)) {
     return jsonError("Use fotos JPG, PNG ou WebP com até 10 MB cada.", 400);
   }
 

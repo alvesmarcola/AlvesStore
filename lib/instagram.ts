@@ -1,3 +1,5 @@
+import { SITE_NAME } from "@/lib/site";
+
 export interface InstagramPost {
   id: string;
   caption?: string;
@@ -14,7 +16,7 @@ export const INSTAGRAM_HANDLE = "@imports_alvess";
 export const FALLBACK_INSTAGRAM_POSTS: InstagramPost[] = [
   {
     id: "fallback-flamengo-25-26",
-    caption: "Manto titular 25/26 com acabamento premium e tecnologia de respirabilidade. Garanta já o seu na Imports Alves! 🔥⚽",
+    caption: `Manto titular 25/26 com acabamento premium e tecnologia de respirabilidade. Garanta já o seu na ${SITE_NAME}! 🔥⚽`,
     media_type: "IMAGE",
     media_url: "/otimizadas/camisa-jogador-brasileirao-flamengo-25-26/01-800.webp",
     permalink: INSTAGRAM_PROFILE_URL,
@@ -92,18 +94,17 @@ export async function getInstagramFeed(limit = 6): Promise<InstagramFeedResponse
     const url = new URL(baseUrl);
     url.searchParams.set("fields", "id,caption,media_type,media_url,permalink,thumbnail_url,timestamp");
     url.searchParams.set("limit", String(Math.max(limit, 6)));
-    url.searchParams.set("access_token", token);
 
     const res = await fetch(url.toString(), {
       next: { revalidate: 3600 }, // Cache de 1 hora
       headers: {
         Accept: "application/json",
+        Authorization: `Bearer ${token}`,
       },
     });
 
     if (!res.ok) {
-      const errorText = await res.text();
-      console.warn(`[Instagram API] Falha na requisição (HTTP ${res.status}):`, errorText);
+      console.warn(`[Instagram API] Falha na requisição (HTTP ${res.status}).`);
       return {
         posts: FALLBACK_INSTAGRAM_POSTS.slice(0, limit),
         isLive: false,
@@ -154,12 +155,12 @@ export async function getInstagramFeed(limit = 6): Promise<InstagramFeedResponse
       posts,
       isLive: true,
     };
-  } catch (error) {
-    console.error("[Instagram API] Erro inesperado ao buscar feed:", error);
+  } catch {
+    console.error("[Instagram API] Erro inesperado ao buscar feed.");
     return {
       posts: FALLBACK_INSTAGRAM_POSTS.slice(0, limit),
       isLive: false,
-      error: error instanceof Error ? error.message : "Erro desconhecido",
+      error: "Feed temporariamente indisponível.",
     };
   }
 }

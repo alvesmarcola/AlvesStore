@@ -2,10 +2,11 @@ import assert from "node:assert/strict";
 import { createHmac } from "node:crypto";
 import { test } from "node:test";
 import { getCartPricing, getPackagePrice, getProductCategoryKey, getProductOfferText, getShippingCents } from "@/lib/commerce";
-import { orderLinesSchema, paymentRequestSchema, validateOrderLines as validateOrderLinesWithCatalog, calculateOrderTotals } from "@/lib/payment/order";
+import { toCatalogPreview } from "@/lib/catalog";
+import { orderLinesSchema, paymentRequestSchema, validateOrderLines as validateOrderLinesWithCatalog, validateOrderLinesFromCatalog, calculateOrderTotals } from "@/lib/payment/order";
 import { buildPreferenceItems } from "@/lib/payment/preference-items";
 import { isValidMercadoPagoSignature, normalizedPaymentStatus } from "@/lib/server/webhook-signature";
-import { getCheckoutUrl, getPaymentEnvironment, PaymentConfigurationError, resolveSiteUrl } from "@/lib/server/mercado-pago";
+import { getCheckoutUrl, getPaymentEnvironment, PaymentConfigurationError, resolveSiteUrl, validateMercadoPagoAccessToken } from "@/lib/server/mercado-pago";
 import { clearCheckoutAttempt, fingerprintCheckoutAttempt, getCheckoutAttemptKey } from "@/lib/payment/checkout-attempt";
 import { validateMercadoPagoPayment } from "@/lib/payment/mercado-pago-validation";
 import productsData from "@/data/products.json";
@@ -15,6 +16,14 @@ import { isCompleteOrderCode, normalizeOrderCodeInput, orderCode } from "@/lib/o
 import { buildOrderPaidEmail, buildOrderReceivedEmail } from "@/lib/server/order-emails";
 import { sendWhatsAppOrderNotice, type OrderNotice } from "@/lib/server/order-notifications";
 import { getAdminAuthFailure } from "@/lib/server/admin-auth";
+import {
+  ADMIN_SESSION_COOKIE,
+  createAdminSessionValue,
+  getAdminAuthFailure as authorizeAdminRequest,
+  isValidAdminSessionValue,
+} from "@/lib/server/admin-auth";
+import { DELETE as logoutAdmin, GET as checkAdminSession, POST as loginAdmin } from "@/app/api/admin/session/route";
+import { GET as getAdminSummary } from "@/app/api/admin/summary/route";
 import { isRateLimited } from "@/lib/server/rate-limit";
 import { inferProductTypeFromSource } from "@/lib/catalog-source-classification";
 import { prioritizeClubs, prioritizeEditorialProducts, sortCatalogProducts } from "@/lib/catalog-order";
@@ -28,8 +37,13 @@ import { filterPublicReviews, publicReviewsPayload, reviewSubmissionSchema, sani
 import { filterCustomizationNumber, formatCustomization, getCustomizationError, sanitizeCustomizationName } from "@/lib/customization";
 import { GET as getAdminReviews } from "@/app/api/admin/reviews/route";
 import { POST as createCheckout } from "@/app/api/checkout/route";
+import { POST as mercadoPagoWebhook } from "@/app/api/mercado-pago/webhook/route";
+import { POST as trackOrder } from "@/app/api/orders/track/route";
+import { isValidProductImage } from "@/lib/server/image-upload-validation";
 import { GET as getYupooImage } from "@/app/api/yupoo-image/route";
 import { storeConfig } from "@/config";
+import { getInstagramFeed } from "@/lib/instagram";
+import { getPersistedCartItems } from "@/lib/cart-persistence";
 import type { Product } from "@/lib/types";
 
 const products = (productsData as Product[]).map((entry) => ({ ...entry, tamanhos: entry.tamanhos.filter((size) => size !== "3GG") }));
@@ -315,6 +329,42 @@ test("valida produto, tamanho e campos de linha pelo catálogo do servidor", () 
   assert.equal(orderLinesSchema.safeParse([{ ...validLine, quantity: -1 }]).success, false);
 });
 
+test("vitrine usa slug público no lugar do ID interno e checkout resolve pelo slug", () => {
+  const internalProduct = {
+    ...product,
+    id: "database-internal-id",
+    stock_by_size: { M: 2 },
+    supplier_name: "Fornecedor privado",
+    supplier_cost: 50,
+  };
+  const publicProduct = toCatalogPreview(internalProduct);
+  assert.equal(publicProduct.id, product.slug);
+  assert.equal(publicProduct.stock_by_size, undefined);
+  assert.equal(publicProduct.supplier_name, undefined);
+  assert.equal(publicProduct.supplier_cost, undefined);
+
+  const [verified] = validateOrderLinesWithCatalog([{
+    productId: publicProduct.id,
+    size: product.tamanhos[0]!,
+    quantity: 1,
+  }], [internalProduct]);
+  assert.equal(verified?.product.id, "database-internal-id");
+});
+
+test("checkout não usa o catálogo empacotado se a configuração live do Supabase estiver ausente", async () => {
+  const keys = ["NEXT_PUBLIC_SUPABASE_URL", "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY", "NEXT_PUBLIC_SUPABASE_ANON_KEY"] as const;
+  const previous = new Map(keys.map((key) => [key, process.env[key]]));
+  try {
+    for (const key of keys) delete process.env[key];
+    await assert.rejects(validateOrderLinesFromCatalog([validLine]), /catálogo atual do Supabase/);
+  } finally {
+    for (const [key, value] of previous) {
+      if (value === undefined) delete process.env[key];
+      else process.env[key] = value;
+    }
+  }
+});
+
 test("personalização aceita nome, número ou ambos e rejeita combinações inválidas no servidor", () => {
   for (const customization of [
     { name: "ANA", number: "" },
@@ -424,6 +474,30 @@ test("Mercado Pago exige ambiente explícito e aceita somente test ou production
   }
 });
 
+test("Access Token do Mercado Pago deve corresponder ao ambiente explícito", () => {
+  const keys = ["PAYMENT_ENVIRONMENT", "MERCADO_PAGO_ACCESS_TOKEN", "MERCADOPAGO_ACCESS_TOKEN", "MP_ACCESS_TOKEN", "MP_TOKEN"] as const;
+  const previous = new Map(keys.map((key) => [key, process.env[key]]));
+  try {
+    for (const key of keys.slice(1)) delete process.env[key];
+    process.env.PAYMENT_ENVIRONMENT = "test";
+    process.env.MERCADO_PAGO_ACCESS_TOKEN = "TEST-fixture-token";
+    assert.doesNotThrow(validateMercadoPagoAccessToken);
+
+    process.env.PAYMENT_ENVIRONMENT = "production";
+    assert.throws(() => validateMercadoPagoAccessToken(), PaymentConfigurationError);
+    process.env.MERCADO_PAGO_ACCESS_TOKEN = `APP_USR-${"x".repeat(48)}`;
+    assert.doesNotThrow(validateMercadoPagoAccessToken);
+
+    process.env.PAYMENT_ENVIRONMENT = "test";
+    assert.throws(() => validateMercadoPagoAccessToken(), PaymentConfigurationError);
+  } finally {
+    for (const [key, value] of previous) {
+      if (value === undefined) delete process.env[key];
+      else process.env[key] = value;
+    }
+  }
+});
+
 test("checkout usa somente init_point HTTPS de host oficial do Mercado Pago", () => {
   assert.equal(
     getCheckoutUrl({ init_point: "https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=123" }),
@@ -451,19 +525,142 @@ test("tentativa de checkout reutiliza chave após reload sem armazenar dados pes
     removeItem: (key: string) => { state.delete(key); },
   };
   const payload = { customer: { email: "private@example.com" }, items: [validLine] };
-  const fingerprint = await fingerprintCheckoutAttempt(payload);
-  const key = getCheckoutAttemptKey(fingerprint, storage, () => "c6f43356-3120-4b4d-a1da-7d3396636291");
-  const reloadedKey = getCheckoutAttemptKey(fingerprint, storage, () => "a6f43356-3120-4b4d-a1da-7d3396636291");
-  const changedPayloadKey = getCheckoutAttemptKey(
-    await fingerprintCheckoutAttempt({ ...payload, items: [{ ...validLine, quantity: 2 }] }),
-    storage,
-    () => "b6f43356-3120-4b4d-a1da-7d3396636291",
-  );
+  const fingerprint = await fingerprintCheckoutAttempt(payload.items);
+  const key = getCheckoutAttemptKey(storage, () => "c6f43356-3120-4b4d-a1da-7d3396636291");
+  const reloadedKey = getCheckoutAttemptKey(storage, () => "a6f43356-3120-4b4d-a1da-7d3396636291");
+  const changedPayloadFingerprint = await fingerprintCheckoutAttempt([{ ...validLine, quantity: 2 }]);
+  const changedPayloadKey = getCheckoutAttemptKey(storage, () => "b6f43356-3120-4b4d-a1da-7d3396636291");
   assert.equal(reloadedKey, key);
-  assert.notEqual(changedPayloadKey, key);
+  assert.notEqual(changedPayloadFingerprint, fingerprint);
+  assert.equal(changedPayloadKey, key);
   assert.equal(JSON.stringify([...state.values()]).includes("private@example.com"), false);
   clearCheckoutAttempt(storage);
+  const nextAttemptKey = getCheckoutAttemptKey(storage, () => "b6f43356-3120-4b4d-a1da-7d3396636291");
+  assert.notEqual(nextAttemptKey, key);
+  clearCheckoutAttempt(storage);
   assert.equal(state.size, 0);
+});
+
+test("carrinho persistido exclui linhas com personalização que pode identificar o cliente", () => {
+  const customized = {
+    lineId: "product-M-ANA-7",
+    product,
+    size: "M",
+    quantity: 1,
+    customization: { name: "ANA", number: "7" },
+  };
+  const persisted = getPersistedCartItems([customized]);
+  assert.deepEqual(persisted, []);
+  assert.equal(JSON.stringify(persisted).includes("ANA"), false);
+  assert.equal(JSON.stringify(persisted).includes("customization"), false);
+});
+
+test("checkout rejeita valores adulterados enviados pelo navegador", async () => {
+  const customer = {
+    whatsappUpdates: false,
+    fullName: "Teste Comprador",
+    email: "comprador@example.com",
+    cpf: "529.982.247-25",
+    phone: "11999999999",
+    cep: "01001000",
+    street: "Rua Teste",
+    number: "1",
+    complement: "",
+    neighborhood: "Centro",
+    city: "São Paulo",
+    state: "SP",
+  };
+  for (const [index, priceFields] of [
+    { price: 0.01 },
+    { total: 0.01, shipping: 0, discount: 999 },
+  ].entries()) {
+    const idempotencyKey = index === 0
+      ? "c6f43356-3120-4b4d-a1da-7d3396636291"
+      : "a6f43356-3120-4b4d-a1da-7d3396636291";
+    const response = await createCheckout(new Request("https://loja.test/api/checkout", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "idempotency-key": idempotencyKey,
+        "x-forwarded-for": `192.0.2.${index + 10}`,
+      },
+      body: JSON.stringify({
+        idempotencyKey,
+        items: [{ ...validLine, ...priceFields }],
+        customer,
+      }),
+    }));
+    assert.equal(response.status, 400);
+  }
+});
+
+test("webhook exige assinatura válida mesmo para eventos não suportados", async () => {
+  const previousSecret = process.env.MERCADO_PAGO_WEBHOOK_SECRET;
+  process.env.MERCADO_PAGO_WEBHOOK_SECRET = "local-webhook-test-secret";
+  try {
+    const response = await mercadoPagoWebhook(new Request(
+      "https://loja.test/api/mercado-pago/webhook?type=merchant_order&id=123",
+      {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ type: "merchant_order", data: { id: "123" } }),
+      },
+    ));
+    assert.equal(response.status, 401);
+  } finally {
+    if (previousSecret === undefined) delete process.env.MERCADO_PAGO_WEBHOOK_SECRET;
+    else process.env.MERCADO_PAGO_WEBHOOK_SECRET = previousSecret;
+  }
+});
+
+test("upload de produto valida a assinatura real do conteúdo da imagem", async () => {
+  const png = new File([new Uint8Array([137, 80, 78, 71, 13, 10, 26, 10, 0])], "foto.png", { type: "image/png" });
+  const spoofed = new File(["nao e imagem"], "foto.png", { type: "image/png" });
+  assert.equal(await isValidProductImage(png), true);
+  assert.equal(await isValidProductImage(spoofed), false);
+});
+
+test("rastreio responde igual a entradas inválidas e códigos incompletos", async () => {
+  const invalid = await trackOrder(new Request("https://loja.test/api/orders/track", {
+    method: "POST",
+    headers: { "content-type": "application/json", "x-forwarded-for": "192.0.2.21" },
+    body: JSON.stringify({ code: "12", contact: "x" }),
+  }));
+  const incomplete = await trackOrder(new Request("https://loja.test/api/orders/track", {
+    method: "POST",
+    headers: { "content-type": "application/json", "x-forwarded-for": "192.0.2.22" },
+    body: JSON.stringify({ code: "ABCD", contact: "cliente@example.com" }),
+  }));
+  assert.equal(invalid.status, 404);
+  assert.equal(incomplete.status, 404);
+  assert.deepEqual(await invalid.json(), await incomplete.json());
+});
+
+test("token do Instagram vai no cabeçalho do servidor, nunca na URL", async () => {
+  const previousToken = process.env.INSTAGRAM_ACCESS_TOKEN;
+  const previousUserId = process.env.INSTAGRAM_USER_ID;
+  const originalFetch = globalThis.fetch;
+  const token = "local-instagram-test-token";
+  let requestUrl = "";
+  let authorization = "";
+  process.env.INSTAGRAM_ACCESS_TOKEN = token;
+  process.env.INSTAGRAM_USER_ID = "test-profile";
+  globalThis.fetch = async (input, init) => {
+    requestUrl = String(input);
+    authorization = new Headers(init?.headers).get("authorization") ?? "";
+    return Response.json({ data: [] });
+  };
+  try {
+    await getInstagramFeed();
+    assert.equal(requestUrl.includes(token), false);
+    assert.equal(authorization, `Bearer ${token}`);
+  } finally {
+    globalThis.fetch = originalFetch;
+    if (previousToken === undefined) delete process.env.INSTAGRAM_ACCESS_TOKEN;
+    else process.env.INSTAGRAM_ACCESS_TOKEN = previousToken;
+    if (previousUserId === undefined) delete process.env.INSTAGRAM_USER_ID;
+    else process.env.INSTAGRAM_USER_ID = previousUserId;
+  }
 });
 
 test("reconciliação aceita somente pagamento correspondente ao pedido, ambiente e valor", () => {
@@ -496,7 +693,7 @@ test("valida assinatura do webhook e converte estados de pagamento", () => {
   assert.equal(normalizedPaymentStatus("rejected"), "rejected");
 });
 
-test("distingue token administrativo ausente de senha inválida e aceita espaços externos", () => {
+test("distingue token administrativo ausente de senha inválida e aceita espaços externos", async () => {
   const previousToken = process.env.ADMIN_ORDERS_TOKEN;
   try {
     delete process.env.ADMIN_ORDERS_TOKEN;
@@ -508,11 +705,97 @@ test("distingue token administrativo ausente de senha inválida e aceita espaço
       headers: { authorization: "Bearer wrong-secret" },
     }));
     assert.equal(invalid?.status, 401);
+    const protectedRouteResponse = await getAdminSummary(new Request("https://store.example/api/admin/summary"));
+    assert.equal(protectedRouteResponse.status, 401);
+    assert.equal(protectedRouteResponse.headers.get("Cache-Control"), "no-store");
+    assert.equal(protectedRouteResponse.headers.get("X-Robots-Tag"), "noindex, nofollow");
 
     const valid = getAdminAuthFailure(new Request("https://store.example/api/admin/orders", {
       headers: { authorization: "Bearer  admin-secret  " },
     }));
     assert.equal(valid, null);
+  } finally {
+    if (previousToken === undefined) delete process.env.ADMIN_ORDERS_TOKEN;
+    else process.env.ADMIN_ORDERS_TOKEN = previousToken;
+  }
+});
+
+test("sessão admin usa cookie assinado, autentica com token, expira e encerra sem armazenar o token no cookie", async () => {
+  const previousToken = process.env.ADMIN_ORDERS_TOKEN;
+  const previousNodeEnv = process.env.NODE_ENV;
+  process.env.ADMIN_ORDERS_TOKEN = "admin-session-test-secret";
+  Object.defineProperty(process.env, "NODE_ENV", { configurable: true, enumerable: true, writable: true, value: "production" });
+  try {
+    const ip = `192.0.2.${Math.floor(Math.random() * 200) + 1}`;
+    const wrong = await loginAdmin(new Request("https://store.example/api/admin/session", {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-forwarded-for": ip },
+      body: JSON.stringify({ token: "wrong-token" }),
+    }));
+    assert.equal(wrong.status, 401);
+
+    const login = await loginAdmin(new Request("https://store.example/api/admin/session", {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-forwarded-for": ip },
+      body: JSON.stringify({ token: process.env.ADMIN_ORDERS_TOKEN }),
+    }));
+    assert.equal(login.status, 200);
+    const cookieHeader = login.headers.get("set-cookie") ?? "";
+    assert.match(cookieHeader, /HttpOnly/i);
+    assert.match(cookieHeader, /Secure/i);
+    assert.match(cookieHeader, /SameSite=Strict/i);
+    assert.match(cookieHeader, /Path=\//i);
+    const cookieValue = cookieHeader.match(new RegExp(`${ADMIN_SESSION_COOKIE}=([^;]+)`))?.[1] ?? "";
+    assert.ok(cookieValue);
+    assert.notEqual(cookieValue, process.env.ADMIN_ORDERS_TOKEN);
+    assert.equal(isValidAdminSessionValue(cookieValue), true);
+    assert.equal(isValidAdminSessionValue(cookieValue, Date.now() + 9 * 60 * 60 * 1000), false);
+
+    const sessionRequest = new Request("https://store.example/api/admin/session", {
+      headers: { cookie: `${ADMIN_SESSION_COOKIE}=${cookieValue}` },
+    });
+    assert.equal((await checkAdminSession(sessionRequest)).status, 200);
+    assert.equal(authorizeAdminRequest(sessionRequest), null);
+    const alteredRequest = new Request("https://store.example/api/admin/session", {
+      headers: { cookie: `${ADMIN_SESSION_COOKIE}=${cookieValue.slice(0, -1)}${cookieValue.endsWith("0") ? "1" : "0"}` },
+    });
+    assert.equal((await checkAdminSession(alteredRequest)).status, 401);
+    const expiredRequest = new Request("https://store.example/api/admin/session", {
+      headers: { cookie: `${ADMIN_SESSION_COOKIE}=${createAdminSessionValue(Date.now() - 9 * 60 * 60 * 1000)}` },
+    });
+    assert.equal((await checkAdminSession(expiredRequest)).status, 401);
+    assert.equal(authorizeAdminRequest(new Request("https://store.example/api/admin/session"))?.status, 401);
+
+    const logout = logoutAdmin();
+    assert.equal(logout.status, 200);
+    assert.match(logout.headers.get("set-cookie") ?? "", /Max-Age=0/i);
+  } finally {
+    if (previousToken === undefined) delete process.env.ADMIN_ORDERS_TOKEN;
+    else process.env.ADMIN_ORDERS_TOKEN = previousToken;
+    if (previousNodeEnv === undefined) Reflect.deleteProperty(process.env, "NODE_ENV");
+    else Object.defineProperty(process.env, "NODE_ENV", { configurable: true, enumerable: true, writable: true, value: previousNodeEnv });
+  }
+});
+
+test("login administrativo limita tentativas por IP", async () => {
+  const previousToken = process.env.ADMIN_ORDERS_TOKEN;
+  process.env.ADMIN_ORDERS_TOKEN = "admin-session-test-secret";
+  try {
+    const ip = `198.51.100.${Math.floor(Math.random() * 200) + 1}`;
+    for (let attempt = 0; attempt < 5; attempt += 1) {
+      const response = await loginAdmin(new Request("https://store.example/api/admin/session", {
+        method: "POST",
+        headers: { "content-type": "application/json", "x-real-ip": ip },
+        body: JSON.stringify({ token: "wrong-token" }),
+      }));
+      assert.equal(response.status, 401);
+    }
+    const blocked = await loginAdmin(new Request("https://store.example/api/admin/session", {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-real-ip": ip },
+      body: JSON.stringify({ token: "wrong-token" }),
+    }));
+    assert.equal(blocked.status, 429);
   } finally {
     if (previousToken === undefined) delete process.env.ADMIN_ORDERS_TOKEN;
     else process.env.ADMIN_ORDERS_TOKEN = previousToken;

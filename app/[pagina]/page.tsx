@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowUpRight, Mail, MessageCircle } from "lucide-react";
 import { storeConfig } from "@/config";
+import { SITE_NAME } from "@/lib/site";
 import { ContactForm } from "./contact-form";
 
 type InstitutionalPage = {
@@ -15,7 +16,7 @@ type InstitutionalPage = {
 const pages: Record<string, InstitutionalPage> = {
   "quem-somos": {
     title: "Quem somos",
-    intro: "A Imports Alves é para quem leva a paixão pelo esporte para além do jogo.",
+    intro: `${SITE_NAME} é para quem leva a paixão pelo esporte para além do jogo.`,
     sections: [
       { heading: "Futebol e automobilismo", paragraphs: [
         "Somos especializados em camisas de futebol importadas — versões torcedor e jogador, modelos retrô e kits infantis — e em artigos de Fórmula 1.",
@@ -29,14 +30,14 @@ const pages: Record<string, InstitutionalPage> = {
   },
   privacidade: {
     title: "Política de privacidade",
-    intro: "Esta política explica como as informações são usadas quando você navega, entra em contato ou faz um pedido na Imports Alves.",
+    intro: `Esta política explica como as informações são usadas quando você navega, entra em contato ou faz um pedido na ${SITE_NAME}.`,
     sections: [
       { heading: "Dados que recebemos", paragraphs: [
         "Para processar um pedido, podemos tratar nome, CPF, e-mail, telefone, endereço de entrega, itens comprados e informações sobre o pagamento. Se você falar com o atendimento, também usamos os dados que enviar na mensagem.",
         "O site guarda no navegador a opção escolhida no aviso de cookies.",
       ] },
       { heading: "Como usamos os dados", paragraphs: [
-        "Usamos os dados para confirmar e processar pedidos, receber pagamentos, encaminhar a entrega, prestar suporte, informar o rastreio e cumprir obrigações legais. O pagamento é processado pelo Mercado Pago; a Imports Alves não recebe os dados completos do cartão.",
+        `Usamos os dados para confirmar e processar pedidos, receber pagamentos, encaminhar a entrega, prestar suporte, informar o rastreio e cumprir obrigações legais. O pagamento é processado pelo Mercado Pago; a ${SITE_NAME} não recebe os dados completos do cartão.`,
         "Para concluir a entrega, os dados necessários do pedido são compartilhados com os parceiros responsáveis pelo envio. As informações do pedido ficam armazenadas no sistema operacional da loja. Quando os serviços correspondentes estão configurados, dados mínimos também podem ser enviados aos provedores de e-mail e de notificações transacionais por WhatsApp.",
       ] },
       { heading: "Acesso, segurança e direitos", paragraphs: [
@@ -44,7 +45,7 @@ const pages: Record<string, InstitutionalPage> = {
         "Você pode solicitar confirmação de tratamento, acesso, correção ou outras providências previstas na LGPD pelo e-mail atendimento@importsalves.com.br. Para proteger sua conta e seus dados, poderemos confirmar sua identidade antes de atender à solicitação.",
       ] },
       { heading: "Responsável pelo atendimento de privacidade", paragraphs: [
-        "A Imports Alves recebe solicitações de privacidade pelo e-mail atendimento@importsalves.com.br. Para proteger os dados, o atendimento pode confirmar a identidade de quem faz a solicitação.",
+        `${SITE_NAME} recebe solicitações de privacidade pelo e-mail atendimento@importsalves.com.br. Para proteger os dados, o atendimento pode confirmar a identidade de quem faz a solicitação.`,
       ] },
     ],
     references: [{ label: "Lei Geral de Proteção de Dados (LGPD)", href: "https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm" }],
@@ -86,7 +87,7 @@ const pages: Record<string, InstitutionalPage> = {
   },
   "termos-de-uso": {
     title: "Termos de uso e compra",
-    intro: "Ao navegar ou comprar na Imports Alves, use o site de forma lícita e confira as informações do pedido antes de pagar.",
+    intro: `Ao navegar ou comprar na ${SITE_NAME}, use o site de forma lícita e confira as informações do pedido antes de pagar.`,
     sections: [
       { heading: "Produtos e disponibilidade", paragraphs: [
         "As páginas apresentam as descrições, imagens, tamanhos disponíveis e valores cadastrados para cada produto. A disponibilidade pode mudar até a confirmação do pedido; a loja informa qualquer impedimento identificado no processamento.",
@@ -158,7 +159,7 @@ export default async function InstitutionalPage({ params }: { params: Promise<{ 
 
   return <main className="mx-auto max-w-4xl px-5 py-10 sm:py-14">
     <header className="rounded-2xl bg-ink px-6 py-8 text-white sm:px-10 sm:py-10">
-      <p className="text-[10px] font-bold uppercase tracking-wider text-action">Imports Alves · informações</p>
+      <p className="text-[10px] font-bold uppercase tracking-wider text-action">{SITE_NAME} · informações</p>
       <h1 className="mt-3 text-3xl font-bold tracking-normal sm:text-4xl">{page.title}</h1>
       <p className="mt-3 max-w-2xl text-sm leading-6 text-white/75">{page.intro}</p>
     </header>

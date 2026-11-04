@@ -1,6 +1,7 @@
-# Imports Alves
+# Documentação da loja
 
 Loja de camisas de futebol feita com Next.js 15, TypeScript, Zustand, Supabase e Mercado Pago Checkout Pro.
+O nome comercial exibido pelo site é centralizado em `SITE_NAME`, definido em `lib/site.ts`.
 
 ## Preços e frete
 
@@ -42,7 +43,7 @@ Os pedidos ficam em `store_orders` e os pagamentos em `store_order_payments` no 
 
 ## Operação
 
-- `/admin` exibe a visão geral. A navegação também oferece `/admin/pedidos`, `/admin/produtos`, `/admin/fornecedores`, `/admin/financeiro` e `/admin/configuracoes`; as APIs administrativas exigem `ADMIN_ORDERS_TOKEN` no cabeçalho `Authorization`.
+- `/admin` exibe a visão geral. A navegação também oferece `/admin/pedidos`, `/admin/produtos`, `/admin/fornecedores`, `/admin/financeiro` e `/admin/configuracoes`; o acesso é feito uma vez com `ADMIN_ORDERS_TOKEN`, que cria uma sessão assinada em cookie HttpOnly.
 - `/admin/avaliacoes` lista avaliações pendentes, aprovadas e rejeitadas. A API pública recebe novos comentários como pendentes, e somente avaliações aprovadas aparecem na vitrine e nos dados agregados. A moderação requer a migração `20261103000003_review_moderation.sql` aplicada no Supabase.
 - O dashboard separa faturamento aprovado, gastos registrados e lucro estimado. Os indicadores financeiros abrangem todos os pedidos; as tabelas de pedidos recentes mostram até 300. Os valores do fornecedor, frete e demais despesas são preenchidos manualmente e não são presumidos.
 - `/admin/produtos` permite criar e editar produtos manuais, fotos, descrição, marca, categoria, preço, custo e fornecedor padrão, além de estoque informativo por tamanho. Os produtos manuais são gravados na tabela `products` existente e entram na mesma vitrine/busca/checkout; produtos importados ficam fora da edição manual. Custos/fornecedores são mantidos em `admin_product_supplier_details`, sem leitura pública. Estoque não é reservado, validado nem descontado no checkout.

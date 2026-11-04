@@ -113,11 +113,11 @@ export default function CheckoutPage() {
         })),
         customer: values,
       };
-      const fingerprint = await fingerprintCheckoutAttempt(payload);
+      const fingerprint = await fingerprintCheckoutAttempt(payload.items);
       let storage: Storage | undefined;
       try { storage = window.sessionStorage; } catch { storage = undefined; }
       if (storage) {
-        idempotencyKey.current = getCheckoutAttemptKey(fingerprint, storage);
+        idempotencyKey.current = getCheckoutAttemptKey(storage);
       } else if (attemptFingerprint.current !== fingerprint || !idempotencyKey.current) {
         idempotencyKey.current = globalThis.crypto.randomUUID();
       }
@@ -142,12 +142,14 @@ export default function CheckoutPage() {
         rawText?: string;
       };
       if (!response.ok) {
-        if (result.code === "ORDER_ALREADY_PROCESSED") {
+        if (result.code === "ORDER_ALREADY_PROCESSED" || result.code === "IDEMPOTENCY_CONFLICT") {
           clearCheckoutAttempt();
           idempotencyKey.current = null;
           attemptFingerprint.current = null;
         }
-        const providerMessage = result.error || result.mpErrorMessage || result.mpErrorCause || result.rawText;
+        const providerMessage = result.code === "IDEMPOTENCY_CONFLICT"
+          ? "Os dados do pedido mudaram. Envie novamente para iniciar uma nova tentativa."
+          : result.error || result.mpErrorMessage || result.mpErrorCause || result.rawText;
         throw new Error(providerMessage ?? `Não foi possível iniciar o pagamento (HTTP ${response.status}).`);
       }
       if (!result.checkoutUrl || !result.checkoutUrl.startsWith("https://")) {

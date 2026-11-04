@@ -31,7 +31,7 @@ export async function GET(request: Request) {
     const supabase = getSupabaseOrdersClient();
     const [{ data, error, count }, { data: summary, error: summaryError }] = await Promise.all([
       supabase.from("avaliacoes")
-        .select("id,created_at,nome,cidade,produto,nota,comentario,status", { count: "exact" })
+        .select("created_at,nome,cidade,produto,nota,comentario,status", { count: "exact" })
         .eq("status", "approved")
         .order("created_at", { ascending: false })
         .range(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE - 1),
@@ -47,7 +47,17 @@ export async function GET(request: Request) {
       page,
       PAGE_SIZE,
     );
-    return NextResponse.json(payload, { headers: { "Cache-Control": "no-store" } });
+    return NextResponse.json({
+      ...payload,
+      reviews: payload.reviews.map(({ created_at, nome, cidade, produto, nota, comentario }) => ({
+        created_at,
+        nome,
+        cidade,
+        produto,
+        nota,
+        comentario,
+      })),
+    }, { headers: { "Cache-Control": "no-store" } });
   } catch (error) {
     console.error("Falha ao carregar avaliações públicas:", describeSupabaseError(error));
     return jsonError("Não foi possível carregar as avaliações agora.", 503);

@@ -1,10 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AdminNavigation } from "@/components/admin-navigation";
-import { AdminSkeleton, EmptyState, ErrorState, LockedState, StatCard, StatusBadge } from "@/components/admin-states";
+import { AdminSkeleton, EmptyState, ErrorState, StatCard, StatusBadge } from "@/components/admin-states";
 import { PackageOpen } from "lucide-react";
 import { formatCustomization } from "@/lib/customization";
+import { adminFetch } from "@/lib/client/admin-fetch";
+import { SITE_NAME } from "@/lib/site";
 
 type OrderItem = {
   title: string;
@@ -106,7 +108,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
   return <label className="grid gap-1 text-[11px] font-bold text-muted">{label}{children}</label>;
 }
 
-function OrderOperations({ order, token, onSaved }: { order: Order; token: string; onSaved: () => void }) {
+function OrderOperations({ order, onSaved }: { order: Order; onSaved: () => void }) {
   const [operationalStatus, setOperationalStatus] = useState(getOperationalStatus(order));
   const [supplierStatus, setSupplierStatus] = useState<SupplierStatus>(order.supplier_status ?? "nao_solicitado");
   const [supplierName, setSupplierName] = useState(order.supplier_name ?? "");
@@ -123,9 +125,9 @@ function OrderOperations({ order, token, onSaved }: { order: Order; token: strin
     setSaving(true);
     setFeedback("");
     try {
-      const response = await fetch("/api/admin/orders", {
+      const response = await adminFetch("/api/admin/orders", {
         method: "PATCH",
-        headers: { authorization: `Bearer ${token}`, "content-type": "application/json" },
+        headers: { "content-type": "application/json" },
         body: JSON.stringify({
           orderId: order.id,
           action: "update_operations",
@@ -173,13 +175,13 @@ function OrderOperations({ order, token, onSaved }: { order: Order; token: strin
           <input type="date" value={supplierOrderedAt} onChange={(event) => setSupplierOrderedAt(event.target.value)} className="rounded border border-border bg-white px-2 py-2 text-ink" />
         </Field>
         <Field label="Custo do fornecedor (R$)">
-          <input type="number" min="0" max="100000" step="0.01" value={supplierCost} onChange={(event) => setSupplierCost(event.target.value)} className="rounded border border-border bg-white px-2 py-2 text-ink" />
+          <input type="number" inputMode="decimal" min="0" max="100000" step="0.01" value={supplierCost} onChange={(event) => setSupplierCost(event.target.value)} className="rounded border border-border bg-white px-2 py-2 text-ink" />
         </Field>
         <Field label="Custo de frete (R$)">
-          <input type="number" min="0" max="100000" step="0.01" value={shippingCost} onChange={(event) => setShippingCost(event.target.value)} className="rounded border border-border bg-white px-2 py-2 text-ink" />
+          <input type="number" inputMode="decimal" min="0" max="100000" step="0.01" value={shippingCost} onChange={(event) => setShippingCost(event.target.value)} className="rounded border border-border bg-white px-2 py-2 text-ink" />
         </Field>
         <Field label="Outras despesas (R$)">
-          <input type="number" min="0" max="100000" step="0.01" value={otherExpenses} onChange={(event) => setOtherExpenses(event.target.value)} className="rounded border border-border bg-white px-2 py-2 text-ink" />
+          <input type="number" inputMode="decimal" min="0" max="100000" step="0.01" value={otherExpenses} onChange={(event) => setOtherExpenses(event.target.value)} className="rounded border border-border bg-white px-2 py-2 text-ink" />
         </Field>
         <Field label="Observações internas">
           <textarea maxLength={4000} rows={2} value={internalNotes} onChange={(event) => setInternalNotes(event.target.value)} className="rounded border border-border bg-white px-2 py-2 text-ink" />
@@ -195,16 +197,13 @@ function OrderOperations({ order, token, onSaved }: { order: Order; token: strin
 }
 
 export default function AdminOrders() {
-  const [token, setToken] = useState("");
   const [orders, setOrders] = useState<Order[]>([]);
   const [trackingValues, setTrackingValues] = useState<Record<string, string>>({});
   const [trackingUrls, setTrackingUrls] = useState<Record<string, string>>({});
   const [savingId, setSavingId] = useState("");
   const [message, setMessage] = useState("");
-  const [authorized, setAuthorized] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState("");
-  const [authRejected, setAuthRejected] = useState(false);
   const [onlyPaid, setOnlyPaid] = useState(true);
   const paidOrders = orders.filter(isPaid);
   const visibleOrders = onlyPaid ? paidOrders : orders;
@@ -213,12 +212,10 @@ export default function AdminOrders() {
     setLoading(true);
     setLoadError("");
     try {
-      const response = await fetch("/api/admin/orders", { headers: { authorization: `Bearer ${token}` }, cache: "no-store" });
+      const response = await adminFetch("/api/admin/orders", { cache: "no-store" });
       const body = await response.json();
       if (response.status === 401) {
-        setAuthorized(false);
-        setAuthRejected(true);
-        setLoadError(body.error ?? "Token inválido. Confira e tente novamente.");
+        setLoadError("Sua sessão expirou. Entre novamente.");
         return;
       }
       if (!response.ok) throw new Error(body.error ?? "Não foi possível carregar os pedidos.");
@@ -226,15 +223,14 @@ export default function AdminOrders() {
       setOrders(rows);
       setTrackingValues(Object.fromEntries(rows.map((order) => [order.id, order.tracking_code ?? ""])));
       setTrackingUrls(Object.fromEntries(rows.map((order) => [order.id, order.tracking_url ?? ""])));
-      setAuthorized(true);
-      setAuthRejected(false);
     } catch (error) {
-      setAuthRejected(false);
       setLoadError(error instanceof Error ? error.message : "Não foi possível carregar os pedidos.");
     } finally {
       setLoading(false);
     }
   }
+
+  useEffect(() => { void load(); }, []);
 
   async function saveShipping(order: Order) {
     setSavingId(order.id);
@@ -242,16 +238,14 @@ export default function AdminOrders() {
     try {
       const trackingCode = (trackingValues[order.id] ?? "").trim();
       const trackingUrl = (trackingUrls[order.id] ?? "").trim();
-      const response = await fetch("/api/admin/orders", {
+      const response = await adminFetch("/api/admin/orders", {
         method: "PATCH",
-        headers: { authorization: `Bearer ${token}`, "content-type": "application/json" },
+        headers: { "content-type": "application/json" },
         body: JSON.stringify({ orderId: order.id, action: "save_shipping", trackingCode, trackingUrl }),
       });
       const body = await response.json();
       if (response.status === 401) {
-        setAuthorized(false);
-        setAuthRejected(true);
-        setLoadError(body.error ?? "Token inválido. Confira e tente novamente.");
+        setLoadError("Sua sessão expirou. Entre novamente.");
         return;
       }
       if (!response.ok) throw new Error(body.error ?? "Não foi possível salvar o rastreio.");
@@ -270,16 +264,14 @@ export default function AdminOrders() {
     setSavingId(order.id);
     setMessage("");
     try {
-      const response = await fetch("/api/admin/orders", {
+      const response = await adminFetch("/api/admin/orders", {
         method: "PATCH",
-        headers: { authorization: `Bearer ${token}`, "content-type": "application/json" },
+        headers: { "content-type": "application/json" },
         body: JSON.stringify({ orderId: order.id, action: "mark_shipped" }),
       });
       const body = await response.json();
       if (response.status === 401) {
-        setAuthorized(false);
-        setAuthRejected(true);
-        setLoadError(body.error ?? "Token inválido. Confira e tente novamente.");
+        setLoadError("Sua sessão expirou. Entre novamente.");
         return;
       }
       if (!response.ok) throw new Error(body.error ?? "Não foi possível marcar o pedido como enviado.");
@@ -319,15 +311,13 @@ export default function AdminOrders() {
       <AdminNavigation current="orders" />
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="text-[10px] font-black uppercase tracking-[.2em] text-action">Imports Alves · administração</p>
+          <p className="text-[10px] font-black uppercase tracking-[.2em] text-action">{SITE_NAME} · Administração</p>
           <h1 className="mt-2 text-3xl font-black">Pedidos recentes</h1>
           <p className="mt-2 text-sm text-muted">Pagamento é acompanhado separadamente do andamento operacional.</p>
         </div>
         {orders.length > 0 && <button onClick={exportCsv} className="rounded-lg border border-border px-4 py-2.5 text-xs font-bold hover:bg-paper">Exportar CSV</button>}
       </header>
-      {!authorized && !loading && (!loadError || authRejected) ? (
-        <LockedState token={token} onTokenChange={setToken} onSubmit={(event) => { event.preventDefault(); void load(); }} loading={loading} message={loadError || undefined} />
-      ) : loading ? (
+      {loading ? (
         <AdminSkeleton cards={4} />
       ) : loadError ? (
         <div className="mt-8"><ErrorState message={loadError} onRetry={() => void load()} /></div>
@@ -366,7 +356,7 @@ export default function AdminOrders() {
                     <td className="min-w-72 px-4 py-4">
                       <StatusBadge tone={operationalStatus === "enviado" ? "green" : operationalStatus === "cancelado" ? "red" : operationalStatus === "aguardando_fornecedor" ? "amber" : "neutral"}>{operationalLabel}</StatusBadge>
                       {order.supplier_name && <span className="mt-1 block text-[10px] text-muted">Fornecedor: {order.supplier_name}</span>}
-                      <OrderOperations key={`${order.id}-${order.updated_at}-${order.operational_status}`} order={order} token={token} onSaved={() => void load()} />
+                      <OrderOperations key={`${order.id}-${order.updated_at}-${order.operational_status}`} order={order} onSaved={() => void load()} />
                     </td>
                     <td className="min-w-56 px-4 py-4">
                       <label className="sr-only" htmlFor={`tracking-${order.id}`}>Código de rastreio do pedido {order.id.slice(0, 8)}</label>

@@ -1,6 +1,6 @@
 "use client";
 
-import type { FormEvent, ReactNode } from "react";
+import { useState, type FormEvent, type ReactNode } from "react";
 import {
   AlertTriangle,
   Inbox,
@@ -10,36 +10,61 @@ import {
 } from "lucide-react";
 
 export function LockedState({
-  token,
-  onTokenChange,
-  onSubmit,
-  loading,
+  onAuthenticated,
   message,
 }: {
-  token: string;
-  onTokenChange: (value: string) => void;
-  onSubmit: (event: FormEvent<HTMLFormElement>) => void;
-  loading: boolean;
+  onAuthenticated: () => void;
   message?: string;
 }) {
+  const [token, setToken] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  async function submit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setLoading(true);
+    setError("");
+    try {
+      const response = await fetch("/api/admin/session", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        credentials: "same-origin",
+        cache: "no-store",
+        body: JSON.stringify({ token }),
+      });
+      if (!response.ok) {
+        setError(response.status === 429
+          ? "Muitas tentativas. Aguarde alguns minutos e tente novamente."
+          : "Acesso inválido. Confira o token e tente novamente.");
+        return;
+      }
+      setToken("");
+      onAuthenticated();
+    } catch {
+      setError("Não foi possível iniciar a sessão. Tente novamente.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <section className="mx-auto mt-10 w-full max-w-md rounded-2xl border border-border bg-white p-6 text-center shadow-sm sm:p-8">
       <span className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-paper text-ink"><KeyRound size={25} /></span>
       <h2 className="mt-4 text-xl font-black">Acesso restrito</h2>
       <p className="mt-2 text-sm leading-6 text-muted">Informe seu token administrativo para acessar os dados privados da loja.</p>
-      <form onSubmit={onSubmit} className="mt-5 grid gap-3 text-left">
+      <form onSubmit={(event) => void submit(event)} className="mt-5 grid gap-3 text-left">
         <label htmlFor="admin-access-token" className="text-xs font-bold">Token administrativo</label>
         <input
           id="admin-access-token"
           type="password"
-          autoComplete="current-password"
+          autoComplete="off"
           required
           value={token}
-          onChange={(event) => onTokenChange(event.target.value)}
-          className="min-h-12 rounded-lg border border-border px-4 py-3 text-sm outline-none focus:border-ink focus:ring-2 focus:ring-ink/10"
+          onChange={(event) => setToken(event.target.value)}
+          className="min-h-12 rounded-lg border border-border px-4 py-3 text-base outline-none focus:border-ink focus:ring-2 focus:ring-ink/10"
           placeholder="Digite o token"
         />
-        {message && <p role="alert" className="text-xs leading-5 text-red-700">{message}</p>}
+        {(error || message) && <p role="alert" className="text-xs leading-5 text-red-700">{error || message}</p>}
         <button disabled={loading} className="min-h-12 rounded-lg bg-ink px-5 py-3 text-sm font-bold text-white transition hover:bg-ink/90 disabled:opacity-50">
           {loading ? "Verificando..." : "Acessar painel"}
         </button>

@@ -9,6 +9,7 @@ import {
   getSupabaseOrdersClient,
   SupabaseOrdersConfigurationError,
 } from "@/lib/server/supabase-orders";
+import { SITE_NAME } from "@/lib/site";
 
 export const runtime = "nodejs";
 
@@ -28,7 +29,7 @@ function publicImageRecords(imageUrls: string[], productName: string) {
       src: image.toString(),
       source: image.toString(),
       alt: `${productName} · foto ${index + 1}`,
-      credit: "Imports Alves",
+      credit: SITE_NAME,
       focalPoint: { x: 50, y: 50 },
       blurDataURL: "",
     };

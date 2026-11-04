@@ -62,8 +62,17 @@ function getAccessToken() {
 }
 
 export function validateMercadoPagoAccessToken() {
-  getPaymentEnvironment();
-  getAccessToken();
+  const environment = getPaymentEnvironment();
+  const token = getAccessToken();
+  const matchesEnvironment = environment === "test"
+    ? token.startsWith("TEST-")
+    : token.startsWith("APP_USR-");
+  if (!matchesEnvironment) {
+    throw new PaymentConfigurationError(
+      `O Access Token não corresponde a PAYMENT_ENVIRONMENT=${environment}.`,
+      ["PAYMENT_ENVIRONMENT", "MERCADO_PAGO_ACCESS_TOKEN"],
+    );
+  }
 }
 
 export function getPaymentEnvironment(): PaymentEnvironment {
@@ -118,6 +127,7 @@ export async function createMercadoPagoPreference(
   body: Record<string, unknown>,
   idempotencyKey: string,
 ): Promise<MercadoPagoPreference> {
+  validateMercadoPagoAccessToken();
   const token = getAccessToken();
   let response: Response;
   try {
@@ -166,7 +176,7 @@ export function isProductionPaymentEnvironment() {
 }
 
 export function getPaymentClient() {
-  getPaymentEnvironment();
+  validateMercadoPagoAccessToken();
   return new Payment(new MercadoPagoConfig({
     accessToken: getAccessToken(),
     options: { timeout: 10_000 },

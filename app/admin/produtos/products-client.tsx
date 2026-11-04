@@ -1,11 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AdminNavigation } from "@/components/admin-navigation";
-import { AdminSkeleton, EmptyState, ErrorState, LockedState, StatCard, StatusBadge } from "@/components/admin-states";
+import { AdminSkeleton, EmptyState, ErrorState, StatCard, StatusBadge } from "@/components/admin-states";
 import { PackageOpen } from "lucide-react";
 import type { Audience, ProductType, Uniform } from "@/lib/types";
+import { adminFetch } from "@/lib/client/admin-fetch";
+import { SITE_NAME } from "@/lib/site";
 
 type ProductPhoto = { src: string; alt?: string };
 type ManualProduct = {
@@ -107,47 +109,40 @@ function Field({ label, children, className = "" }: { label: string; children: R
 }
 
 export default function AdminProducts() {
-  const [token, setToken] = useState("");
   const [products, setProducts] = useState<ManualProduct[]>([]);
   const [draft, setDraft] = useState<ProductDraft>(emptyDraft);
   const [existingPhotos, setExistingPhotos] = useState<ProductPhoto[]>([]);
   const [sizeInput, setSizeInput] = useState("P, M, G, GG");
   const [slugTouched, setSlugTouched] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
-  const [authorized, setAuthorized] = useState(false);
   const [loadError, setLoadError] = useState("");
-  const [authRejected, setAuthRejected] = useState(false);
 
   async function loadProducts() {
     setLoading(true);
     setMessage("");
     setLoadError("");
     try {
-      const response = await fetch("/api/admin/products", {
-        headers: { authorization: `Bearer ${token}` },
+      const response = await adminFetch("/api/admin/products", {
         cache: "no-store",
       });
       const body = await response.json();
       if (response.status === 401) {
-        setAuthorized(false);
-        setAuthRejected(true);
-        setLoadError(body.error ?? "Token inválido. Confira e tente novamente.");
+        setLoadError("Sua sessão expirou. Entre novamente.");
         return;
       }
       if (!response.ok) throw new Error(body.error ?? "Não foi possível carregar os produtos.");
       setProducts(body.products as ManualProduct[]);
-      setAuthorized(true);
-      setAuthRejected(false);
     } catch (error) {
-      setAuthRejected(false);
       setLoadError(error instanceof Error ? error.message : "Não foi possível carregar os produtos.");
     } finally {
       setLoading(false);
     }
   }
+
+  useEffect(() => { void loadProducts(); }, []);
 
   function editProduct(product: ManualProduct) {
     const sizes = product.tamanhos.filter((size) => size !== "3GG");
@@ -213,16 +208,13 @@ export default function AdminProducts() {
     try {
       const formData = new FormData();
       files.forEach((file) => formData.append("files", file));
-      const response = await fetch("/api/admin/products/images", {
+      const response = await adminFetch("/api/admin/products/images", {
         method: "POST",
-        headers: { authorization: `Bearer ${token}` },
         body: formData,
       });
       const body = await response.json();
       if (response.status === 401) {
-        setAuthorized(false);
-        setAuthRejected(true);
-        setLoadError(body.error ?? "Token inválido. Confira e tente novamente.");
+        setLoadError("Sua sessão expirou. Entre novamente.");
         return;
       }
       if (!response.ok) throw new Error(body.error ?? "Não foi possível enviar as fotos.");
@@ -244,16 +236,14 @@ export default function AdminProducts() {
         ...draft,
         slug: draft.slug || slugify(draft.nome),
       };
-      const response = await fetch("/api/admin/products", {
+      const response = await adminFetch("/api/admin/products", {
         method: draft.id ? "PATCH" : "POST",
-        headers: { authorization: `Bearer ${token}`, "content-type": "application/json" },
+        headers: { "content-type": "application/json" },
         body: JSON.stringify(payload),
       });
       const body = await response.json();
       if (response.status === 401) {
-        setAuthorized(false);
-        setAuthRejected(true);
-        setLoadError(body.error ?? "Token inválido. Confira e tente novamente.");
+        setLoadError("Sua sessão expirou. Entre novamente.");
         return;
       }
       if (!response.ok) throw new Error(body.error ?? "Não foi possível salvar o produto.");
@@ -276,21 +266,13 @@ export default function AdminProducts() {
   return (
     <main className="mx-auto max-w-7xl px-5 py-10 lg:px-8">
       <AdminNavigation current="products" />
-      {!authorized && !loading && (!loadError || authRejected) ? (
-        <LockedState
-          token={token}
-          onTokenChange={setToken}
-          onSubmit={(event) => { event.preventDefault(); void loadProducts(); }}
-          loading={loading}
-          message={loadError || undefined}
-        />
-      ) : loading ? (
+      {loading ? (
         <AdminSkeleton cards={3} />
       ) : loadError ? (
         <ErrorState message={loadError} onRetry={() => void loadProducts()} />
       ) : <>
       <div>
-        <p className="text-[10px] font-black uppercase tracking-[.2em] text-action">Imports Alves · administração</p>
+        <p className="text-[10px] font-black uppercase tracking-[.2em] text-action">{SITE_NAME} · Administração</p>
         <h1 className="mt-2 text-3xl font-black">Produtos e estoque</h1>
         <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">
           Cadastre produtos manuais no mesmo catálogo Supabase usado pela vitrine. O estoque é informativo e editado manualmente; não reserva nem desconta unidades no checkout.
@@ -326,7 +308,7 @@ export default function AdminProducts() {
             }} className="rounded-lg border border-border px-3 py-2.5 font-normal" placeholder="camisa-clube-modelo" />
           </Field>
           <Field label="Preço (R$)">
-            <input required type="number" min="0" max="100000" step="0.01" value={draft.preco} onChange={(event) => setField("preco", Number(event.target.value))} className="rounded-lg border border-border px-3 py-2.5 font-normal" />
+            <input required type="number" inputMode="decimal" min="0" max="100000" step="0.01" value={draft.preco} onChange={(event) => setField("preco", Number(event.target.value))} className="rounded-lg border border-border px-3 py-2.5 font-normal" />
           </Field>
           <Field label="Marca">
             <input maxLength={100} value={draft.brand} onChange={(event) => setField("brand", event.target.value)} className="rounded-lg border border-border px-3 py-2.5 font-normal" placeholder="Ex.: Adidas" />
@@ -335,7 +317,7 @@ export default function AdminProducts() {
             <input maxLength={160} value={draft.supplier_name} onChange={(event) => setField("supplier_name", event.target.value)} className="rounded-lg border border-border px-3 py-2.5 font-normal" placeholder="Nome do fornecedor" />
           </Field>
           <Field label="Custo de aquisição (R$)">
-            <input type="number" min="0" max="100000" step="0.01" value={draft.supplier_cost} onChange={(event) => setField("supplier_cost", Number(event.target.value))} className="rounded-lg border border-border px-3 py-2.5 font-normal" />
+            <input type="number" inputMode="decimal" min="0" max="100000" step="0.01" value={draft.supplier_cost} onChange={(event) => setField("supplier_cost", Number(event.target.value))} className="rounded-lg border border-border px-3 py-2.5 font-normal" />
           </Field>
           <Field label="Público / categoria">
             <select value={draft.publico} onChange={(event) => setField("publico", event.target.value as ProductDraft["publico"])} className="rounded-lg border border-border px-3 py-2.5 font-normal">
@@ -374,7 +356,7 @@ export default function AdminProducts() {
             {draft.tamanhos.length > 0 && <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
               {draft.tamanhos.map((size) => <label key={size} className="flex items-center justify-between gap-3 rounded-lg border border-border px-3 py-2 text-xs">
                 <span className="font-bold">{size} · estoque manual</span>
-                <input aria-label={`Estoque do tamanho ${size}`} type="number" min="0" max="10000" step="1" value={draft.stock_by_size[size] ?? 0} onChange={(event) => setDraft((current) => ({ ...current, stock_by_size: { ...current.stock_by_size, [size]: Number(event.target.value) } }))} className="w-20 rounded border border-border px-2 py-1 text-right" />
+                <input aria-label={`Estoque do tamanho ${size}`} type="number" inputMode="numeric" min="0" max="10000" step="1" value={draft.stock_by_size[size] ?? 0} onChange={(event) => setDraft((current) => ({ ...current, stock_by_size: { ...current.stock_by_size, [size]: Number(event.target.value) } }))} className="w-20 rounded border border-border px-2 py-1 text-right" />
               </label>)}
             </div>}
             <p className="mt-2 text-[11px] leading-5 text-muted">O cadastro do estoque não altera disponibilidade nem bloqueia compras; atualize manualmente quando necessário. O tamanho 3GG ainda não é aceito pelo checkout atual.</p>
@@ -392,8 +374,8 @@ export default function AdminProducts() {
               ))}
             </div>
           </div>
-          <div className="flex flex-wrap gap-2 md:col-span-2">
-            <button type="submit" disabled={saving || uploading || !token} className="rounded-lg bg-ink px-5 py-3 text-xs font-black uppercase text-white disabled:opacity-50">{saving ? "Salvando…" : draft.id ? "Salvar alterações" : "Cadastrar e publicar"}</button>
+          <div className="sticky bottom-0 z-10 -mx-3 flex flex-wrap gap-2 bg-white/95 p-3 backdrop-blur md:static md:mx-0 md:col-span-2 md:bg-transparent md:p-0 md:backdrop-blur-0">
+            <button type="submit" disabled={saving || uploading} className="rounded-lg bg-ink px-5 py-3 text-xs font-black uppercase text-white disabled:opacity-50">{saving ? "Salvando…" : draft.id ? "Salvar alterações" : "Cadastrar e publicar"}</button>
           </div>
         </form>
       </section>

@@ -4,10 +4,11 @@ import { getBundledFeminineProducts, getSupabaseProducts } from "@/lib/server/su
 import { toCatalogPreview } from "@/lib/catalog";
 import { isFeminineProduct, prepareFeminineProduct } from "@/lib/feminine-catalog";
 import { sortCatalogProducts } from "@/lib/catalog-order";
+import { SITE_NAME } from "@/lib/site";
 
 export const revalidate = 300;
 
-export const metadata = { title: "Camisas femininas | Imports Alves", description: "Camisas femininas e modelos exclusivos para torcer na Imports Alves.", alternates: { canonical: "/feminino" } };
+export const metadata = { title: `Camisas femininas | ${SITE_NAME}`, description: `Camisas femininas e modelos exclusivos para torcer na ${SITE_NAME}.`, alternates: { canonical: "/feminino" } };
 
 export default async function FemininoPage({ searchParams }: { searchParams: Promise<{ tipo?: string }> }) {
   const { tipo = "" } = await searchParams;
@@ -18,5 +19,5 @@ export default async function FemininoPage({ searchParams }: { searchParams: Pro
     feminineBySlug.set(product.slug, product);
   }
   const feminineProducts = sortCatalogProducts([...feminineBySlug.values()]);
-  return <CatalogPage title="Feminino" description="Camisas e peças para viver o futebol com o seu jeito e a sua torcida." products={feminineProducts.map(toCatalogPreview)} breadcrumb={[{ name: "Feminino" }]} initialType={initialType} heroImage={images.categories.female} heroEyebrow={`${feminineProducts.length} produtos · Coleção feminina · Imports Alves`} />;
+  return <CatalogPage title="Feminino" description="Camisas e peças para viver o futebol com o seu jeito e a sua torcida." products={feminineProducts.map(toCatalogPreview)} breadcrumb={[{ name: "Feminino" }]} initialType={initialType} heroImage={images.categories.female} heroEyebrow={`${feminineProducts.length} produtos · Coleção feminina · ${SITE_NAME}`} />;
 }

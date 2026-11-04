@@ -1,5 +1,6 @@
 import { orderCode } from "@/lib/order-code";
 import { formatCustomization } from "@/lib/customization";
+import { SITE_NAME } from "@/lib/site";
 
 export type EmailItem = {
   title: string;
@@ -40,14 +41,14 @@ function summary(input: OrderEmailInput) {
 
 export function buildOrderReceivedEmail(input: OrderEmailInput) {
   return {
-    subject: `Pedido ${orderCode(input.orderId)} recebido — Imports Alves`,
+    subject: `Pedido ${orderCode(input.orderId)} recebido — ${SITE_NAME}`,
     text: `Olá, ${input.customerName}! Recebemos seu pedido. O pagamento ainda precisa ser concluído no Mercado Pago.\n\n${summary(input)}\n\n${trackingInstructions(input)}`,
   };
 }
 
 export function buildOrderPaidEmail(input: OrderEmailInput) {
   return {
-    subject: `Pagamento aprovado — pedido ${orderCode(input.orderId)} — Imports Alves`,
+    subject: `Pagamento aprovado — pedido ${orderCode(input.orderId)} — ${SITE_NAME}`,
     text: `Olá, ${input.customerName}! Seu pagamento foi aprovado e o pedido será preparado.\n\n${summary(input)}\n\n${trackingInstructions(input)}`,
   };
 }

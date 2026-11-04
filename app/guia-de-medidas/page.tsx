@@ -1,7 +1,8 @@
 import { SizeGuideChart, type SizeMeasurement } from "@/components/size-guide-chart";
+import { SITE_NAME } from "@/lib/site";
 
 export const metadata = {
-  title: "Guia de tamanhos | Imports Alves",
+  title: `Guia de tamanhos | ${SITE_NAME}`,
   description: "Consulte as tabelas de medidas masculinas, femininas e infantis das camisas.",
   alternates: { canonical: "/guia-de-medidas" },
 };
@@ -67,7 +68,7 @@ const charts: {
 export default function SizeGuidePage() {
   return <main className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
     <header className="mb-8 rounded-2xl bg-ink px-5 py-7 text-white sm:px-8 sm:py-9">
-      <p className="text-[10px] font-bold uppercase tracking-wider text-action">Imports Alves · escolha seu tamanho</p>
+      <p className="text-[10px] font-bold uppercase tracking-wider text-action">{SITE_NAME} · escolha seu tamanho</p>
       <h1 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">Guia de tamanhos</h1>
       <p className="mt-3 max-w-2xl text-sm leading-6 text-white/75">Compare as medidas de referência das camisas masculinas, femininas e infantis antes de escolher.</p>
       <nav aria-label="Categorias de medidas" className="mt-5 flex flex-wrap gap-2">

@@ -2,22 +2,24 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { describeSupabaseError, getSupabaseOrdersClient } from "@/lib/server/supabase-orders";
 import { isRateLimited } from "@/lib/server/rate-limit";
-import { isCompleteOrderCode, normalizeOrderCodeInput, orderCode } from "@/lib/order-code";
+import { isCompleteOrderCode, normalizeOrderCodeInput } from "@/lib/order-code";
 
 export const runtime = "nodejs";
 const schema = z.object({ code: z.string().trim().min(4).max(36), contact: z.string().trim().min(5).max(120) }).strict();
 const TRACK_LIMIT = 20;
 const TRACK_WINDOW_MS = 10 * 60 * 1000;
+const NO_MATCH = "Não encontramos um pedido com esses dados.";
+
+function noMatch() {
+  return NextResponse.json({ error: NO_MATCH }, { status: 404, headers: { "Cache-Control": "no-store" } });
+}
 
 export async function POST(request: Request) {
   if (isRateLimited(request, "track", TRACK_LIMIT, TRACK_WINDOW_MS)) {
     return NextResponse.json({ error: "Muitas consultas seguidas. Aguarde alguns minutos e tente novamente." }, { status: 429, headers: { "Cache-Control": "no-store" } });
   }
   const input = schema.safeParse(await request.json().catch(() => null));
-  if (!input.success) return NextResponse.json({ error: "Informe o código do pedido e o e-mail ou CPF usado na compra." }, { status: 400 });
-  if (!isCompleteOrderCode(input.data.code)) {
-    return NextResponse.json({ error: "Informe o código completo do pedido (8 caracteres, como no e-mail de confirmação)." }, { status: 400 });
-  }
+  if (!input.success || !isCompleteOrderCode(input.data.code)) return noMatch();
 
   const contact = input.data.contact.toLowerCase();
   const cpf = contact.replace(/\D/g, "");
@@ -29,7 +31,7 @@ export async function POST(request: Request) {
       p_cpf: cpf,
     });
     if (error) throw error;
-    if (!Array.isArray(data) || data.length !== 1) return NextResponse.json({ error: "Não encontramos um pedido com esses dados." }, { status: 404 });
+    if (!Array.isArray(data) || data.length !== 1) return noMatch();
     const order = data[0];
     const operationalStatus = order.operational_status ?? (
       order.status === "enviado"
@@ -41,13 +43,11 @@ export async function POST(request: Request) {
           : "aguardando_pagamento"
     );
     return NextResponse.json({ order: {
-      code: orderCode(String(order.id)),
+      code: prefix.toUpperCase(),
       status: order.status,
       operationalStatus,
       trackingCode: order.tracking_code,
       trackingUrl: order.tracking_url,
-      shipping: order.shipping?.label ?? "Frete fixo",
-      createdAt: order.created_at,
     } }, { headers: { "Cache-Control": "no-store" } });
   } catch (error) {
     console.error("Falha ao consultar pedido:", describeSupabaseError(error));

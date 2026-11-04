@@ -1,5 +1,7 @@
+import { SITE_NAME } from "@/lib/site";
+
 export const storeConfig = {
-  name: "Imports Alves",
+  name: SITE_NAME,
   fanCommonPrice: 160,
   kidsPrice: 180,
   fanFullPatchPrice: 180,

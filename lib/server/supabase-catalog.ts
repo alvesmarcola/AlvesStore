@@ -9,8 +9,8 @@ const PAGE_SIZE = 100;
 const PRODUCT_COLUMNS = "id,slug,clube,clubeSlug,liga,publico,tipo,temporada,uniforme,nome,preco,tamanhos,cor,imageSeed";
 const LIST_PRODUCT_COLUMNS = `${PRODUCT_COLUMNS},images`;
 const EXTENDED_LIST_PRODUCT_COLUMNS = `${LIST_PRODUCT_COLUMNS},category,gender,league,subcategory,tags,title,name,model,version`;
-const MANAGEMENT_PRODUCT_COLUMNS = `${EXTENDED_LIST_PRODUCT_COLUMNS},description,stock_by_size,brand`;
-const DETAIL_PRODUCT_COLUMNS = `${PRODUCT_COLUMNS},images,description,stock_by_size,brand`;
+const PUBLIC_LIST_PRODUCT_COLUMNS = `${EXTENDED_LIST_PRODUCT_COLUMNS},description,brand`;
+const DETAIL_PRODUCT_COLUMNS = `${PRODUCT_COLUMNS},images,description,brand`;
 const bundledCatalog = [...(bundledProducts as unknown as Product[]), ...(f1BundledProducts as unknown as Product[])];
 
 export function getBundledFormulaOneProducts(): Product[] {
@@ -32,6 +32,10 @@ function supabaseConfig() {
   const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY?.trim()
     || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim();
   return url && key ? { url: url.replace(/\/$/, ""), key } : null;
+}
+
+export function hasSupabaseCatalogConfiguration() {
+  return supabaseConfig() !== null;
 }
 
 function slugifyCatalogValue(value: string) {
@@ -220,15 +224,7 @@ function mapProduct(value: unknown): Product | null {
     subcategory: typeof value.subcategory === "string" ? value.subcategory : undefined,
     tags: tags.length ? tags : undefined,
     description: typeof value.description === "string" ? value.description : undefined,
-    stock_by_size: isRecord(value.stock_by_size)
-      ? Object.entries(value.stock_by_size).reduce<Record<string, number>>((stock, [size, count]) => {
-        if (typeof count === "number" && Number.isInteger(count) && count >= 0) stock[size] = count;
-        return stock;
-      }, {})
-      : undefined,
     brand: typeof value.brand === "string" ? value.brand : undefined,
-    supplier_name: typeof value.supplier_name === "string" ? value.supplier_name : undefined,
-    supplier_cost: Number.isFinite(Number(value.supplier_cost)) ? Number(value.supplier_cost) : undefined,
     title: typeof value.title === "string" ? value.title : undefined,
     name: typeof value.name === "string" ? value.name : undefined,
     model: typeof value.model === "string" ? value.model : undefined,
@@ -277,7 +273,7 @@ async function fetchSupabaseProducts(): Promise<Product[]> {
       apikey: config.key,
       ...(config.key.startsWith("eyJ") ? { Authorization: `Bearer ${config.key}` } : {}),
     };
-    const query = new URLSearchParams({ select: MANAGEMENT_PRODUCT_COLUMNS, order: "slug.asc", limit: String(PAGE_SIZE), offset: String(offset) });
+    const query = new URLSearchParams({ select: PUBLIC_LIST_PRODUCT_COLUMNS, order: "slug.asc", limit: String(PAGE_SIZE), offset: String(offset) });
     let response = await fetch(`${config.url}/rest/v1/products?${query}`, { headers, next: { revalidate: 300, tags: ["catalog"] } });
     if (!response.ok) {
       query.set("select", EXTENDED_LIST_PRODUCT_COLUMNS);
@@ -360,7 +356,7 @@ export async function getSupabaseProductBySlug(slug: string): Promise<Product | 
 }
 
 export function getBundledRelatedProducts(product: Product): Product[] {
-  return bundledCatalog.filter((item) => isPublishedProduct(item) && item.id !== product.id &&
+  return bundledCatalog.filter((item) => isPublishedProduct(item) && item.id !== product.id && item.slug !== product.slug &&
     ((product.clubeSlug !== "revisar" && item.clubeSlug === product.clubeSlug) ||
       (product.liga !== "revisar" && item.liga === product.liga))).slice(0, 5);
 }

@@ -4,7 +4,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { CartItem, Product } from "@/lib/types";
 import { getAvailablePatches } from "@/lib/patch-compatibility";
-import { CUSTOMIZATION_NAME_MAX_LENGTH, sanitizeCustomizationName } from "@/lib/customization";
+import { getPersistedCartItems } from "@/lib/cart-persistence";
 
 interface CartState {
   items: CartItem[];
@@ -24,21 +24,16 @@ function migratePersistedCart(value: unknown): Pick<CartState, "items"> {
   if (!isRecord(value)) return { items: [] };
 
   const items = Array.isArray(value.items)
-    ? value.items.flatMap((entry): CartItem[] => {
+    ? value.items.flatMap((entry, index): CartItem[] => {
       if (!isRecord(entry) || !isRecord(entry.product) || typeof entry.size !== "string") return [];
+      const savedCustomization = isRecord(entry.customization) ? entry.customization : {};
+      if ((typeof savedCustomization.name === "string" && savedCustomization.name.trim())
+        || (typeof savedCustomization.number === "string" && savedCustomization.number.trim())) return [];
       const storedProduct = entry.product;
       if (typeof storedProduct.id !== "string") return [];
       const product = restoreCatalogProduct(storedProduct);
       if (!product || !product.tamanhos.includes(entry.size)) return [];
 
-      const savedCustomization = isRecord(entry.customization) ? entry.customization : {};
-      const name = typeof savedCustomization.name === "string"
-        ? sanitizeCustomizationName(savedCustomization.name).slice(0, CUSTOMIZATION_NAME_MAX_LENGTH)
-        : "";
-      const number = typeof savedCustomization.number === "string" && /^\d{1,3}$/.test(savedCustomization.number)
-        ? savedCustomization.number
-        : "";
-      const customization = name || number ? { name, number } : undefined;
       const allowed = getAvailablePatches(product);
       const patches = Array.isArray(entry.patches) ? entry.patches.flatMap((candidate) => {
         if (!isRecord(candidate) || typeof candidate.id !== "string" || typeof candidate.position !== "string") return [];
@@ -48,9 +43,9 @@ function migratePersistedCart(value: unknown): Pick<CartState, "items"> {
       const quantity = typeof entry.quantity === "number" && Number.isFinite(entry.quantity)
         ? Math.max(1, Math.floor(entry.quantity))
         : 1;
-      const lineId = `${product.id}-${entry.size}-${customization?.name ?? ""}-${customization?.number ?? ""}-${patches.map(({ id, position }) => `${id}:${position}`).sort().join(",")}`;
+      const lineId = `${product.id}-${entry.size}-persisted-${index}-${patches.map(({ id, position }) => `${id}:${position}`).sort().join(",")}`;
 
-      return [{ lineId, product, size: entry.size, quantity, ...(customization ? { customization } : {}), ...(patches.length ? { patches } : {}) }];
+      return [{ lineId, product, size: entry.size, quantity, ...(patches.length ? { patches } : {}) }];
     })
     : [];
 
@@ -98,10 +93,10 @@ export const useCart = create<CartState>()(
     }),
     {
       name: "arquibancada90-cart",
-      version: 4,
+      version: 5,
       migrate: migratePersistedCart,
       skipHydration: true,
-      partialize: (state) => ({ items: state.items }),
+      partialize: (state) => ({ items: getPersistedCartItems(state.items) }),
     },
   ),
 );

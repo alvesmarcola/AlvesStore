@@ -1,13 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Check, MessageSquareQuote, Star, Trash2, X } from "lucide-react";
 import { AdminNavigation } from "@/components/admin-navigation";
+import { adminFetch } from "@/lib/client/admin-fetch";
+import { SITE_NAME } from "@/lib/site";
 import {
   AdminSkeleton,
   EmptyState,
   ErrorState,
-  LockedState,
   StatCard,
   StatusBadge,
 } from "@/components/admin-states";
@@ -39,61 +40,52 @@ function StarRating({ rating }: { rating: number }) {
 }
 
 export default function AdminReviews() {
-  const [token, setToken] = useState("");
   const [status, setStatus] = useState<ReviewStatus>("pending");
   const [reviews, setReviews] = useState<Review[]>([]);
   const [counts, setCounts] = useState<Counts>({ pending: 0, approved: 0, rejected: 0 });
-  const [authorized, setAuthorized] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [busyId, setBusyId] = useState("");
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
-  const [authRejected, setAuthRejected] = useState(false);
 
-  async function load(nextStatus = status) {
+  const load = useCallback(async (nextStatus = status) => {
     setLoading(true);
     setError("");
     setNotice("");
     try {
-      const response = await fetch(`/api/admin/reviews?status=${nextStatus}`, {
-        headers: { authorization: `Bearer ${token}` },
+      const response = await adminFetch(`/api/admin/reviews?status=${nextStatus}`, {
         cache: "no-store",
       });
       const body = await response.json();
       if (response.status === 401) {
-        setAuthorized(false);
-        setAuthRejected(true);
-        setError(body.error ?? "Token inválido. Verifique e tente novamente.");
+        setError("Sua sessão expirou. Entre novamente.");
         return;
       }
       if (!response.ok) throw new Error(body.error ?? "Não foi possível carregar as avaliações.");
       setReviews(body.reviews as Review[]);
       setCounts(body.counts as Counts);
-      setAuthorized(true);
-      setAuthRejected(false);
     } catch (reason) {
-      setAuthRejected(false);
       setError(reason instanceof Error ? reason.message : "Não foi possível carregar as avaliações.");
     } finally {
       setLoading(false);
     }
-  }
+  }, [status]);
+
+  useEffect(() => { void load(); }, [load]);
 
   async function moderate(review: Review, nextStatus: ReviewStatus) {
     setBusyId(review.id);
     setError("");
     setNotice("");
     try {
-      const response = await fetch("/api/admin/reviews", {
+      const response = await adminFetch("/api/admin/reviews", {
         method: "PATCH",
-        headers: { authorization: `Bearer ${token}`, "content-type": "application/json" },
+        headers: { "content-type": "application/json" },
         body: JSON.stringify({ id: review.id, status: nextStatus }),
       });
       const body = await response.json();
       if (response.status === 401) {
-        setAuthorized(false);
-        setAuthRejected(true);
-        setError(body.error ?? "Token inválido. Verifique e tente novamente.");
+        setError("Sua sessão expirou. Entre novamente.");
         return;
       }
       if (!response.ok) throw new Error(body.error ?? "Não foi possível atualizar a avaliação.");
@@ -117,16 +109,14 @@ export default function AdminReviews() {
     setError("");
     setNotice("");
     try {
-      const response = await fetch("/api/admin/reviews", {
+      const response = await adminFetch("/api/admin/reviews", {
         method: "DELETE",
-        headers: { authorization: `Bearer ${token}`, "content-type": "application/json" },
+        headers: { "content-type": "application/json" },
         body: JSON.stringify({ id: review.id }),
       });
       const body = await response.json();
       if (response.status === 401) {
-        setAuthorized(false);
-        setAuthRejected(true);
-        setError(body.error ?? "Token inválido. Verifique e tente novamente.");
+        setError("Sua sessão expirou. Entre novamente.");
         return;
       }
       if (!response.ok) throw new Error(body.error ?? "Não foi possível excluir a avaliação.");
@@ -144,20 +134,12 @@ export default function AdminReviews() {
     <main className="mx-auto max-w-7xl px-5 py-8 sm:py-10 lg:px-8">
       <AdminNavigation current="reviews" />
       <header>
-        <p className="text-[10px] font-black uppercase tracking-[.2em] text-action">Imports Alves · administração</p>
+        <p className="text-[10px] font-black uppercase tracking-[.2em] text-action">{SITE_NAME} · Administração</p>
         <h1 className="mt-2 text-3xl font-black">Avaliações</h1>
         <p className="mt-2 text-sm text-muted">Revise os comentários enviados antes de publicá-los na loja.</p>
       </header>
 
-      {!authorized && !loading && (!error || authRejected) ? (
-        <LockedState
-          token={token}
-          onTokenChange={setToken}
-          onSubmit={(event) => { event.preventDefault(); void load(); }}
-          loading={loading}
-          message={error}
-        />
-      ) : loading ? (
+      {loading ? (
         <AdminSkeleton cards={3} />
       ) : error ? (
         <div className="mt-8"><ErrorState message={error} onRetry={() => void load()} /></div>
@@ -176,7 +158,7 @@ export default function AdminReviews() {
                 type="button"
                 role="tab"
                 aria-selected={status === tab.status}
-                onClick={() => { setStatus(tab.status); void load(tab.status); }}
+                onClick={() => setStatus(tab.status)}
                 className={`min-h-11 shrink-0 rounded-lg border px-4 py-2 text-sm font-bold transition ${status === tab.status ? "border-ink bg-ink text-white" : "border-border bg-white hover:bg-paper"}`}
               >
                 {tab.label}

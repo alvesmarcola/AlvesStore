@@ -7,12 +7,13 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Menu, Search, ShoppingBag, X, ChevronDown } from "lucide-react";
 import { useCart } from "@/store/cart";
 import type { CatalogLeague } from "@/lib/catalog-taxonomy";
+import { SITE_NAME } from "@/lib/site";
 
 const maleCategories = [["Versão Torcedor", "torcedor"], ["Versão Jogador", "jogador"], ["Retrô", "retro"], ["Conjunto de Treino", "treino"], ["Mangas compridas", "inverno"], ["Regatas", "regata"]];
 const femaleCategories = [["Camisas Femininas", "torcedor"], ["Conjuntos", "treino"]];
 const dropdownTransition = { duration: 0.18, ease: "easeOut" as const };
 
-type SearchSuggestion = { id: string; slug: string; nome: string; clube: string; temporada: string };
+type SearchSuggestion = { slug: string; nome: string; clube: string; temporada: string };
 
 export function SiteHeader({ leagues }: { leagues: Pick<CatalogLeague, "slug" | "nome">[] }) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -63,8 +64,8 @@ export function SiteHeader({ leagues }: { leagues: Pick<CatalogLeague, "slug" | 
       <header className="site-header sticky top-0 z-40 border-b border-white/10 bg-ink text-white">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 lg:px-8">
           <button className="header-icon lg:hidden" aria-label="Abrir menu" onClick={() => setMenuOpen(true)}><Menu size={23} /></button>
-          <Link href="/" className="shrink-0 leading-none" aria-label="Imports Alves - início">
-            <span className="block text-[22px] font-bold tracking-tight text-white sm:text-[27px]">Imports <span className="text-action">Alves</span></span>
+          <Link href="/" className="shrink-0 leading-none" aria-label={`${SITE_NAME} - início`}>
+            <span className="block text-[22px] font-bold tracking-tight text-white sm:text-[27px]">{SITE_NAME}</span>
           </Link>
           <div className="relative hidden max-w-xl flex-1 md:block">
             <form onSubmit={search} role="search" className="flex items-center rounded-full border border-white/10 bg-graphite px-4 py-2.5 focus-within:border-action">
@@ -74,7 +75,7 @@ export function SiteHeader({ leagues }: { leagues: Pick<CatalogLeague, "slug" | 
             </form>
             {suggestionsOpen && suggestions.length > 0 && <div id="search-suggestions" role="listbox" className="absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-lg border border-border bg-white p-2 text-ink shadow-card">
               {alternativesOnly && <p className="px-3 py-2 text-[10px] leading-4 text-muted">Alternativas relacionadas; versão ou uniforme ainda não confirmados.</p>}
-              {suggestions.map((product) => <Link role="option" aria-selected="false" href={`/produto/${product.slug}`} key={product.id} onClick={() => { setQuery(""); setSuggestionsOpen(false); }} className="block rounded px-3 py-2 text-xs hover:bg-paper">{product.nome}<span className="mt-1 block text-muted">{product.clube} · {product.temporada}</span></Link>)}
+              {suggestions.map((product) => <Link role="option" aria-selected="false" href={`/produto/${product.slug}`} key={product.slug} onClick={() => { setQuery(""); setSuggestionsOpen(false); }} className="block rounded px-3 py-2 text-xs hover:bg-paper">{product.nome}<span className="mt-1 block text-muted">{product.clube} · {product.temporada}</span></Link>)}
               <Link href={`/busca?q=${encodeURIComponent(query)}`} className="block border-t border-border px-3 py-3 text-xs font-bold text-blue-700">Ver todos os resultados</Link>
             </div>}
           </div>

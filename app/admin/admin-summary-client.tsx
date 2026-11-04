@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AdminNavigation, type AdminSection } from "@/components/admin-navigation";
-import { AdminSkeleton, EmptyState, ErrorState, LockedState, StatCard } from "@/components/admin-states";
+import { AdminSkeleton, EmptyState, ErrorState, StatCard } from "@/components/admin-states";
 import { BarChart3, CircleDollarSign, PackageOpen, Truck } from "lucide-react";
+import { adminFetch } from "@/lib/client/admin-fetch";
+import { SITE_NAME } from "@/lib/site";
 
 type Summary = {
   metrics: {
@@ -46,56 +48,46 @@ const configLabels: Record<string, string> = {
 };
 
 export default function AdminSummaryClient({ current }: { current: AdminSection }) {
-  const [token, setToken] = useState("");
   const [summary, setSummary] = useState<Summary | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [authorized, setAuthorized] = useState(false);
   const [error, setError] = useState("");
-  const [authRejected, setAuthRejected] = useState(false);
 
   async function load() {
     setLoading(true);
     setError("");
     try {
-      const response = await fetch("/api/admin/summary", {
-        headers: { authorization: `Bearer ${token}` },
+      const response = await adminFetch("/api/admin/summary", {
         cache: "no-store",
       });
       const body = await response.json();
       if (response.status === 401) {
         setAuthorized(false);
-        setAuthRejected(true);
-        setError(body.error ?? "Token inválido. Confira e tente novamente.");
+        setError("Sua sessão expirou. Entre novamente.");
         return;
       }
       if (!response.ok) throw new Error(body.error ?? "Não foi possível carregar os dados administrativos.");
       setSummary(body as Summary);
       setAuthorized(true);
-      setAuthRejected(false);
     } catch (error) {
-      setAuthRejected(false);
       setError(error instanceof Error ? error.message : "Não foi possível carregar os dados administrativos.");
     } finally {
       setLoading(false);
     }
   }
 
-  function submit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    void load();
-  }
+  useEffect(() => { void load(); }, []);
 
   const metrics = summary?.metrics;
   const heading = current === "overview" ? "Visão geral" : current === "suppliers" ? "Fornecedores" : current === "finance" ? "Financeiro" : "Configurações";
   return (
     <main className="mx-auto max-w-7xl px-5 py-10 lg:px-8">
       <AdminNavigation current={current} />
-      <p className="text-[10px] font-black uppercase tracking-[.2em] text-action">Imports Alves · administração</p>
+      <p className="text-[10px] font-black uppercase tracking-[.2em] text-action">{SITE_NAME} · Administração</p>
       <h1 className="mt-2 text-3xl font-black">{heading}</h1>
       <p className="mt-2 text-sm text-muted">{current === "overview" ? "Resumo da operação e dos indicadores da loja." : "Dados internos disponíveis somente para a equipe administrativa."}</p>
-      {!authorized && !loading && (!error || authRejected) && <LockedState token={token} onTokenChange={setToken} onSubmit={submit} loading={loading} message={error || undefined} />}
       {loading && <AdminSkeleton cards={current === "finance" ? 4 : 3} />}
-      {!loading && error && !authRejected && <div className="mt-8"><ErrorState message={error} onRetry={() => void load()} /></div>}
+      {!loading && error && <div className="mt-8"><ErrorState message={error} onRetry={() => void load()} /></div>}
 
       {authorized && summary && !loading && !error && current === "overview" && metrics && (
         metrics.orderCount === 0 ? <div className="mt-8"><EmptyState icon={PackageOpen} title="Ainda não há pedidos" description="Os indicadores aparecerão aqui assim que a loja receber pedidos." /></div> :

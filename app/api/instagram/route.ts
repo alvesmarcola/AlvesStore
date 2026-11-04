@@ -16,12 +16,11 @@ export async function GET(request: Request) {
         "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
       },
     });
-  } catch (error) {
-    console.error("GET /api/instagram failed:", error);
+  } catch {
+    console.error("GET /api/instagram failed.");
     return NextResponse.json(
       { posts: [], isLive: false, error: "Falha ao buscar feed do Instagram" },
       { status: 500 }
     );
   }
 }
-

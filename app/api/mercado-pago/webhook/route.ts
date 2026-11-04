@@ -23,7 +23,6 @@ export async function POST(request: Request) {
   const query = new URL(request.url).searchParams;
   const eventType = String(query.get("type") ?? event?.type ?? "");
   const paymentId = String(query.get("data.id") ?? query.get("id") ?? data?.id ?? "");
-  if (eventType !== "payment" || !/^\d{1,30}$/.test(paymentId)) return NextResponse.json({ received: true });
 
   const secret = process.env.MERCADO_PAGO_WEBHOOK_SECRET;
   if (!secret || !isValidMercadoPagoSignature({
@@ -34,6 +33,7 @@ export async function POST(request: Request) {
   })) {
     return NextResponse.json({ error: "Assinatura de webhook inválida." }, { status: 401 });
   }
+  if (eventType !== "payment" || !/^\d{1,30}$/.test(paymentId)) return NextResponse.json({ received: true });
 
   try {
     const result = await applyMercadoPagoPayment(paymentId);

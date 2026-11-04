@@ -1,10 +1,11 @@
 import { createHash, randomUUID } from "node:crypto";
 import { NextResponse } from "next/server";
 import { InvalidOrderError, paymentRequestSchema, validateOrderLinesFromCatalog, calculateOrderTotals, calculateOrderFingerprint } from "@/lib/payment/order";
-import { createMercadoPagoPreference, getCheckoutUrl, getSiteUrl, MercadoPagoApiError, PaymentConfigurationError, validateMercadoPagoAccessToken } from "@/lib/server/mercado-pago";
+import { createMercadoPagoPreference, getCheckoutUrl, getPaymentEnvironment, getSiteUrl, MercadoPagoApiError, PaymentConfigurationError, validateMercadoPagoAccessToken } from "@/lib/server/mercado-pago";
 import { SupabaseOrdersConfigurationError, describeSupabaseError, getSupabaseOrdersClient } from "@/lib/server/supabase-orders";
 import { buildPreferenceItems } from "@/lib/payment/preference-items";
 import { buildOrderReceivedEmail, sendOrderEmail } from "@/lib/server/order-emails";
+import { SITE_NAME } from "@/lib/site";
 
 export const runtime = "nodejs";
 const requestWindows = new Map<string, { count: number; startedAt: number }>();
@@ -62,6 +63,9 @@ export async function POST(request: Request) {
     const totals = calculateOrderTotals(lines);
     const requestHash = createHash("sha256").update(calculateOrderFingerprint(requestData)).digest("hex");
     const siteUrl = getSiteUrl(request.url);
+    if (getPaymentEnvironment() === "production" && siteUrl !== "https://importsalves.com.br") {
+      throw new PaymentConfigurationError("Em produção, SITE_URL deve ser https://importsalves.com.br.", ["SITE_URL"]);
+    }
     validateMercadoPagoAccessToken();
     const supabase = getSupabaseOrdersClient();
     stage = "supabase";
@@ -104,7 +108,10 @@ export async function POST(request: Request) {
     if (!order?.order_id) throw new Error("Supabase não retornou o pedido gravado.");
     const orderId = String(order.order_id);
     if (String(order.saved_request_hash).trim() !== requestHash) {
-      return publicError("Esta chave de pedido já foi usada com dados diferentes. Recarregue o checkout.", 409);
+      return NextResponse.json({
+        error: "Os dados do pedido mudaram. Envie novamente para iniciar uma nova tentativa.",
+        code: "IDEMPOTENCY_CONFLICT",
+      }, { status: 409, headers: { "Cache-Control": "no-store" } });
     }
     if (!["pending", "rejected", "cancelled"].includes(String(order.order_status))) {
       return NextResponse.json({
@@ -112,7 +119,7 @@ export async function POST(request: Request) {
         code: "ORDER_ALREADY_PROCESSED",
       }, { status: 409, headers: { "Cache-Control": "no-store" } });
     }
-    if (order.checkout_url) return NextResponse.json({ checkoutUrl: order.checkout_url, orderId, reused: true }, { headers: { "Cache-Control": "no-store" } });
+    if (order.checkout_url) return NextResponse.json({ checkoutUrl: order.checkout_url }, { headers: { "Cache-Control": "no-store" } });
 
     stage = "mercado-pago";
     const preference = await createMercadoPagoPreference({
@@ -129,8 +136,8 @@ export async function POST(request: Request) {
       },
       ...(siteUrl.startsWith("https://") ? { auto_return: "approved" } : {}),
       payment_methods: { installments: 12 },
-      ...(siteUrl.startsWith("https://") ? { notification_url: `${siteUrl}/api/webhooks/mercadopago` } : {}),
-      statement_descriptor: "Imports Alves",
+      ...(siteUrl.startsWith("https://") ? { notification_url: `${siteUrl}/api/mercado-pago/webhook` } : {}),
+      statement_descriptor: SITE_NAME,
     }, requestData.idempotencyKey);
 
     const checkoutUrl = getCheckoutUrl(preference);
@@ -162,7 +169,7 @@ export async function POST(request: Request) {
       siteUrl,
     }));
 
-    return NextResponse.json({ checkoutUrl, orderId }, { headers: { "Cache-Control": "no-store" } });
+    return NextResponse.json({ checkoutUrl }, { headers: { "Cache-Control": "no-store" } });
   } catch (error) {
     if (error instanceof InvalidOrderError) return publicError(error.message, 400);
     if (error instanceof PaymentConfigurationError || error instanceof SupabaseOrdersConfigurationError) {
