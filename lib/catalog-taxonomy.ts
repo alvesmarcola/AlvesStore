@@ -12,6 +12,7 @@ export type CatalogLeague = {
 const specialNames: Record<string, string> = {
   "f1": "F1",
   "formula-1": "F1",
+  "nba": "NBA",
   "la-liga": "La Liga",
   "premier-league": "Premier League",
   "ligue-1": "Ligue 1",

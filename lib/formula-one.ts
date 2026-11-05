@@ -6,6 +6,7 @@ const FORMULA_ONE_TERM = /\b(?:f1|formula[-\s]*1|formula[-\s]*one|automobilismo|
 export function isFormulaOneEvidence(value: string) {
   const normalized = value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("pt-BR")
     .replace(/\bred[-\s]*bull[-\s]+bragantino\b/g, "bragantino");
+  if (/\b(?:nba|basquete|basketball|regata)\b/.test(normalized)) return false;
   return FORMULA_ONE_TERM.test(normalized);
 }
 
@@ -24,6 +25,7 @@ export function allowsCustomization(product: Product) {
 }
 
 export function isFormulaOneProduct(product: Product) {
+  if (product.liga === "nba" || product.tipo === "regata") return false;
   const evidence = [
     product.liga,
     product.tipo,

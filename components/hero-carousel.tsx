@@ -102,7 +102,7 @@ export function HeroCarousel() {
   if (promoActive) {
     return (
       <section
-        className="arena-hero relative isolate w-full overflow-hidden bg-[#180407]"
+        className="relative isolate w-full overflow-hidden bg-[#180407]"
         aria-label="Campanha Black Friday NBA"
       >
         <Link

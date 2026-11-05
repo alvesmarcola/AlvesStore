@@ -72,6 +72,9 @@ function ProductSection({
 
 export default async function HomePage() {
   const products = await getSupabaseProducts();
+  const nbaRegata = products.find((product) =>
+    product.liga === "nba" && product.tipo === "regata" && product.images?.[0]?.src,
+  );
   const formulaOneBySlug = new Map<string, Product>();
   for (const product of [...getBundledFormulaOneProducts(), ...products.filter(isFormulaOneProduct)]) {
     formulaOneBySlug.set(product.slug, product);
@@ -122,21 +125,66 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ─── 3. BENEFITS STRIP ─── */}
+      {/* ─── 3. NBA HIGHLIGHT ─── */}
+      <section className="bg-white px-5 py-7 sm:py-9 lg:px-8" aria-labelledby="nba-highlight-title">
+        <Link
+          href="/masculino?tipo=regata-nba"
+          aria-label="Explorar a coleção de Regatas NBA"
+          className="group mx-auto grid max-w-7xl grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] items-stretch overflow-hidden rounded-xl border border-white/10 bg-[#0a0a0a] text-white shadow-xl transition hover:border-blue-500/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-400"
+        >
+          <span className="flex min-w-0 flex-col justify-center p-4 sm:p-8 lg:p-12">
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-300">Coleção de regatas</span>
+            <span id="nba-highlight-title" className="mt-2 text-4xl font-black uppercase tracking-tight sm:text-5xl lg:text-7xl">NBA</span>
+            <span className="mt-2 line-clamp-2 text-xs font-medium text-white/75 sm:text-sm">{nbaRegata?.nome ?? "Regatas da coleção NBA"}</span>
+            <span className="mt-4 flex w-fit items-center gap-2 rounded-full bg-blue-600 px-4 py-2 text-[10px] font-bold uppercase tracking-wider transition group-hover:bg-blue-500 sm:mt-6 sm:text-xs">
+              Ver regatas <ArrowRight size={16} />
+            </span>
+          </span>
+          <span className="relative min-h-[220px] overflow-hidden bg-[radial-gradient(circle_at_55%_45%,rgba(37,99,235,0.28),transparent_58%),linear-gradient(135deg,#171717,#0a0a0a)] sm:min-h-[280px] lg:min-h-[360px]">
+            <Image
+              src={nbaRegata?.images?.[0]?.src ?? "/arena/bf-nba-desktop.webp"}
+              alt={nbaRegata?.nome ?? "Destaque visual da coleção NBA"}
+              fill
+              unoptimized
+              sizes="(max-width: 640px) 45vw, (max-width: 1024px) 46vw, 600px"
+              className={`object-contain p-3 transition-transform duration-500 group-hover:scale-105 sm:p-6 lg:p-10 ${nbaRegata ? "" : "object-cover object-[80%_center]"}`}
+            />
+          </span>
+        </Link>
+      </section>
+
+      {/* ─── 4. BENEFITS STRIP ─── */}
       <section className="benefits-strip bg-[#F5F5F5]">
-        <div className="mx-auto grid max-w-7xl grid-cols-2 gap-4 px-5 py-7 sm:grid-cols-4 lg:px-8">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 min-[540px]:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4 lg:gap-5 px-5 py-7 sm:py-9 lg:px-8">
           {features.map(({ icon: Icon, title, text, link }, index) => (
-            <Reveal key={title} delay={index * 0.06} className="h-full">
-              <div className="flex h-full min-h-28 items-start gap-3 rounded-xl border border-black/5 bg-white p-4 shadow-sm sm:min-h-32 sm:p-5">
-                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-ink text-action"><Icon size={19} /></span>
-                <div className="min-w-0"><h2 className="text-xs font-bold uppercase">{title}</h2><p className="mt-1 text-[10px] leading-5 text-muted sm:text-xs">{text}</p>{link && <Link href={link.href} className="mt-2 inline-flex text-[10px] font-bold text-blue-700 underline underline-offset-2">{link.label}</Link>}</div>
+            <Reveal key={title} delay={index * 0.06} className="h-full w-full min-w-0">
+              <div className="flex h-full w-full min-w-0 items-start gap-3.5 rounded-xl border border-black/5 bg-white p-4 shadow-sm transition hover:shadow-md sm:p-5">
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-ink text-action sm:h-11 sm:w-11" aria-hidden="true">
+                  <Icon size={18} className="sm:h-5 sm:w-5" />
+                </span>
+                <div className="min-w-0 flex-1 flex flex-col justify-start">
+                  <h2 className="text-xs sm:text-sm font-bold uppercase tracking-normal text-ink break-words whitespace-normal leading-snug">
+                    {title}
+                  </h2>
+                  <p className="mt-1 text-[11px] sm:text-xs leading-relaxed text-muted break-words whitespace-normal">
+                    {text}
+                  </p>
+                  {link && (
+                    <Link
+                      href={link.href}
+                      className="mt-2 inline-flex w-fit text-[11px] sm:text-xs font-semibold text-blue-700 hover:text-blue-800 underline underline-offset-2 break-words whitespace-normal"
+                    >
+                      {link.label}
+                    </Link>
+                  )}
+                </div>
               </div>
             </Reveal>
           ))}
         </div>
       </section>
 
-      {/* ─── 4. COLLECTIONS BENTO ─── */}
+      {/* ─── 5. COLLECTIONS BENTO ─── */}
       <section className="mx-auto max-w-7xl px-5 py-14 lg:px-8 lg:py-20" aria-label="Explore coleções">
         <Reveal className="mb-7 flex items-end justify-between gap-4">
           <div><p className="text-[10px] font-bold uppercase tracking-wider text-action">Escolha o seu lado</p><h2 className="mt-2 text-3xl font-bold uppercase tracking-normal sm:text-4xl">O jogo é seu</h2></div>
@@ -169,13 +217,13 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ─── 5. LEAGUE RAIL ─── */}
+      {/* ─── 6. LEAGUE RAIL ─── */}
       <StickyLeagueRail leagues={leagues} />
 
-      {/* ─── 6. CLUB PRODUCTS ─── */}
+      {/* ─── 7. CLUB PRODUCTS ─── */}
       {clubProducts.length > 0 && <ProductSection title="Camisas de clubes" kicker="Explore o catálogo" href="/clubes" items={clubProducts} />}
 
-      {/* ─── 7. FEATURED CLUBS ─── */}
+      {/* ─── 8. FEATURED CLUBS ─── */}
       <section className="bg-[#F5F5F5] py-14 sm:py-20">
         <div className="mx-auto max-w-7xl px-5 lg:px-8">
           <Reveal>
@@ -196,13 +244,13 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ─── 8. RETRO ─── */}
+      {/* ─── 9. RETRO ─── */}
       {retros.length > 0 && <ProductSection title="Clássicos retrô" kicker="Para quem vive de história" href="/retro" items={retros} />}
 
-      {/* ─── 9. SESSÃO INFORMATIVA F1 ─── */}
+      {/* ─── 10. SESSÃO INFORMATIVA F1 ─── */}
       <FormulaOneShowcase href="/f1" />
 
-      {/* ─── 10. PRODUTOS FÓRMULA 1 (Logo abaixo da sessão informativa F1) ─── */}
+      {/* ─── 11. PRODUTOS FÓRMULA 1 (Logo abaixo da sessão informativa F1) ─── */}
       {formulaOneProducts.length > 0 && (
         <ProductSection
           title="F1"
@@ -213,13 +261,13 @@ export default async function HomePage() {
         />
       )}
 
-      {/* ─── 11. KIDS ─── */}
+      {/* ─── 12. KIDS ─── */}
       {kidsProducts.length > 0 && <ProductSection title="Kits infantis" kicker="A torcida começa cedo" href="/infantil" items={kidsProducts} dark />}
 
-      {/* ─── 12. SELEÇÕES NACIONAIS ─── */}
+      {/* ─── 13. SELEÇÕES NACIONAIS ─── */}
       {nationalSelections.length > 0 && <ProductSection title="Seleções nacionais" kicker="Camisas de seleções" href="/selecoes" items={nationalSelections} dark />}
 
-      {/* ─── 13. DIFFERENTIALS ─── */}
+      {/* ─── 14. DIFFERENTIALS ─── */}
       <section className="mx-auto grid max-w-7xl gap-4 px-5 py-14 sm:grid-cols-3 lg:px-8 lg:py-20">
         {differentials.map((item, index) => (
           <Reveal key={item.title} delay={index * 0.08} className="h-full">
@@ -233,10 +281,10 @@ export default async function HomePage() {
         ))}
       </section>
 
-      {/* ─── 14. INSTAGRAM CTA ─── */}
+      {/* ─── 15. INSTAGRAM CTA ─── */}
       <InstagramCTA />
 
-      {/* ─── 15. CUSTOMER REVIEWS ─── */}
+      {/* ─── 16. CUSTOMER REVIEWS ─── */}
       <CustomerReviews />
 
     </main>

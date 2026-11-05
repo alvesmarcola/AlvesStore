@@ -3,7 +3,7 @@ import type { CartItem } from "@/lib/types";
 import { classifyProduct, getProductSizeSurcharge, isKidsProduct, isNbaTankTop, isPackageEligible } from "@/lib/product-classification";
 import { getAvailablePatches } from "@/lib/patch-compatibility";
 import { formatCustomization } from "@/lib/customization";
-import { calcularPromoBlackFriday } from "@/lib/black-friday";
+import { calcularPromoBlackFriday, isBlackFridayEligibleShirt } from "@/lib/black-friday";
 
 export function getPackagePrice(units: number) {
   const normalizedUnits = Math.max(0, Math.floor(units));
@@ -49,17 +49,14 @@ export function getCartPricing(items: CartItem[]) {
   const bundleDiscountCents = promoDiscountCents > 0 ? 0 : packageEligibleBaseCents - getPackagePrice(packageUnits) * 100;
   const productsTotalCents = baseShirtsCents - bundleDiscountCents - promoDiscountCents + customizationCents + patchesCents;
   const tankTopQuantity = items.reduce((sum, item) => sum + (isNbaTankTop(item.product) ? item.quantity : 0), 0);
-  const eligibleShirtQuantity = classified.reduce((sum, row) => sum + (
-    row.item.product.tipo === "torcedor" && row.facts.version === "fan" && !row.facts.fullPatch && !isKidsProduct(row.item.product)
-      ? row.item.quantity : 0
-  ), 0);
+  const eligibleShirtQuantity = items.reduce((sum, item) => sum + (isBlackFridayEligibleShirt(item.product) ? item.quantity : 0), 0);
   const discountedQuantity = promo.itensComDesconto.reduce((sum, item) => sum + item.quantity, 0);
-  const promoNotice = promo.ativa && tankTopQuantity !== discountedQuantity || promo.ativa && eligibleShirtQuantity !== discountedQuantity
+  const promoNotice = promo.ativa && (tankTopQuantity !== discountedQuantity || eligibleShirtQuantity !== discountedQuantity)
     ? tankTopQuantity === discountedQuantity
-      ? "Adicione uma regata NBA e ganhe 50% em uma camisa torcedor."
+      ? "Adicione uma regata NBA e ganhe 50% na sua camisa."
       : eligibleShirtQuantity === discountedQuantity
-        ? "Adicione uma camisa torcedor e ganhe 50% de desconto."
-        : "Adicione outra regata NBA e ganhe 50% em uma camisa torcedor."
+        ? "Adicione uma camisa de time e ganhe 50% de desconto."
+        : "Adicione outra regata NBA e ganhe 50% na sua camisa."
     : "";
   const needsReview = classified.some((row) => row.facts.reviewRequired);
   const patchCount = items.reduce((sum, item) => sum + (item.patches?.length ?? 0), 0);

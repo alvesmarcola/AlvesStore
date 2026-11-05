@@ -28,9 +28,11 @@ export function hasBundledProductSlug(slug: string) {
 }
 
 function supabaseConfig() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim() || process.env.SUPABASE_URL?.trim();
   const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY?.trim()
-    || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim();
+    || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim()
+    || process.env.SUPABASE_SERVICE_ROLE_KEY?.trim()
+    || process.env.SUPABASE_SECRET_KEY?.trim();
   return url && key ? { url: url.replace(/\/$/, ""), key } : null;
 }
 
@@ -54,6 +56,7 @@ function normalizeAudience(value: unknown): Product["publico"] {
 
 function normalizeProductType(value: unknown): Product["tipo"] {
   const normalized = typeof value === "string" ? slugifyCatalogValue(value) : "";
+  if (normalized.includes("regata") || normalized.includes("tank-top")) return "regata";
   if (["f1", "formula-1", "formula-one", "formula1"].includes(normalized) || /\b(?:f1|formula[-\s]*1|formula[-\s]*one)\b/.test(normalized)) return "f1";
   if (isFormulaOneEvidence(normalized)) return "f1";
   if (["torcedor", "fan", "supporter"].some((term) => normalized.includes(term))) return "torcedor";
@@ -194,7 +197,16 @@ function mapProduct(value: unknown): Product | null {
   }
   let league = normalizeLeague(value.liga ?? value.league);
 
-  const isF1 = type === "f1" || type === "formula1" || league === "f1" || isFormulaOneEvidence(normalizedEvidence);
+  const isNba = league === "nba" || type === "regata" || normalizedEvidence.includes("nba");
+  if (isNba) {
+    league = "nba";
+    if (type === "revisar" || type === "f1") type = "regata";
+    if (audience === "revisar") audience = "masculino";
+    if (!Number.isFinite(price) || price <= 0) price = 230;
+    if (sizes.length === 0) sizes = ["P", "M", "G", "GG"];
+  }
+
+  const isF1 = !isNba && (type === "f1" || type === "formula1" || league === "f1" || isFormulaOneEvidence(normalizedEvidence));
   if (isF1) {
     type = "f1";
     league = "f1";
@@ -258,15 +270,16 @@ function hasStorefrontImages(product: Product) {
 
 function isPublishedProduct(product: Product) {
   if (isJacketFormulaOneProduct(product)) return false;
+  const isNba = product.liga === "nba" || product.tipo === "regata";
   const hasImage = (product.tipo === "f1" || product.tipo === "formula1" || product.liga === "f1" || isFormulaOneProduct(product))
     ? true
     : hasStorefrontImages(product);
-  const hasKnownAudience = product.publico !== "revisar";
+  const hasKnownAudience = product.publico !== "revisar" || isNba;
   const isFormulaOne = product.tipo === "f1" || product.tipo === "formula1" || product.liga === "f1" || isFormulaOneProduct(product);
-  return hasImage && product.tipo !== "revisar" && (hasKnownAudience || isFormulaOne);
+  return hasImage && (product.tipo !== "revisar" || isNba) && (hasKnownAudience || isFormulaOne);
 }
 
-async function fetchSupabaseProducts(): Promise<Product[]> {
+export async function fetchSupabaseProducts(): Promise<Product[]> {
   const config = supabaseConfig();
   if (!config) {
     return bundledCatalog.filter(isPublishedProduct);
@@ -315,7 +328,7 @@ async function fetchSupabaseProducts(): Promise<Product[]> {
 
 export const getSupabaseProducts = unstable_cache(
   fetchSupabaseProducts,
-  ["supabase-products-v2"],
+  ["supabase-products-v3"],
   { revalidate: 300, tags: ["catalog"] },
 );
 
