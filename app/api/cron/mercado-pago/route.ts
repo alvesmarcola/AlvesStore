@@ -28,6 +28,19 @@ export async function GET(request: Request) {
 
   try {
     const supabase = getSupabaseOrdersClient();
+
+    // Expira pedidos pendentes com mais de 48 horas (abandonos de checkout)
+    const cutoff48h = new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString();
+    await supabase.from("store_orders")
+      .update({
+        operational_status: "cancelado",
+        status: "cancelled",
+        updated_at: new Date().toISOString(),
+      })
+      .eq("status", "pending")
+      .or("operational_status.is.null,operational_status.eq.aguardando_pagamento")
+      .lt("created_at", cutoff48h);
+
     const claimed = await supabase.rpc("claim_store_orders_for_payment_reconciliation", { p_limit: 10 });
     if (claimed.error) throw claimed.error;
 

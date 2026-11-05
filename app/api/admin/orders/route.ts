@@ -7,6 +7,7 @@ import {
 } from "@/lib/server/supabase-orders";
 import { sendTrackingUpdateEmail, sendWhatsAppOrderNotice, type OrderNotice } from "@/lib/server/order-notifications";
 import { ADMIN_PRIVATE_HEADERS, getAdminAuthFailure } from "@/lib/server/admin-auth";
+import { reconcileMercadoPagoOrder } from "@/lib/server/mercado-pago-payments";
 
 export const runtime = "nodejs";
 
@@ -25,6 +26,10 @@ const orderPatchSchema = z.discriminatedUnion("action", [
   z.object({
     orderId: z.string().uuid(),
     action: z.literal("mark_shipped"),
+  }).strict(),
+  z.object({
+    orderId: z.string().uuid(),
+    action: z.literal("reconcile"),
   }).strict(),
   z.object({
     orderId: z.string().uuid(),
@@ -62,7 +67,19 @@ export async function GET(request: Request) {
   const authFailure = getAdminAuthFailure(request);
   if (authFailure) return jsonError(authFailure.message, authFailure.status);
   try {
-    const { data, error } = await getSupabaseOrdersClient().from("store_orders")
+    const supabase = getSupabaseOrdersClient();
+    const cutoff48h = new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString();
+    await supabase.from("store_orders")
+      .update({
+        operational_status: "cancelado",
+        status: "cancelled",
+        updated_at: new Date().toISOString(),
+      })
+      .eq("status", "pending")
+      .or("operational_status.is.null,operational_status.eq.aguardando_pagamento")
+      .lt("created_at", cutoff48h);
+
+    const { data, error } = await supabase.from("store_orders")
       .select("id,status,item_lines,customer,shipping,shipping_cents,total_cents,promo,valor_desconto,tracking_code,tracking_url,shipped_at,operational_status,supplier_name,supplier_status,supplier_ordered_at,supplier_cost_cents,shipping_cost_cents,other_expenses_cents,internal_notes,payment_method_id,payment_type_id,mercado_pago_status,mercado_pago_id,created_at,updated_at")
       .order("created_at", { ascending: false })
       .limit(500);
@@ -144,6 +161,24 @@ export async function PATCH(request: Request) {
           ? "Pedido marcado como enviado. O cliente não autorizou atualizações pelo WhatsApp."
           : undefined;
       return NextResponse.json({ updated: true, whatsappSent: whatsappResult, message }, { headers: ADMIN_PRIVATE_HEADERS });
+    }
+
+    if (parsed.data.action === "reconcile") {
+      try {
+        const results = await reconcileMercadoPagoOrder(order.id);
+        const applied = results.some((r) => r.applied);
+        return NextResponse.json({
+          updated: applied,
+          reconciled: true,
+          applied,
+          message: applied
+            ? "Pagamento aprovado confirmado com o Mercado Pago! O pedido foi atualizado."
+            : "Consulta realizada: nenhum pagamento aprovado foi retornado pelo Mercado Pago para este pedido até o momento.",
+        }, { headers: ADMIN_PRIVATE_HEADERS });
+      } catch (reconcileError) {
+        console.error("Erro ao reconciliar pedido com Mercado Pago:", reconcileError);
+        return jsonError(reconcileError instanceof Error ? reconcileError.message : "Falha ao consultar Mercado Pago.", 500);
+      }
     }
 
     const values = parsed.data;

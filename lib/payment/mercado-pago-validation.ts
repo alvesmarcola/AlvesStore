@@ -24,12 +24,28 @@ export function validateMercadoPagoPayment(
   const orderId = payment.external_reference ?? "";
   const status = normalizedPaymentStatus(payment.status);
 
-  if (!/^\d{1,30}$/.test(paymentId) || resolvedPaymentId !== paymentId
-    || payment.live_mode !== (environment === "production")
-    || payment.currency_id !== "BRL"
-    || !ORDER_ID_PATTERN.test(orderId)
-    || !status
-    || typeof amount !== "number" || !Number.isFinite(amount) || amount <= 0) {
+  if (!/^\d{1,30}$/.test(paymentId) || resolvedPaymentId !== paymentId) {
+    console.warn(`[Mercado Pago Validation] ID de pagamento inválido ou divergente: informado='${paymentId}', retornado='${resolvedPaymentId}'`);
+    return undefined;
+  }
+  if (payment.live_mode !== (environment === "production")) {
+    console.warn(`[Mercado Pago Validation] Divergência de ambiente: payment.live_mode=${payment.live_mode} enquanto environment=${environment}. Em produção, PAYMENT_ENVIRONMENT deve ser 'production'.`);
+    return undefined;
+  }
+  if (payment.currency_id !== "BRL") {
+    console.warn(`[Mercado Pago Validation] Moeda não suportada: ${payment.currency_id}`);
+    return undefined;
+  }
+  if (!ORDER_ID_PATTERN.test(orderId)) {
+    console.warn(`[Mercado Pago Validation] external_reference '${orderId}' não é um UUID de pedido válido.`);
+    return undefined;
+  }
+  if (!status) {
+    console.warn(`[Mercado Pago Validation] Status do Mercado Pago desconhecido: ${payment.status}`);
+    return undefined;
+  }
+  if (typeof amount !== "number" || !Number.isFinite(amount) || amount <= 0) {
+    console.warn(`[Mercado Pago Validation] Valor da transação inválido: ${amount}`);
     return undefined;
   }
 

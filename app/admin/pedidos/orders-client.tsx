@@ -7,6 +7,7 @@ import { PackageOpen } from "lucide-react";
 import { formatCustomization } from "@/lib/customization";
 import { adminFetch } from "@/lib/client/admin-fetch";
 import { SITE_NAME } from "@/lib/site";
+import { isOrderExpired, isOrderPaid, isOrderPending } from "@/lib/order-status";
 
 type OrderItem = {
   title: string;
@@ -85,12 +86,11 @@ const money = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL
 const date = new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" });
 const shortDate = new Intl.DateTimeFormat("pt-BR", { dateStyle: "short" });
 
-function isPaid(order: Order) {
-  return ["pago", "enviado", "approved"].includes(order.status) || order.mercado_pago_status === "approved";
-}
+const isPaid = isOrderPaid;
 
 function getOperationalStatus(order: Order): OperationalStatus {
   if (order.operational_status) return order.operational_status;
+  if (isOrderExpired(order)) return "cancelado";
   if (order.status === "cancelled") return "cancelado";
   if (order.status === "enviado") return "enviado";
   if (isPaid(order)) return "aguardando_fornecedor";
@@ -205,12 +205,21 @@ export default function AdminOrders() {
   const [trackingValues, setTrackingValues] = useState<Record<string, string>>({});
   const [trackingUrls, setTrackingUrls] = useState<Record<string, string>>({});
   const [savingId, setSavingId] = useState("");
+  const [reconcilingId, setReconcilingId] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState("");
-  const [onlyPaid, setOnlyPaid] = useState(true);
-  const paidOrders = orders.filter(isPaid);
-  const visibleOrders = onlyPaid ? paidOrders : orders;
+  const [filter, setFilter] = useState<"paid" | "pending" | "expired" | "all">("paid");
+  const paidOrders = orders.filter(isOrderPaid);
+  const pendingOrders = orders.filter((order) => isOrderPending(order));
+  const expiredOrders = orders.filter((order) => isOrderExpired(order));
+  const visibleOrders = filter === "paid"
+    ? paidOrders
+    : filter === "pending"
+      ? pendingOrders
+      : filter === "expired"
+        ? expiredOrders
+        : orders;
 
   async function load() {
     setLoading(true);
@@ -231,6 +240,30 @@ export default function AdminOrders() {
       setLoadError(error instanceof Error ? error.message : "Não foi possível carregar os pedidos.");
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function reconcileOrder(orderId: string) {
+    setReconcilingId(orderId);
+    setMessage("");
+    try {
+      const response = await adminFetch("/api/admin/orders", {
+        method: "PATCH",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ orderId, action: "reconcile" }),
+      });
+      const body = await response.json();
+      if (response.status === 401) {
+        setLoadError("Sua sessão expirou. Entre novamente.");
+        return;
+      }
+      if (!response.ok) throw new Error(body.error ?? "Não foi possível consultar o Mercado Pago.");
+      setMessage(body.message ?? "Consulta ao Mercado Pago finalizada.");
+      await load();
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Falha ao consultar Mercado Pago.");
+    } finally {
+      setReconcilingId("");
     }
   }
 
@@ -328,16 +361,47 @@ export default function AdminOrders() {
         <div className="mt-8"><ErrorState message={loadError} onRetry={() => void load()} /></div>
       ) : <>
       <section className="mt-7 grid gap-3 sm:grid-cols-3">
-        <StatCard label="Pedidos no painel" value={String(orders.length)} icon={PackageOpen} />
-        <StatCard label="Pagamentos aprovados" value={String(paidOrders.length)} detail="Status financeiro" />
-        <StatCard label="Pedidos enviados" value={String(orders.filter((order) => getOperationalStatus(order) === "enviado").length)} detail="Andamento operacional" />
+        <StatCard label="Pagamentos aprovados" value={String(paidOrders.length)} icon={PackageOpen} detail="Vendas confirmadas" />
+        <StatCard label="Aguardando pagamento" value={String(pendingOrders.length)} detail="Pendentes recentes (≤ 48h)" />
+        <StatCard label="Expirados" value={String(expiredOrders.length)} detail="Abandonos de checkout (> 48h)" />
       </section>
       {message && <p role="status" aria-live="polite" className="mt-4 rounded-lg bg-paper px-4 py-3 text-sm">{message}</p>}
-      {orders.length > 0 && <label className="mt-4 flex w-fit items-center gap-2 text-xs font-bold"><input type="checkbox" checked={onlyPaid} onChange={(event) => setOnlyPaid(event.target.checked)} />Mostrar só pedidos pagos ({paidOrders.length} de {orders.length})</label>}
+      {orders.length > 0 && (
+        <div className="mt-4 flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setFilter("paid")}
+            className={`rounded-lg px-3 py-1.5 text-xs font-bold transition ${filter === "paid" ? "bg-ink text-white" : "border border-border bg-white text-muted hover:text-ink"}`}
+          >
+            Pagos / Aprovados ({paidOrders.length})
+          </button>
+          <button
+            type="button"
+            onClick={() => setFilter("pending")}
+            className={`rounded-lg px-3 py-1.5 text-xs font-bold transition ${filter === "pending" ? "bg-ink text-white" : "border border-border bg-white text-muted hover:text-ink"}`}
+          >
+            Aguardando pagamento ({pendingOrders.length})
+          </button>
+          <button
+            type="button"
+            onClick={() => setFilter("expired")}
+            className={`rounded-lg px-3 py-1.5 text-xs font-bold transition ${filter === "expired" ? "bg-ink text-white" : "border border-border bg-white text-muted hover:text-ink"}`}
+          >
+            Expirados ({expiredOrders.length})
+          </button>
+          <button
+            type="button"
+            onClick={() => setFilter("all")}
+            className={`rounded-lg px-3 py-1.5 text-xs font-bold transition ${filter === "all" ? "bg-ink text-white" : "border border-border bg-white text-muted hover:text-ink"}`}
+          >
+            Todos ({orders.length})
+          </button>
+        </div>
+      )}
       {orders.length === 0 ? (
         <div className="mt-6"><EmptyState icon={PackageOpen} title="Ainda não há pedidos" description="Os pedidos novos aparecerão aqui assim que um cliente finalizar o checkout." /></div>
       ) : visibleOrders.length === 0 ? (
-        <div className="mt-6"><EmptyState icon={PackageOpen} title="Nenhum pedido pago" description="Desative o filtro de pagamentos aprovados para ver pedidos aguardando pagamento." /></div>
+        <div className="mt-6"><EmptyState icon={PackageOpen} title="Nenhum pedido nesta categoria" description="Selecione outra aba acima para visualizar os demais pedidos." /></div>
       ) : (
         <div className="mt-6 overflow-x-auto rounded-xl border border-border bg-white">
           <table className="w-full min-w-[1350px] border-collapse text-left text-xs">
@@ -357,7 +421,21 @@ export default function AdminOrders() {
                     <td className="max-w-64 px-4 py-4"><ul className="grid gap-2">{order.item_lines.map((item, index) => <li key={`${item.title}-${index}`} className="leading-5">{itemDescription(item)}</li>)}</ul>{order.promo === "BF-NBA-2026" && <p className="mt-2 text-[10px] font-bold text-blue-700">Promo Black Friday NBA · desconto {money.format(order.valor_desconto)}</p>}</td>
                     <td className="max-w-60 whitespace-pre-line px-4 py-4 leading-5 text-muted">{order.customer.street ? `${order.customer.street}, ${order.customer.number ?? ""}\n${order.customer.neighborhood ?? ""} · ${order.customer.city ?? ""}/${order.customer.state ?? ""}\nCEP ${order.customer.cep ?? ""}` : "—"}</td>
                     <td className="whitespace-nowrap px-4 py-4"><span className="font-black">{isPaid(order) ? money.format(order.total_cents / 100) : "Não pago"}</span><span className="mt-1 block text-[10px] text-muted">{isPaid(order) ? `Frete cobrado: ${money.format(order.shipping_cents / 100)}` : `Total: ${money.format(order.total_cents / 100)}`}</span></td>
-                    <td className="px-4 py-4"><span className="font-bold">{statusLabels[paymentStatus] ?? paymentStatus}</span><span className="mt-1 block text-[10px] text-muted">{paymentLabels[order.payment_type_id ?? ""] ?? paymentLabels[order.payment_method_id ?? ""] ?? order.payment_method_id ?? "Forma não informada"}</span>{order.mercado_pago_id && <span className="mt-1 block text-[10px] text-muted">ID {order.mercado_pago_id}</span>}</td>
+                    <td className="px-4 py-4">
+                      <span className="font-bold">{statusLabels[paymentStatus] ?? paymentStatus}</span>
+                      <span className="mt-1 block text-[10px] text-muted">{paymentLabels[order.payment_type_id ?? ""] ?? paymentLabels[order.payment_method_id ?? ""] ?? order.payment_method_id ?? "Forma não informada"}</span>
+                      {order.mercado_pago_id && <span className="mt-1 block text-[10px] text-muted">ID {order.mercado_pago_id}</span>}
+                      {!isPaid(order) && (
+                        <button
+                          type="button"
+                          disabled={reconcilingId === order.id}
+                          onClick={() => void reconcileOrder(order.id)}
+                          className="mt-2 inline-flex items-center gap-1 rounded border border-border bg-paper px-2 py-1 text-[10px] font-bold text-ink hover:bg-zinc-200 disabled:opacity-50"
+                        >
+                          {reconcilingId === order.id ? "Consultando..." : "Verificar no Mercado Pago"}
+                        </button>
+                      )}
+                    </td>
                     <td className="min-w-72 px-4 py-4">
                       <StatusBadge tone={operationalStatus === "enviado" ? "green" : operationalStatus === "cancelado" ? "red" : operationalStatus === "aguardando_fornecedor" ? "amber" : "neutral"}>{operationalLabel}</StatusBadge>
                       {order.supplier_name && <span className="mt-1 block text-[10px] text-muted">Fornecedor: {order.supplier_name}</span>}

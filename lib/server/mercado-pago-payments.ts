@@ -5,9 +5,22 @@ import { validateMercadoPagoPayment } from "@/lib/payment/mercado-pago-validatio
 
 export async function applyMercadoPagoPayment(paymentId: string) {
   const environment = getPaymentEnvironment();
+  console.log(`[applyMercadoPagoPayment] Consultando API Mercado Pago para pagamento ${paymentId} (ambiente: ${environment})...`);
   const payment = await getPaymentClient().get({ id: paymentId });
+  console.log(`[applyMercadoPagoPayment] Dados recebidos da API Mercado Pago:`, {
+    id: payment?.id,
+    status: payment?.status,
+    transaction_amount: payment?.transaction_amount,
+    currency_id: payment?.currency_id,
+    live_mode: payment?.live_mode,
+    external_reference: payment?.external_reference,
+  });
+
   const verified = validateMercadoPagoPayment(paymentId, payment, environment);
-  if (!verified) return { applied: false, orderId: undefined, status: undefined };
+  if (!verified) {
+    console.warn(`[applyMercadoPagoPayment] Pagamento ${paymentId} falhou na validação.`);
+    return { applied: false, orderId: undefined, status: undefined };
+  }
 
   const supabase = getSupabaseOrdersClient();
   const result = await supabase.rpc("apply_store_payment", {
@@ -18,9 +31,15 @@ export async function applyMercadoPagoPayment(paymentId: string) {
     p_currency: verified.currency,
     p_live_mode: verified.liveMode,
   });
-  if (result.error) throw result.error;
+  if (result.error) {
+    console.error(`[applyMercadoPagoPayment] Erro RPC Supabase apply_store_payment:`, result.error);
+    throw result.error;
+  }
   const order = Array.isArray(result.data) ? result.data[0] : null;
-  if (!order?.applied) return { applied: false, orderId: verified.orderId, status: verified.status };
+  if (!order?.applied) {
+    console.warn(`[applyMercadoPagoPayment] RPC Supabase recusou aplicação do pagamento para o pedido ${verified.orderId}.`);
+    return { applied: false, orderId: verified.orderId, status: verified.status };
+  }
 
   const savedPayment = await supabase.from("store_orders")
     .update({
@@ -36,6 +55,8 @@ export async function applyMercadoPagoPayment(paymentId: string) {
   if (savedPayment.error || !savedPayment.data) {
     throw savedPayment.error ?? new Error("Pedido não encontrado ao salvar os dados do pagamento.");
   }
+
+  console.log(`[applyMercadoPagoPayment] Pedido ${verified.orderId} atualizado com sucesso! Status: ${verified.status}`);
 
   if (verified.status === "approved") {
     const operational = await supabase.from("store_orders")

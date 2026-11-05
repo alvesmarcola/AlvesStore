@@ -153,3 +153,28 @@ test("texto de oferta do produto teste destaca frete grátis e preço cadastrado
   assert.match(offerText, /1,50/);
   assert.match(offerText, /Frete grátis/);
 });
+
+test("validação de assinatura de webhook suporta tanto id de query quanto webhook sem query param", () => {
+  const secret = "test-secret-123";
+  const requestId = "req-test-uuid";
+  const dataId = "123456789";
+  const ts = "1700000000";
+
+  // Manifest padrão com ID
+  const crypto = require("node:crypto");
+  const manifestWithId = `id:${dataId};request-id:${requestId};ts:${ts};`;
+  const v1WithId = crypto.createHmac("sha256", secret).update(manifestWithId).digest("hex");
+  const signatureWithId = `ts=${ts},v1=${v1WithId}`;
+
+  const { isValidMercadoPagoSignature } = require("@/lib/server/webhook-signature");
+  assert.equal(isValidMercadoPagoSignature({ secret, signature: signatureWithId, requestId, dataId }), true);
+
+  // Manifest sem ID na URL (URL de webhook cadastrada limpa no painel Mercado Pago)
+  const manifestEmptyId = `id:;request-id:${requestId};ts:${ts};`;
+  const v1EmptyId = crypto.createHmac("sha256", secret).update(manifestEmptyId).digest("hex");
+  const signatureEmptyId = `ts=${ts},v1=${v1EmptyId}`;
+
+  assert.equal(isValidMercadoPagoSignature({ secret, signature: signatureEmptyId, requestId, dataId: "" }), true);
+  assert.equal(isValidMercadoPagoSignature({ secret, signature: signatureEmptyId, requestId, dataId: "9999" }), true, "Deve aceitar assinatura mesmo se dataId foi extraído do body mas URL era limpa");
+});
+

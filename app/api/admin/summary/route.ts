@@ -23,6 +23,17 @@ export async function GET(request: Request) {
   if (authFailure) return privateJson({ error: authFailure.message }, authFailure.status);
   try {
     const supabase = getSupabaseOrdersClient();
+    const cutoff48h = new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString();
+    await supabase.from("store_orders")
+      .update({
+        operational_status: "cancelado",
+        status: "cancelled",
+        updated_at: new Date().toISOString(),
+      })
+      .eq("status", "pending")
+      .or("operational_status.is.null,operational_status.eq.aguardando_pagamento")
+      .lt("created_at", cutoff48h);
+
     const [metrics, orders, orderSuppliers, productSuppliers] = await Promise.all([
       supabase.from("store_order_admin_metrics")
         .select("order_count,paid_order_count,awaiting_supplier_count,shipped_order_count,revenue_cents,supplier_cost_cents,shipping_cost_cents,other_expenses_cents,promo_order_count,promo_discount_cents,promo_revenue_cents")

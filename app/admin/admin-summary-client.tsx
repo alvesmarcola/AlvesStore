@@ -6,6 +6,7 @@ import { AdminSkeleton, EmptyState, ErrorState, StatCard } from "@/components/ad
 import { BarChart3, CircleDollarSign, PackageOpen, Truck } from "lucide-react";
 import { adminFetch } from "@/lib/client/admin-fetch";
 import { SITE_NAME } from "@/lib/site";
+import { isOrderExpired, isOrderPaid, isOrderPending } from "@/lib/order-status";
 
 type Summary = {
   metrics: {
@@ -55,6 +56,7 @@ export default function AdminSummaryClient({ current }: { current: AdminSection 
   const [loading, setLoading] = useState(true);
   const [authorized, setAuthorized] = useState(false);
   const [error, setError] = useState("");
+  const [financeFilter, setFinanceFilter] = useState<"paid" | "pending" | "expired" | "all">("paid");
 
   async function load() {
     setLoading(true);
@@ -98,7 +100,7 @@ export default function AdminSummaryClient({ current }: { current: AdminSection 
           <StatCard label="Faturamento recebido" value={money.format(metrics.revenueCents / 100)} detail={`${metrics.paidOrderCount} pedidos com pagamento aprovado`} icon={CircleDollarSign} />
           <StatCard label="Gasto com fornecedores" value={money.format(metrics.supplierCostCents / 100)} icon={BarChart3} />
           <StatCard label="Lucro estimado" value={money.format(metrics.estimatedProfitCents / 100)} detail="Faturamento aprovado menos custos registrados" icon={CircleDollarSign} />
-          <StatCard label="Pedidos" value={String(metrics.orderCount)} icon={PackageOpen} />
+          <StatCard label="Pedidos aprovados" value={String(metrics.paidOrderCount)} detail={`${metrics.orderCount} no total (inclui pendentes/cancelados)`} icon={PackageOpen} />
           <StatCard label="Aguardando fornecedor" value={String(metrics.awaitingSupplierCount)} icon={PackageOpen} />
           <StatCard label="Pedidos enviados" value={String(metrics.shippedOrderCount)} icon={Truck} />
           <StatCard label="Pedidos Black Friday NBA" value={String(metrics.promoOrderCount)} icon={PackageOpen} />
@@ -108,31 +110,120 @@ export default function AdminSummaryClient({ current }: { current: AdminSection 
         </section>
       )}
 
-      {authorized && summary && !loading && !error && current === "finance" && metrics && (
-        <section className="mt-8">
-          {metrics.orderCount === 0 ? <EmptyState icon={CircleDollarSign} title="Sem movimentação financeira" description="Vendas e custos registrados serão resumidos aqui." /> : <>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <StatCard label="Faturamento aprovado" value={money.format(metrics.revenueCents / 100)} icon={CircleDollarSign} />
-            <StatCard label="Fornecedores" value={money.format(metrics.supplierCostCents / 100)} icon={BarChart3} />
-            <StatCard label="Frete e outras despesas" value={money.format((metrics.shippingCostCents + metrics.otherExpensesCents) / 100)} icon={Truck} />
-            <StatCard label="Lucro estimado" value={money.format(metrics.estimatedProfitCents / 100)} icon={CircleDollarSign} />
-          </div>
-          <h2 className="mt-8 text-lg font-black">Pedidos recentes e custos registrados</h2>
-          <div className="mt-3 overflow-x-auto rounded-xl border border-border bg-white">
-            <table className="w-full min-w-[820px] text-left text-xs">
-              <thead className="bg-paper text-[10px] uppercase text-muted"><tr>{["Pedido", "Data", "Fornecedor", "Venda", "Custos registrados", "Lucro estimado"].map((heading) => <th key={heading} className="px-4 py-3">{heading}</th>)}</tr></thead>
-              <tbody className="divide-y divide-border">{summary.orders.map((order) => {
-                const expenses = (order.supplier_cost_cents ?? 0) + (order.shipping_cost_cents ?? 0) + (order.other_expenses_cents ?? 0);
-                const paid = ["pago", "enviado", "approved"].includes(order.status) || order.mercado_pago_status === "approved";
-                const revenue = paid ? order.total_cents : 0;
-                return <tr key={order.id}><td className="px-4 py-3 font-bold">{order.id.slice(0, 8).toUpperCase()}</td><td className="px-4 py-3">{date.format(new Date(order.created_at))}</td><td className="px-4 py-3">{order.supplier_name ?? "—"}</td><td className="px-4 py-3">{paid ? money.format(revenue / 100) : "Aguardando pagamento"}</td><td className="px-4 py-3">{money.format(expenses / 100)}</td><td className="px-4 py-3 font-bold">{money.format((revenue - expenses) / 100)}</td></tr>;
-              })}</tbody>
-            </table>
-          </div>
-          <p className="mt-2 text-[11px] text-muted">A tabela lista até 300 pedidos recentes; os indicadores acima abrangem todos os pedidos.</p>
-          </>}
-        </section>
-      )}
+      {authorized && summary && !loading && !error && current === "finance" && metrics && (() => {
+        const paidOrders = summary.orders.filter(isOrderPaid);
+        const pendingOrders = summary.orders.filter(isOrderPending);
+        const expiredOrders = summary.orders.filter(isOrderExpired);
+        const displayedOrders =
+          financeFilter === "paid"
+            ? paidOrders
+            : financeFilter === "pending"
+            ? pendingOrders
+            : financeFilter === "expired"
+            ? expiredOrders
+            : summary.orders;
+
+        return (
+          <section className="mt-8">
+            {metrics.orderCount === 0 ? <EmptyState icon={CircleDollarSign} title="Sem movimentação financeira" description="Vendas e custos registrados serão resumidos aqui." /> : <>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              <StatCard label="Faturamento aprovado" value={money.format(metrics.revenueCents / 100)} icon={CircleDollarSign} />
+              <StatCard label="Fornecedores" value={money.format(metrics.supplierCostCents / 100)} icon={BarChart3} />
+              <StatCard label="Frete e outras despesas" value={money.format((metrics.shippingCostCents + metrics.otherExpensesCents) / 100)} icon={Truck} />
+              <StatCard label="Lucro estimado" value={money.format(metrics.estimatedProfitCents / 100)} icon={CircleDollarSign} />
+            </div>
+
+            <div className="mt-8 flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <h2 className="text-lg font-black">Pedidos e custos registrados</h2>
+                <p className="text-xs text-muted">Exibição padrão focada em pedidos aprovados. Use as abas para consultar abandonos e pendências.</p>
+              </div>
+              <div className="inline-flex flex-wrap rounded-xl border border-border bg-paper p-1 text-xs">
+                <button
+                  type="button"
+                  onClick={() => setFinanceFilter("paid")}
+                  className={`rounded-lg px-3 py-1.5 font-bold transition-colors ${
+                    financeFilter === "paid" ? "bg-white text-foreground shadow-sm" : "text-muted hover:text-foreground"
+                  }`}
+                >
+                  Pagos / Aprovados ({paidOrders.length})
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFinanceFilter("pending")}
+                  className={`rounded-lg px-3 py-1.5 font-bold transition-colors ${
+                    financeFilter === "pending" ? "bg-white text-foreground shadow-sm" : "text-muted hover:text-foreground"
+                  }`}
+                >
+                  Aguardando pagamento ({pendingOrders.length})
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFinanceFilter("expired")}
+                  className={`rounded-lg px-3 py-1.5 font-bold transition-colors ${
+                    financeFilter === "expired" ? "bg-white text-foreground shadow-sm" : "text-muted hover:text-foreground"
+                  }`}
+                >
+                  Expirados ({expiredOrders.length})
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFinanceFilter("all")}
+                  className={`rounded-lg px-3 py-1.5 font-bold transition-colors ${
+                    financeFilter === "all" ? "bg-white text-foreground shadow-sm" : "text-muted hover:text-foreground"
+                  }`}
+                >
+                  Todos ({summary.orders.length})
+                </button>
+              </div>
+            </div>
+
+            {displayedOrders.length === 0 ? (
+              <div className="mt-4 rounded-xl border border-border bg-white p-8 text-center text-xs text-muted">
+                Nenhum pedido encontrado nesta aba.
+              </div>
+            ) : (
+              <div className="mt-3 overflow-x-auto rounded-xl border border-border bg-white">
+                <table className="w-full min-w-[820px] text-left text-xs">
+                  <thead className="bg-paper text-[10px] uppercase text-muted">
+                    <tr>{["Pedido", "Data", "Status", "Fornecedor", "Venda", "Custos registrados", "Lucro estimado"].map((heading) => <th key={heading} className="px-4 py-3">{heading}</th>)}</tr>
+                  </thead>
+                  <tbody className="divide-y divide-border">{displayedOrders.map((order) => {
+                    const expenses = (order.supplier_cost_cents ?? 0) + (order.shipping_cost_cents ?? 0) + (order.other_expenses_cents ?? 0);
+                    const paid = isOrderPaid(order);
+                    const expired = isOrderExpired(order);
+                    const revenue = paid ? order.total_cents : 0;
+                    const statusLabel = paid ? "Aprovado" : expired ? "Expirado (>48h)" : "Aguardando pagamento";
+                    const statusClass = paid
+                      ? "text-emerald-700 bg-emerald-50 border-emerald-200"
+                      : expired
+                      ? "text-slate-600 bg-slate-100 border-slate-200"
+                      : "text-amber-700 bg-amber-50 border-amber-200";
+
+                    return (
+                      <tr key={order.id}>
+                        <td className="px-4 py-3 font-bold">{order.id.slice(0, 8).toUpperCase()}</td>
+                        <td className="px-4 py-3">{date.format(new Date(order.created_at))}</td>
+                        <td className="px-4 py-3">
+                          <span className={`inline-block rounded-full border px-2 py-0.5 text-[10px] font-bold ${statusClass}`}>
+                            {statusLabel}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3">{order.supplier_name ?? "—"}</td>
+                        <td className="px-4 py-3">{paid ? money.format(revenue / 100) : "R$ 0,00"}</td>
+                        <td className="px-4 py-3">{money.format(expenses / 100)}</td>
+                        <td className="px-4 py-3 font-bold">{money.format((revenue - expenses) / 100)}</td>
+                      </tr>
+                    );
+                  })}</tbody>
+                </table>
+              </div>
+            )}
+            <p className="mt-2 text-[11px] text-muted">A tabela lista até 300 pedidos recentes; os indicadores acima abrangem todos os pedidos.</p>
+            </>}
+          </section>
+        );
+      })()}
 
       {authorized && summary && !loading && !error && current === "suppliers" && (
         <section className="mt-8">
