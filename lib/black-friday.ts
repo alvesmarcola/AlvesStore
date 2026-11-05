@@ -1,4 +1,4 @@
-import { classifyProduct, getProductSizeSurcharge, isKidsProduct, isNbaTankTop } from "@/lib/product-classification";
+import { classifyProduct, getProductSizeSurcharge, isKidsProduct, isManualProduct, isNbaTankTop } from "@/lib/product-classification";
 import { storeConfig } from "@/config";
 import type { Product } from "@/lib/types";
 
@@ -58,6 +58,7 @@ export function isPlayerVersion(product: Product): boolean {
  * - Versão jogador / player / atleta (exceção explícita da promoção)
  */
 export function isBlackFridayEligibleShirt(product: Product): boolean {
+  if (isManualProduct(product)) return false;
   if (isNbaTankTop(product) || product.tipo === "regata") return false;
   if (isKidsProduct(product)) return false;
   if (isPlayerVersion(product)) return false;

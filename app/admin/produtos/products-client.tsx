@@ -401,11 +401,9 @@ export default function AdminProducts() {
           </Field>
           <Field label="Preço (R$)">
             <input required type="number" inputMode="decimal" min="0" max="100000" step="0.01" value={draft.preco} onChange={(event) => setField("preco", Number(event.target.value))} className="rounded-lg border border-border px-3 py-2.5 font-normal" />
-            {draft.tipo === "regata" && (draft.liga === "nba" || isNbaTeamEvidence(`${draft.clube} ${draft.nome}`)) && (
-              <p className="mt-1 text-[11px] text-muted">
-                Preço sugerido: {currency.format(storeConfig.nbaTankTopPrice)}. Regatas NBA têm preço único de {currency.format(storeConfig.nbaTankTopPrice)} garantido no catálogo, carrinho e checkout.
-              </p>
-            )}
+            <p className="mt-1 text-[11px] text-muted">
+              Produtos manuais utilizam exatamente o preço digitado acima, sem regras de categoria, ofertas por quantidade ou promoções automáticas.
+            </p>
           </Field>
           <Field label="Marca">
             <input maxLength={100} value={draft.brand} onChange={(event) => setField("brand", event.target.value)} className="rounded-lg border border-border px-3 py-2.5 font-normal" placeholder="Ex.: Adidas" />

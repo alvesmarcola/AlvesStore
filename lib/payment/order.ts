@@ -3,11 +3,10 @@ import { storeConfig } from "@/config";
 import { getPackagePrice, getShippingCents } from "@/lib/commerce";
 import { checkoutSchema } from "@/lib/validation";
 import type { Product } from "@/lib/types";
-import { classifyProduct, isNbaTankTop, isPackageEligible } from "@/lib/product-classification";
+import { classifyProduct, getProductSizeSurcharge, isFreeShippingProduct, isManualProduct, isNbaTankTop, isPackageEligible } from "@/lib/product-classification";
 import { getAvailablePatches } from "@/lib/patch-compatibility";
 import { allowsCustomization } from "@/lib/formula-one";
 import { getSupabaseProducts, hasSupabaseCatalogConfiguration } from "@/lib/server/supabase-catalog";
-import { getProductSizeSurcharge } from "@/lib/product-classification";
 import { CUSTOMIZATION_NAME_MAX_LENGTH, sanitizeCustomizationName } from "@/lib/customization";
 import { calcularPromoBlackFriday, BLACK_FRIDAY_PROMO_CODE } from "@/lib/black-friday";
 
@@ -116,12 +115,13 @@ export function calculateOrderTotals(lines: VerifiedOrderLine[], dataAtual = new
   const packageQuantity = promoDiscountCents > 0 ? 0 : lines.reduce((sum, line) => {
     return sum + (isPackageEligible(line.product) ? line.quantity : 0);
   }, 0);
-  const baseSubtotalCents = lines.reduce((sum, line) => sum + ((classifyProduct(line.product).price ?? 0) + getProductSizeSurcharge(line.size)) * line.quantity * 100, 0);
+  const baseSubtotalCents = lines.reduce((sum, line) => sum + Math.round(((classifyProduct(line.product).price ?? 0) + (isManualProduct(line.product) ? 0 : getProductSizeSurcharge(line.size))) * 100) * line.quantity, 0);
   const customizationCents = personalizedQuantity * Math.round(storeConfig.customizationPrice * 100);
   const bundleDiscountCents = packageQuantity > 0 ? packageQuantity * storeConfig.fanCommonPrice * 100 - getPackagePrice(packageQuantity) * 100 : 0;
   const shirtsCents = baseSubtotalCents - bundleDiscountCents - promoDiscountCents;
   const patchesCents = lines.reduce((sum, line) => sum + line.quantity * line.patchOptions.reduce((patchSum, patch) => patchSum + patch.priceCents, 0), 0);
-  const shippingCents = getShippingCents(quantity);
+  const shippingUnits = lines.reduce((sum, line) => sum + (isFreeShippingProduct(line.product) ? 0 : line.quantity), 0);
+  const shippingCents = getShippingCents(shippingUnits);
 
   return {
     quantity,

@@ -6,7 +6,7 @@ import { isFormulaOneEvidence, isFormulaOneProduct, isJacketFormulaOneProduct } 
 import { unstable_cache } from "next/cache";
 
 const PAGE_SIZE = 100;
-const PRODUCT_COLUMNS = "id,slug,clube,clubeSlug,liga,publico,tipo,temporada,uniforme,nome,preco,tamanhos,cor,imageSeed";
+const PRODUCT_COLUMNS = "id,yupoo_id,slug,clube,clubeSlug,liga,publico,tipo,temporada,uniforme,nome,preco,tamanhos,cor,imageSeed";
 const LIST_PRODUCT_COLUMNS = `${PRODUCT_COLUMNS},images`;
 const EXTENDED_LIST_PRODUCT_COLUMNS = `${LIST_PRODUCT_COLUMNS},category,gender,league,subcategory,tags,title,name,model,version`;
 const PUBLIC_LIST_PRODUCT_COLUMNS = `${EXTENDED_LIST_PRODUCT_COLUMNS},description,brand,tem_variacao_uniforme`;
@@ -197,7 +197,14 @@ function mapProduct(value: unknown): Product | null {
   }
   let league = normalizeLeague(value.liga ?? value.league);
 
-  const isNba = league === "nba" || type === "regata" || normalizedEvidence.includes("nba");
+  const isManual = Boolean(
+    (typeof value.yupoo_id === "string" && value.yupoo_id.startsWith("manual:")) ||
+    (typeof value.id === "string" && value.id.startsWith("manual:")) ||
+    value.slug === "teste" ||
+    name.toLowerCase() === "teste"
+  );
+
+  const isNba = !isManual && (league === "nba" || type === "regata" || normalizedEvidence.includes("nba"));
   if (isNba) {
     league = "nba";
     if (type === "revisar" || type === "f1") type = "regata";
@@ -206,14 +213,14 @@ function mapProduct(value: unknown): Product | null {
     if (sizes.length === 0) sizes = ["P", "M", "G", "GG"];
   }
 
-  const isRetro = !isNba && (type === "retro" || slugifyCatalogValue(value.slug).startsWith("retro-") || slugifyCatalogValue(value.slug).includes("-retro"));
+  const isRetro = !isNba && !isManual && (type === "retro" || slugifyCatalogValue(value.slug).startsWith("retro-") || slugifyCatalogValue(value.slug).includes("-retro"));
   if (isRetro) {
     if (type === "revisar") type = "retro";
     if (audience === "revisar") audience = "masculino";
     if (!Number.isFinite(price) || price <= 0) price = 185;
   }
 
-  const isF1 = !isNba && !isRetro && (type === "f1" || type === "formula1" || league === "f1" || isFormulaOneEvidence(normalizedEvidence));
+  const isF1 = !isNba && !isRetro && !isManual && (type === "f1" || type === "formula1" || league === "f1" || isFormulaOneEvidence(normalizedEvidence));
   if (isF1) {
     type = "f1";
     league = "f1";
@@ -227,8 +234,13 @@ function mapProduct(value: unknown): Product | null {
     }
   }
 
+  if (isManual && Number.isFinite(Number(value.preco)) && Number(value.preco) >= 0) {
+    price = Number(value.preco);
+  }
+
   return {
     id: value.id,
+    yupoo_id: typeof value.yupoo_id === "string" ? value.yupoo_id : undefined,
     slug: value.slug,
     clube: club,
     clubeSlug: clubSlug || "revisar",

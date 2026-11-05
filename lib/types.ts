@@ -48,6 +48,8 @@ export interface Product {
   model?: string;
   version?: string;
   tem_variacao_uniforme?: boolean;
+  yupoo_id?: string;
+  ignorar_regras_preco?: boolean;
 }
 
 export interface League {

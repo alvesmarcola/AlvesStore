@@ -14,7 +14,11 @@ const nextConfig: NextConfig = {
     { protocol: "https", hostname: "**.instagram.com" },
   ] },
   async redirects() {
-    return [{ source: "/login", destination: "/", permanent: true }];
+    return [
+      { source: "/login", destination: "/", permanent: true },
+      { source: "/regatas", destination: "/masculino?tipo=regata-nba", permanent: true },
+      { source: "/regata", destination: "/masculino?tipo=regata-nba", permanent: true },
+    ];
   },
   async headers() {
     const scriptSources = process.env.NODE_ENV === "development" ? "'self' 'unsafe-inline' 'unsafe-eval'" : "'self' 'unsafe-inline'";

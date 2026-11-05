@@ -82,3 +82,23 @@ test("Busca inteligente encontra regatas NBA tanto por 'nba' quanto por 'regata'
   assert.equal(searchThunder.results.length, 1, "Busca por 'thunder' deve retornar Thunder");
   assert.equal(searchThunder.results[0].slug, "regata-nba-thunder-city-edition-8-jalen-williams");
 });
+
+test("Menu e categorias de Masculino possuem apenas 'Regatas NBA', e rota antiga possui redirect", async () => {
+  const categories = (await import("@/data/categories.json", { with: { type: "json" } })).default;
+  const masculino = categories.find((c) => c.slug === "masculino");
+  assert.ok(masculino, "Categoria masculino deve existir");
+  assert.ok(!masculino.subcategories.includes("Regatas"), "Não deve conter 'Regatas'");
+  assert.ok(masculino.subcategories.includes("Regatas NBA"), "Deve conter 'Regatas NBA'");
+
+  const nextConfigModule = await import("@/next.config");
+  const nextConfig = nextConfigModule.default;
+  if (nextConfig.redirects) {
+    const redirects = await nextConfig.redirects();
+    const regatasRedirect = redirects.find((r: { source: string }) => r.source === "/regatas");
+    const regataRedirect = redirects.find((r: { source: string }) => r.source === "/regata");
+    assert.ok(regatasRedirect, "Deve haver redirect para /regatas");
+    assert.equal(regatasRedirect.destination, "/masculino?tipo=regata-nba");
+    assert.ok(regataRedirect, "Deve haver redirect para /regata");
+    assert.equal(regataRedirect.destination, "/masculino?tipo=regata-nba");
+  }
+});

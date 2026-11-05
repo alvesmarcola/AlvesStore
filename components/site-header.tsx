@@ -9,7 +9,7 @@ import { useCart } from "@/store/cart";
 import type { CatalogLeague } from "@/lib/catalog-taxonomy";
 import { SITE_NAME } from "@/lib/site";
 
-const maleCategories = [["Versão Torcedor", "torcedor"], ["Versão Jogador", "jogador"], ["Retrô", "retro"], ["Conjunto de Treino", "treino"], ["Mangas compridas", "inverno"], ["Regatas", "regata"], ["Regatas NBA", "regata-nba"]];
+const maleCategories = [["Versão Torcedor", "torcedor"], ["Versão Jogador", "jogador"], ["Retrô", "retro"], ["Conjunto de Treino", "treino"], ["Mangas compridas", "inverno"], ["Regatas NBA", "regata-nba"]];
 const femaleCategories = [["Camisas Femininas", "torcedor"], ["Conjuntos", "treino"]];
 const dropdownTransition = { duration: 0.18, ease: "easeOut" as const };
 
@@ -27,7 +27,7 @@ export function SiteHeader({ leagues, hasRegatas, hasNbaRegatas }: { leagues: Pi
   const reducedMotion = useReducedMotion();
   const count = useCart((state) => state.items.reduce((sum, item) => sum + item.quantity, 0));
   const setDrawerOpen = useCart((state) => state.setDrawerOpen);
-  const visibleMaleCategories = maleCategories.filter(([, type]) => type !== "regata" || hasRegatas).filter(([, type]) => type !== "regata-nba" || hasNbaRegatas);
+  const visibleMaleCategories = maleCategories.filter(([, type]) => type !== "regata-nba" || hasNbaRegatas);
   useEffect(() => {
     const normalized = query.trim();
     if (normalized.length < 2) {
@@ -114,6 +114,7 @@ export function SiteHeader({ leagues, hasRegatas, hasNbaRegatas }: { leagues: Pi
                 </motion.div>)}
               </motion.div>}</AnimatePresence>
             </div>
+            <Link className="nav-link" href="/retro">Retrô</Link>
             <Link className="nav-link" href="/infantil">Infantil</Link>
             <Link className="nav-link" href="/selecoes">Seleções nacionais</Link>
             <Link className="nav-link" href="/rastreio">Rastreio</Link>
@@ -131,6 +132,7 @@ export function SiteHeader({ leagues, hasRegatas, hasNbaRegatas }: { leagues: Pi
             {categoryOpen === "feminino" && <div className="mb-3 pl-4"><Link href="/feminino" className="block py-2 text-xs font-bold">Ver tudo</Link>{femaleCategories.map(([name, type], index) => <Link key={`${type}-${index}`} href={`/feminino?tipo=${type}`} className="block py-2 text-xs text-muted">{name}</Link>)}</div>}
             <button className="mobile-nav-link flex w-full items-center justify-between" aria-expanded={leagueOpen} onClick={() => setLeagueOpen(!leagueOpen)}>Ligas <ChevronDown size={16} /></button>
             {leagueOpen && <div className="mb-3 pl-4">{leagues.map((league) => <Link key={league.slug} href={`/ligas/${league.slug}`} className="block border-b border-border py-3 text-xs font-bold text-ink transition-colors hover:text-action">{league.nome}</Link>)}</div>}
+            <Link className="mobile-nav-link" href="/retro">Retrô</Link>
             <Link className="mobile-nav-link" href="/infantil">Infantil / Kids</Link><Link className="mobile-nav-link" href="/selecoes">Seleções nacionais</Link><Link className="mobile-nav-link" href="/rastreio">Rastreio de pedido</Link>
           </motion.aside>
         </motion.div>}

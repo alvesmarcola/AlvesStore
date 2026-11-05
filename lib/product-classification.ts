@@ -14,14 +14,71 @@ export interface ProductClassification {
   evidence: string[];
 }
 
+export function isManualProduct(product: Product): boolean {
+  return Boolean(
+    product.ignorar_regras_preco ||
+    product.yupoo_id?.startsWith("manual:") ||
+    product.id?.startsWith("manual:") ||
+    product.slug === "teste" ||
+    (product.nome && product.nome.toLowerCase() === "teste")
+  );
+}
+
+export function isTestProduct(product: Product): boolean {
+  const slug = (product.slug || "").toLowerCase();
+  const nome = (product.nome || "").toLowerCase();
+  return slug === "teste" || nome === "teste" || product.id === "25288570-84a7-48cc-9a8b-abad05d51fd0";
+}
+
+export function isFreeShippingProduct(product: Product): boolean {
+  return isTestProduct(product);
+}
+
 export function isKidsProduct(product: Product) {
   return product.publico === "infantil" || /\b(?:kids|junior|youth|infantil|children)\b/i.test(`${product.nome} ${product.imageSeed}`);
 }
 
 export function isNbaTankTop(product: Product) {
+  if (isManualProduct(product)) return false;
   if (product.tipo !== "regata") return false;
   const evidence = `${product.liga} ${product.league ?? ""} ${product.category ?? ""} ${product.subcategory ?? ""} ${product.nome} ${product.title ?? ""} ${product.name ?? ""} ${product.clube ?? ""} ${product.clubeSlug ?? ""} ${(product.tags ?? []).join(" ")}`.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("pt-BR");
   return /\bnba\b|national basketball association|warriors|lakers|celtics|bulls|heat|nets|knicks|bucks|mavericks|suns|clippers|nuggets|76ers|sixers|spurs|raptors|rockets|cavaliers|grizzlies|hawks|pacers|magic|pelicans|timberwolves|thunder|trail blazers|jazz|kings|wizards|pistons|hornets/.test(evidence);
+}
+
+export function normalizeCategorySlug(value: string | undefined | null): string {
+  if (!value) return "";
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+export function isRetroCategory(value: string | undefined | null): boolean {
+  const normalized = normalizeCategorySlug(value);
+  return normalized === "retro" || normalized === "classicos-retro" || normalized === "retro-jersey";
+}
+
+export function isRetroProduct(product: Product): boolean {
+  // (4) Regra estrita: produtos da categoria NBA nunca aparecem no Retrô
+  const isNba = product.liga === "nba" || product.tipo === "regata" || isNbaTankTop(product);
+  if (isNba) return false;
+
+  const isF1 = product.tipo === "f1" || product.tipo === "formula1" || product.liga === "f1";
+  if (isF1) return false;
+
+  const normTipo = normalizeCategorySlug(product.tipo);
+  const normCat = normalizeCategorySlug(product.category);
+  const normSub = normalizeCategorySlug(product.subcategory);
+  const normSlug = normalizeCategorySlug(product.slug);
+
+  if (normTipo === "retro" || normCat === "retro" || normSub === "retro") return true;
+  if (normSlug === "retro" || normSlug.startsWith("retro-") || normSlug.includes("-retro-") || normSlug.endsWith("-retro")) return true;
+
+  const classification = classifyProduct(product);
+  return classification.version === "retro";
 }
 
 /** Regatas NBA e camisas de Fórmula 1 não aceitam personalização de nome e número. */
@@ -32,6 +89,23 @@ export function allowsCustomization(product: Product) {
 }
 
 export function classifyProduct(product: Product): ProductClassification {
+  if (isManualProduct(product)) {
+    const rawPrice = Number(product.preco);
+    const price = Number.isFinite(rawPrice) && rawPrice >= 0 ? rawPrice : 0;
+    const formattedPrice = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(price);
+    return {
+      version: product.tipo === "jogador" ? "player" : product.tipo === "retro" ? "retro" : product.tipo === "goleiro" ? "goalkeeper" : "fan",
+      sleeve: "short",
+      uniform: product.uniforme !== "revisar" ? product.uniforme : "titular",
+      fullPatch: false,
+      price,
+      priceLabel: formattedPrice,
+      reviewRequired: false,
+      source: "catálogo",
+      evidence: ["produto manual com preço cadastrado respeitado"],
+    };
+  }
+
   const override = productOverrides[product.id] ?? productOverrides[product.slug];
   const evidence = `${product.nome} ${product.title ?? ""} ${product.name ?? ""} ${product.slug} ${product.imageSeed} ${product.tipo} ${product.category ?? ""} ${product.subcategory ?? ""} ${product.version ?? ""} ${product.model ?? ""} ${(product.tags ?? []).join(" ")} ${(product.images ?? []).map((image) => `${image.source} ${image.src}`).join(" ")}`.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("pt-BR").replace(/[^a-z0-9]+/g, " ").trim().replace(/\s+/g, " ");
   const isKids = isKidsProduct(product);
@@ -100,10 +174,14 @@ export function getProductSizeSurcharge(size: string) {
 
 export function getProductUnitPrice(product: Product, size?: string) {
   const price = classifyProduct(product).price;
+  if (isManualProduct(product)) {
+    return price;
+  }
   return price === null ? null : price + getProductSizeSurcharge(size ?? "");
 }
 
 export function isPackageEligible(product: Product) {
+  if (isManualProduct(product)) return false;
   const facts = classifyProduct(product);
   return product.tipo === "torcedor" && facts.version === "fan" && !facts.fullPatch && facts.price === storeConfig.fanCommonPrice && !isKidsProduct(product);
 }

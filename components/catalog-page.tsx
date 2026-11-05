@@ -9,7 +9,7 @@ import { catalogLabel } from "@/lib/catalog-taxonomy";
 import { storeConfig } from "@/config";
 import type { Product } from "@/lib/types";
 import { searchProducts } from "@/lib/smart-search";
-import { classifyProduct, getProductUnitPrice } from "@/lib/product-classification";
+import { classifyProduct, getProductUnitPrice, isRetroCategory, isRetroProduct, normalizeCategorySlug } from "@/lib/product-classification";
 import { getProductCategoryKey } from "@/lib/commerce";
 import { compareCatalogProducts } from "@/lib/catalog-order";
 import { CategoryHero } from "@/components/category-hero";
@@ -46,7 +46,9 @@ export function CatalogPage({ title, description, products, breadcrumb, initialT
   const urlReady = useRef(false);
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    setSearch(initialSearch !== undefined ? initialSearch : params.get("q") ?? ""); setType(params.get("tipo") ?? initialType);
+    const rawType = params.get("tipo") ?? initialType;
+    const resolvedType = isRetroCategory(rawType) ? "retro" : normalizeCategorySlug(rawType);
+    setSearch(initialSearch !== undefined ? initialSearch : params.get("q") ?? ""); setType(resolvedType);
     setUniform(params.get("uniforme") ?? ""); setClub(params.get("clube") ?? ""); setLeague(params.get("liga") ?? ""); setSleeve(params.get("manga") ?? "");
     setSize(params.get("tamanho") ?? ""); setSeason(params.get("temporada") ?? ""); setColor(params.get("cor") ?? "");
     setMaxPrice(params.get("preco") ?? "all"); setSort(params.get("ordem") ?? "relevancia"); urlReady.current = true;
@@ -68,7 +70,12 @@ export function CatalogPage({ title, description, products, breadcrumb, initialT
       const verifiedUniform = classifyProduct(product).uniform;
       const priceMatches = maxPrice === "all" || (price !== null && price <= Number(maxPrice));
       const category = getProductCategoryKey(product);
-      const categoryMatches = !type || category === type || (type === "regata" && category === "regata-nba") || (type === "inverno" && classifyProduct(product).sleeve === "long");
+      const normalizedCurrentType = isRetroCategory(type) ? "retro" : normalizeCategorySlug(type);
+      const isRetro = isRetroProduct(product);
+      const categoryMatches = !normalizedCurrentType
+        || (normalizedCurrentType === "retro" ? isRetro : category === normalizedCurrentType)
+        || (normalizedCurrentType === "regata" && (category === "regata-nba" || product.tipo === "regata"))
+        || (normalizedCurrentType === "inverno" && classifyProduct(product).sleeve === "long");
       return categoryMatches && (!sleeve || classifyProduct(product).sleeve === sleeve) && (!uniform || verifiedUniform === uniform) &&
         (!club || product.clubeSlug === club) && (!league || product.liga === league) &&
         (!size || product.tamanhos.includes(size)) &&
@@ -87,11 +94,14 @@ export function CatalogPage({ title, description, products, breadcrumb, initialT
   const seasonOptions = Array.from(new Set(products.map((product) => product.temporada).filter((value) => value !== "revisar")));
   const colorOptions = Array.from(new Set(products.map((product) => product.cor).filter((value) => value !== "revisar")));
   const leagueOptions = Array.from(new Set(products.map((product) => product.liga).filter((value) => value !== "revisar"))).sort((a, b) => catalogLabel(a).localeCompare(catalogLabel(b), "pt-BR"));
-  const typeLabels: Record<string, string> = { torcedor: "Torcedor", jogador: "Jogador", goleiro: "Goleiro", retro: "Retrô", treino: "Treino", cropped: "Cropped", regata: "Regata", "regata-nba": "Regatas NBA", inverno: "Mangas compridas", vestido: "Vestido" };
+  const typeLabels: Record<string, string> = { torcedor: "Torcedor", jogador: "Jogador", goleiro: "Goleiro", retro: "Retrô", treino: "Treino", cropped: "Cropped", regata: "Regatas NBA", "regata-nba": "Regatas NBA", inverno: "Mangas compridas", vestido: "Vestido" };
   typeLabels["full-patch"] = "Full Patches";
   typeLabels["f1"] = "F1";
   typeLabels["formula1"] = "F1";
-  const typeOptions = Array.from(new Set(products.map((product) => getProductCategoryKey(product).toString()).filter((value) => value !== "revisar")));
+  const typeOptions = Array.from(new Set(products.map((product) => {
+    const key = getProductCategoryKey(product).toString();
+    return key === "regata" ? "regata-nba" : key;
+  }).filter((value) => value !== "revisar")));
   const sleeveOptions = Array.from(new Set(products.map((product) => classifyProduct(product).sleeve).filter((value) => value !== "unknown")));
   const uniformLabels: Record<string, string> = { titular: "Casa (Home)", reserva: "Fora (Away)", terceiro: "Terceira camisa (Third)", quarto: "Quarta camisa (Fourth)" };
   const uniformOptions = Array.from(new Set(products.map((product) => classifyProduct(product).uniform).filter((value) => value !== "revisar")));

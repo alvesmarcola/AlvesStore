@@ -15,7 +15,7 @@ import type { Metadata } from "next";
 import type { Product } from "@/lib/types";
 import { deriveCatalogLeagues } from "@/lib/catalog-taxonomy";
 import { editorialPriorities, prioritizeClubs, prioritizeEditorialProducts, sortCatalogProducts } from "@/lib/catalog-order";
-import { classifyProduct, isNbaTankTop } from "@/lib/product-classification";
+import { classifyProduct, isNbaTankTop, isRetroProduct } from "@/lib/product-classification";
 import { getBundledFormulaOneProducts, getSupabaseProducts } from "@/lib/server/supabase-catalog";
 import { isFormulaOneProduct } from "@/lib/formula-one";
 
@@ -94,17 +94,7 @@ export default async function HomePage() {
     editorialPriorities.selections,
     8,
   );
-  const retros = catalogProducts.filter((product) => {
-    const isNba = product.liga === "nba" || product.tipo === "regata" || isNbaTankTop(product);
-    if (isNba) return false;
-    if (isFormulaOneProduct(product)) return false;
-    return product.tipo === "retro"
-      || product.category === "retro"
-      || product.subcategory === "retro"
-      || product.slug.startsWith("retro-")
-      || product.slug.includes("-retro-")
-      || product.slug.endsWith("-retro");
-  }).slice(0, 8);
+  const retros = catalogProducts.filter(isRetroProduct).slice(0, 8);
   const kidsProducts = catalogProducts.filter((product) => (product.publico === "infantil" || /\b(?:kids|junior|youth|infantil|children)\b/i.test(`${product.nome} ${product.imageSeed}`)) && !isFormulaOneProduct(product)).slice(0, 8);
   const formulaOneProducts = sortCatalogProducts([...formulaOneBySlug.values()]).slice(0, 12);
   const destinations = new Map<string, { name: string; league: string; slug: string; popularity: number }>();
@@ -143,11 +133,11 @@ export default async function HomePage() {
           className="group mx-auto grid max-w-7xl grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] items-stretch overflow-hidden rounded-xl border border-white/10 bg-[#0a0a0a] text-white shadow-xl transition hover:border-blue-500/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-400"
         >
           <span className="flex min-w-0 flex-col justify-center p-4 sm:p-8 lg:p-12">
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-300">Coleção de regatas</span>
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-300">Coleção de regatas NBA</span>
             <span id="nba-highlight-title" className="mt-2 text-4xl font-black uppercase tracking-tight sm:text-5xl lg:text-7xl">NBA</span>
             <span className="mt-2 line-clamp-2 text-xs font-medium text-white/75 sm:text-sm">{nbaRegata?.nome ?? "Regatas da coleção NBA"}</span>
             <span className="mt-4 flex w-fit items-center gap-2 rounded-full bg-blue-600 px-4 py-2 text-[10px] font-bold uppercase tracking-wider transition group-hover:bg-blue-500 sm:mt-6 sm:text-xs">
-              Ver regatas <ArrowRight size={16} />
+              Ver regatas NBA <ArrowRight size={16} />
             </span>
           </span>
           <span className="relative min-h-[220px] overflow-hidden bg-[radial-gradient(circle_at_55%_45%,rgba(37,99,235,0.28),transparent_58%),linear-gradient(135deg,#171717,#0a0a0a)] sm:min-h-[280px] lg:min-h-[360px]">

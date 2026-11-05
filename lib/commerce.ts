@@ -1,6 +1,6 @@
 import { storeConfig } from "@/config";
 import type { CartItem } from "@/lib/types";
-import { classifyProduct, getProductSizeSurcharge, isKidsProduct, isNbaTankTop, isPackageEligible } from "@/lib/product-classification";
+import { classifyProduct, getProductSizeSurcharge, isFreeShippingProduct, isKidsProduct, isManualProduct, isNbaTankTop, isPackageEligible, isRetroProduct, isTestProduct } from "@/lib/product-classification";
 import { getAvailablePatches } from "@/lib/patch-compatibility";
 import { formatCustomization } from "@/lib/customization";
 import { calcularPromoBlackFriday, isBlackFridayEligibleShirt } from "@/lib/black-friday";
@@ -14,7 +14,8 @@ export function getPackagePrice(units: number) {
 }
 
 export function qualifiesForFreeShipping(items: CartItem[]) {
-  return items.reduce((sum, item) => sum + item.quantity, 0) >= storeConfig.freeShippingQuantity;
+  const chargeableUnits = items.reduce((sum, item) => sum + (isFreeShippingProduct(item.product) ? 0 : item.quantity), 0);
+  return chargeableUnits >= storeConfig.freeShippingQuantity;
 }
 
 export function getShippingCents(units: number) {
@@ -30,16 +31,18 @@ export function getShippingOfferText() {
 
 export function getCartPricing(items: CartItem[]) {
   const units = items.reduce((sum, item) => sum + item.quantity, 0);
+  const shippingUnits = items.reduce((sum, item) => sum + (isFreeShippingProduct(item.product) ? 0 : item.quantity), 0);
   const classified = items.map((item) => ({ item, facts: classifyProduct(item.product) }));
   const promo = calcularPromoBlackFriday(items, new Date());
   const packageUnits = promo.desconto > 0 ? 0 : classified.reduce((sum, row) => sum + (isPackageEligible(row.item.product) ? row.item.quantity : 0), 0);
-  const baseShirtsCents = classified.reduce((sum, row) => sum + Math.round(((row.facts.price ?? 0) + getProductSizeSurcharge(row.item.size)) * 100) * row.item.quantity, 0);
+  const baseShirtsCents = classified.reduce((sum, row) => sum + Math.round(((row.facts.price ?? 0) + (isManualProduct(row.item.product) ? 0 : getProductSizeSurcharge(row.item.size))) * 100) * row.item.quantity, 0);
   const packageEligibleBaseCents = classified.reduce((sum, row) => sum + (isPackageEligible(row.item.product) ? storeConfig.fanCommonPrice * row.item.quantity * 100 : 0), 0);
   const customizationCents = items.reduce(
     (sum, item) => sum + (formatCustomization(item.customization) ? Math.round(storeConfig.customizationPrice * 100) : 0) * item.quantity,
     0,
   );
-  const shipping = getShippingCents(units) / 100;
+  const shippingCents = getShippingCents(shippingUnits);
+  const shipping = shippingCents / 100;
   const patchesCents = classified.reduce((sum, row) => sum + row.item.quantity * (row.item.patches ?? []).reduce((patchSum, selected) => {
     const option = getAvailablePatches(row.item.product).find((patch) => patch.id === selected.id && patch.positions.includes(selected.position));
     return patchSum + (option?.priceCents ?? 0);
@@ -60,7 +63,7 @@ export function getCartPricing(items: CartItem[]) {
     : "";
   const needsReview = classified.some((row) => row.facts.reviewRequired);
   const patchCount = items.reduce((sum, item) => sum + (item.patches?.length ?? 0), 0);
-  const totalCents = productsTotalCents + getShippingCents(units);
+  const totalCents = productsTotalCents + shippingCents;
   return {
     subtotal: subtotalCents / 100,
     bundleDiscount: bundleDiscountCents / 100,
@@ -76,6 +79,7 @@ export function getCartPricing(items: CartItem[]) {
 }
 
 export function getProductCategoryKey(product: CartItem["product"]) {
+  if (isRetroProduct(product)) return "retro";
   const facts = classifyProduct(product);
   if (facts.fullPatch) return "full-patch";
   if (isNbaTankTop(product)) return "regata-nba";
@@ -89,6 +93,13 @@ export function getProductCategoryKey(product: CartItem["product"]) {
 }
 
 export function getProductOfferText(product: CartItem["product"]) {
+  if (isManualProduct(product)) {
+    const facts = classifyProduct(product);
+    const shipping = isTestProduct(product)
+      ? "Frete grátis."
+      : `Frete: ${new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(storeConfig.shippingPrice)} (1 ou 2 camisas) ou grátis (${storeConfig.freeShippingQuantity}+).`;
+    return `Preço cadastrado: ${new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(facts.price ?? 0)}; sem oferta por quantidade. ${shipping}`;
+  }
   const facts = classifyProduct(product);
   const shipping = `Frete: ${new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(storeConfig.shippingPrice)} (1 ou 2 camisas) ou grátis (${storeConfig.freeShippingQuantity}+).`;
   if (isNbaTankTop(product)) {
@@ -98,7 +109,7 @@ export function getProductOfferText(product: CartItem["product"]) {
     return `Torcedor comum: 1 por R$ ${storeConfig.fanCommonPrice}, 2 por R$ ${storeConfig.twoShirtPrice} ou 3 por R$ ${storeConfig.threeShirtPrice}. ${shipping}`;
   }
   if (facts.price !== null) {
-    const category = facts.fullPatch ? "Full Patches" : facts.version === "retro" ? "Retrô" : facts.version === "player" ? "Jogador" : facts.version === "fan" ? "Torcedor manga longa" : facts.version === "goalkeeper" ? "Goleiro" : "Produto";
+    const category = facts.fullPatch ? "Full Patches" : (facts.version === "retro" || isRetroProduct(product)) ? "Retrô" : facts.version === "player" ? "Jogador" : facts.version === "fan" ? "Torcedor manga longa" : facts.version === "goalkeeper" ? "Goleiro" : "Produto";
     return `${category}: ${new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(facts.price)} por camisa; sem oferta por quantidade. ${shipping}`;
   }
   return `Preço em revisão. ${shipping}`;
