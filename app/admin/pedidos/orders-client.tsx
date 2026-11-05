@@ -12,6 +12,7 @@ type OrderItem = {
   title: string;
   size: string;
   quantity: number;
+  uniformVariation?: string | null;
   customization?: { name?: string; number?: string } | null;
   patches?: { name: string; position: string; priceCents: number }[];
 };
@@ -99,6 +100,7 @@ function getOperationalStatus(order: Order): OperationalStatus {
 function itemDescription(item: OrderItem) {
   const options = [
     `Tam. ${item.size}`,
+    item.uniformVariation ? `Uniforme: ${item.uniformVariation}` : "",
     `${item.quantity} un.`,
     formatCustomization(item.customization),
     item.patches?.length ? item.patches.map((patch) => `${patch.name} (${patch.position})`).join(", ") : "",

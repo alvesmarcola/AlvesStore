@@ -9,7 +9,7 @@ import { getPersistedCartItems } from "@/lib/cart-persistence";
 interface CartState {
   items: CartItem[];
   drawerOpen: boolean;
-  addItem: (product: Product, size: string, customization?: CartItem["customization"], patches?: CartItem["patches"]) => void;
+  addItem: (product: Product, size: string, customization?: CartItem["customization"], patches?: CartItem["patches"], uniformVariation?: "Casa" | "Fora") => void;
   removeItem: (lineId: string) => void;
   updateQuantity: (lineId: string, quantity: number) => void;
   setDrawerOpen: (open: boolean) => void;
@@ -35,6 +35,7 @@ function migratePersistedCart(value: unknown): Pick<CartState, "items"> {
       if (!product || !product.tamanhos.includes(entry.size)) return [];
 
       const allowed = getAvailablePatches(product);
+      const uniformVariation = entry.uniformVariation === "Casa" || entry.uniformVariation === "Fora" ? entry.uniformVariation : undefined;
       const patches = Array.isArray(entry.patches) ? entry.patches.flatMap((candidate) => {
         if (!isRecord(candidate) || typeof candidate.id !== "string" || typeof candidate.position !== "string") return [];
         const option = allowed.find((patch) => patch.id === candidate.id && patch.positions.includes(candidate.position as never));
@@ -43,9 +44,9 @@ function migratePersistedCart(value: unknown): Pick<CartState, "items"> {
       const quantity = typeof entry.quantity === "number" && Number.isFinite(entry.quantity)
         ? Math.max(1, Math.floor(entry.quantity))
         : 1;
-      const lineId = `${product.id}-${entry.size}-persisted-${index}-${patches.map(({ id, position }) => `${id}:${position}`).sort().join(",")}`;
+      const lineId = `${product.id}-${entry.size}-${uniformVariation ?? ""}-persisted-${index}-${patches.map(({ id, position }) => `${id}:${position}`).sort().join(",")}`;
 
-      return [{ lineId, product, size: entry.size, quantity, ...(patches.length ? { patches } : {}) }];
+      return [{ lineId, product, size: entry.size, quantity, ...(uniformVariation ? { uniformVariation } : {}), ...(patches.length ? { patches } : {}) }];
     })
     : [];
 
@@ -64,9 +65,9 @@ export const useCart = create<CartState>()(
     (set) => ({
       items: [],
       drawerOpen: false,
-      addItem: (product, size, customization, patches) =>
+      addItem: (product, size, customization, patches, uniformVariation) =>
         set((state) => {
-          const lineId = `${product.id}-${size}-${customization?.name ?? ""}-${customization?.number ?? ""}-${(patches ?? []).map(({ id, position }) => `${id}:${position}`).sort().join(",")}`;
+          const lineId = `${product.id}-${size}-${uniformVariation ?? ""}-${customization?.name ?? ""}-${customization?.number ?? ""}-${(patches ?? []).map(({ id, position }) => `${id}:${position}`).sort().join(",")}`;
           const existing = state.items.find((item) => item.lineId === lineId);
           return {
             items: existing
@@ -75,7 +76,7 @@ export const useCart = create<CartState>()(
                     ? { ...item, quantity: item.quantity + 1 }
                     : item,
                 )
-              : [...state.items, { lineId, product, size, quantity: 1, customization, ...(patches?.length ? { patches } : {}) }],
+              : [...state.items, { lineId, product, size, quantity: 1, uniformVariation, customization, ...(patches?.length ? { patches } : {}) }],
             drawerOpen: true,
           };
         }),

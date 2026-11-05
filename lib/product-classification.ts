@@ -39,7 +39,8 @@ export function classifyProduct(product: Product): ProductClassification {
   const modelEvidence = `${product.nome} ${product.title ?? ""} ${product.name ?? ""} ${product.slug} ${product.category ?? ""} ${product.version ?? ""} ${product.model ?? ""} ${(product.tags ?? []).join(" ")}`.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("pt-BR").replace(/[^a-z0-9]+/g, " ").trim().replace(/\s+/g, " ");
   const explicitTrainingProduct = product.tipo === "treino" && /\b(treino|training|pre jogo|pre match)\b/.test(modelEvidence)
     && !/\b(player|jogador)\b/.test(`${product.nome} ${product.title ?? ""} ${product.name ?? ""} ${product.category ?? ""} ${product.version ?? ""} ${product.model ?? ""}`.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("pt-BR"));
-  const inferredVersion: ShirtVersion = (product.tipo === "f1" || product.tipo === "formula1") ? "unknown" : explicitTrainingProduct ? "fan" : product.tipo === "retro" || /\b(retro|vintage)\b/.test(evidence)
+  const isNba = isNbaTankTop(product) || product.tipo === "regata" || product.liga === "nba";
+  const inferredVersion: ShirtVersion = (product.tipo === "f1" || product.tipo === "formula1" || isNba) ? "unknown" : explicitTrainingProduct ? "fan" : product.tipo === "retro" || /\b(retro|vintage)\b/.test(evidence)
     ? "retro"
     : product.tipo === "jogador" || /\b(player|player version|versao jogador|jogador)\b/.test(evidence)
       ? "player"

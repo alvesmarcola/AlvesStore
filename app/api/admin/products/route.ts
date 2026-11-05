@@ -13,7 +13,7 @@ import { SITE_NAME } from "@/lib/site";
 
 export const runtime = "nodejs";
 
-const PRODUCT_COLUMNS = "id,yupoo_id,slug,clube,clubeSlug,liga,publico,tipo,temporada,uniforme,nome,preco,tamanhos,cor,imageSeed,images,description,stock_by_size,brand";
+const PRODUCT_COLUMNS = "id,yupoo_id,slug,clube,clubeSlug,liga,publico,tipo,temporada,uniforme,nome,preco,tamanhos,cor,imageSeed,images,description,stock_by_size,brand,tem_variacao_uniforme";
 
 function publicImageRecords(imageUrls: string[], productName: string) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim() || process.env.SUPABASE_URL?.trim();
@@ -63,6 +63,7 @@ function productValues(input: ManualProductInput, id: string, imageUrls: string[
     description: input.description,
     stock_by_size: stockBySize,
     brand: input.brand,
+    tem_variacao_uniforme: Boolean(input.tem_variacao_uniforme),
     updated_at: new Date().toISOString(),
   };
 }
@@ -198,6 +199,7 @@ export async function PATCH(request: Request) {
         description: parsed.data.description,
         stock_by_size: stockBySize,
         brand: parsed.data.brand,
+        tem_variacao_uniforme: Boolean(parsed.data.tem_variacao_uniforme),
         updated_at: new Date().toISOString(),
       })
       .eq("id", parsed.data.id)

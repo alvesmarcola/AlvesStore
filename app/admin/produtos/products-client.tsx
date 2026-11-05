@@ -31,6 +31,7 @@ type ManualProduct = {
   brand: string;
   supplier_name: string;
   supplier_cost: number;
+  tem_variacao_uniforme?: boolean;
 };
 
 type ProductDraft = {
@@ -52,6 +53,7 @@ type ProductDraft = {
   tamanhos: string[];
   stock_by_size: Record<string, number>;
   imageUrls: string[];
+  tem_variacao_uniforme: boolean;
 };
 
 const emptyDraft: ProductDraft = {
@@ -72,6 +74,7 @@ const emptyDraft: ProductDraft = {
   tamanhos: ["P", "M", "G", "GG"],
   stock_by_size: { P: 0, M: 0, G: 0, GG: 0 },
   imageUrls: [],
+  tem_variacao_uniforme: false,
 };
 
 const KNOWN_COMPETITIONS = [
@@ -199,6 +202,7 @@ export default function AdminProducts() {
       tamanhos: sizes,
       stock_by_size: Object.fromEntries(sizes.map((size) => [size, product.stock_by_size?.[size] ?? 0])),
       imageUrls: [],
+      tem_variacao_uniforme: Boolean(product.tem_variacao_uniforme),
     });
     setSizeInput(sizes.join(", "));
     setExistingPhotos(product.images ?? []);
@@ -484,6 +488,22 @@ export default function AdminProducts() {
           <Field label="Cor principal">
             <input required maxLength={60} value={draft.cor} onChange={(event) => setField("cor", event.target.value)} className="rounded-lg border border-border px-3 py-2.5 font-normal" />
           </Field>
+          <div className="rounded-lg border border-border bg-paper/50 p-3 md:col-span-2">
+            <label className="flex cursor-pointer items-start gap-3">
+              <input
+                type="checkbox"
+                checked={draft.tem_variacao_uniforme}
+                onChange={(event) => setField("tem_variacao_uniforme", event.target.checked)}
+                className="mt-0.5 h-4 w-4 rounded border-border text-pitch focus:ring-pitch"
+              />
+              <div className="text-xs">
+                <span className="font-bold text-ink">Opção de uniforme: Casa / Fora</span>
+                <p className="mt-0.5 text-muted">
+                  Quando ativo, exibe opções obrigatórias de rádio &quot;Casa&quot; e &quot;Fora&quot; na página do produto antes da compra e adiciona como linhas separadas no carrinho.
+                </p>
+              </div>
+            </label>
+          </div>
           <Field label="Descrição" className="md:col-span-2">
             <textarea maxLength={4000} rows={4} value={draft.description} onChange={(event) => setField("description", event.target.value)} className="rounded-lg border border-border px-3 py-2.5 font-normal" />
           </Field>
@@ -537,7 +557,10 @@ export default function AdminProducts() {
                   <p className="mt-1 text-xs text-muted">{product.clube} · {product.temporada} · {audienceLabels[product.publico as keyof typeof audienceLabels] ?? product.publico}</p>
                   <p className="mt-2 text-sm font-black">{currency.format(Number(product.preco))}</p>
                   <p className="mt-1 text-[11px] text-muted">{product.tamanhos.map((size) => `${size}: ${product.stock_by_size?.[size] ?? 0}`).join(" · ")}</p>
-                  <div className="mt-2"><StatusBadge tone="blue">Publicado na vitrine</StatusBadge></div>
+                  <div className="mt-2 flex flex-wrap gap-1.5">
+                    <StatusBadge tone="blue">Publicado na vitrine</StatusBadge>
+                    {product.tem_variacao_uniforme && <StatusBadge tone="amber">Casa / Fora</StatusBadge>}
+                  </div>
                   <button type="button" onClick={() => editProduct(product)} className="mt-3 min-h-11 rounded-md border border-border px-3 py-2 text-xs font-bold hover:bg-paper">Editar produto e estoque</button>
                 </div>
               </article>

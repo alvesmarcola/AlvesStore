@@ -79,6 +79,7 @@ export async function POST(request: Request) {
       title: product.nome,
       size: line.size,
       quantity: line.quantity,
+      uniformVariation: line.uniformVariation ?? null,
       customization: line.customization ?? null,
       patches: line.patchOptions.map((patch, index) => ({
         id: patch.id,

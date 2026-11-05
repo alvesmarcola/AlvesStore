@@ -47,6 +47,7 @@ export interface Product {
   name?: string;
   model?: string;
   version?: string;
+  tem_variacao_uniforme?: boolean;
 }
 
 export interface League {
@@ -67,6 +68,7 @@ export interface CartItem {
   product: Product;
   size: string;
   quantity: number;
+  uniformVariation?: "Casa" | "Fora";
   customization?: { name: string; number: string };
   patches?: { id: string; position: PatchPosition }[];
 }

@@ -21,6 +21,7 @@ import { whatsappLink } from "@/lib/whatsapp";
 
 export function ProductDetails({ product, relatedProducts = [] }: { product: Product; relatedProducts?: Product[] }) {
   const [size, setSize] = useState("");
+  const [uniformVariation, setUniformVariation] = useState<"Casa" | "Fora" | "">("");
   const [personalize, setPersonalize] = useState(false);
   const [name, setName] = useState("");
   const [number, setNumber] = useState("");
@@ -109,8 +110,11 @@ export function ProductDetails({ product, relatedProducts = [] }: { product: Pro
     setActiveImage(0);
   }
 
+  const hasUniformVariation = Boolean(product.tem_variacao_uniforme);
+  const missingUniform = hasUniformVariation && !uniformVariation;
+
   function buy() {
-    if (!size || !availableSizes.includes(size) || classification.reviewRequired || classification.price === null || personalizationError) return;
+    if (!size || !availableSizes.includes(size) || missingUniform || classification.reviewRequired || classification.price === null || personalizationError) return;
 
     const activeVar = variants?.find((v) => v.id === selectedVariantId);
     const productToAdd: Product = activeVar && activeVar.id !== "all"
@@ -121,13 +125,19 @@ export function ProductDetails({ product, relatedProducts = [] }: { product: Pro
         }
       : product;
 
-    addItem(productToAdd, size, hasCustomization ? { name: cleanName, number } : undefined, selectedPatches);
+    addItem(
+      productToAdd,
+      size,
+      hasCustomization ? { name: cleanName, number } : undefined,
+      selectedPatches,
+      uniformVariation ? uniformVariation : undefined
+    );
     setAdded(true);
     window.setTimeout(() => setAdded(false), 1800);
   }
 
   function handleBuyClick() {
-    if (!size) {
+    if (!size || missingUniform) {
       setValidationAttempted(true);
       scrollToPurchase();
       return;
@@ -408,6 +418,61 @@ export function ProductDetails({ product, relatedProducts = [] }: { product: Pro
               )}
             </div>
 
+            {/* Opção de Uniforme: Casa / Fora */}
+            {hasUniformVariation && (
+              <div className="mt-6 rounded-xl border border-zinc-200 bg-zinc-50/60 p-4">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-sm font-bold text-zinc-900">
+                    Uniforme <span className="text-red-500">*</span>
+                  </h2>
+                  {uniformVariation && (
+                    <span className="text-xs font-bold text-blue-700">
+                      Selecionado: {uniformVariation}
+                    </span>
+                  )}
+                </div>
+
+                <div className="mt-3 grid grid-cols-2 gap-3" role="radiogroup" aria-label="Escolha o uniforme">
+                  {(["Casa", "Fora"] as const).map((option) => {
+                    const isSelected = uniformVariation === option;
+                    return (
+                      <label
+                        key={option}
+                        className={`flex min-h-12 cursor-pointer items-center justify-center gap-2.5 rounded-lg border p-3 text-sm font-bold transition-all select-none ${
+                          isSelected
+                            ? "border-pitch bg-pitch text-white shadow-sm ring-1 ring-pitch"
+                            : "border-zinc-300 bg-white text-zinc-900 hover:border-pitch hover:bg-zinc-50"
+                        }`}
+                      >
+                        <input
+                          type="radio"
+                          name="uniform-variation"
+                          value={option}
+                          checked={isSelected}
+                          onChange={() => {
+                            setUniformVariation(option);
+                          }}
+                          className="h-4 w-4 border-zinc-300 text-pitch focus:ring-pitch"
+                        />
+                        <span>{option}</span>
+                      </label>
+                    );
+                  })}
+                </div>
+
+                {validationAttempted && !uniformVariation && (
+                  <p role="alert" className="mt-2.5 text-xs font-bold text-red-600 animate-pulse">
+                    ⚠️ Por favor, selecione o uniforme (Casa ou Fora) antes de continuar.
+                  </p>
+                )}
+                {!uniformVariation && !validationAttempted && (
+                  <p className="mt-2 text-[11px] text-muted">
+                    Selecione entre o uniforme Casa ou Fora para avançar.
+                  </p>
+                )}
+              </div>
+            )}
+
             {/* 3. INFORMAÇÕES E CAMPOS DE PERSONALIZAÇÃO */}
             {canPersonalize && (
               <div className="mt-6 rounded-xl border border-zinc-200 bg-zinc-50/60 p-4">
@@ -519,6 +584,11 @@ export function ProductDetails({ product, relatedProducts = [] }: { product: Pro
                   ⚠️ Por favor, selecione um tamanho acima para adicionar à sacola.
                 </p>
               )}
+              {validationAttempted && size && missingUniform && (
+                <p role="alert" className="mb-3 rounded-lg bg-red-50 p-3 text-xs font-bold text-red-700">
+                  ⚠️ Por favor, selecione o uniforme (Casa ou Fora) acima para adicionar à sacola.
+                </p>
+              )}
               {validationAttempted && personalizationError && (
                 <p role="alert" className="mb-3 rounded-lg bg-red-50 p-3 text-xs font-bold text-red-700">
                   {personalizationError}
@@ -536,6 +606,8 @@ export function ProductDetails({ product, relatedProducts = [] }: { product: Pro
                   <><Check size={18} /> Adicionado à sacola!</>
                 ) : !size ? (
                   <><ShoppingBag size={18} /> Selecionar tamanho e comprar</>
+                ) : missingUniform ? (
+                  <><ShoppingBag size={18} /> Selecionar uniforme (Casa ou Fora)</>
                 ) : (
                   <><ShoppingBag size={18} /> Adicionar à sacola · {formatCurrency(price + selectedPatchTotal)}</>
                 )}
@@ -636,6 +708,8 @@ export function ProductDetails({ product, relatedProducts = [] }: { product: Pro
             "Preço em revisão"
           ) : !size ? (
             <><ShoppingBag size={16} /> Selecionar tamanho e comprar</>
+          ) : missingUniform ? (
+            <><ShoppingBag size={16} /> Selecionar uniforme (Casa ou Fora)</>
           ) : (
             <><ShoppingBag size={16} /> Adicionar à sacola · {formatCurrency(price + selectedPatchTotal)}</>
           )}

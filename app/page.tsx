@@ -15,7 +15,7 @@ import type { Metadata } from "next";
 import type { Product } from "@/lib/types";
 import { deriveCatalogLeagues } from "@/lib/catalog-taxonomy";
 import { editorialPriorities, prioritizeClubs, prioritizeEditorialProducts, sortCatalogProducts } from "@/lib/catalog-order";
-import { classifyProduct } from "@/lib/product-classification";
+import { classifyProduct, isNbaTankTop } from "@/lib/product-classification";
 import { getBundledFormulaOneProducts, getSupabaseProducts } from "@/lib/server/supabase-catalog";
 import { isFormulaOneProduct } from "@/lib/formula-one";
 
@@ -94,7 +94,17 @@ export default async function HomePage() {
     editorialPriorities.selections,
     8,
   );
-  const retros = catalogProducts.filter((product) => classifyProduct(product).version === "retro" && !isFormulaOneProduct(product)).slice(0, 8);
+  const retros = catalogProducts.filter((product) => {
+    const isNba = product.liga === "nba" || product.tipo === "regata" || isNbaTankTop(product);
+    if (isNba) return false;
+    if (isFormulaOneProduct(product)) return false;
+    return product.tipo === "retro"
+      || product.category === "retro"
+      || product.subcategory === "retro"
+      || product.slug.startsWith("retro-")
+      || product.slug.includes("-retro-")
+      || product.slug.endsWith("-retro");
+  }).slice(0, 8);
   const kidsProducts = catalogProducts.filter((product) => (product.publico === "infantil" || /\b(?:kids|junior|youth|infantil|children)\b/i.test(`${product.nome} ${product.imageSeed}`)) && !isFormulaOneProduct(product)).slice(0, 8);
   const formulaOneProducts = sortCatalogProducts([...formulaOneBySlug.values()]).slice(0, 12);
   const destinations = new Map<string, { name: string; league: string; slug: string; popularity: number }>();

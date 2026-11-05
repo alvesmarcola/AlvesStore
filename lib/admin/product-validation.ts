@@ -24,6 +24,7 @@ export const manualProductSchema = z.object({
     message: "Remova tamanhos repetidos.",
   }),
   stock_by_size: z.record(z.string(), z.number().int().min(0).max(10000)),
+  tem_variacao_uniforme: z.boolean().default(false),
   imageUrls: z.array(z.string().url()).max(6),
 }).strict().superRefine((product, context) => {
   for (const size of Object.keys(product.stock_by_size)) {

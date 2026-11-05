@@ -9,8 +9,8 @@ const PAGE_SIZE = 100;
 const PRODUCT_COLUMNS = "id,slug,clube,clubeSlug,liga,publico,tipo,temporada,uniforme,nome,preco,tamanhos,cor,imageSeed";
 const LIST_PRODUCT_COLUMNS = `${PRODUCT_COLUMNS},images`;
 const EXTENDED_LIST_PRODUCT_COLUMNS = `${LIST_PRODUCT_COLUMNS},category,gender,league,subcategory,tags,title,name,model,version`;
-const PUBLIC_LIST_PRODUCT_COLUMNS = `${EXTENDED_LIST_PRODUCT_COLUMNS},description,brand`;
-const DETAIL_PRODUCT_COLUMNS = `${PRODUCT_COLUMNS},images,description,brand`;
+const PUBLIC_LIST_PRODUCT_COLUMNS = `${EXTENDED_LIST_PRODUCT_COLUMNS},description,brand,tem_variacao_uniforme`;
+const DETAIL_PRODUCT_COLUMNS = `${PRODUCT_COLUMNS},images,description,brand,tem_variacao_uniforme`;
 const bundledCatalog = [...(bundledProducts as unknown as Product[]), ...(f1BundledProducts as unknown as Product[])];
 
 export function getBundledFormulaOneProducts(): Product[] {
@@ -206,7 +206,14 @@ function mapProduct(value: unknown): Product | null {
     if (sizes.length === 0) sizes = ["P", "M", "G", "GG"];
   }
 
-  const isF1 = !isNba && (type === "f1" || type === "formula1" || league === "f1" || isFormulaOneEvidence(normalizedEvidence));
+  const isRetro = !isNba && (type === "retro" || slugifyCatalogValue(value.slug).startsWith("retro-") || slugifyCatalogValue(value.slug).includes("-retro"));
+  if (isRetro) {
+    if (type === "revisar") type = "retro";
+    if (audience === "revisar") audience = "masculino";
+    if (!Number.isFinite(price) || price <= 0) price = 185;
+  }
+
+  const isF1 = !isNba && !isRetro && (type === "f1" || type === "formula1" || league === "f1" || isFormulaOneEvidence(normalizedEvidence));
   if (isF1) {
     type = "f1";
     league = "f1";
@@ -247,6 +254,7 @@ function mapProduct(value: unknown): Product | null {
     name: typeof value.name === "string" ? value.name : undefined,
     model: typeof value.model === "string" ? value.model : undefined,
     version: typeof value.version === "string" ? value.version : undefined,
+    tem_variacao_uniforme: Boolean(value.tem_variacao_uniforme),
   };
 }
 
@@ -271,12 +279,13 @@ function hasStorefrontImages(product: Product) {
 function isPublishedProduct(product: Product) {
   if (isJacketFormulaOneProduct(product)) return false;
   const isNba = product.liga === "nba" || product.tipo === "regata";
+  const isRetro = product.tipo === "retro" || product.slug.startsWith("retro-") || product.slug.includes("-retro");
   const hasImage = (product.tipo === "f1" || product.tipo === "formula1" || product.liga === "f1" || isFormulaOneProduct(product))
     ? true
     : hasStorefrontImages(product);
-  const hasKnownAudience = product.publico !== "revisar" || isNba;
+  const hasKnownAudience = product.publico !== "revisar" || isNba || isRetro;
   const isFormulaOne = product.tipo === "f1" || product.tipo === "formula1" || product.liga === "f1" || isFormulaOneProduct(product);
-  return hasImage && (product.tipo !== "revisar" || isNba) && (hasKnownAudience || isFormulaOne);
+  return hasImage && (product.tipo !== "revisar" || isNba || isRetro) && (hasKnownAudience || isFormulaOne);
 }
 
 export async function fetchSupabaseProducts(): Promise<Product[]> {

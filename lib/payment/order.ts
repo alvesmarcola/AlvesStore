@@ -33,6 +33,7 @@ export const orderLinesSchema = z.array(z.object({
   productId: z.string().min(1).max(100),
   size: z.string().trim().min(1).max(12),
   quantity: z.number().int().min(1).max(20),
+  uniformVariation: z.enum(["Casa", "Fora"]).optional(),
   customization: customizationSchema.optional(),
   patches: z.array(z.object({ id: z.string().min(1).max(80), position: z.enum(["manga-esquerda", "manga-direita", "peito"]) }).strict()).max(4).optional(),
 }).strict()).min(1).max(20);
@@ -58,6 +59,9 @@ export function validateOrderLines(lines: OrderLineInput[], catalog: Product[]):
     const product = catalog.find((candidate) => candidate.id === line.productId || candidate.slug === line.productId);
     if (!product) throw new InvalidOrderError("Um dos produtos não está mais disponível.");
     if (line.size === "3GG" || !product.tamanhos.includes(line.size)) throw new InvalidOrderError("Um dos tamanhos selecionados não está disponível.");
+    if (product.tem_variacao_uniforme && !line.uniformVariation) {
+      throw new InvalidOrderError(`Selecione o uniforme (Casa ou Fora) para o produto ${product.nome}.`);
+    }
     if (line.customization && !allowsCustomization(product)) {
       if (isNbaTankTop(product)) {
         throw new InvalidOrderError("Regatas NBA não aceitam personalização de nome e número.");
@@ -75,7 +79,7 @@ export function validateOrderLines(lines: OrderLineInput[], catalog: Product[]):
       return option;
     });
 
-    const key = JSON.stringify([line.productId, line.size, line.customization?.name ?? "", line.customization?.number ?? "", [...(line.patches ?? [])].sort((a, b) => a.id.localeCompare(b.id))]);
+    const key = JSON.stringify([line.productId, line.size, line.uniformVariation ?? "", line.customization?.name ?? "", line.customization?.number ?? "", [...(line.patches ?? [])].sort((a, b) => a.id.localeCompare(b.id))]);
     if (seen.has(key)) throw new InvalidOrderError("O carrinho contém linhas repetidas. Atualize a página e tente novamente.");
     seen.add(key);
     quantityTotal += line.quantity;
@@ -144,6 +148,7 @@ export function calculateOrderFingerprint(request: PaymentRequest) {
       productId: line.productId,
       size: line.size,
       quantity: line.quantity,
+      uniformVariation: line.uniformVariation ?? null,
       customization: line.customization
         ? { name: line.customization.name.trim(), number: line.customization.number.trim() }
         : null,

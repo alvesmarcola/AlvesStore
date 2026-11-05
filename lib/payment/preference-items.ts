@@ -29,31 +29,32 @@ export function buildPreferenceItems(orderId: string, lines: VerifiedOrderLine[]
     const higherPricedQuantity = packageEligible ? Math.min(line.quantity, remainingHigherPricedUnits) : 0;
     if (packageEligible) remainingHigherPricedUnits -= higherPricedQuantity;
     const regularPricedQuantity = packageEligible ? line.quantity - higherPricedQuantity : 0;
+    const uniformSuffix = line.uniformVariation ? ` · Uniforme: ${line.uniformVariation}` : "";
     const items = [
       ...(!packageEligible ? [{
         id: `${orderId}-shirt-${index}`,
-        title: `${line.product.nome} (tamanho ${line.size})`,
+        title: `${line.product.nome} (tamanho ${line.size}${uniformSuffix})`,
         quantity: line.quantity - (promoItem?.quantity ?? 0),
         currency_id: "BRL",
         unit_price: facts.price ?? 0,
       }].filter((item) => item.quantity > 0) : []),
       ...(promoItem ? [{
         id: `${orderId}-shirt-${index}-promo`,
-        title: `${line.product.nome} (tamanho ${line.size}) - Promo Black Friday NBA`,
+        title: `${line.product.nome} (tamanho ${line.size}${uniformSuffix}) - Promo Black Friday NBA`,
         quantity: promoItem.quantity,
         currency_id: "BRL",
         unit_price: Number((((facts.price ?? 0) * 100 - promoItem.discountPerUnitCents) / 100).toFixed(2)),
       }] : []),
       ...(regularPricedQuantity > 0 ? [{
         id: `${orderId}-shirt-${index}-regular`,
-        title: `${line.product.nome} (tamanho ${line.size})`,
+        title: `${line.product.nome} (tamanho ${line.size}${uniformSuffix})`,
         quantity: regularPricedQuantity,
         currency_id: "BRL",
         unit_price: toPrice(baseUnitPrice),
       }] : []),
       ...(higherPricedQuantity > 0 ? [{
         id: `${orderId}-shirt-${index}-adjusted`,
-        title: `${line.product.nome} (tamanho ${line.size})`,
+        title: `${line.product.nome} (tamanho ${line.size}${uniformSuffix})`,
         quantity: higherPricedQuantity,
         currency_id: "BRL",
         unit_price: toPrice(baseUnitPrice + 1),
@@ -67,7 +68,7 @@ export function buildPreferenceItems(orderId: string, lines: VerifiedOrderLine[]
       }] : []),
       ...(line.customization ? [{
         id: `${orderId}-customization-${index}`,
-        title: `Personalização - ${line.product.nome} (tamanho ${line.size})`,
+        title: `Personalização - ${line.product.nome} (tamanho ${line.size}${uniformSuffix})`,
         quantity: line.quantity,
         currency_id: "BRL",
         unit_price: storeConfig.customizationPrice,
