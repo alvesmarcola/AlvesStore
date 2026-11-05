@@ -9,6 +9,8 @@ type OrderTotals = {
   standardShirtsCents: number;
   patchesCents: number;
   customizationCents: number;
+  promoDiscountCents: number;
+  promoItems: { itemIndex: number; quantity: number; discountPerUnitCents: number }[];
 };
 
 function toPrice(cents: number) {
@@ -18,10 +20,12 @@ function toPrice(cents: number) {
 export function buildPreferenceItems(orderId: string, lines: VerifiedOrderLine[], totals: OrderTotals) {
   const baseUnitPrice = totals.standardQuantity > 0 ? Math.floor(totals.standardShirtsCents / totals.standardQuantity) : 0;
   let remainingHigherPricedUnits = totals.standardQuantity > 0 ? totals.standardShirtsCents % totals.standardQuantity : 0;
+  const discountedByLine = new Map(totals.promoItems.map((item) => [item.itemIndex, item]));
 
   const rawItems = lines.flatMap((line, index) => {
     const facts = classifyProduct(line.product);
-    const packageEligible = isPackageEligible(line.product);
+    const promoItem = discountedByLine.get(index);
+    const packageEligible = totals.promoDiscountCents === 0 && isPackageEligible(line.product);
     const higherPricedQuantity = packageEligible ? Math.min(line.quantity, remainingHigherPricedUnits) : 0;
     if (packageEligible) remainingHigherPricedUnits -= higherPricedQuantity;
     const regularPricedQuantity = packageEligible ? line.quantity - higherPricedQuantity : 0;
@@ -29,9 +33,16 @@ export function buildPreferenceItems(orderId: string, lines: VerifiedOrderLine[]
       ...(!packageEligible ? [{
         id: `${orderId}-shirt-${index}`,
         title: `${line.product.nome} (tamanho ${line.size})`,
-        quantity: line.quantity,
+        quantity: line.quantity - (promoItem?.quantity ?? 0),
         currency_id: "BRL",
         unit_price: facts.price ?? 0,
+      }].filter((item) => item.quantity > 0) : []),
+      ...(promoItem ? [{
+        id: `${orderId}-shirt-${index}-promo`,
+        title: `${line.product.nome} (tamanho ${line.size}) - Promo Black Friday NBA`,
+        quantity: promoItem.quantity,
+        currency_id: "BRL",
+        unit_price: Number((((facts.price ?? 0) * 100 - promoItem.discountPerUnitCents) / 100).toFixed(2)),
       }] : []),
       ...(regularPricedQuantity > 0 ? [{
         id: `${orderId}-shirt-${index}-regular`,

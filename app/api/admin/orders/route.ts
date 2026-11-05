@@ -63,7 +63,7 @@ export async function GET(request: Request) {
   if (authFailure) return jsonError(authFailure.message, authFailure.status);
   try {
     const { data, error } = await getSupabaseOrdersClient().from("store_orders")
-      .select("id,status,item_lines,customer,shipping,shipping_cents,total_cents,tracking_code,tracking_url,shipped_at,operational_status,supplier_name,supplier_status,supplier_ordered_at,supplier_cost_cents,shipping_cost_cents,other_expenses_cents,internal_notes,payment_method_id,payment_type_id,mercado_pago_status,mercado_pago_id,created_at,updated_at")
+      .select("id,status,item_lines,customer,shipping,shipping_cents,total_cents,promo,valor_desconto,tracking_code,tracking_url,shipped_at,operational_status,supplier_name,supplier_status,supplier_ordered_at,supplier_cost_cents,shipping_cost_cents,other_expenses_cents,internal_notes,payment_method_id,payment_type_id,mercado_pago_status,mercado_pago_id,created_at,updated_at")
       .order("created_at", { ascending: false })
       .limit(500);
     if (error) throw error;

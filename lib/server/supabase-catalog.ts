@@ -185,7 +185,13 @@ function mapProduct(value: unknown): Product | null {
     ? "feminino" : normalizeAudience(value.publico ?? value.gender);
   let type = normalizeProductType(value.tipo);
   if (type === "revisar") type = normalizeProductType(evidence);
-  if (type === "revisar" && (audience === "feminino" || audience === "unissex")) type = "torcedor";
+  if (type === "revisar" && (audience === "feminino" || audience === "unissex" || audience === "infantil")) type = "torcedor";
+  if (audience === "infantil" && sizes.length === 0) {
+    sizes = ["16", "18", "20", "22", "24", "26", "28"];
+  }
+  if (audience === "infantil" && (!Number.isFinite(price) || price <= 0)) {
+    price = 180;
+  }
   let league = normalizeLeague(value.liga ?? value.league);
 
   const isF1 = type === "f1" || type === "formula1" || league === "f1" || isFormulaOneEvidence(normalizedEvidence);

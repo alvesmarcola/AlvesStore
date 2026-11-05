@@ -1,8 +1,9 @@
 import { storeConfig } from "@/config";
 import type { CartItem } from "@/lib/types";
-import { classifyProduct, getProductSizeSurcharge, isPackageEligible } from "@/lib/product-classification";
+import { classifyProduct, getProductSizeSurcharge, isKidsProduct, isNbaTankTop, isPackageEligible } from "@/lib/product-classification";
 import { getAvailablePatches } from "@/lib/patch-compatibility";
 import { formatCustomization } from "@/lib/customization";
+import { calcularPromoBlackFriday } from "@/lib/black-friday";
 
 export function getPackagePrice(units: number) {
   const normalizedUnits = Math.max(0, Math.floor(units));
@@ -22,32 +23,66 @@ export function getShippingCents(units: number) {
   return quantity >= 1 ? storeConfig.shippingPrice * 100 : 0;
 }
 
+export function getShippingOfferText() {
+  const currency = (amount: number) => new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(amount);
+  return `Oferta de quantidade válida para torcedor comum: 2 por ${currency(storeConfig.twoShirtPrice)} ou 3 por ${currency(storeConfig.threeShirtPrice)}. Camisas comuns: ${currency(storeConfig.fanCommonPrice)}; Regatas NBA: ${currency(storeConfig.nbaTankTopPrice)}. Personalização: +${currency(storeConfig.customizationPrice)}. Frete de ${currency(storeConfig.shippingPrice)} para 1 ou 2 produtos e grátis em pedidos de ${storeConfig.freeShippingQuantity} ou mais.`;
+}
+
 export function getCartPricing(items: CartItem[]) {
   const units = items.reduce((sum, item) => sum + item.quantity, 0);
   const classified = items.map((item) => ({ item, facts: classifyProduct(item.product) }));
-  const packageUnits = classified.reduce((sum, row) => sum + (isPackageEligible(row.item.product) ? row.item.quantity : 0), 0);
-  const baseShirtsTotal = classified.reduce((sum, row) => sum + ((row.facts.price ?? 0) + getProductSizeSurcharge(row.item.size)) * row.item.quantity, 0);
-  const packageEligibleBase = classified.reduce((sum, row) => sum + (isPackageEligible(row.item.product) ? storeConfig.fanCommonPrice * row.item.quantity : 0), 0);
-  const customizationTotal = items.reduce(
-    (sum, item) => sum + (formatCustomization(item.customization) ? storeConfig.customizationPrice : 0) * item.quantity,
+  const promo = calcularPromoBlackFriday(items, new Date());
+  const packageUnits = promo.desconto > 0 ? 0 : classified.reduce((sum, row) => sum + (isPackageEligible(row.item.product) ? row.item.quantity : 0), 0);
+  const baseShirtsCents = classified.reduce((sum, row) => sum + Math.round(((row.facts.price ?? 0) + getProductSizeSurcharge(row.item.size)) * 100) * row.item.quantity, 0);
+  const packageEligibleBaseCents = classified.reduce((sum, row) => sum + (isPackageEligible(row.item.product) ? storeConfig.fanCommonPrice * row.item.quantity * 100 : 0), 0);
+  const customizationCents = items.reduce(
+    (sum, item) => sum + (formatCustomization(item.customization) ? Math.round(storeConfig.customizationPrice * 100) : 0) * item.quantity,
     0,
   );
   const shipping = getShippingCents(units) / 100;
-  const patchesPrice = classified.reduce((sum, row) => sum + row.item.quantity * (row.item.patches ?? []).reduce((patchSum, selected) => {
+  const patchesCents = classified.reduce((sum, row) => sum + row.item.quantity * (row.item.patches ?? []).reduce((patchSum, selected) => {
     const option = getAvailablePatches(row.item.product).find((patch) => patch.id === selected.id && patch.positions.includes(selected.position));
     return patchSum + (option?.priceCents ?? 0);
-  }, 0) / 100, 0);
-  const subtotal = baseShirtsTotal + customizationTotal + patchesPrice;
-  const bundleDiscount = packageEligibleBase - getPackagePrice(packageUnits);
-  const productsTotal = baseShirtsTotal - bundleDiscount + customizationTotal + patchesPrice;
+  }, 0), 0);
+  const promoDiscountCents = Math.round(promo.desconto * 100);
+  const subtotalCents = baseShirtsCents + customizationCents + patchesCents;
+  const bundleDiscountCents = promoDiscountCents > 0 ? 0 : packageEligibleBaseCents - getPackagePrice(packageUnits) * 100;
+  const productsTotalCents = baseShirtsCents - bundleDiscountCents - promoDiscountCents + customizationCents + patchesCents;
+  const tankTopQuantity = items.reduce((sum, item) => sum + (isNbaTankTop(item.product) ? item.quantity : 0), 0);
+  const eligibleShirtQuantity = classified.reduce((sum, row) => sum + (
+    row.item.product.tipo === "torcedor" && row.facts.version === "fan" && !row.facts.fullPatch && !isKidsProduct(row.item.product)
+      ? row.item.quantity : 0
+  ), 0);
+  const discountedQuantity = promo.itensComDesconto.reduce((sum, item) => sum + item.quantity, 0);
+  const promoNotice = promo.ativa && tankTopQuantity !== discountedQuantity || promo.ativa && eligibleShirtQuantity !== discountedQuantity
+    ? tankTopQuantity === discountedQuantity
+      ? "Adicione uma regata NBA e ganhe 50% em uma camisa torcedor."
+      : eligibleShirtQuantity === discountedQuantity
+        ? "Adicione uma camisa torcedor e ganhe 50% de desconto."
+        : "Adicione outra regata NBA e ganhe 50% em uma camisa torcedor."
+    : "";
   const needsReview = classified.some((row) => row.facts.reviewRequired);
   const patchCount = items.reduce((sum, item) => sum + (item.patches?.length ?? 0), 0);
-  return { subtotal, bundleDiscount, total: productsTotal, shipping, grandTotal: productsTotal + shipping, needsReview, patchCount };
+  const totalCents = productsTotalCents + getShippingCents(units);
+  return {
+    subtotal: subtotalCents / 100,
+    bundleDiscount: bundleDiscountCents / 100,
+    promoDiscount: promoDiscountCents / 100,
+    promoActive: promo.ativa,
+    promoNotice,
+    total: productsTotalCents / 100,
+    shipping,
+    grandTotal: totalCents / 100,
+    needsReview,
+    patchCount,
+  };
 }
 
 export function getProductCategoryKey(product: CartItem["product"]) {
   const facts = classifyProduct(product);
   if (facts.fullPatch) return "full-patch";
+  if (isNbaTankTop(product)) return "regata-nba";
+  if (product.tipo === "regata") return "regata";
   if (product.tipo === "goleiro") return "goleiro";
   if (facts.version === "fan") return "torcedor";
   if (facts.version === "player") return "jogador";
@@ -58,7 +93,10 @@ export function getProductCategoryKey(product: CartItem["product"]) {
 
 export function getProductOfferText(product: CartItem["product"]) {
   const facts = classifyProduct(product);
-  const shipping = "Frete: R$ 20,00 (1 ou 2 camisas) ou grátis (3+).";
+  const shipping = `Frete: ${new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(storeConfig.shippingPrice)} (1 ou 2 camisas) ou grátis (${storeConfig.freeShippingQuantity}+).`;
+  if (isNbaTankTop(product)) {
+    return `Regata NBA: ${new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(storeConfig.nbaTankTopPrice)} por regata; sem oferta por quantidade. ${shipping}`;
+  }
   if (isPackageEligible(product)) {
     return `Torcedor comum: 1 por R$ ${storeConfig.fanCommonPrice}, 2 por R$ ${storeConfig.twoShirtPrice} ou 3 por R$ ${storeConfig.threeShirtPrice}. ${shipping}`;
   }

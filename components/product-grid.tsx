@@ -9,6 +9,6 @@ export function ProductGrid({ items }: { items: Product[] }) {
     delete publicProduct.stock_by_size;
     delete publicProduct.supplier_name;
     delete publicProduct.supplier_cost;
-    return <Reveal key={publicProduct.slug} delay={(index % 4) * 0.055} className="min-w-0"><ProductCard product={publicProduct} /></Reveal>;
+    return <Reveal key={publicProduct.slug} delay={(index % 4) * 0.055} className="min-w-0 h-full flex flex-col"><ProductCard product={publicProduct} /></Reveal>;
   })}</div>;
 }

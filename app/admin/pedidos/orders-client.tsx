@@ -23,6 +23,8 @@ type Order = {
   shipping: { label?: string };
   shipping_cents: number;
   total_cents: number;
+  promo: string | null;
+  valor_desconto: number;
   tracking_code: string | null;
   tracking_url: string | null;
   shipped_at: string | null;
@@ -287,11 +289,12 @@ export default function AdminOrders() {
   }
 
   function exportCsv() {
-    const columns = ["pedido", "data", "nome", "email", "telefone", "itens", "total_centavos", "pagamento", "status_pagamento", "status_operacional", "fornecedor", "custo_fornecedor_centavos", "frete_centavos", "outras_despesas_centavos", "lucro_estimado_centavos", "rastreio"];
+    const columns = ["pedido", "data", "nome", "email", "telefone", "itens", "total_centavos", "promo", "valor_desconto", "pagamento", "status_pagamento", "status_operacional", "fornecedor", "custo_fornecedor_centavos", "frete_centavos", "outras_despesas_centavos", "lucro_estimado_centavos", "rastreio"];
     const quote = (value: unknown) => `"${String(value ?? "").replaceAll('"', '""')}"`;
     const rows = visibleOrders.map((order) => [
       order.id, order.created_at, order.customer.fullName, order.customer.email, order.customer.phone,
       order.item_lines.map(itemDescription).join(" | "), isPaid(order) ? order.total_cents : 0,
+      order.promo, order.valor_desconto,
       paymentLabels[order.payment_type_id ?? ""] ?? paymentLabels[order.payment_method_id ?? ""] ?? order.payment_method_id ?? "",
       order.mercado_pago_status ?? order.status, operationalOptions.find(([value]) => value === getOperationalStatus(order))?.[1],
       order.supplier_name, order.supplier_cost_cents, order.shipping_cost_cents, order.other_expenses_cents,
@@ -349,7 +352,7 @@ export default function AdminOrders() {
                   <tr key={order.id} className="align-top hover:bg-paper/50">
                     <td className="whitespace-nowrap px-4 py-4"><span className="font-black">{order.id.slice(0, 8).toUpperCase()}</span><span className="mt-1 block text-[10px] text-muted">{date.format(new Date(order.created_at))}</span></td>
                     <td className="max-w-48 px-4 py-4"><span className="font-bold">{order.customer.fullName}</span><span className="mt-1 block break-all text-[10px] text-muted">{order.customer.email}</span><span className="mt-1 block text-[10px] text-muted">{order.customer.phone}</span></td>
-                    <td className="max-w-64 px-4 py-4"><ul className="grid gap-2">{order.item_lines.map((item, index) => <li key={`${item.title}-${index}`} className="leading-5">{itemDescription(item)}</li>)}</ul></td>
+                    <td className="max-w-64 px-4 py-4"><ul className="grid gap-2">{order.item_lines.map((item, index) => <li key={`${item.title}-${index}`} className="leading-5">{itemDescription(item)}</li>)}</ul>{order.promo === "BF-NBA-2026" && <p className="mt-2 text-[10px] font-bold text-blue-700">Promo Black Friday NBA · desconto {money.format(order.valor_desconto)}</p>}</td>
                     <td className="max-w-60 whitespace-pre-line px-4 py-4 leading-5 text-muted">{order.customer.street ? `${order.customer.street}, ${order.customer.number ?? ""}\n${order.customer.neighborhood ?? ""} · ${order.customer.city ?? ""}/${order.customer.state ?? ""}\nCEP ${order.customer.cep ?? ""}` : "—"}</td>
                     <td className="whitespace-nowrap px-4 py-4"><span className="font-black">{isPaid(order) ? money.format(order.total_cents / 100) : "Não pago"}</span><span className="mt-1 block text-[10px] text-muted">{isPaid(order) ? `Frete cobrado: ${money.format(order.shipping_cents / 100)}` : `Total: ${money.format(order.total_cents / 100)}`}</span></td>
                     <td className="px-4 py-4"><span className="font-bold">{statusLabels[paymentStatus] ?? paymentStatus}</span><span className="mt-1 block text-[10px] text-muted">{paymentLabels[order.payment_type_id ?? ""] ?? paymentLabels[order.payment_method_id ?? ""] ?? order.payment_method_id ?? "Forma não informada"}</span>{order.mercado_pago_id && <span className="mt-1 block text-[10px] text-muted">ID {order.mercado_pago_id}</span>}</td>

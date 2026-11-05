@@ -18,6 +18,9 @@ type Summary = {
     shippingCostCents: number;
     otherExpensesCents: number;
     estimatedProfitCents: number;
+    promoOrderCount: number;
+    promoDiscountCents: number;
+    promoRevenueCents: number;
   };
   orders: {
     id: string;
@@ -98,6 +101,9 @@ export default function AdminSummaryClient({ current }: { current: AdminSection 
           <StatCard label="Pedidos" value={String(metrics.orderCount)} icon={PackageOpen} />
           <StatCard label="Aguardando fornecedor" value={String(metrics.awaitingSupplierCount)} icon={PackageOpen} />
           <StatCard label="Pedidos enviados" value={String(metrics.shippedOrderCount)} icon={Truck} />
+          <StatCard label="Pedidos Black Friday NBA" value={String(metrics.promoOrderCount)} icon={PackageOpen} />
+          <StatCard label="Desconto Black Friday NBA" value={money.format(metrics.promoDiscountCents / 100)} icon={CircleDollarSign} />
+          <StatCard label="Faturamento Black Friday NBA" value={money.format(metrics.promoRevenueCents / 100)} icon={CircleDollarSign} />
           <div className="rounded-xl border border-border bg-paper p-5 text-xs leading-6 text-muted sm:col-span-2 lg:col-span-3">O faturamento considera somente pedidos aprovados no Mercado Pago. O lucro é estimado e considera os custos registrados nos pedidos pagos; custos ainda não informados não são estimados automaticamente.</div>
         </section>
       )}

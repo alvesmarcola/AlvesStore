@@ -1,0 +1,49 @@
+AUDITORIA VISUAL NBA (Yupoo)
+============================================================
+Total de produtos: 142
+Aprovados para importacao: 122
+Pendentes de conferencia manual: 20
+Possiveis duplicados (grupos): 6
+Inconsistencias: 12
+
+OBSERVACAO
+------------------------------------------------------------
+Auditoria visual automatizada limitada: o modelo atual nao processa imagens.
+Os 20 itens pendentes exigem conferencia visual manual (frente/costas).
+Nenhum produto foi cadastrado, alterado ou excluido.
+
+PRODUTOS APROVADOS PARA IMPORTACAO (IDs)
+------------------------------------------------------------
+252961584, 252958531, 248774418, 248416471, 232244398, 232244090, 232243531, 230511736, 230511706, 230511696, 230511685, 230511445, 230511114, 225271290, 225271226, 222627283, 222627074, 222626827, 222626803, 221707219, 221706903, 221706710, 221706388, 221143656, 221143437, 221143310, 221142737, 221142709, 221142675, 219635747, 219635700, 219635602, 219635422, 219634851, 219634528, 219634452, 219634275, 219633729, 219633623, 219633330, 219633257, 219633143, 219633052, 219632898, 219233363, 219233349, 219233325, 219233013, 219232816, 218492889, 218492868, 218492848, 218492400, 218492378, 218492350, 218048830, 218048789, 218048774, 218047571, 218047527, 218047481, 218046738, 218046699, 218046661, 218046483, 218046092, 218046039, 218045991, 218045369, 218045367, 218045363, 218045358, 213848648, 216320452, 216320436, 216320415, 216320394, 213507124, 213507076, 213506739, 212676653, 212676633, 212676615, 212676585, 212676560, 212676502, 210402986, 209084713, 209084671, 209084656, 209083323, 209083312, 209083302, 209083291, 209083278, 209083263, 209083208, 209083044, 209082828, 209082655, 209082506, 209082325, 209082145, 209081983, 209081793, 151101070, 130834348, 160275115, 151306378, 151306387, 151306402, 203254397, 189118270, 168525032, 143153111, 143152423, 143152407, 143152387, 143152360, 143152312, 143152332, 143152294
+
+PRODUTOS PENDENTES DE CONFERENCIA MANUAL
+------------------------------------------------------------
+253376467 | Regata NBA Jazz Roxa #00 | Possivel duplicado (mesmo time/edicao/numero) | sugestao: None | Possível duplicado de álbum 219635529; manter só um
+253376441 | Regata NBA Jazz Branca #00 | Possivel duplicado (mesmo time/edicao/numero) | sugestao: None | Possível duplicado de álbum 219635726; manter só um
+253375421 | Regata NBA Celtics City Edition #13 Paul George | Inconsistencia de time/jogador/numero/edicao | sugestao: Regata NBA Celtics City Edition #13 | Combinação time/jogador incomum; conferir na foto Sugestao: remover jogador nao confirmado ate conferencia visual.
+252960101 | Regata NBA Trail Blazers Preta #1 Ja Morant | Inconsistencia de time/jogador/numero/edicao | sugestao: Regata NBA Trail Blazers Preta #1 | Combinação time/jogador incomum; conferir na foto Sugestao: remover jogador nao confirmado ate conferencia visual.
+250040803 | Regata NBA Trail Blazers City Edition #1 Ja Morant | Inconsistencia de time/jogador/numero/edicao | sugestao: Regata NBA Trail Blazers City Edition #1 | Combinação time/jogador incomum; conferir na foto Sugestao: remover jogador nao confirmado ate conferencia visual.
+250040259 | Regata NBA Trail Blazers Branca #1 Ja Morant | Inconsistencia de time/jogador/numero/edicao | sugestao: Regata NBA Trail Blazers Branca #1 | Combinação time/jogador incomum; conferir na foto Sugestao: remover jogador nao confirmado ate conferencia visual.
+250037084 | Regata NBA 76ers Retrô Preta #7 Brown | Inconsistencia de time/jogador/numero/edicao | sugestao: Regata NBA 76ers Retro Preta #7 | Mais de um Brown na NBA; conferir nome completo na foto Sugestao: remover sobrenome ambiguo ate conferencia visual.
+248774587 | Regata NBA Celtics City Edition #88 | Possivel duplicado (mesmo time/edicao/numero) | sugestao: None | Conferir foto: no print anterior parecia ser Tatum #0; Possível duplicado de álbum 218049067; manter só um
+248774222 | Regata NBA Celtics City Edition #7 Jaylen Brown | Possivel duplicado (mesmo time/edicao/numero) | sugestao: None | Possível duplicado de álbum 218049048; manter só um
+248771469 | Regata NBA 76ers Retrô Preta #23 LeBron James | Inconsistencia de time/jogador/numero/edicao | sugestao: Regata NBA 76ers Retrô Preta #23 | Combinação time/jogador incomum; conferir na foto Sugestao: remover jogador nao confirmado ate conferencia visual.
+248771422 | Regata NBA 76ers Retrô Branca #23 LeBron James | Inconsistencia de time/jogador/numero/edicao | sugestao: Regata NBA 76ers Retrô Branca #23 | Combinação time/jogador incomum; conferir na foto Sugestao: remover jogador nao confirmado ate conferencia visual.
+221705624 | Regata NBA Grizzlies Retrô #12 | Possivel duplicado (mesmo time/edicao/numero) | sugestao: None | Possível duplicado de álbum 218048095; manter só um
+219635726 | Regata NBA Jazz Branca #00 | Possivel duplicado (mesmo time/edicao/numero) | sugestao: None | Possível duplicado de álbum 253376441; manter só um
+219635529 | Regata NBA Jazz Roxa #00 | Possivel duplicado (mesmo time/edicao/numero) | sugestao: None | Possível duplicado de álbum 253376467; manter só um
+218049067 | Regata NBA Celtics City Edition #88 Keita | Possivel duplicado (mesmo time/edicao/numero) | sugestao: None | Nome 凯塔 incerto; a foto do álbum parecia ser outra camisa; Álbum com só 3 fotos; conferir se há foto das costas; Possível duplicado de álbum 248774587; manter só um
+218049048 | Regata NBA Celtics City Edition #7 Jaylen Brown | Possivel duplicado (mesmo time/edicao/numero) | sugestao: None | Álbum com só 3 fotos; conferir se há foto das costas; Possível duplicado de álbum 248774222; manter só um
+218048095 | Regata NBA Grizzlies Retrô #12 Ja Morant | Possivel duplicado (mesmo time/edicao/numero) | sugestao: None | Álbum com só 3 fotos; conferir se há foto das costas; Possível duplicado de álbum 221705624; manter só um
+209084728 | Regata NBA Trail Blazers Away Preta #0 Damian Lillard | Possivel duplicado (mesmo time/edicao/numero) | sugestao: None | Possível duplicado de álbum 209084694; manter só um
+209084694 | Regata NBA Trail Blazers Away Preta #0 Damian Lillard | Possivel duplicado (mesmo time/edicao/numero) | sugestao: None | Possível duplicado de álbum 209084728; manter só um
+151101027 | Regata NBA Pelicans City Edition #1 Williams | Inconsistencia de time/jogador/numero/edicao | sugestao: None | Título diz Williams (Zion seria Williamson); conferir na foto Possivel Zion Williamson #1, mas nao confirmado visualmente.
+
+GRUPOS DE POSSIVEIS DUPLICADOS
+------------------------------------------------------------
+['253376467', '219635529'] (time=Jazz, edicao=Roxa, numero=00)
+['253376441', '219635726'] (time=Jazz, edicao=Branca, numero=00)
+['248774587', '218049067'] (time=Celtics, edicao=City Edition, numero=88)
+['248774222', '218049048'] (time=Celtics, edicao=City Edition, numero=7)
+['221705624', '218048095'] (time=Grizzlies, edicao=Retrô, numero=12)
+['209084728', '209084694'] (time=Trail Blazers, edicao=Away Preta, numero=0)

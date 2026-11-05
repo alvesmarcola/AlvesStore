@@ -3,12 +3,13 @@ import { storeConfig } from "@/config";
 import { getPackagePrice, getShippingCents } from "@/lib/commerce";
 import { checkoutSchema } from "@/lib/validation";
 import type { Product } from "@/lib/types";
-import { classifyProduct, isPackageEligible } from "@/lib/product-classification";
+import { classifyProduct, isNbaTankTop, isPackageEligible } from "@/lib/product-classification";
 import { getAvailablePatches } from "@/lib/patch-compatibility";
 import { allowsCustomization } from "@/lib/formula-one";
 import { getSupabaseProducts, hasSupabaseCatalogConfiguration } from "@/lib/server/supabase-catalog";
 import { getProductSizeSurcharge } from "@/lib/product-classification";
 import { CUSTOMIZATION_NAME_MAX_LENGTH, sanitizeCustomizationName } from "@/lib/customization";
+import { calcularPromoBlackFriday, BLACK_FRIDAY_PROMO_CODE } from "@/lib/black-friday";
 
 const customizationSchema = z.preprocess((value) => {
   if (typeof value !== "object" || value === null || Array.isArray(value)) return value;
@@ -57,7 +58,12 @@ export function validateOrderLines(lines: OrderLineInput[], catalog: Product[]):
     const product = catalog.find((candidate) => candidate.id === line.productId || candidate.slug === line.productId);
     if (!product) throw new InvalidOrderError("Um dos produtos não está mais disponível.");
     if (line.size === "3GG" || !product.tamanhos.includes(line.size)) throw new InvalidOrderError("Um dos tamanhos selecionados não está disponível.");
-    if (line.customization && !allowsCustomization(product)) throw new InvalidOrderError("Camisas de Fórmula 1 não podem ser personalizadas.");
+    if (line.customization && !allowsCustomization(product)) {
+      if (isNbaTankTop(product)) {
+        throw new InvalidOrderError("Regatas NBA não aceitam personalização de nome e número.");
+      }
+      throw new InvalidOrderError("Camisas de Fórmula 1 não podem ser personalizadas.");
+    }
     const facts = classifyProduct(product);
     if (facts.reviewRequired || facts.price === null) throw new InvalidOrderError("O preço deste produto está em revisão. Escolha outro modelo ou tente novamente mais tarde.");
     const availablePatches = getAvailablePatches(product);
@@ -95,21 +101,22 @@ export async function validateOrderLinesFromCatalog(lines: OrderLineInput[]) {
   return validateOrderLines(lines, await getSupabaseProducts());
 }
 
-export function calculateOrderTotals(lines: VerifiedOrderLine[]) {
+export function calculateOrderTotals(lines: VerifiedOrderLine[], dataAtual = new Date()) {
   const quantity = lines.reduce((sum, line) => sum + line.quantity, 0);
   const personalizedQuantity = lines.reduce(
     (sum, line) => sum + (line.customization ? line.quantity : 0),
     0,
   );
-  const packageQuantity = lines.reduce((sum, line) => {
+  const promo = calcularPromoBlackFriday(lines, dataAtual);
+  const promoDiscountCents = Math.round(promo.desconto * 100);
+  const packageQuantity = promoDiscountCents > 0 ? 0 : lines.reduce((sum, line) => {
     return sum + (isPackageEligible(line.product) ? line.quantity : 0);
   }, 0);
   const baseSubtotalCents = lines.reduce((sum, line) => sum + ((classifyProduct(line.product).price ?? 0) + getProductSizeSurcharge(line.size)) * line.quantity * 100, 0);
-  const pricedOutsidePackagesCents = baseSubtotalCents - packageQuantity * storeConfig.fanCommonPrice * 100;
-  const customizationCents = personalizedQuantity * storeConfig.customizationPrice * 100;
-  const shirtsCents = getPackagePrice(packageQuantity) * 100 + pricedOutsidePackagesCents;
+  const customizationCents = personalizedQuantity * Math.round(storeConfig.customizationPrice * 100);
+  const bundleDiscountCents = packageQuantity > 0 ? packageQuantity * storeConfig.fanCommonPrice * 100 - getPackagePrice(packageQuantity) * 100 : 0;
+  const shirtsCents = baseSubtotalCents - bundleDiscountCents - promoDiscountCents;
   const patchesCents = lines.reduce((sum, line) => sum + line.quantity * line.patchOptions.reduce((patchSum, patch) => patchSum + patch.priceCents, 0), 0);
-  const bundleDiscountCents = baseSubtotalCents - shirtsCents;
   const shippingCents = getShippingCents(quantity);
 
   return {
@@ -121,6 +128,9 @@ export function calculateOrderTotals(lines: VerifiedOrderLine[]) {
     standardQuantity: packageQuantity,
     standardShirtsCents: getPackagePrice(packageQuantity) * 100,
     bundleDiscountCents,
+    promoDiscountCents,
+    promoCode: promoDiscountCents > 0 ? BLACK_FRIDAY_PROMO_CODE : null,
+    promoItems: promo.itensComDesconto,
     patchesCents,
     productsTotalCents: shirtsCents + customizationCents + patchesCents,
     shippingCents,

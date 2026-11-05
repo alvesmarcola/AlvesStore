@@ -2,7 +2,8 @@ import { SITE_NAME } from "@/lib/site";
 
 export const storeConfig = {
   name: SITE_NAME,
-  fanCommonPrice: 160,
+  fanCommonPrice: 170,
+  nbaTankTopPrice: 230,
   kidsPrice: 180,
   fanFullPatchPrice: 180,
   retroShortSleevePrice: 185,
@@ -13,8 +14,7 @@ export const storeConfig = {
   threeShirtPrice: 450,
   freeShippingQuantity: 3,
   shippingPrice: 20,
-  shippingOfferText: "Oferta de quantidade válida apenas para torcedor comum: 2 por R$ 300,00 ou 3 por R$ 450,00. Torcedor comum: R$ 160,00. Full Patches: R$ 180,00. Retrô manga curta: R$ 185,00. Retrô manga longa e Jogador manga longa: R$ 220,00. Jogador: R$ 190,00. Frete igual para qualquer produto: R$ 20,00 para 1 ou 2 camisas e grátis em pedidos de 3 ou mais camisas.",
-  customizationPrice: 20,
+  customizationPrice: 39.9,
   patchPrice: 10,
   size2GGPrice: 10,
   email: "atendimento@importsalves.com.br",

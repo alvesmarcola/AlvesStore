@@ -1,0 +1,992 @@
+{
+  "total_aprovados_identificados": 122,
+  "total_importado": 122,
+  "total_ignorado_ja_existia": 0,
+  "total_falhas": 0,
+  "total_pendentes_preservados": 20,
+  "total_imagens_armazenadas": 488,
+  "peso_total_bytes": 64421638,
+  "peso_total_mb": 61.44,
+  "tamanho_medio_bytes": 132011,
+  "produtos_inativos": true,
+  "importados": [
+    {
+      "id": "252961584",
+      "nome": "Regata NBA Hornets City Edition #7",
+      "time": "Hornets",
+      "slug": "regata-nba-hornets-city-edition-7",
+      "images": 4,
+      "bytes": 810302
+    },
+    {
+      "id": "252958531",
+      "nome": "Regata NBA Jazz #00 Jordan Clarkson",
+      "time": "Jazz",
+      "slug": "regata-nba-jazz-00-jordan-clarkson",
+      "images": 4,
+      "bytes": 818608
+    },
+    {
+      "id": "248774418",
+      "nome": "Regata NBA Celtics City Edition #0 Jayson Tatum",
+      "time": "Celtics",
+      "slug": "regata-nba-celtics-city-edition-0-jayson-tatum",
+      "images": 4,
+      "bytes": 572058
+    },
+    {
+      "id": "248416471",
+      "nome": "Regata NBA Knicks Jordan Brand #8",
+      "time": "Knicks",
+      "slug": "regata-nba-knicks-jordan-brand-8",
+      "images": 4,
+      "bytes": 667560
+    },
+    {
+      "id": "232244398",
+      "nome": "Regata NBA Thunder City Edition #8 Jalen Williams",
+      "time": "Thunder",
+      "slug": "regata-nba-thunder-city-edition-8-jalen-williams",
+      "images": 4,
+      "bytes": 594434
+    },
+    {
+      "id": "232244090",
+      "nome": "Regata NBA Thunder City Edition #2 Shai Gilgeous-Alexander",
+      "time": "Thunder",
+      "slug": "regata-nba-thunder-city-edition-2-shai-gilgeous-alexander",
+      "images": 4,
+      "bytes": 649280
+    },
+    {
+      "id": "232243531",
+      "nome": "Regata NBA Thunder City Edition #7 Chet Holmgren",
+      "time": "Thunder",
+      "slug": "regata-nba-thunder-city-edition-7-chet-holmgren",
+      "images": 4,
+      "bytes": 611348
+    },
+    {
+      "id": "230511736",
+      "nome": "Regata NBA 76ers Retrô Branca #8 Paul George",
+      "time": "76ers",
+      "slug": "regata-nba-76ers-retro-branca-8-paul-george",
+      "images": 4,
+      "bytes": 783722
+    },
+    {
+      "id": "230511706",
+      "nome": "Regata NBA 76ers Retrô Branca #0 Tyrese Maxey",
+      "time": "76ers",
+      "slug": "regata-nba-76ers-retro-branca-0-tyrese-maxey",
+      "images": 4,
+      "bytes": 788122
+    },
+    {
+      "id": "230511696",
+      "nome": "Regata NBA 76ers Retrô Branca #3 Allen Iverson",
+      "time": "76ers",
+      "slug": "regata-nba-76ers-retro-branca-3-allen-iverson",
+      "images": 4,
+      "bytes": 793574
+    },
+    {
+      "id": "230511685",
+      "nome": "Regata NBA 76ers Retrô Branca #21 Joel Embiid",
+      "time": "76ers",
+      "slug": "regata-nba-76ers-retro-branca-21-joel-embiid",
+      "images": 4,
+      "bytes": 763300
+    },
+    {
+      "id": "230511445",
+      "nome": "Regata NBA Cavaliers City Edition #1 James Harden",
+      "time": "Cavaliers",
+      "slug": "regata-nba-cavaliers-city-edition-1-james-harden",
+      "images": 4,
+      "bytes": 804382
+    },
+    {
+      "id": "230511114",
+      "nome": "Regata NBA Cavaliers Retrô #1 James Harden",
+      "time": "Cavaliers",
+      "slug": "regata-nba-cavaliers-retro-1-james-harden",
+      "images": 4,
+      "bytes": 764306
+    },
+    {
+      "id": "225271290",
+      "nome": "Regata NBA Mavericks Retrô Verde #77 Luka Doncic",
+      "time": "Mavericks",
+      "slug": "regata-nba-mavericks-retro-verde-77-luka-doncic",
+      "images": 4,
+      "bytes": 876648
+    },
+    {
+      "id": "222627283",
+      "nome": "Regata NBA Mavericks City Edition #3",
+      "time": "Mavericks",
+      "slug": "regata-nba-mavericks-city-edition-3",
+      "images": 4,
+      "bytes": 744976
+    },
+    {
+      "id": "222627074",
+      "nome": "Regata NBA Mavericks City Edition #77",
+      "time": "Mavericks",
+      "slug": "regata-nba-mavericks-city-edition-77",
+      "images": 4,
+      "bytes": 741406
+    },
+    {
+      "id": "222626827",
+      "nome": "Regata NBA Mavericks City Edition #11",
+      "time": "Mavericks",
+      "slug": "regata-nba-mavericks-city-edition-11",
+      "images": 4,
+      "bytes": 792006
+    },
+    {
+      "id": "222626803",
+      "nome": "Regata NBA Mavericks City Edition #32",
+      "time": "Mavericks",
+      "slug": "regata-nba-mavericks-city-edition-32",
+      "images": 4,
+      "bytes": 750778
+    },
+    {
+      "id": "221707219",
+      "nome": "Regata NBA Raptors City Edition #15",
+      "time": "Raptors",
+      "slug": "regata-nba-raptors-city-edition-15",
+      "images": 4,
+      "bytes": 853882
+    },
+    {
+      "id": "221706710",
+      "nome": "Regata NBA Raptors City Edition #4",
+      "time": "Raptors",
+      "slug": "regata-nba-raptors-city-edition-4",
+      "images": 4,
+      "bytes": 860126
+    },
+    {
+      "id": "221706388",
+      "nome": "Regata NBA Raptors City Edition #9",
+      "time": "Raptors",
+      "slug": "regata-nba-raptors-city-edition-9",
+      "images": 4,
+      "bytes": 850466
+    },
+    {
+      "id": "221143656",
+      "nome": "Regata NBA Spurs City Edition #10",
+      "time": "Spurs",
+      "slug": "regata-nba-spurs-city-edition-10",
+      "images": 4,
+      "bytes": 811782
+    },
+    {
+      "id": "221143437",
+      "nome": "Regata NBA Spurs City Edition #1",
+      "time": "Spurs",
+      "slug": "regata-nba-spurs-city-edition-1",
+      "images": 4,
+      "bytes": 822108
+    },
+    {
+      "id": "221143310",
+      "nome": "Regata NBA Spurs City Edition #4",
+      "time": "Spurs",
+      "slug": "regata-nba-spurs-city-edition-4",
+      "images": 4,
+      "bytes": 620556
+    },
+    {
+      "id": "221142737",
+      "nome": "Regata NBA Warriors City Edition #10 Jimmy Butler",
+      "time": "Warriors",
+      "slug": "regata-nba-warriors-city-edition-10-jimmy-butler",
+      "images": 4,
+      "bytes": 687526
+    },
+    {
+      "id": "221142709",
+      "nome": "Regata NBA Warriors City Edition #30 Stephen Curry",
+      "time": "Warriors",
+      "slug": "regata-nba-warriors-city-edition-30-stephen-curry",
+      "images": 4,
+      "bytes": 586984
+    },
+    {
+      "id": "221142675",
+      "nome": "Regata NBA Warriors City Edition #23 Draymond Green",
+      "time": "Warriors",
+      "slug": "regata-nba-warriors-city-edition-23-draymond-green",
+      "images": 4,
+      "bytes": 705956
+    },
+    {
+      "id": "219635747",
+      "nome": "Regata NBA Jazz Branca #19",
+      "time": "Jazz",
+      "slug": "regata-nba-jazz-branca-19",
+      "images": 4,
+      "bytes": 773448
+    },
+    {
+      "id": "219635700",
+      "nome": "Regata NBA Jazz Branca #23",
+      "time": "Jazz",
+      "slug": "regata-nba-jazz-branca-23",
+      "images": 4,
+      "bytes": 779928
+    },
+    {
+      "id": "219635602",
+      "nome": "Regata NBA Jazz Roxa #19",
+      "time": "Jazz",
+      "slug": "regata-nba-jazz-roxa-19",
+      "images": 4,
+      "bytes": 803608
+    },
+    {
+      "id": "219635422",
+      "nome": "Regata NBA Jazz Roxa #23",
+      "time": "Jazz",
+      "slug": "regata-nba-jazz-roxa-23",
+      "images": 4,
+      "bytes": 842060
+    },
+    {
+      "id": "219634851",
+      "nome": "Regata NBA Clippers City Edition #13",
+      "time": "Clippers",
+      "slug": "regata-nba-clippers-city-edition-13",
+      "images": 4,
+      "bytes": 792880
+    },
+    {
+      "id": "219634528",
+      "nome": "Regata NBA Nuggets City Edition #15",
+      "time": "Nuggets",
+      "slug": "regata-nba-nuggets-city-edition-15",
+      "images": 4,
+      "bytes": 843426
+    },
+    {
+      "id": "219634452",
+      "nome": "Regata NBA Nuggets City Edition #32",
+      "time": "Nuggets",
+      "slug": "regata-nba-nuggets-city-edition-32",
+      "images": 4,
+      "bytes": 785312
+    },
+    {
+      "id": "219634275",
+      "nome": "Regata NBA Nuggets City Edition #27",
+      "time": "Nuggets",
+      "slug": "regata-nba-nuggets-city-edition-27",
+      "images": 4,
+      "bytes": 424998
+    },
+    {
+      "id": "219633729",
+      "nome": "Regata NBA Bulls City Edition #3",
+      "time": "Bulls",
+      "slug": "regata-nba-bulls-city-edition-3",
+      "images": 4,
+      "bytes": 775900
+    },
+    {
+      "id": "219633623",
+      "nome": "Regata NBA Bulls City Edition #14",
+      "time": "Bulls",
+      "slug": "regata-nba-bulls-city-edition-14",
+      "images": 4,
+      "bytes": 785900
+    },
+    {
+      "id": "219633330",
+      "nome": "Regata NBA Bulls City Edition #23",
+      "time": "Bulls",
+      "slug": "regata-nba-bulls-city-edition-23",
+      "images": 4,
+      "bytes": 788168
+    },
+    {
+      "id": "219633257",
+      "nome": "Regata NBA Bulls City Edition #0",
+      "time": "Bulls",
+      "slug": "regata-nba-bulls-city-edition-0",
+      "images": 4,
+      "bytes": 763992
+    },
+    {
+      "id": "219633143",
+      "nome": "Regata NBA Jazz Jordan Brand #23",
+      "time": "Jazz",
+      "slug": "regata-nba-jazz-jordan-brand-23",
+      "images": 4,
+      "bytes": 797498
+    },
+    {
+      "id": "219633052",
+      "nome": "Regata NBA Jazz Jordan Brand #00",
+      "time": "Jazz",
+      "slug": "regata-nba-jazz-jordan-brand-00",
+      "images": 4,
+      "bytes": 807938
+    },
+    {
+      "id": "219632898",
+      "nome": "Regata NBA Jazz Jordan Brand #19",
+      "time": "Jazz",
+      "slug": "regata-nba-jazz-jordan-brand-19",
+      "images": 4,
+      "bytes": 797060
+    },
+    {
+      "id": "219233363",
+      "nome": "Regata NBA Cavaliers City Edition #45 Donovan Mitchell",
+      "time": "Cavaliers",
+      "slug": "regata-nba-cavaliers-city-edition-45-donovan-mitchell",
+      "images": 4,
+      "bytes": 236498
+    },
+    {
+      "id": "219233349",
+      "nome": "Regata NBA Cavaliers City Edition #23 LeBron James",
+      "time": "Cavaliers",
+      "slug": "regata-nba-cavaliers-city-edition-23-lebron-james",
+      "images": 4,
+      "bytes": 237012
+    },
+    {
+      "id": "219233325",
+      "nome": "Regata NBA Cavaliers City Edition #10 Darius Garland",
+      "time": "Cavaliers",
+      "slug": "regata-nba-cavaliers-city-edition-10-darius-garland",
+      "images": 4,
+      "bytes": 244628
+    },
+    {
+      "id": "219233013",
+      "nome": "Regata NBA Suns Limitada #35 Kevin Durant",
+      "time": "Suns",
+      "slug": "regata-nba-suns-limitada-35-kevin-durant",
+      "images": 4,
+      "bytes": 202928
+    },
+    {
+      "id": "219232816",
+      "nome": "Regata NBA Suns Limitada #1 Devin Booker",
+      "time": "Suns",
+      "slug": "regata-nba-suns-limitada-1-devin-booker",
+      "images": 4,
+      "bytes": 206712
+    },
+    {
+      "id": "218492889",
+      "nome": "Regata NBA Magic Jordan Brand #22 Franz Wagner",
+      "time": "Magic",
+      "slug": "regata-nba-magic-jordan-brand-22-franz-wagner",
+      "images": 4,
+      "bytes": 286010
+    },
+    {
+      "id": "218492868",
+      "nome": "Regata NBA Magic Home Azul #22 Franz Wagner",
+      "time": "Magic",
+      "slug": "regata-nba-magic-home-azul-22-franz-wagner",
+      "images": 4,
+      "bytes": 277082
+    },
+    {
+      "id": "218492848",
+      "nome": "Regata NBA Magic Home Branca #22 Franz Wagner",
+      "time": "Magic",
+      "slug": "regata-nba-magic-home-branca-22-franz-wagner",
+      "images": 4,
+      "bytes": 819340
+    },
+    {
+      "id": "218492400",
+      "nome": "Regata NBA Lakers Jordan Brand #24 Kobe Bryant",
+      "time": "Lakers",
+      "slug": "regata-nba-lakers-jordan-brand-24-kobe-bryant",
+      "images": 4,
+      "bytes": 283188
+    },
+    {
+      "id": "218492378",
+      "nome": "Regata NBA Lakers Jordan Brand #15 Austin Reaves",
+      "time": "Lakers",
+      "slug": "regata-nba-lakers-jordan-brand-15-austin-reaves",
+      "images": 4,
+      "bytes": 284844
+    },
+    {
+      "id": "218492350",
+      "nome": "Regata NBA Lakers Jordan Brand #8 Kobe Bryant",
+      "time": "Lakers",
+      "slug": "regata-nba-lakers-jordan-brand-8-kobe-bryant",
+      "images": 4,
+      "bytes": 261366
+    },
+    {
+      "id": "218048830",
+      "nome": "Regata NBA Spurs Limitada Cinza #10 Jeremy Sochan",
+      "time": "Spurs",
+      "slug": "regata-nba-spurs-limitada-cinza-10-jeremy-sochan",
+      "images": 4,
+      "bytes": 267954
+    },
+    {
+      "id": "218048789",
+      "nome": "Regata NBA Spurs Limitada Cinza #4 De'Aaron Fox",
+      "time": "Spurs",
+      "slug": "regata-nba-spurs-limitada-cinza-4-de-aaron-fox",
+      "images": 4,
+      "bytes": 276100
+    },
+    {
+      "id": "218048774",
+      "nome": "Regata NBA Spurs Limitada Cinza #1 Victor Wembanyama",
+      "time": "Spurs",
+      "slug": "regata-nba-spurs-limitada-cinza-1-victor-wembanyama",
+      "images": 4,
+      "bytes": 293452
+    },
+    {
+      "id": "218047571",
+      "nome": "Regata NBA Hornets City Edition #1 LaMelo Ball",
+      "time": "Hornets",
+      "slug": "regata-nba-hornets-city-edition-1-lamelo-ball",
+      "images": 4,
+      "bytes": 247886
+    },
+    {
+      "id": "218047527",
+      "nome": "Regata NBA Clippers City Edition #2 Kawhi Leonard",
+      "time": "Clippers",
+      "slug": "regata-nba-clippers-city-edition-2-kawhi-leonard",
+      "images": 4,
+      "bytes": 776180
+    },
+    {
+      "id": "218047481",
+      "nome": "Regata NBA Clippers City Edition #1 James Harden",
+      "time": "Clippers",
+      "slug": "regata-nba-clippers-city-edition-1-james-harden",
+      "images": 4,
+      "bytes": 788028
+    },
+    {
+      "id": "218046738",
+      "nome": "Regata NBA Knicks Limitada #32 Karl-Anthony Towns",
+      "time": "Knicks",
+      "slug": "regata-nba-knicks-limitada-32-karl-anthony-towns",
+      "images": 4,
+      "bytes": 195230
+    },
+    {
+      "id": "218046699",
+      "nome": "Regata NBA Knicks Limitada #25 Mikal Bridges",
+      "time": "Knicks",
+      "slug": "regata-nba-knicks-limitada-25-mikal-bridges",
+      "images": 4,
+      "bytes": 202368
+    },
+    {
+      "id": "218046661",
+      "nome": "Regata NBA Knicks Limitada #11 Jalen Brunson",
+      "time": "Knicks",
+      "slug": "regata-nba-knicks-limitada-11-jalen-brunson",
+      "images": 4,
+      "bytes": 199756
+    },
+    {
+      "id": "218046483",
+      "nome": "Regata NBA Knicks Limitada #00 Jordan Clarkson",
+      "time": "Knicks",
+      "slug": "regata-nba-knicks-limitada-00-jordan-clarkson",
+      "images": 4,
+      "bytes": 198328
+    },
+    {
+      "id": "218046092",
+      "nome": "Regata NBA Cavaliers Retrô #45 Donovan Mitchell",
+      "time": "Cavaliers",
+      "slug": "regata-nba-cavaliers-retro-45-donovan-mitchell",
+      "images": 4,
+      "bytes": 226042
+    },
+    {
+      "id": "218046039",
+      "nome": "Regata NBA Cavaliers Retrô #23 LeBron James",
+      "time": "Cavaliers",
+      "slug": "regata-nba-cavaliers-retro-23-lebron-james",
+      "images": 4,
+      "bytes": 231720
+    },
+    {
+      "id": "218045991",
+      "nome": "Regata NBA Cavaliers Retrô #10 Darius Garland",
+      "time": "Cavaliers",
+      "slug": "regata-nba-cavaliers-retro-10-darius-garland",
+      "images": 4,
+      "bytes": 756576
+    },
+    {
+      "id": "218045369",
+      "nome": "Regata NBA 76ers Retrô Preta #21 Joel Embiid",
+      "time": "76ers",
+      "slug": "regata-nba-76ers-retro-preta-21-joel-embiid",
+      "images": 4,
+      "bytes": 215524
+    },
+    {
+      "id": "218045367",
+      "nome": "Regata NBA 76ers Retrô Preta #8 Paul George",
+      "time": "76ers",
+      "slug": "regata-nba-76ers-retro-preta-8-paul-george",
+      "images": 4,
+      "bytes": 208672
+    },
+    {
+      "id": "218045363",
+      "nome": "Regata NBA 76ers Retrô Preta #0 Tyrese Maxey",
+      "time": "76ers",
+      "slug": "regata-nba-76ers-retro-preta-0-tyrese-maxey",
+      "images": 4,
+      "bytes": 196256
+    },
+    {
+      "id": "213848648",
+      "nome": "Regata NBA Pelicans City Edition #3 Jordan Poole",
+      "time": "Pelicans",
+      "slug": "regata-nba-pelicans-city-edition-3-jordan-poole",
+      "images": 4,
+      "bytes": 199618
+    },
+    {
+      "id": "216320452",
+      "nome": "Regata NBA Mavericks Retrô Verde #32 Cooper Flagg",
+      "time": "Mavericks",
+      "slug": "regata-nba-mavericks-retro-verde-32-cooper-flagg",
+      "images": 4,
+      "bytes": 264866
+    },
+    {
+      "id": "216320436",
+      "nome": "Regata NBA Mavericks Retrô Verde #31 Klay Thompson",
+      "time": "Mavericks",
+      "slug": "regata-nba-mavericks-retro-verde-31-klay-thompson",
+      "images": 4,
+      "bytes": 273404
+    },
+    {
+      "id": "216320415",
+      "nome": "Regata NBA Mavericks Retrô Verde #5 D'Angelo Russell",
+      "time": "Mavericks",
+      "slug": "regata-nba-mavericks-retro-verde-5-d-angelo-russell",
+      "images": 4,
+      "bytes": 264366
+    },
+    {
+      "id": "216320394",
+      "nome": "Regata NBA Mavericks Retrô Verde #3 Anthony Davis",
+      "time": "Mavericks",
+      "slug": "regata-nba-mavericks-retro-verde-3-anthony-davis",
+      "images": 4,
+      "bytes": 272242
+    },
+    {
+      "id": "213507124",
+      "nome": "Regata NBA Raptors Retrô Branca #15 Vince Carter",
+      "time": "Raptors",
+      "slug": "regata-nba-raptors-retro-branca-15-vince-carter",
+      "images": 4,
+      "bytes": 288418
+    },
+    {
+      "id": "213507076",
+      "nome": "Regata NBA Raptors Retrô Branca #1 Tracy McGrady",
+      "time": "Raptors",
+      "slug": "regata-nba-raptors-retro-branca-1-tracy-mcgrady",
+      "images": 4,
+      "bytes": 300496
+    },
+    {
+      "id": "213506739",
+      "nome": "Regata NBA Raptors Retrô Roxa #1 Tracy McGrady",
+      "time": "Raptors",
+      "slug": "regata-nba-raptors-retro-roxa-1-tracy-mcgrady",
+      "images": 4,
+      "bytes": 343132
+    },
+    {
+      "id": "212676653",
+      "nome": "Regata NBA Magic Jordan Brand #32 Shaquille O'Neal",
+      "time": "Magic",
+      "slug": "regata-nba-magic-jordan-brand-32-shaquille-o-neal",
+      "images": 4,
+      "bytes": 246188
+    },
+    {
+      "id": "212676633",
+      "nome": "Regata NBA Magic Jordan Brand #5 Paolo Banchero",
+      "time": "Magic",
+      "slug": "regata-nba-magic-jordan-brand-5-paolo-banchero",
+      "images": 4,
+      "bytes": 237222
+    },
+    {
+      "id": "212676615",
+      "nome": "Regata NBA Magic Jordan Brand #1 Penny Hardaway",
+      "time": "Magic",
+      "slug": "regata-nba-magic-jordan-brand-1-penny-hardaway",
+      "images": 4,
+      "bytes": 222464
+    },
+    {
+      "id": "212676585",
+      "nome": "Regata NBA Magic Away Azul #32 Shaquille O'Neal",
+      "time": "Magic",
+      "slug": "regata-nba-magic-away-azul-32-shaquille-o-neal",
+      "images": 4,
+      "bytes": 250042
+    },
+    {
+      "id": "212676560",
+      "nome": "Regata NBA Magic Away Azul #5 Paolo Banchero",
+      "time": "Magic",
+      "slug": "regata-nba-magic-away-azul-5-paolo-banchero",
+      "images": 4,
+      "bytes": 251080
+    },
+    {
+      "id": "212676502",
+      "nome": "Regata NBA Magic Away Azul #1 Penny Hardaway",
+      "time": "Magic",
+      "slug": "regata-nba-magic-away-azul-1-penny-hardaway",
+      "images": 4,
+      "bytes": 247132
+    },
+    {
+      "id": "210402986",
+      "nome": "Regata NBA Trail Blazers City Edition #16 Yang Hansen",
+      "time": "Trail Blazers",
+      "slug": "regata-nba-trail-blazers-city-edition-16-yang-hansen",
+      "images": 4,
+      "bytes": 207820
+    },
+    {
+      "id": "209084713",
+      "nome": "Regata NBA Trail Blazers Away Preta #8 Deni Avdija",
+      "time": "Trail Blazers",
+      "slug": "regata-nba-trail-blazers-away-preta-8-deni-avdija",
+      "images": 4,
+      "bytes": 194020
+    },
+    {
+      "id": "209084671",
+      "nome": "Regata NBA Trail Blazers Home Branca #16 Yang Hansen",
+      "time": "Trail Blazers",
+      "slug": "regata-nba-trail-blazers-home-branca-16-yang-hansen",
+      "images": 4,
+      "bytes": 204452
+    },
+    {
+      "id": "209084656",
+      "nome": "Regata NBA Trail Blazers Home Branca #8 Deni Avdija",
+      "time": "Trail Blazers",
+      "slug": "regata-nba-trail-blazers-home-branca-8-deni-avdija",
+      "images": 4,
+      "bytes": 207630
+    },
+    {
+      "id": "209083312",
+      "nome": "Regata NBA Bulls Jordan Brand #11 DeMar DeRozan",
+      "time": "Bulls",
+      "slug": "regata-nba-bulls-jordan-brand-11-demar-derozan",
+      "images": 4,
+      "bytes": 235164
+    },
+    {
+      "id": "209083302",
+      "nome": "Regata NBA Bulls Jordan Brand #91 Dennis Rodman",
+      "time": "Bulls",
+      "slug": "regata-nba-bulls-jordan-brand-91-dennis-rodman",
+      "images": 4,
+      "bytes": 241794
+    },
+    {
+      "id": "209083278",
+      "nome": "Regata NBA Bulls Jordan Brand #8 Zach LaVine",
+      "time": "Bulls",
+      "slug": "regata-nba-bulls-jordan-brand-8-zach-lavine",
+      "images": 4,
+      "bytes": 225586
+    },
+    {
+      "id": "209083263",
+      "nome": "Regata NBA Bulls Jordan Brand #33 Scottie Pippen",
+      "time": "Bulls",
+      "slug": "regata-nba-bulls-jordan-brand-33-scottie-pippen",
+      "images": 4,
+      "bytes": 236716
+    },
+    {
+      "id": "209083208",
+      "nome": "Regata NBA Bulls Jordan Brand #23 Michael Jordan",
+      "time": "Bulls",
+      "slug": "regata-nba-bulls-jordan-brand-23-michael-jordan",
+      "images": 4,
+      "bytes": 238756
+    },
+    {
+      "id": "209083044",
+      "nome": "Regata NBA Timberwolves Retrô #25 Derrick Rose",
+      "time": "Timberwolves",
+      "slug": "regata-nba-timberwolves-retro-25-derrick-rose",
+      "images": 4,
+      "bytes": 214574
+    },
+    {
+      "id": "209082828",
+      "nome": "Regata NBA Timberwolves Retrô #5 Anthony Edwards",
+      "time": "Timberwolves",
+      "slug": "regata-nba-timberwolves-retro-5-anthony-edwards",
+      "images": 4,
+      "bytes": 197514
+    },
+    {
+      "id": "209082655",
+      "nome": "Regata NBA Magic Home Branca #32 Shaquille O'Neal",
+      "time": "Magic",
+      "slug": "regata-nba-magic-home-branca-32-shaquille-o-neal",
+      "images": 4,
+      "bytes": 836150
+    },
+    {
+      "id": "209082506",
+      "nome": "Regata NBA Magic Home Branca #5 Paolo Banchero",
+      "time": "Magic",
+      "slug": "regata-nba-magic-home-branca-5-paolo-banchero",
+      "images": 4,
+      "bytes": 829220
+    },
+    {
+      "id": "209082325",
+      "nome": "Regata NBA Magic Home Branca #1 Penny Hardaway",
+      "time": "Magic",
+      "slug": "regata-nba-magic-home-branca-1-penny-hardaway",
+      "images": 4,
+      "bytes": 832354
+    },
+    {
+      "id": "209082145",
+      "nome": "Regata NBA Raptors Retrô Roxa #15 Vince Carter",
+      "time": "Raptors",
+      "slug": "regata-nba-raptors-retro-roxa-15-vince-carter",
+      "images": 4,
+      "bytes": 328182
+    },
+    {
+      "id": "209081983",
+      "nome": "Regata NBA Lakers Jordan Brand #77 Luka Doncic",
+      "time": "Lakers",
+      "slug": "regata-nba-lakers-jordan-brand-77-luka-doncic",
+      "images": 4,
+      "bytes": 836492
+    },
+    {
+      "id": "151101070",
+      "nome": "Regata NBA Pelicans City Edition #14 Brandon Ingram",
+      "time": "Pelicans",
+      "slug": "regata-nba-pelicans-city-edition-14-brandon-ingram",
+      "images": 4,
+      "bytes": 810812
+    },
+    {
+      "id": "160275115",
+      "nome": "Regata NBA Rockets City Edition #28 Alperen Sengun",
+      "time": "Rockets",
+      "slug": "regata-nba-rockets-city-edition-28-alperen-sengun",
+      "images": 4,
+      "bytes": 855086
+    },
+    {
+      "id": "151306387",
+      "nome": "Regata NBA Rockets City Edition #4 Jalen Green",
+      "time": "Rockets",
+      "slug": "regata-nba-rockets-city-edition-4-jalen-green",
+      "images": 4,
+      "bytes": 809162
+    },
+    {
+      "id": "151306402",
+      "nome": "Regata NBA Rockets City Edition #13 James Harden",
+      "time": "Rockets",
+      "slug": "regata-nba-rockets-city-edition-13-james-harden",
+      "images": 4,
+      "bytes": 806116
+    },
+    {
+      "id": "203254397",
+      "nome": "Regata NBA Rockets City Edition #7 Kevin Durant",
+      "time": "Rockets",
+      "slug": "regata-nba-rockets-city-edition-7-kevin-durant",
+      "images": 4,
+      "bytes": 904198
+    },
+    {
+      "id": "189118270",
+      "nome": "Regata NBA Lakers City Edition #77 Luka Doncic",
+      "time": "Lakers",
+      "slug": "regata-nba-lakers-city-edition-77-luka-doncic",
+      "images": 4,
+      "bytes": 672124
+    },
+    {
+      "id": "168525032",
+      "nome": "Regata NBA Lakers City Edition #9 Bronny James",
+      "time": "Lakers",
+      "slug": "regata-nba-lakers-city-edition-9-bronny-james",
+      "images": 4,
+      "bytes": 217998
+    },
+    {
+      "id": "143152423",
+      "nome": "Regata NBA Lakers City Edition #23 LeBron James",
+      "time": "Lakers",
+      "slug": "regata-nba-lakers-city-edition-23-lebron-james",
+      "images": 4,
+      "bytes": 347846
+    },
+    {
+      "id": "143152407",
+      "nome": "Regata NBA Lakers City Edition #15 Austin Reaves",
+      "time": "Lakers",
+      "slug": "regata-nba-lakers-city-edition-15-austin-reaves",
+      "images": 4,
+      "bytes": 686732
+    },
+    {
+      "id": "143152387",
+      "nome": "Regata NBA Lakers City Edition #8 Kobe Bryant",
+      "time": "Lakers",
+      "slug": "regata-nba-lakers-city-edition-8-kobe-bryant",
+      "images": 4,
+      "bytes": 692098
+    },
+    {
+      "id": "143152360",
+      "nome": "Regata NBA Lakers City Edition #6 LeBron James",
+      "time": "Lakers",
+      "slug": "regata-nba-lakers-city-edition-6-lebron-james",
+      "images": 4,
+      "bytes": 674394
+    },
+    {
+      "id": "143152332",
+      "nome": "Regata NBA Lakers City Edition #3 Anthony Davis",
+      "time": "Lakers",
+      "slug": "regata-nba-lakers-city-edition-3-anthony-davis",
+      "images": 4,
+      "bytes": 696266
+    },
+    {
+      "id": "143152294",
+      "nome": "Regata NBA Lakers City Edition #0 Russell Westbrook",
+      "time": "Lakers",
+      "slug": "regata-nba-lakers-city-edition-0-russell-westbrook",
+      "images": 4,
+      "bytes": 701718
+    },
+    {
+      "id": "225271226",
+      "nome": "Regata NBA Mavericks Retrô Verde #11 Kyrie Irving",
+      "time": "Mavericks",
+      "slug": "regata-nba-mavericks-retro-verde-11-kyrie-irving",
+      "images": 4,
+      "bytes": 767346
+    },
+    {
+      "id": "221706903",
+      "nome": "Regata NBA Raptors City Edition #3",
+      "time": "Raptors",
+      "slug": "regata-nba-raptors-city-edition-3",
+      "images": 4,
+      "bytes": 838534
+    },
+    {
+      "id": "218045358",
+      "nome": "Regata NBA 76ers Retrô Preta #3 Allen Iverson",
+      "time": "76ers",
+      "slug": "regata-nba-76ers-retro-preta-3-allen-iverson",
+      "images": 4,
+      "bytes": 207860
+    },
+    {
+      "id": "209083323",
+      "nome": "Regata NBA Trail Blazers Home Branca #0 Damian Lillard",
+      "time": "Trail Blazers",
+      "slug": "regata-nba-trail-blazers-home-branca-0-damian-lillard",
+      "images": 4,
+      "bytes": 214672
+    },
+    {
+      "id": "209083291",
+      "nome": "Regata NBA Bulls Jordan Brand #45 Michael Jordan",
+      "time": "Bulls",
+      "slug": "regata-nba-bulls-jordan-brand-45-michael-jordan",
+      "images": 4,
+      "bytes": 253006
+    },
+    {
+      "id": "130834348",
+      "nome": "Regata NBA Trail Blazers City Edition #0 Damian Lillard",
+      "time": "Trail Blazers",
+      "slug": "regata-nba-trail-blazers-city-edition-0-damian-lillard",
+      "images": 4,
+      "bytes": 202460
+    },
+    {
+      "id": "209081793",
+      "nome": "Regata NBA Lakers Jordan Brand #23 LeBron James",
+      "time": "Lakers",
+      "slug": "regata-nba-lakers-jordan-brand-23-lebron-james",
+      "images": 4,
+      "bytes": 828906
+    },
+    {
+      "id": "151306378",
+      "nome": "Regata NBA Rockets City Edition #0 Russell Westbrook",
+      "time": "Rockets",
+      "slug": "regata-nba-rockets-city-edition-0-russell-westbrook",
+      "images": 4,
+      "bytes": 825638
+    },
+    {
+      "id": "143153111",
+      "nome": "Regata NBA Lakers City Edition #24 Kobe Bryant",
+      "time": "Lakers",
+      "slug": "regata-nba-lakers-city-edition-24-kobe-bryant",
+      "images": 4,
+      "bytes": 704210
+    },
+    {
+      "id": "143152312",
+      "nome": "Regata NBA Lakers City Edition #1 D'Angelo Russell",
+      "time": "Lakers",
+      "slug": "regata-nba-lakers-city-edition-1-d-angelo-russell",
+      "images": 4,
+      "bytes": 669370
+    }
+  ],
+  "ignorados": [],
+  "falhas": []
+}

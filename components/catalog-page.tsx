@@ -68,7 +68,7 @@ export function CatalogPage({ title, description, products, breadcrumb, initialT
       const verifiedUniform = classifyProduct(product).uniform;
       const priceMatches = maxPrice === "all" || (price !== null && price <= Number(maxPrice));
       const category = getProductCategoryKey(product);
-      const categoryMatches = !type || category === type || (type === "inverno" && classifyProduct(product).sleeve === "long");
+      const categoryMatches = !type || category === type || (type === "regata" && category === "regata-nba") || (type === "inverno" && classifyProduct(product).sleeve === "long");
       return categoryMatches && (!sleeve || classifyProduct(product).sleeve === sleeve) && (!uniform || verifiedUniform === uniform) &&
         (!club || product.clubeSlug === club) && (!league || product.liga === league) &&
         (!size || product.tamanhos.includes(size)) &&
@@ -87,7 +87,7 @@ export function CatalogPage({ title, description, products, breadcrumb, initialT
   const seasonOptions = Array.from(new Set(products.map((product) => product.temporada).filter((value) => value !== "revisar")));
   const colorOptions = Array.from(new Set(products.map((product) => product.cor).filter((value) => value !== "revisar")));
   const leagueOptions = Array.from(new Set(products.map((product) => product.liga).filter((value) => value !== "revisar"))).sort((a, b) => catalogLabel(a).localeCompare(catalogLabel(b), "pt-BR"));
-  const typeLabels: Record<string, string> = { torcedor: "Torcedor", jogador: "Jogador", goleiro: "Goleiro", retro: "Retrô", treino: "Treino", cropped: "Cropped", regata: "Regata", inverno: "Mangas compridas", vestido: "Vestido" };
+  const typeLabels: Record<string, string> = { torcedor: "Torcedor", jogador: "Jogador", goleiro: "Goleiro", retro: "Retrô", treino: "Treino", cropped: "Cropped", regata: "Regata", "regata-nba": "Regatas NBA", inverno: "Mangas compridas", vestido: "Vestido" };
   typeLabels["full-patch"] = "Full Patches";
   typeLabels["f1"] = "F1";
   typeLabels["formula1"] = "F1";

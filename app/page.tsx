@@ -23,7 +23,7 @@ export const metadata: Metadata = { alternates: { canonical: "/" } };
 export const revalidate = 300;
 
 const features: { icon: typeof ShoppingBag; title: string; text: string; link?: { label: string; href: string } }[] = [
-  { icon: ShoppingBag, title: "Frete facilitado", text: "R$ 20 (1 ou 2 itens) · Grátis a partir de 3 peças", link: { label: "Ver regras completas", href: "/envios-e-prazos" } },
+  { icon: ShoppingBag, title: "Frete facilitado", text: `${formatCurrency(storeConfig.shippingPrice)} (1 ou 2 itens) · Grátis a partir de ${storeConfig.freeShippingQuantity} peças`, link: { label: "Ver regras completas", href: "/envios-e-prazos" } },
   { icon: WalletCards, title: "Pagamento seguro", text: "Pix imediato ou cartão em até 12x via Mercado Pago." },
   { icon: Truck, title: "Envio rastreado", text: "Acompanhamento completo do despacho até sua casa." },
   { icon: HeartHandshake, title: "Personalização", text: `Nome e número oficiais por +${formatCurrency(storeConfig.customizationPrice)}.` },

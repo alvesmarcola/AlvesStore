@@ -14,10 +14,27 @@ export interface ProductClassification {
   evidence: string[];
 }
 
+export function isKidsProduct(product: Product) {
+  return product.publico === "infantil" || /\b(?:kids|junior|youth|infantil|children)\b/i.test(`${product.nome} ${product.imageSeed}`);
+}
+
+export function isNbaTankTop(product: Product) {
+  if (product.tipo !== "regata") return false;
+  const evidence = `${product.liga} ${product.league ?? ""} ${product.category ?? ""} ${product.subcategory ?? ""} ${product.nome} ${product.title ?? ""} ${product.name ?? ""} ${product.clube ?? ""} ${product.clubeSlug ?? ""} ${(product.tags ?? []).join(" ")}`.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("pt-BR");
+  return /\bnba\b|national basketball association|warriors|lakers|celtics|bulls|heat|nets|knicks|bucks|mavericks|suns|clippers|nuggets|76ers|sixers|spurs|raptors|rockets|cavaliers|grizzlies|hawks|pacers|magic|pelicans|timberwolves|thunder|trail blazers|jazz|kings|wizards|pistons|hornets/.test(evidence);
+}
+
+/** Regatas NBA e camisas de Fórmula 1 não aceitam personalização de nome e número. */
+export function allowsCustomization(product: Product) {
+  const isF1 = product.tipo === "f1" || product.tipo === "formula1" || product.liga === "f1" || product.liga === "formula-1"
+    || /\b(?:f1|formula[-\s]*1|formula[-\s]*one|automobilismo|scuderia|ferrari|red[-\s]*bull(?:[-\s]*racing)?|mclaren|mercedes(?:[-\s]*amg)?|senna|aston[-\s]*martin|alpine|williams|haas)\b/i.test(`${product.liga} ${product.nome} ${product.clube}`);
+  return !isF1 && !isNbaTankTop(product);
+}
+
 export function classifyProduct(product: Product): ProductClassification {
   const override = productOverrides[product.id] ?? productOverrides[product.slug];
   const evidence = `${product.nome} ${product.title ?? ""} ${product.name ?? ""} ${product.slug} ${product.imageSeed} ${product.tipo} ${product.category ?? ""} ${product.subcategory ?? ""} ${product.version ?? ""} ${product.model ?? ""} ${(product.tags ?? []).join(" ")} ${(product.images ?? []).map((image) => `${image.source} ${image.src}`).join(" ")}`.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("pt-BR").replace(/[^a-z0-9]+/g, " ").trim().replace(/\s+/g, " ");
-  const isKids = product.publico === "infantil" || /\b(?:kids|junior|youth|infantil|children)\b/i.test(`${product.nome} ${product.imageSeed}`);
+  const isKids = isKidsProduct(product);
   const fullPatchEvidence = /\b(full ?patch(?:es)?|patch completo|patches completos|full sponsor|all sponsors)\b/.test(evidence);
   const modelEvidence = `${product.nome} ${product.title ?? ""} ${product.name ?? ""} ${product.slug} ${product.category ?? ""} ${product.version ?? ""} ${product.model ?? ""} ${(product.tags ?? []).join(" ")}`.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("pt-BR").replace(/[^a-z0-9]+/g, " ").trim().replace(/\s+/g, " ");
   const explicitTrainingProduct = product.tipo === "treino" && /\b(treino|training|pre jogo|pre match)\b/.test(modelEvidence)
@@ -45,19 +62,22 @@ export function classifyProduct(product: Product): ProductClassification {
   const fullPatch = override?.fullPatch ?? (version === "fan" && fullPatchEvidence && !isKids);
   const overridePrice = Number.isFinite(override?.price) && (override?.price ?? 0) > 0 && (override?.price ?? Infinity) <= 2000
     ? override?.price : undefined;
-  const categoryPrice = isKids ? storeConfig.kidsPrice : (product.tipo === "revisar" && !override ? null : ((product.tipo === "f1" || product.tipo === "formula1") ? (product.preco > 0 ? product.preco : storeConfig.fanCommonPrice) : (
+  const categoryPrice = isKids ? storeConfig.kidsPrice : isNbaTankTop(product) ? storeConfig.nbaTankTopPrice : (product.tipo === "revisar" && !override ? null : ((product.tipo === "f1" || product.tipo === "formula1") ? (product.preco > 0 ? product.preco : storeConfig.fanCommonPrice) : (
     version === "retro" && sleeve === "long" ? storeConfig.retroLongSleevePrice
       : version === "retro" && sleeve === "short" ? storeConfig.retroShortSleevePrice
-        : version === "retro" ? (product.preco > 0 && product.preco !== storeConfig.fanCommonPrice ? product.preco : storeConfig.retroShortSleevePrice)
+        : version === "retro" ? (product.preco > storeConfig.fanCommonPrice ? product.preco : storeConfig.retroShortSleevePrice)
         : version === "player" ? (sleeve === "long" ? storeConfig.playerLongSleevePrice : storeConfig.playerShortSleevePrice)
       : version === "goalkeeper" ? storeConfig.fanCommonPrice
         : version === "fan" && fullPatch ? storeConfig.fanFullPatchPrice
-            : version === "fan" && sleeve === "long" && product.preco > 0 && product.preco !== storeConfig.fanCommonPrice ? product.preco
+            : version === "fan" && sleeve === "long" && product.preco > storeConfig.fanCommonPrice ? product.preco
               : version === "fan" ? storeConfig.fanCommonPrice : null
   )));
 
   const registeredPrice = Number.isFinite(product.preco) && product.preco > 0 && !(product.preco === storeConfig.fanCommonPrice && version !== "fan");
-  const price = isGoalkeeper ? storeConfig.fanCommonPrice : (categoryPrice === null && overridePrice === undefined ? null : (overridePrice ?? categoryPrice ?? (registeredPrice && (product.tipo === "f1" || product.tipo === "formula1" || (version === "retro" && sleeve === "unknown") || !["fan", "player"].includes(version)) ? product.preco : storeConfig.fanCommonPrice)));
+  const price = isKids ? storeConfig.kidsPrice
+    : isGoalkeeper ? storeConfig.fanCommonPrice
+    : isNbaTankTop(product) ? storeConfig.nbaTankTopPrice
+    : (categoryPrice === null && overridePrice === undefined ? null : (overridePrice ?? categoryPrice ?? (registeredPrice && (product.tipo === "f1" || product.tipo === "formula1" || (version === "retro" && sleeve === "unknown") || !["fan", "player"].includes(version)) ? product.preco : storeConfig.fanCommonPrice)));
   const reviewRequired = price === null;
   const label = price === null ? "Preço em revisão" : `R$ ${price.toFixed(2).replace(".", ",")}${reviewRequired ? " · classificação em revisão" : ""}`;
   return {
@@ -84,6 +104,5 @@ export function getProductUnitPrice(product: Product, size?: string) {
 
 export function isPackageEligible(product: Product) {
   const facts = classifyProduct(product);
-  const isKids = product.publico === "infantil" || /\b(?:kids|junior|youth|infantil|children)\b/i.test(`${product.nome} ${product.imageSeed}`);
-  return product.tipo === "torcedor" && facts.version === "fan" && !facts.fullPatch && facts.price === storeConfig.fanCommonPrice && !isKids;
+  return product.tipo === "torcedor" && facts.version === "fan" && !facts.fullPatch && facts.price === storeConfig.fanCommonPrice && !isKidsProduct(product);
 }

@@ -2,15 +2,16 @@ import assert from "node:assert/strict";
 import { createHmac } from "node:crypto";
 import { test } from "node:test";
 import { getCartPricing, getPackagePrice, getProductCategoryKey, getProductOfferText, getShippingCents } from "@/lib/commerce";
+import { calcularPromoBlackFriday } from "@/lib/black-friday";
 import { toCatalogPreview } from "@/lib/catalog";
-import { orderLinesSchema, paymentRequestSchema, validateOrderLines as validateOrderLinesWithCatalog, validateOrderLinesFromCatalog, calculateOrderTotals } from "@/lib/payment/order";
+import { orderLinesSchema, paymentRequestSchema, validateOrderLines as validateOrderLinesWithCatalog, validateOrderLinesFromCatalog, calculateOrderTotals, InvalidOrderError } from "@/lib/payment/order";
 import { buildPreferenceItems } from "@/lib/payment/preference-items";
 import { isValidMercadoPagoSignature, normalizedPaymentStatus } from "@/lib/server/webhook-signature";
 import { getCheckoutUrl, getPaymentEnvironment, PaymentConfigurationError, resolveSiteUrl, validateMercadoPagoAccessToken } from "@/lib/server/mercado-pago";
 import { clearCheckoutAttempt, fingerprintCheckoutAttempt, getCheckoutAttemptKey } from "@/lib/payment/checkout-attempt";
 import { validateMercadoPagoPayment } from "@/lib/payment/mercado-pago-validation";
 import productsData from "@/data/products.json";
-import { classifyProduct, isPackageEligible } from "@/lib/product-classification";
+import { classifyProduct, getProductUnitPrice, isPackageEligible } from "@/lib/product-classification";
 import { getAvailablePatches } from "@/lib/patch-compatibility";
 import { isCompleteOrderCode, normalizeOrderCodeInput, orderCode } from "@/lib/order-code";
 import { buildOrderPaidEmail, buildOrderReceivedEmail } from "@/lib/server/order-emails";
@@ -30,7 +31,7 @@ import { prioritizeClubs, prioritizeEditorialProducts, sortCatalogProducts } fro
 import { parseSearchIntent, searchProducts } from "@/lib/smart-search";
 import { patchOptions } from "@/data/patches";
 import { productOverrides } from "@/data/product-overrides";
-import { isJacketFormulaOneProduct } from "@/lib/formula-one";
+import { allowsCustomization, isJacketFormulaOneProduct } from "@/lib/formula-one";
 import { getBundledFormulaOneProducts } from "@/lib/server/supabase-catalog";
 import { manualProductSchema } from "@/lib/admin/product-validation";
 import { filterPublicReviews, publicReviewsPayload, reviewSubmissionSchema, sanitizeReviewText } from "@/lib/reviews";
@@ -49,8 +50,8 @@ import type { Product } from "@/lib/types";
 const products = (productsData as Product[]).map((entry) => ({ ...entry, tamanhos: entry.tamanhos.filter((size) => size !== "3GG") }));
 const validateOrderLines = (lines: Parameters<typeof validateOrderLinesWithCatalog>[0]) => validateOrderLinesWithCatalog(lines, products);
 const baseProduct = products[0]!;
-const product = products.find((entry) => classifyProduct(entry).price === 160 && entry.tamanhos.length > 0 && entry.tipo === "torcedor")
-  ?? productFixture("produto-teste-torcedor", { nome: "Camisa Clube Torcedor", tipo: "torcedor", imageSeed: "Torcedor", preco: 160, tamanhos: ["M"] }, baseProduct);
+const product = products.find((entry) => classifyProduct(entry).price === storeConfig.fanCommonPrice && entry.tamanhos.length > 0 && entry.tipo === "torcedor")
+  ?? productFixture("produto-teste-torcedor", { nome: "Camisa Clube Torcedor", tipo: "torcedor", imageSeed: "Torcedor", preco: storeConfig.fanCommonPrice, tamanhos: ["M"] }, baseProduct);
 if (!products.some((entry) => entry.id === product.id)) products.push(product);
 assert.ok(product, "O catálogo precisa ter ao menos um produto com tamanho disponível para os testes.");
 const validLine = { productId: product.id, size: product.tamanhos[0], quantity: 1 };
@@ -69,7 +70,7 @@ function productFixture(id: string, overrides: Partial<Product>, base: Product =
 }
 
 test("calcula pacotes de camisa com preços únicos", () => {
-  assert.deepEqual([1, 2, 3, 4, 5, 6].map(getPackagePrice), [160, 300, 450, 610, 750, 900]);
+  assert.deepEqual([1, 2, 3, 4, 5, 6].map(getPackagePrice), [170, 300, 450, 620, 750, 900]);
   assert.ok(products.filter((entry) => entry.tipo === "retro" && !/manga-longa|manga longa/i.test(entry.imageSeed + entry.nome)).every((entry) => classifyProduct(entry).price === 185));
   assert.ok(products.filter((entry) => entry.tipo === "retro" && /manga-longa|manga longa/i.test(entry.imageSeed + entry.nome)).every((entry) => classifyProduct(entry).price === 220));
 });
@@ -96,7 +97,7 @@ test("classifica Torcedor, Ultrapasso, Full Patches e mangas sem confundir vers�
   const legacyFanLong = productFixture("teste-torcedor-longa-legado", { nome: "Clube manga longa torcedor", tipo: "inverno", imageSeed: "Camisa Manga Longa Torcedor", preco: 190 });
 
   assert.equal(getProductCategoryKey(fan), "torcedor");
-  assert.equal(classifyProduct(fan).price, 160);
+  assert.equal(classifyProduct(fan).price, 170);
 
   assert.equal(getProductCategoryKey(fullPatch), "full-patch");
   assert.equal(classifyProduct(fullPatch).price, null);
@@ -110,6 +111,144 @@ test("classifica Torcedor, Ultrapasso, Full Patches e mangas sem confundir vers�
   assert.equal(isPackageEligible(legacyFanLong), false);
   assert.match(getProductOfferText(retroShort), /sem oferta por quantidade/);
   assert.match(getProductOfferText(fan), /3 por R\$ 450/);
+});
+
+test("promo Black Friday NBA aplica pares, prioriza maior preço e não dá desconto em adicionais", () => {
+  const promoDate = new Date("2026-11-05T12:00:00-03:00");
+  const nbaTankTop = productFixture("regata-nba-teste", {
+    nome: "Regata NBA",
+    tipo: "regata",
+    liga: "nba",
+    league: "NBA",
+    publico: "masculino",
+    preco: 999,
+    tamanhos: ["M"],
+  });
+  const fan = productFixture("camisa-torcedor-teste", {
+    nome: "Camisa Clube Torcedor",
+    tipo: "torcedor",
+    publico: "masculino",
+    imageSeed: "Torcedor",
+    preco: 160,
+    tamanhos: ["M"],
+  });
+  const premiumFan = productFixture("camisa-torcedor-longa-teste", {
+    nome: "Camisa Clube Torcedor Manga Longa",
+    tipo: "torcedor",
+    publico: "masculino",
+    imageSeed: "Torcedor Manga Longa",
+    preco: 190,
+    tamanhos: ["M"],
+  });
+  const kid = productFixture("camisa-infantil-teste", {
+    nome: "Camisa Infantil Clube",
+    tipo: "torcedor",
+    publico: "infantil",
+    imageSeed: "Infantil",
+    preco: 160,
+    tamanhos: ["M"],
+  });
+  const cartItem = (item: Product, quantity = 1, customization?: { name: string; number: string }) => ({
+    lineId: item.id, product: item, size: "M", quantity, customization,
+  });
+
+  assert.equal(classifyProduct(nbaTankTop).price, storeConfig.nbaTankTopPrice);
+  assert.match(getProductOfferText(nbaTankTop), /Regata NBA.*230,00/);
+  assert.equal(classifyProduct(fan).price, storeConfig.fanCommonPrice);
+  assert.equal(classifyProduct(kid).price, storeConfig.kidsPrice);
+  assert.equal(calcularPromoBlackFriday([cartItem(nbaTankTop)], promoDate).desconto, 0);
+  assert.equal(calcularPromoBlackFriday([cartItem(fan)], promoDate).desconto, 0);
+  assert.equal(getCartPricing([cartItem(nbaTankTop)]).grandTotal, 250);
+  assert.equal(getCartPricing([cartItem(fan)]).grandTotal, 190);
+  const cartPair = getCartPricing([cartItem(nbaTankTop), cartItem(fan)]);
+  assert.equal(cartPair.promoDiscount, 85);
+  assert.equal(cartPair.grandTotal, 335);
+  assert.equal(cartPair.bundleDiscount, 0);
+  assert.equal(getCartPricing([cartItem(nbaTankTop), cartItem(fan, 2)]).grandTotal, 485);
+  assert.equal(getCartPricing([cartItem(nbaTankTop, 2), cartItem(fan, 2)]).grandTotal, 630);
+  assert.equal(getCartPricing([cartItem(nbaTankTop), cartItem(kid)]).promoDiscount, 0);
+  assert.equal(getCartPricing([cartItem(nbaTankTop), cartItem(kid)]).grandTotal, 430);
+
+  const onePair = validateOrderLinesWithCatalog([
+    { productId: nbaTankTop.id, size: "M", quantity: 1 },
+    { productId: fan.id, size: "M", quantity: 1 },
+  ], [nbaTankTop, fan]);
+  const onePairTotals = calculateOrderTotals(onePair, promoDate);
+  assert.equal(onePairTotals.promoDiscountCents, 8500);
+  assert.equal(onePairTotals.shirtsCents, 31500);
+  assert.equal(onePairTotals.totalCents, 33500);
+  assert.equal(buildPreferenceItems("bf-1-1", onePair, onePairTotals)
+    .reduce((sum, item) => sum + Math.round(item.unit_price * 100) * item.quantity, 0), onePairTotals.productsTotalCents);
+
+  const oneRegataTwoShirts = validateOrderLinesWithCatalog([
+    { productId: nbaTankTop.id, size: "M", quantity: 1 },
+    { productId: fan.id, size: "M", quantity: 2 },
+  ], [nbaTankTop, fan]);
+  const oneRegataTwoShirtsTotals = calculateOrderTotals(oneRegataTwoShirts, promoDate);
+  assert.equal(oneRegataTwoShirtsTotals.promoDiscountCents, 8500);
+  assert.equal(oneRegataTwoShirtsTotals.shirtsCents, 48500);
+  assert.equal(oneRegataTwoShirtsTotals.bundleDiscountCents, 0);
+
+  const twoPairs = validateOrderLinesWithCatalog([
+    { productId: nbaTankTop.id, size: "M", quantity: 2 },
+    { productId: fan.id, size: "M", quantity: 2 },
+  ], [nbaTankTop, fan]);
+  const twoPairTotals = calculateOrderTotals(twoPairs, promoDate);
+  assert.equal(twoPairTotals.promoDiscountCents, 17000);
+  assert.equal(twoPairTotals.shirtsCents, 63000);
+  assert.equal(buildPreferenceItems("bf-2-2", twoPairs, twoPairTotals)
+    .reduce((sum, item) => sum + Math.round(item.unit_price * 100) * item.quantity, 0), twoPairTotals.productsTotalCents);
+
+  const customizedPair = validateOrderLinesWithCatalog([
+    { productId: nbaTankTop.id, size: "M", quantity: 1 },
+    { productId: fan.id, size: "M", quantity: 1, customization: { name: "ANA", number: "10" } },
+  ], [nbaTankTop, fan]);
+  const customizedTotals = calculateOrderTotals(customizedPair, promoDate);
+  assert.equal(customizedTotals.customizationCents, 3990);
+  assert.equal(customizedTotals.productsTotalCents, 35490);
+  assert.equal(buildPreferenceItems("bf-custom", customizedPair, customizedTotals)
+    .reduce((sum, item) => sum + Math.round(item.unit_price * 100) * item.quantity, 0), customizedTotals.productsTotalCents);
+
+  // Regatas NBA rejeitam personalização de nome e número
+  assert.equal(allowsCustomization(nbaTankTop), false);
+  assert.throws(
+    () => validateOrderLinesWithCatalog([
+      { productId: nbaTankTop.id, size: "M", quantity: 1, customization: { name: "CURRY", number: "30" } },
+    ], [nbaTankTop]),
+    (error: any) => error instanceof InvalidOrderError && error.message === "Regatas NBA não aceitam personalização de nome e número.",
+  );
+
+  // Preço da regata NBA ignora valor arbitrário do cadastro (ex.: 240) e usa nbaTankTopPrice (230)
+  const nbaTankTopWithCustomPrice = productFixture("nba-tank-240", {
+    nome: "Regata NBA Los Angeles Lakers",
+    tipo: "regata",
+    liga: "nba",
+    clube: "Lakers",
+    preco: 240,
+    tamanhos: ["M"],
+  });
+  assert.equal(classifyProduct(nbaTankTopWithCustomPrice).price, 230);
+  assert.equal(getProductUnitPrice(nbaTankTopWithCustomPrice, "M"), 230);
+
+  const kidPair = validateOrderLinesWithCatalog([
+    { productId: nbaTankTop.id, size: "M", quantity: 1 },
+    { productId: kid.id, size: "M", quantity: 1 },
+  ], [nbaTankTop, kid]);
+  assert.equal(calculateOrderTotals(kidPair, promoDate).promoDiscountCents, 0);
+
+  const preferred = calcularPromoBlackFriday([
+    cartItem(nbaTankTop),
+    cartItem(fan),
+    cartItem(premiumFan),
+  ], promoDate);
+  assert.equal(preferred.desconto, 95);
+  assert.deepEqual(preferred.itensComDesconto.map((item) => item.itemIndex), [2]);
+
+  const expiredAtBrasilia = new Date("2026-12-02T02:59:59.999Z");
+  const afterExpiry = new Date("2026-12-02T03:00:00.000Z");
+  assert.equal(calcularPromoBlackFriday([cartItem(nbaTankTop), cartItem(fan)], expiredAtBrasilia).ativa, true);
+  assert.equal(calcularPromoBlackFriday([cartItem(nbaTankTop), cartItem(fan)], afterExpiry).desconto, 0);
+  assert.equal(calculateOrderTotals(onePair, afterExpiry).promoDiscountCents, 0);
 });
 
 test("importador respeita a categoria da pasta antes de mangas e variações", () => {
@@ -304,7 +443,7 @@ test("patches custam R$ 10 cada, respeitam a liga e não aparecem em retrô nem 
 });
 
 test("soma quantidades de produtos e linhas diferentes para definir frete", () => {
-  const other = products.find((entry) => entry.id !== product.id && classifyProduct(entry).price === 160 && entry.tamanhos.length > 0)
+  const other = products.find((entry) => entry.id !== product.id && classifyProduct(entry).price === storeConfig.fanCommonPrice && entry.tamanhos.length > 0)
     ?? productFixture("produto-teste-torcedor-outro", { nome: "Outra camisa Torcedor", tipo: "torcedor", imageSeed: "Torcedor", preco: 160 }, baseProduct);
   const addToCatalog = !products.some((entry) => entry.id === other.id);
   if (addToCatalog) products.push(other);
@@ -418,12 +557,12 @@ test("personalização só cobra uma vez por camisa quando há nome ou número",
   const nameOnly = validateOrderLines([{ ...validLine, quantity: 2, customization: { name: "ANA", number: "" } }]);
   const numberOnly = validateOrderLines([{ ...validLine, quantity: 2, customization: { name: "", number: "99" } }]);
   assert.equal(calculateOrderTotals(noCustomization).customizationCents, 0);
-  assert.equal(calculateOrderTotals(nameOnly).customizationCents, 2 * storeConfig.customizationPrice * 100);
-  assert.equal(calculateOrderTotals(numberOnly).customizationCents, 2 * storeConfig.customizationPrice * 100);
+  assert.equal(calculateOrderTotals(nameOnly).customizationCents, 2 * Math.round(storeConfig.customizationPrice * 100));
+  assert.equal(calculateOrderTotals(numberOnly).customizationCents, 2 * Math.round(storeConfig.customizationPrice * 100));
 
   const cartItem = { lineId: "personalizado", product, size: validLine.size, quantity: 1, customization: { name: "ANA", number: "" } };
   const plainCartItem = { ...cartItem, customization: undefined };
-  assert.equal(getCartPricing([cartItem]).grandTotal - getCartPricing([plainCartItem]).grandTotal, storeConfig.customizationPrice);
+  assert.equal(Math.round((getCartPricing([cartItem]).grandTotal - getCartPricing([plainCartItem]).grandTotal) * 100), Math.round(storeConfig.customizationPrice * 100));
   assert.equal(getCartPricing([{ ...plainCartItem, customization: { name: "", number: "" } }]).grandTotal, getCartPricing([plainCartItem]).grandTotal);
 });
 
@@ -444,7 +583,7 @@ test("rejeita frete do navegador e checkout não depende de configuração de tr
     shipping: { price: 0 },
   });
   assert.equal(parsed.success, false);
-  assert.equal(calculateOrderTotals(validateOrderLines([{ ...validLine, quantity: 1 }])).totalCents, 18000);
+  assert.equal(calculateOrderTotals(validateOrderLines([{ ...validLine, quantity: 1 }])).totalCents, 19000);
 });
 
 test("itens do Mercado Pago refletem exatamente os preços dos produtos", () => {
@@ -1000,7 +1139,7 @@ test("2 e 3 unidades de infantil somam R$ 180 por unidade (sem pacote)", () => {
 
 test("infantil misturado com torcedor calcula cada linha e frete pelo total de unidades", () => {
   const kid = productFixture("teste-infantil-misto", { nome: "Camisa Infantil Misto", tipo: "revisar", publico: "infantil", imageSeed: "Infantil Misto", preco: 160, tamanhos: ["M"] }, baseProduct);
-  const fanProduct = products.find((entry) => classifyProduct(entry).price === 160 && entry.tamanhos.length > 0 && entry.tipo === "torcedor") ?? product;
+  const fanProduct = products.find((entry) => classifyProduct(entry).price === storeConfig.fanCommonPrice && entry.tamanhos.length > 0 && entry.tipo === "torcedor") ?? product;
   const lines = validateOrderLinesWithCatalog([
     { productId: kid.id, size: "M", quantity: 1 },
     { productId: fanProduct.id, size: fanProduct.tamanhos[0], quantity: 2 },

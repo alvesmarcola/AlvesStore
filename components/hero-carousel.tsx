@@ -1,13 +1,29 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { MagneticLink } from "@/components/motion-effects";
 import { SITE_NAME } from "@/lib/site";
 
-const slides = [
+/**
+ * Data limite da promoção Black Friday NBA:
+ * 01/12/2026 às 23:59:59 (Horário oficial de Brasília, UTC-3).
+ * Após essa data, o carrossel retorna automaticamente às imagens padrão da loja.
+ */
+export const BLACK_FRIDAY_DEADLINE_ISO = "2026-12-01T23:59:59-03:00";
+
+export function isBlackFridayActive(now: number = Date.now()): boolean {
+  const deadline = new Date(BLACK_FRIDAY_DEADLINE_ISO).getTime();
+  return now <= deadline;
+}
+
+/**
+ * Slides originais da loja (preservados no repositório para retorno automático após a campanha).
+ */
+export const DEFAULT_HERO_SLIDES = [
   {
     eyebrow: "Uma nova temporada começa",
     title: ["Vista a", "paixão.", "Jogue junto."],
@@ -50,16 +66,19 @@ export function HeroCarousel() {
   const [direction, setDirection] = useState(1);
   const [isPaused, setIsPaused] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [promoActive, setPromoActive] = useState(() => isBlackFridayActive());
   const reducedMotion = useReducedMotion();
 
   useEffect(() => {
     setMounted(true);
+    // Atualiza verificação de campanha ativa
+    setPromoActive(isBlackFridayActive());
   }, []);
 
   const move = useCallback(
     (dir: number) => {
       setDirection(dir);
-      setActive((index) => (index + dir + slides.length) % slides.length);
+      setActive((index) => (index + dir + DEFAULT_HERO_SLIDES.length) % DEFAULT_HERO_SLIDES.length);
     },
     [],
   );
@@ -72,14 +91,66 @@ export function HeroCarousel() {
     [active],
   );
 
-  /* Auto-play */
+  /* Auto-play: somente quando há mais de 1 slide e a campanha não é estática */
   useEffect(() => {
-    if (!mounted || isPaused || reducedMotion) return;
+    if (!mounted || isPaused || reducedMotion || promoActive || DEFAULT_HERO_SLIDES.length <= 1) return;
     const timer = setInterval(() => move(1), AUTO_PLAY_MS);
     return () => clearInterval(timer);
-  }, [mounted, isPaused, reducedMotion, move]);
+  }, [mounted, isPaused, reducedMotion, promoActive, move]);
 
-  const slide = slides[active];
+  // Se a campanha Black Friday estiver ativa (até 01/12/2026 23:59 horário de Brasília), exibe o banner dedicado
+  if (promoActive) {
+    return (
+      <section
+        className="arena-hero relative isolate w-full overflow-hidden bg-[#180407]"
+        aria-label="Campanha Black Friday NBA"
+      >
+        <Link
+          href="/masculino"
+          className="group relative block w-full aspect-[4/5] md:aspect-[1920/720] overflow-hidden bg-[#180407]"
+          aria-label="Black Friday: na compra de 1 camisa da NBA, 50% off na camisa de time comum"
+        >
+          <picture className="block h-full w-full">
+            {/* Mobile (telas até 768px): imagem 1080x1350 na proporção 4:5 */}
+            <source
+              media="(max-width: 768px)"
+              srcSet="/arena/bf-nba-mobile.webp"
+              type="image/webp"
+            />
+            <source
+              media="(max-width: 768px)"
+              srcSet="/arena/bf-nba-mobile.jpg"
+              type="image/jpeg"
+            />
+            {/* Desktop (telas acima de 768px): imagem 1920x720 na proporção ~8:3 */}
+            <source
+              media="(min-width: 769px)"
+              srcSet="/arena/bf-nba-desktop.webp"
+              type="image/webp"
+            />
+            <source
+              media="(min-width: 769px)"
+              srcSet="/arena/bf-nba-desktop.jpg"
+              type="image/jpeg"
+            />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/arena/bf-nba-desktop.webp"
+              alt="Black Friday: na compra de 1 camisa da NBA, 50% off na camisa de time comum"
+              width={1920}
+              height={720}
+              fetchPriority="high"
+              decoding="sync"
+              loading="eager"
+              className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.01]"
+            />
+          </picture>
+        </Link>
+      </section>
+    );
+  }
+
+  const slide = DEFAULT_HERO_SLIDES[active];
   const shouldAnimate = mounted && !reducedMotion;
 
   const slideVariants = {
@@ -170,52 +241,54 @@ export function HeroCarousel() {
       </div>
 
       {/* Controls bottom-right: arrows + dots */}
-      <div className="absolute bottom-5 right-5 flex items-center gap-3 sm:bottom-7 sm:right-8">
-        {/* Dots */}
-        <div className="flex items-center gap-2">
-          {slides.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => goTo(index)}
-              aria-label={`Ir para slide ${index + 1}`}
-              className="group relative flex h-6 w-6 items-center justify-center"
-            >
-              <span
-                className={`block rounded-full transition-all duration-300 ${
-                  index === active
-                    ? "h-2.5 w-2.5 bg-action shadow-[0_0_8px_rgba(37,99,235,.5)]"
-                    : "h-2 w-2 bg-white/40 group-hover:bg-white/70"
-                }`}
-              />
-              {/* Progress ring for active dot */}
-              {mounted && index === active && !isPaused && !reducedMotion && (
-                <svg className="absolute inset-0 h-6 w-6 -rotate-90 pointer-events-none" viewBox="0 0 24 24">
-                  <circle
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    fill="none"
-                    stroke="rgba(37,99,235,.4)"
-                    strokeWidth="1.5"
-                    strokeDasharray="62.83"
-                    strokeDashoffset="0"
-                    className="hero-dot-progress"
-                    style={{ animation: `hero-dot-fill ${AUTO_PLAY_MS}ms linear forwards` }}
-                  />
-                </svg>
-              )}
-            </button>
-          ))}
-        </div>
+      {DEFAULT_HERO_SLIDES.length > 1 && (
+        <div className="absolute bottom-5 right-5 flex items-center gap-3 sm:bottom-7 sm:right-8">
+          {/* Dots */}
+          <div className="flex items-center gap-2">
+            {DEFAULT_HERO_SLIDES.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => goTo(index)}
+                aria-label={`Ir para slide ${index + 1}`}
+                className="group relative flex h-6 w-6 items-center justify-center"
+              >
+                <span
+                  className={`block rounded-full transition-all duration-300 ${
+                    index === active
+                      ? "h-2.5 w-2.5 bg-action shadow-[0_0_8px_rgba(37,99,235,.5)]"
+                      : "h-2 w-2 bg-white/40 group-hover:bg-white/70"
+                  }`}
+                />
+                {/* Progress ring for active dot */}
+                {mounted && index === active && !isPaused && !reducedMotion && (
+                  <svg className="absolute inset-0 h-6 w-6 -rotate-90 pointer-events-none" viewBox="0 0 24 24">
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      fill="none"
+                      stroke="rgba(37,99,235,.4)"
+                      strokeWidth="1.5"
+                      strokeDasharray="62.83"
+                      strokeDashoffset="0"
+                      className="hero-dot-progress"
+                      style={{ animation: `hero-dot-fill ${AUTO_PLAY_MS}ms linear forwards` }}
+                    />
+                  </svg>
+                )}
+              </button>
+            ))}
+          </div>
 
-        {/* Arrow buttons */}
-        <button aria-label="Banner anterior" onClick={() => move(-1)} className="hero-control grid h-10 w-10 place-items-center rounded-full border border-white/25 bg-black/30 backdrop-blur-sm transition hover:bg-white hover:text-ink">
-          <ChevronLeft size={17} />
-        </button>
-        <button aria-label="Próximo banner" onClick={() => move(1)} className="hero-control grid h-10 w-10 place-items-center rounded-full border border-white/25 bg-black/30 backdrop-blur-sm transition hover:bg-white hover:text-ink">
-          <ChevronRight size={17} />
-        </button>
-      </div>
+          {/* Arrow buttons */}
+          <button aria-label="Banner anterior" onClick={() => move(-1)} className="hero-control grid h-10 w-10 place-items-center rounded-full border border-white/25 bg-black/30 backdrop-blur-sm transition hover:bg-white hover:text-ink">
+            <ChevronLeft size={17} />
+          </button>
+          <button aria-label="Próximo banner" onClick={() => move(1)} className="hero-control grid h-10 w-10 place-items-center rounded-full border border-white/25 bg-black/30 backdrop-blur-sm transition hover:bg-white hover:text-ink">
+            <ChevronRight size={17} />
+          </button>
+        </div>
+      )}
     </section>
   );
 }

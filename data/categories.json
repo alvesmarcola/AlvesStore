@@ -1,4 +1,4 @@
 [
-  { "slug": "masculino", "name": "Masculino", "subcategories": ["Versão Torcedor", "Versão Jogador", "Retrô", "Conjunto de Treino", "Corta-vento / Inverno", "Regatas"] },
+  { "slug": "masculino", "name": "Masculino", "subcategories": ["Versão Torcedor", "Versão Jogador", "Retrô", "Conjunto de Treino", "Corta-vento / Inverno", "Regatas", "Regatas NBA"] },
   { "slug": "feminino", "name": "Feminino", "subcategories": ["Camisas Femininas", "Versão Jogadora", "Cropped", "Vestidos", "Retrô", "Conjuntos"] }
 ]

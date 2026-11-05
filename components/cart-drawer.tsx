@@ -7,14 +7,14 @@ import { SafeProductImage } from "@/components/safe-product-image";
 import { storeConfig } from "@/config";
 import { formatCurrency, productImageAsset } from "@/lib/catalog";
 import { useCart } from "@/store/cart";
-import { getCartPricing } from "@/lib/commerce";
+import { getCartPricing, getShippingOfferText } from "@/lib/commerce";
 import { classifyProduct, getProductUnitPrice } from "@/lib/product-classification";
 import { patchOptions } from "@/data/patches";
 import { formatCustomization } from "@/lib/customization";
 
 export function CartDrawer() {
   const { items, drawerOpen, setDrawerOpen, updateQuantity, removeItem } = useCart();
-  const { subtotal, bundleDiscount, shipping, grandTotal, needsReview } = getCartPricing(items);
+  const { subtotal, bundleDiscount, promoDiscount, promoNotice, shipping, grandTotal, needsReview } = getCartPricing(items);
   const reducedMotion = useReducedMotion();
 
   return <>
@@ -24,7 +24,7 @@ export function CartDrawer() {
         <div className="flex items-center justify-between border-b px-5 py-4"><h2 className="flex items-center gap-2 text-lg font-bold"><ShoppingBag size={20} /> Sua sacola ({items.reduce((sum, item) => sum + item.quantity, 0)})</h2><button className="icon-button" onClick={() => setDrawerOpen(false)} aria-label="Fechar carrinho"><X /></button></div>
         {!items.length ? <div className="grid flex-1 place-content-center text-center"><ShoppingBag className="mx-auto text-muted" size={38} /><p className="mt-4 font-bold">Sua sacola está esperando por você</p><Link href="/masculino" onClick={() => setDrawerOpen(false)} className="mt-4 rounded bg-action px-5 py-3 text-xs font-bold uppercase">Explorar produtos</Link></div> : <>
           <div className="flex-1 overflow-y-auto px-5">
-            <p className="my-4 rounded bg-paper p-3 text-xs font-semibold text-ink">{storeConfig.shippingOfferText}</p>
+            <p className="my-4 rounded bg-paper p-3 text-xs font-semibold text-ink">{getShippingOfferText()}</p>
             {items.map(({ lineId, product, size, quantity, customization, patches }) => { const customizationText = formatCustomization(customization); return <div key={lineId} className="flex gap-3 border-b py-4">
               <div className="relative h-24 w-20 shrink-0 overflow-hidden rounded bg-paper"><SafeProductImage src={productImageAsset(product).src} alt={product.nome} fill sizes="80px" className="object-cover" /></div>
               <div className="min-w-0 flex-1"><p className="line-clamp-2 text-xs font-bold">{product.nome}</p><p className="mt-1 text-xs text-muted">Tamanho: {size}{customizationText ? ` · ${customizationText}` : ""}</p><p className="mt-1 text-sm font-bold">{classifyProduct(product).reviewRequired ? classifyProduct(product).priceLabel : formatCurrency(getProductUnitPrice(product, size)!)} / camisa{customizationText ? ` + ${formatCurrency(storeConfig.customizationPrice)} de personalização` : ""}</p>{patches?.map((selected) => { const option = patchOptions.find((patch) => patch.id === selected.id); return <p key={selected.id} className="mt-1 text-[10px] text-muted">Patch {option?.name ?? ""} · {selected.position.replaceAll("-", " ")}{option ? ` · +${formatCurrency(option.priceCents / 100)}` : ""}</p>; })}
@@ -33,7 +33,8 @@ export function CartDrawer() {
             </div>; })}
           </div>
           <div className="border-t p-5">
-            <div className="mt-4 flex justify-between text-sm"><span>Subtotal</span><span>{formatCurrency(subtotal)}</span></div>{bundleDiscount > 0 && <div className="mt-1 flex justify-between text-sm text-success"><span>Oferta por quantidade</span><span>-{formatCurrency(bundleDiscount)}</span></div>}
+            <div className="mt-4 flex justify-between text-sm"><span>Subtotal</span><span>{formatCurrency(subtotal)}</span></div>{bundleDiscount > 0 && <div className="mt-1 flex justify-between text-sm text-success"><span>Oferta por quantidade</span><span>-{formatCurrency(bundleDiscount)}</span></div>}{promoDiscount > 0 && <div className="mt-1 flex justify-between text-sm font-bold text-blue-700"><span>Promo Black Friday NBA</span><span>-{formatCurrency(promoDiscount)}</span></div>}
+            {promoNotice && <p className="mt-3 rounded bg-blue-50 p-3 text-xs leading-5 text-blue-900">{promoNotice}</p>}
             <div className="mt-2 flex justify-between text-sm"><span>Frete</span><span>{shipping === 0 ? "Grátis" : formatCurrency(shipping)}</span></div><div className="mt-2 flex justify-between text-lg font-bold"><span>Total do pedido</span><span>{formatCurrency(grandTotal)}</span></div>
             {needsReview && <p role="status" className="mt-3 rounded bg-amber-50 p-3 text-xs text-amber-950">Há produto com preço em revisão. Remova-o antes de continuar.</p>}
             <Link href="/carrinho" onClick={() => setDrawerOpen(false)} className="mt-4 block rounded bg-action py-3 text-center text-sm font-bold uppercase">Ver sacola</Link>

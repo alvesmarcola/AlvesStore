@@ -1,4 +1,5 @@
 import type { Product } from "@/lib/types";
+import { isNbaTankTop } from "@/lib/product-classification";
 
 const FORMULA_ONE_TERM = /\b(?:f1|formula[-\s]*1|formula[-\s]*one|automobilismo|scuderia|ferrari|red[-\s]*bull(?:[-\s]*racing)?|mclaren|mercedes(?:[-\s]*amg)?|senna|aston[-\s]*martin|alpine|williams|haas)\b/;
 
@@ -17,9 +18,9 @@ export function isJacketFormulaOneProduct(product: Product) {
   ].join(" "));
 }
 
-/** Camisas de Fórmula 1 não aceitam personalização de nome e número. */
+/** Camisas de Fórmula 1 e Regatas NBA não aceitam personalização de nome e número. */
 export function allowsCustomization(product: Product) {
-  return !isFormulaOneProduct(product);
+  return !isFormulaOneProduct(product) && !isNbaTankTop(product);
 }
 
 export function isFormulaOneProduct(product: Product) {

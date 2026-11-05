@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { StoreShell } from "@/components/store-shell";
 import { SITE_NAME } from "@/lib/site";
+import { getSupabaseProducts } from "@/lib/server/supabase-catalog";
+import { isNbaTankTop } from "@/lib/product-classification";
 import "./globals.css";
 
 export const revalidate = 300;
@@ -12,6 +14,10 @@ export const metadata: Metadata = {
   openGraph: { title: SITE_NAME, description: `Vista a paixão pelo seu time com a ${SITE_NAME}.`, type: "website", locale: "pt_BR" },
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="pt-BR" data-scroll-behavior="smooth"><body><StoreShell>{children}</StoreShell></body></html>;
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const products = await getSupabaseProducts();
+  const masculineProducts = products.filter((product) => product.publico === "masculino" || product.publico === "unissex");
+  const hasRegatas = masculineProducts.some((product) => product.tipo === "regata");
+  const hasNbaRegatas = masculineProducts.some(isNbaTankTop);
+  return <html lang="pt-BR" data-scroll-behavior="smooth"><body><StoreShell hasRegatas={hasRegatas} hasNbaRegatas={hasNbaRegatas}>{children}</StoreShell></body></html>;
 }

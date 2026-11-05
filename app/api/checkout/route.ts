@@ -121,6 +121,24 @@ export async function POST(request: Request) {
     }
     if (order.checkout_url) return NextResponse.json({ checkoutUrl: order.checkout_url }, { headers: { "Cache-Control": "no-store" } });
 
+    const savedTotals = await supabase.from("store_orders")
+      .update({
+        promo: totals.promoCode,
+        valor_desconto: totals.promoDiscountCents / 100,
+        shirts_cents: totals.shirtsCents,
+        customization_cents: totals.customizationCents,
+        patches_cents: totals.patchesCents,
+        shipping_cents: totals.shippingCents,
+        total_cents: totals.totalCents,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", orderId)
+      .select("id")
+      .maybeSingle();
+    if (savedTotals.error || !savedTotals.data) {
+      throw savedTotals.error ?? new Error("Não foi possível salvar os valores recalculados do pedido.");
+    }
+
     stage = "mercado-pago";
     const preference = await createMercadoPagoPreference({
       items: buildPreferenceItems(orderId, lines, totals),

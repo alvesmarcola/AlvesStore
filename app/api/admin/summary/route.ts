@@ -25,7 +25,7 @@ export async function GET(request: Request) {
     const supabase = getSupabaseOrdersClient();
     const [metrics, orders, orderSuppliers, productSuppliers] = await Promise.all([
       supabase.from("store_order_admin_metrics")
-        .select("order_count,paid_order_count,awaiting_supplier_count,shipped_order_count,revenue_cents,supplier_cost_cents,shipping_cost_cents,other_expenses_cents")
+        .select("order_count,paid_order_count,awaiting_supplier_count,shipped_order_count,revenue_cents,supplier_cost_cents,shipping_cost_cents,other_expenses_cents,promo_order_count,promo_discount_cents,promo_revenue_cents")
         .single(),
       supabase.from("store_orders")
         .select("id,status,mercado_pago_status,operational_status,total_cents,supplier_name,supplier_status,supplier_cost_cents,shipping_cost_cents,other_expenses_cents,created_at")
@@ -80,6 +80,9 @@ export async function GET(request: Request) {
         shippingCostCents: Number(totals.shipping_cost_cents ?? 0),
         otherExpensesCents: Number(totals.other_expenses_cents ?? 0),
         estimatedProfitCents: revenueCents - expensesCents,
+        promoOrderCount: Number(totals.promo_order_count ?? 0),
+        promoDiscountCents: Number(totals.promo_discount_cents ?? 0),
+        promoRevenueCents: Number(totals.promo_revenue_cents ?? 0),
       },
       orders: orders.data ?? [],
       suppliers: [...suppliers.values()].sort((a, b) => a.name.localeCompare(b.name, "pt-BR")),

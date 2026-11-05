@@ -1,0 +1,1442 @@
+[
+ {
+  "id_album": "253376467",
+  "nome": "Regata NBA Jazz Roxa #00",
+  "time": "Jazz",
+  "edicao": "Roxa",
+  "numero": "00",
+  "jogador": null,
+  "slug": "regata-nba-jazz-roxa-00-253376467",
+  "confirmar": true,
+  "motivo": "Possível duplicado de álbum 219635529; manter só um"
+ },
+ {
+  "id_album": "253376441",
+  "nome": "Regata NBA Jazz Branca #00",
+  "time": "Jazz",
+  "edicao": "Branca",
+  "numero": "00",
+  "jogador": null,
+  "slug": "regata-nba-jazz-branca-00-253376441",
+  "confirmar": true,
+  "motivo": "Possível duplicado de álbum 219635726; manter só um"
+ },
+ {
+  "id_album": "253375421",
+  "nome": "Regata NBA Celtics City Edition #13 Paul George",
+  "time": "Celtics",
+  "edicao": "City Edition",
+  "numero": "13",
+  "jogador": "Paul George",
+  "slug": "regata-nba-celtics-city-edition-13-paul-george",
+  "confirmar": true,
+  "motivo": "Combinação time/jogador incomum; conferir na foto"
+ },
+ {
+  "id_album": "252961584",
+  "nome": "Regata NBA Hornets City Edition #7",
+  "time": "Hornets",
+  "edicao": "City Edition",
+  "numero": "7",
+  "jogador": null,
+  "slug": "regata-nba-hornets-city-edition-7",
+  "confirmar": false
+ },
+ {
+  "id_album": "252960101",
+  "nome": "Regata NBA Trail Blazers Preta #1 Ja Morant",
+  "time": "Trail Blazers",
+  "edicao": "Preta",
+  "numero": "1",
+  "jogador": "Ja Morant",
+  "slug": "regata-nba-trail-blazers-preta-1-ja-morant",
+  "confirmar": true,
+  "motivo": "Combinação time/jogador incomum; conferir na foto"
+ },
+ {
+  "id_album": "252958531",
+  "nome": "Regata NBA Jazz #00 Jordan Clarkson",
+  "time": "Jazz",
+  "edicao": "Padrão",
+  "numero": "00",
+  "jogador": "Jordan Clarkson",
+  "slug": "regata-nba-jazz-00-jordan-clarkson",
+  "confirmar": false
+ },
+ {
+  "id_album": "250040803",
+  "nome": "Regata NBA Trail Blazers City Edition #1 Ja Morant",
+  "time": "Trail Blazers",
+  "edicao": "City Edition",
+  "numero": "1",
+  "jogador": "Ja Morant",
+  "slug": "regata-nba-trail-blazers-city-edition-1-ja-morant",
+  "confirmar": true,
+  "motivo": "Combinação time/jogador incomum; conferir na foto"
+ },
+ {
+  "id_album": "250040259",
+  "nome": "Regata NBA Trail Blazers Branca #1 Ja Morant",
+  "time": "Trail Blazers",
+  "edicao": "Branca",
+  "numero": "1",
+  "jogador": "Ja Morant",
+  "slug": "regata-nba-trail-blazers-branca-1-ja-morant",
+  "confirmar": true,
+  "motivo": "Combinação time/jogador incomum; conferir na foto"
+ },
+ {
+  "id_album": "250037084",
+  "nome": "Regata NBA 76ers Retrô Preta #7 Brown",
+  "time": "76ers",
+  "edicao": "Retrô Preta",
+  "numero": "7",
+  "jogador": "Brown",
+  "slug": "regata-nba-76ers-retro-preta-7-brown",
+  "confirmar": true,
+  "motivo": "Mais de um Brown na NBA; conferir nome completo na foto"
+ },
+ {
+  "id_album": "248774587",
+  "nome": "Regata NBA Celtics City Edition #88",
+  "time": "Celtics",
+  "edicao": "City Edition",
+  "numero": "88",
+  "jogador": null,
+  "slug": "regata-nba-celtics-city-edition-88-248774587",
+  "confirmar": true,
+  "motivo": "Conferir foto: no print anterior parecia ser Tatum #0; Possível duplicado de álbum 218049067; manter só um"
+ },
+ {
+  "id_album": "248774418",
+  "nome": "Regata NBA Celtics City Edition #0 Jayson Tatum",
+  "time": "Celtics",
+  "edicao": "City Edition",
+  "numero": "0",
+  "jogador": "Jayson Tatum",
+  "slug": "regata-nba-celtics-city-edition-0-jayson-tatum",
+  "confirmar": false
+ },
+ {
+  "id_album": "248774222",
+  "nome": "Regata NBA Celtics City Edition #7 Jaylen Brown",
+  "time": "Celtics",
+  "edicao": "City Edition",
+  "numero": "7",
+  "jogador": "Jaylen Brown",
+  "slug": "regata-nba-celtics-city-edition-7-jaylen-brown-248774222",
+  "confirmar": true,
+  "motivo": "Possível duplicado de álbum 218049048; manter só um"
+ },
+ {
+  "id_album": "248771469",
+  "nome": "Regata NBA 76ers Retrô Preta #23 LeBron James",
+  "time": "76ers",
+  "edicao": "Retrô Preta",
+  "numero": "23",
+  "jogador": "LeBron James",
+  "slug": "regata-nba-76ers-retro-preta-23-lebron-james",
+  "confirmar": true,
+  "motivo": "Combinação time/jogador incomum; conferir na foto"
+ },
+ {
+  "id_album": "248771422",
+  "nome": "Regata NBA 76ers Retrô Branca #23 LeBron James",
+  "time": "76ers",
+  "edicao": "Retrô Branca",
+  "numero": "23",
+  "jogador": "LeBron James",
+  "slug": "regata-nba-76ers-retro-branca-23-lebron-james",
+  "confirmar": true,
+  "motivo": "Combinação time/jogador incomum; conferir na foto"
+ },
+ {
+  "id_album": "248416471",
+  "nome": "Regata NBA Knicks Jordan Brand #8",
+  "time": "Knicks",
+  "edicao": "Jordan Brand",
+  "numero": "8",
+  "jogador": null,
+  "slug": "regata-nba-knicks-jordan-brand-8",
+  "confirmar": false
+ },
+ {
+  "id_album": "232244398",
+  "nome": "Regata NBA Thunder City Edition #8 Jalen Williams",
+  "time": "Thunder",
+  "edicao": "City Edition",
+  "numero": "8",
+  "jogador": "Jalen Williams",
+  "slug": "regata-nba-thunder-city-edition-8-jalen-williams",
+  "confirmar": false
+ },
+ {
+  "id_album": "232244090",
+  "nome": "Regata NBA Thunder City Edition #2 Shai Gilgeous-Alexander",
+  "time": "Thunder",
+  "edicao": "City Edition",
+  "numero": "2",
+  "jogador": "Shai Gilgeous-Alexander",
+  "slug": "regata-nba-thunder-city-edition-2-shai-gilgeous-alexander",
+  "confirmar": false
+ },
+ {
+  "id_album": "232243531",
+  "nome": "Regata NBA Thunder City Edition #7 Chet Holmgren",
+  "time": "Thunder",
+  "edicao": "City Edition",
+  "numero": "7",
+  "jogador": "Chet Holmgren",
+  "slug": "regata-nba-thunder-city-edition-7-chet-holmgren",
+  "confirmar": false
+ },
+ {
+  "id_album": "230511736",
+  "nome": "Regata NBA 76ers Retrô Branca #8 Paul George",
+  "time": "76ers",
+  "edicao": "Retrô Branca",
+  "numero": "8",
+  "jogador": "Paul George",
+  "slug": "regata-nba-76ers-retro-branca-8-paul-george",
+  "confirmar": false
+ },
+ {
+  "id_album": "230511706",
+  "nome": "Regata NBA 76ers Retrô Branca #0 Tyrese Maxey",
+  "time": "76ers",
+  "edicao": "Retrô Branca",
+  "numero": "0",
+  "jogador": "Tyrese Maxey",
+  "slug": "regata-nba-76ers-retro-branca-0-tyrese-maxey",
+  "confirmar": false
+ },
+ {
+  "id_album": "230511696",
+  "nome": "Regata NBA 76ers Retrô Branca #3 Allen Iverson",
+  "time": "76ers",
+  "edicao": "Retrô Branca",
+  "numero": "3",
+  "jogador": "Allen Iverson",
+  "slug": "regata-nba-76ers-retro-branca-3-allen-iverson",
+  "confirmar": false
+ },
+ {
+  "id_album": "230511685",
+  "nome": "Regata NBA 76ers Retrô Branca #21 Joel Embiid",
+  "time": "76ers",
+  "edicao": "Retrô Branca",
+  "numero": "21",
+  "jogador": "Joel Embiid",
+  "slug": "regata-nba-76ers-retro-branca-21-joel-embiid",
+  "confirmar": false
+ },
+ {
+  "id_album": "230511445",
+  "nome": "Regata NBA Cavaliers City Edition #1 James Harden",
+  "time": "Cavaliers",
+  "edicao": "City Edition",
+  "numero": "1",
+  "jogador": "James Harden",
+  "slug": "regata-nba-cavaliers-city-edition-1-james-harden",
+  "confirmar": false
+ },
+ {
+  "id_album": "230511114",
+  "nome": "Regata NBA Cavaliers Retrô #1 James Harden",
+  "time": "Cavaliers",
+  "edicao": "Retrô",
+  "numero": "1",
+  "jogador": "James Harden",
+  "slug": "regata-nba-cavaliers-retro-1-james-harden",
+  "confirmar": false
+ },
+ {
+  "id_album": "225271290",
+  "nome": "Regata NBA Mavericks Retrô Verde #77 Luka Doncic",
+  "time": "Mavericks",
+  "edicao": "Retrô Verde",
+  "numero": "77",
+  "jogador": "Luka Doncic",
+  "slug": "regata-nba-mavericks-retro-verde-77-luka-doncic",
+  "confirmar": false
+ },
+ {
+  "id_album": "225271226",
+  "nome": "Regata NBA Mavericks Retrô Verde #11 Kyrie Irving",
+  "time": "Mavericks",
+  "edicao": "Retrô Verde",
+  "numero": "11",
+  "jogador": "Kyrie Irving",
+  "slug": "regata-nba-mavericks-retro-verde-11-kyrie-irving",
+  "confirmar": false
+ },
+ {
+  "id_album": "222627283",
+  "nome": "Regata NBA Mavericks City Edition #3",
+  "time": "Mavericks",
+  "edicao": "City Edition",
+  "numero": "3",
+  "jogador": null,
+  "slug": "regata-nba-mavericks-city-edition-3",
+  "confirmar": false
+ },
+ {
+  "id_album": "222627074",
+  "nome": "Regata NBA Mavericks City Edition #77",
+  "time": "Mavericks",
+  "edicao": "City Edition",
+  "numero": "77",
+  "jogador": null,
+  "slug": "regata-nba-mavericks-city-edition-77",
+  "confirmar": false
+ },
+ {
+  "id_album": "222626827",
+  "nome": "Regata NBA Mavericks City Edition #11",
+  "time": "Mavericks",
+  "edicao": "City Edition",
+  "numero": "11",
+  "jogador": null,
+  "slug": "regata-nba-mavericks-city-edition-11",
+  "confirmar": false
+ },
+ {
+  "id_album": "222626803",
+  "nome": "Regata NBA Mavericks City Edition #32",
+  "time": "Mavericks",
+  "edicao": "City Edition",
+  "numero": "32",
+  "jogador": null,
+  "slug": "regata-nba-mavericks-city-edition-32",
+  "confirmar": false
+ },
+ {
+  "id_album": "221707219",
+  "nome": "Regata NBA Raptors City Edition #15",
+  "time": "Raptors",
+  "edicao": "City Edition",
+  "numero": "15",
+  "jogador": null,
+  "slug": "regata-nba-raptors-city-edition-15",
+  "confirmar": false
+ },
+ {
+  "id_album": "221706903",
+  "nome": "Regata NBA Raptors City Edition #3",
+  "time": "Raptors",
+  "edicao": "City Edition",
+  "numero": "3",
+  "jogador": null,
+  "slug": "regata-nba-raptors-city-edition-3",
+  "confirmar": false
+ },
+ {
+  "id_album": "221706710",
+  "nome": "Regata NBA Raptors City Edition #4",
+  "time": "Raptors",
+  "edicao": "City Edition",
+  "numero": "4",
+  "jogador": null,
+  "slug": "regata-nba-raptors-city-edition-4",
+  "confirmar": false
+ },
+ {
+  "id_album": "221706388",
+  "nome": "Regata NBA Raptors City Edition #9",
+  "time": "Raptors",
+  "edicao": "City Edition",
+  "numero": "9",
+  "jogador": null,
+  "slug": "regata-nba-raptors-city-edition-9",
+  "confirmar": false
+ },
+ {
+  "id_album": "221705624",
+  "nome": "Regata NBA Grizzlies Retrô #12",
+  "time": "Grizzlies",
+  "edicao": "Retrô",
+  "numero": "12",
+  "jogador": null,
+  "slug": "regata-nba-grizzlies-retro-12-221705624",
+  "confirmar": true,
+  "motivo": "Possível duplicado de álbum 218048095; manter só um"
+ },
+ {
+  "id_album": "221143656",
+  "nome": "Regata NBA Spurs City Edition #10",
+  "time": "Spurs",
+  "edicao": "City Edition",
+  "numero": "10",
+  "jogador": null,
+  "slug": "regata-nba-spurs-city-edition-10",
+  "confirmar": false
+ },
+ {
+  "id_album": "221143437",
+  "nome": "Regata NBA Spurs City Edition #1",
+  "time": "Spurs",
+  "edicao": "City Edition",
+  "numero": "1",
+  "jogador": null,
+  "slug": "regata-nba-spurs-city-edition-1",
+  "confirmar": false
+ },
+ {
+  "id_album": "221143310",
+  "nome": "Regata NBA Spurs City Edition #4",
+  "time": "Spurs",
+  "edicao": "City Edition",
+  "numero": "4",
+  "jogador": null,
+  "slug": "regata-nba-spurs-city-edition-4",
+  "confirmar": false
+ },
+ {
+  "id_album": "221142737",
+  "nome": "Regata NBA Warriors City Edition #10 Jimmy Butler",
+  "time": "Warriors",
+  "edicao": "City Edition",
+  "numero": "10",
+  "jogador": "Jimmy Butler",
+  "slug": "regata-nba-warriors-city-edition-10-jimmy-butler",
+  "confirmar": false
+ },
+ {
+  "id_album": "221142709",
+  "nome": "Regata NBA Warriors City Edition #30 Stephen Curry",
+  "time": "Warriors",
+  "edicao": "City Edition",
+  "numero": "30",
+  "jogador": "Stephen Curry",
+  "slug": "regata-nba-warriors-city-edition-30-stephen-curry",
+  "confirmar": false
+ },
+ {
+  "id_album": "221142675",
+  "nome": "Regata NBA Warriors City Edition #23 Draymond Green",
+  "time": "Warriors",
+  "edicao": "City Edition",
+  "numero": "23",
+  "jogador": "Draymond Green",
+  "slug": "regata-nba-warriors-city-edition-23-draymond-green",
+  "confirmar": false
+ },
+ {
+  "id_album": "219635747",
+  "nome": "Regata NBA Jazz Branca #19",
+  "time": "Jazz",
+  "edicao": "Branca",
+  "numero": "19",
+  "jogador": null,
+  "slug": "regata-nba-jazz-branca-19",
+  "confirmar": false
+ },
+ {
+  "id_album": "219635726",
+  "nome": "Regata NBA Jazz Branca #00",
+  "time": "Jazz",
+  "edicao": "Branca",
+  "numero": "00",
+  "jogador": null,
+  "slug": "regata-nba-jazz-branca-00-219635726",
+  "confirmar": true,
+  "motivo": "Possível duplicado de álbum 253376441; manter só um"
+ },
+ {
+  "id_album": "219635700",
+  "nome": "Regata NBA Jazz Branca #23",
+  "time": "Jazz",
+  "edicao": "Branca",
+  "numero": "23",
+  "jogador": null,
+  "slug": "regata-nba-jazz-branca-23",
+  "confirmar": false
+ },
+ {
+  "id_album": "219635602",
+  "nome": "Regata NBA Jazz Roxa #19",
+  "time": "Jazz",
+  "edicao": "Roxa",
+  "numero": "19",
+  "jogador": null,
+  "slug": "regata-nba-jazz-roxa-19",
+  "confirmar": false
+ },
+ {
+  "id_album": "219635529",
+  "nome": "Regata NBA Jazz Roxa #00",
+  "time": "Jazz",
+  "edicao": "Roxa",
+  "numero": "00",
+  "jogador": null,
+  "slug": "regata-nba-jazz-roxa-00-219635529",
+  "confirmar": true,
+  "motivo": "Possível duplicado de álbum 253376467; manter só um"
+ },
+ {
+  "id_album": "219635422",
+  "nome": "Regata NBA Jazz Roxa #23",
+  "time": "Jazz",
+  "edicao": "Roxa",
+  "numero": "23",
+  "jogador": null,
+  "slug": "regata-nba-jazz-roxa-23",
+  "confirmar": false
+ },
+ {
+  "id_album": "219634851",
+  "nome": "Regata NBA Clippers City Edition #13",
+  "time": "Clippers",
+  "edicao": "City Edition",
+  "numero": "13",
+  "jogador": null,
+  "slug": "regata-nba-clippers-city-edition-13",
+  "confirmar": false
+ },
+ {
+  "id_album": "219634528",
+  "nome": "Regata NBA Nuggets City Edition #15",
+  "time": "Nuggets",
+  "edicao": "City Edition",
+  "numero": "15",
+  "jogador": null,
+  "slug": "regata-nba-nuggets-city-edition-15",
+  "confirmar": false
+ },
+ {
+  "id_album": "219634452",
+  "nome": "Regata NBA Nuggets City Edition #32",
+  "time": "Nuggets",
+  "edicao": "City Edition",
+  "numero": "32",
+  "jogador": null,
+  "slug": "regata-nba-nuggets-city-edition-32",
+  "confirmar": false
+ },
+ {
+  "id_album": "219634275",
+  "nome": "Regata NBA Nuggets City Edition #27",
+  "time": "Nuggets",
+  "edicao": "City Edition",
+  "numero": "27",
+  "jogador": null,
+  "slug": "regata-nba-nuggets-city-edition-27",
+  "confirmar": false
+ },
+ {
+  "id_album": "219633729",
+  "nome": "Regata NBA Bulls City Edition #3",
+  "time": "Bulls",
+  "edicao": "City Edition",
+  "numero": "3",
+  "jogador": null,
+  "slug": "regata-nba-bulls-city-edition-3",
+  "confirmar": false
+ },
+ {
+  "id_album": "219633623",
+  "nome": "Regata NBA Bulls City Edition #14",
+  "time": "Bulls",
+  "edicao": "City Edition",
+  "numero": "14",
+  "jogador": null,
+  "slug": "regata-nba-bulls-city-edition-14",
+  "confirmar": false
+ },
+ {
+  "id_album": "219633330",
+  "nome": "Regata NBA Bulls City Edition #23",
+  "time": "Bulls",
+  "edicao": "City Edition",
+  "numero": "23",
+  "jogador": null,
+  "slug": "regata-nba-bulls-city-edition-23",
+  "confirmar": false
+ },
+ {
+  "id_album": "219633257",
+  "nome": "Regata NBA Bulls City Edition #0",
+  "time": "Bulls",
+  "edicao": "City Edition",
+  "numero": "0",
+  "jogador": null,
+  "slug": "regata-nba-bulls-city-edition-0",
+  "confirmar": false
+ },
+ {
+  "id_album": "219633143",
+  "nome": "Regata NBA Jazz Jordan Brand #23",
+  "time": "Jazz",
+  "edicao": "Jordan Brand",
+  "numero": "23",
+  "jogador": null,
+  "slug": "regata-nba-jazz-jordan-brand-23",
+  "confirmar": false
+ },
+ {
+  "id_album": "219633052",
+  "nome": "Regata NBA Jazz Jordan Brand #00",
+  "time": "Jazz",
+  "edicao": "Jordan Brand",
+  "numero": "00",
+  "jogador": null,
+  "slug": "regata-nba-jazz-jordan-brand-00",
+  "confirmar": false
+ },
+ {
+  "id_album": "219632898",
+  "nome": "Regata NBA Jazz Jordan Brand #19",
+  "time": "Jazz",
+  "edicao": "Jordan Brand",
+  "numero": "19",
+  "jogador": null,
+  "slug": "regata-nba-jazz-jordan-brand-19",
+  "confirmar": false
+ },
+ {
+  "id_album": "219233363",
+  "nome": "Regata NBA Cavaliers City Edition #45 Donovan Mitchell",
+  "time": "Cavaliers",
+  "edicao": "City Edition",
+  "numero": "45",
+  "jogador": "Donovan Mitchell",
+  "slug": "regata-nba-cavaliers-city-edition-45-donovan-mitchell",
+  "confirmar": false
+ },
+ {
+  "id_album": "219233349",
+  "nome": "Regata NBA Cavaliers City Edition #23 LeBron James",
+  "time": "Cavaliers",
+  "edicao": "City Edition",
+  "numero": "23",
+  "jogador": "LeBron James",
+  "slug": "regata-nba-cavaliers-city-edition-23-lebron-james",
+  "confirmar": false
+ },
+ {
+  "id_album": "219233325",
+  "nome": "Regata NBA Cavaliers City Edition #10 Darius Garland",
+  "time": "Cavaliers",
+  "edicao": "City Edition",
+  "numero": "10",
+  "jogador": "Darius Garland",
+  "slug": "regata-nba-cavaliers-city-edition-10-darius-garland",
+  "confirmar": false
+ },
+ {
+  "id_album": "219233013",
+  "nome": "Regata NBA Suns Limitada #35 Kevin Durant",
+  "time": "Suns",
+  "edicao": "Limitada",
+  "numero": "35",
+  "jogador": "Kevin Durant",
+  "slug": "regata-nba-suns-limitada-35-kevin-durant",
+  "confirmar": false
+ },
+ {
+  "id_album": "219232816",
+  "nome": "Regata NBA Suns Limitada #1 Devin Booker",
+  "time": "Suns",
+  "edicao": "Limitada",
+  "numero": "1",
+  "jogador": "Devin Booker",
+  "slug": "regata-nba-suns-limitada-1-devin-booker",
+  "confirmar": false
+ },
+ {
+  "id_album": "218492889",
+  "nome": "Regata NBA Magic Jordan Brand #22 Franz Wagner",
+  "time": "Magic",
+  "edicao": "Jordan Brand",
+  "numero": "22",
+  "jogador": "Franz Wagner",
+  "slug": "regata-nba-magic-jordan-brand-22-franz-wagner",
+  "confirmar": false
+ },
+ {
+  "id_album": "218492868",
+  "nome": "Regata NBA Magic Home Azul #22 Franz Wagner",
+  "time": "Magic",
+  "edicao": "Home Azul",
+  "numero": "22",
+  "jogador": "Franz Wagner",
+  "slug": "regata-nba-magic-home-azul-22-franz-wagner",
+  "confirmar": false
+ },
+ {
+  "id_album": "218492848",
+  "nome": "Regata NBA Magic Home Branca #22 Franz Wagner",
+  "time": "Magic",
+  "edicao": "Home Branca",
+  "numero": "22",
+  "jogador": "Franz Wagner",
+  "slug": "regata-nba-magic-home-branca-22-franz-wagner",
+  "confirmar": false
+ },
+ {
+  "id_album": "218492400",
+  "nome": "Regata NBA Lakers Jordan Brand #24 Kobe Bryant",
+  "time": "Lakers",
+  "edicao": "Jordan Brand",
+  "numero": "24",
+  "jogador": "Kobe Bryant",
+  "slug": "regata-nba-lakers-jordan-brand-24-kobe-bryant",
+  "confirmar": false
+ },
+ {
+  "id_album": "218492378",
+  "nome": "Regata NBA Lakers Jordan Brand #15 Austin Reaves",
+  "time": "Lakers",
+  "edicao": "Jordan Brand",
+  "numero": "15",
+  "jogador": "Austin Reaves",
+  "slug": "regata-nba-lakers-jordan-brand-15-austin-reaves",
+  "confirmar": false
+ },
+ {
+  "id_album": "218492350",
+  "nome": "Regata NBA Lakers Jordan Brand #8 Kobe Bryant",
+  "time": "Lakers",
+  "edicao": "Jordan Brand",
+  "numero": "8",
+  "jogador": "Kobe Bryant",
+  "slug": "regata-nba-lakers-jordan-brand-8-kobe-bryant",
+  "confirmar": false
+ },
+ {
+  "id_album": "218049067",
+  "nome": "Regata NBA Celtics City Edition #88 Keita",
+  "time": "Celtics",
+  "edicao": "City Edition",
+  "numero": "88",
+  "jogador": "Keita",
+  "slug": "regata-nba-celtics-city-edition-88-keita-218049067",
+  "confirmar": true,
+  "motivo": "Nome 凯塔 incerto; a foto do álbum parecia ser outra camisa; Álbum com só 3 fotos; conferir se há foto das costas; Possível duplicado de álbum 248774587; manter só um"
+ },
+ {
+  "id_album": "218049048",
+  "nome": "Regata NBA Celtics City Edition #7 Jaylen Brown",
+  "time": "Celtics",
+  "edicao": "City Edition",
+  "numero": "7",
+  "jogador": "Jaylen Brown",
+  "slug": "regata-nba-celtics-city-edition-7-jaylen-brown-218049048",
+  "confirmar": true,
+  "motivo": "Álbum com só 3 fotos; conferir se há foto das costas; Possível duplicado de álbum 248774222; manter só um"
+ },
+ {
+  "id_album": "218048830",
+  "nome": "Regata NBA Spurs Limitada Cinza #10 Jeremy Sochan",
+  "time": "Spurs",
+  "edicao": "Limitada Cinza",
+  "numero": "10",
+  "jogador": "Jeremy Sochan",
+  "slug": "regata-nba-spurs-limitada-cinza-10-jeremy-sochan",
+  "confirmar": false
+ },
+ {
+  "id_album": "218048789",
+  "nome": "Regata NBA Spurs Limitada Cinza #4 De'Aaron Fox",
+  "time": "Spurs",
+  "edicao": "Limitada Cinza",
+  "numero": "4",
+  "jogador": "De'Aaron Fox",
+  "slug": "regata-nba-spurs-limitada-cinza-4-de-aaron-fox",
+  "confirmar": false
+ },
+ {
+  "id_album": "218048774",
+  "nome": "Regata NBA Spurs Limitada Cinza #1 Victor Wembanyama",
+  "time": "Spurs",
+  "edicao": "Limitada Cinza",
+  "numero": "1",
+  "jogador": "Victor Wembanyama",
+  "slug": "regata-nba-spurs-limitada-cinza-1-victor-wembanyama",
+  "confirmar": false
+ },
+ {
+  "id_album": "218048095",
+  "nome": "Regata NBA Grizzlies Retrô #12 Ja Morant",
+  "time": "Grizzlies",
+  "edicao": "Retrô",
+  "numero": "12",
+  "jogador": "Ja Morant",
+  "slug": "regata-nba-grizzlies-retro-12-ja-morant-218048095",
+  "confirmar": true,
+  "motivo": "Álbum com só 3 fotos; conferir se há foto das costas; Possível duplicado de álbum 221705624; manter só um"
+ },
+ {
+  "id_album": "218047571",
+  "nome": "Regata NBA Hornets City Edition #1 LaMelo Ball",
+  "time": "Hornets",
+  "edicao": "City Edition",
+  "numero": "1",
+  "jogador": "LaMelo Ball",
+  "slug": "regata-nba-hornets-city-edition-1-lamelo-ball",
+  "confirmar": false
+ },
+ {
+  "id_album": "218047527",
+  "nome": "Regata NBA Clippers City Edition #2 Kawhi Leonard",
+  "time": "Clippers",
+  "edicao": "City Edition",
+  "numero": "2",
+  "jogador": "Kawhi Leonard",
+  "slug": "regata-nba-clippers-city-edition-2-kawhi-leonard",
+  "confirmar": false
+ },
+ {
+  "id_album": "218047481",
+  "nome": "Regata NBA Clippers City Edition #1 James Harden",
+  "time": "Clippers",
+  "edicao": "City Edition",
+  "numero": "1",
+  "jogador": "James Harden",
+  "slug": "regata-nba-clippers-city-edition-1-james-harden",
+  "confirmar": false
+ },
+ {
+  "id_album": "218046738",
+  "nome": "Regata NBA Knicks Limitada #32 Karl-Anthony Towns",
+  "time": "Knicks",
+  "edicao": "Limitada",
+  "numero": "32",
+  "jogador": "Karl-Anthony Towns",
+  "slug": "regata-nba-knicks-limitada-32-karl-anthony-towns",
+  "confirmar": false
+ },
+ {
+  "id_album": "218046699",
+  "nome": "Regata NBA Knicks Limitada #25 Mikal Bridges",
+  "time": "Knicks",
+  "edicao": "Limitada",
+  "numero": "25",
+  "jogador": "Mikal Bridges",
+  "slug": "regata-nba-knicks-limitada-25-mikal-bridges",
+  "confirmar": false
+ },
+ {
+  "id_album": "218046661",
+  "nome": "Regata NBA Knicks Limitada #11 Jalen Brunson",
+  "time": "Knicks",
+  "edicao": "Limitada",
+  "numero": "11",
+  "jogador": "Jalen Brunson",
+  "slug": "regata-nba-knicks-limitada-11-jalen-brunson",
+  "confirmar": false
+ },
+ {
+  "id_album": "218046483",
+  "nome": "Regata NBA Knicks Limitada #00 Jordan Clarkson",
+  "time": "Knicks",
+  "edicao": "Limitada",
+  "numero": "00",
+  "jogador": "Jordan Clarkson",
+  "slug": "regata-nba-knicks-limitada-00-jordan-clarkson",
+  "confirmar": false
+ },
+ {
+  "id_album": "218046092",
+  "nome": "Regata NBA Cavaliers Retrô #45 Donovan Mitchell",
+  "time": "Cavaliers",
+  "edicao": "Retrô",
+  "numero": "45",
+  "jogador": "Donovan Mitchell",
+  "slug": "regata-nba-cavaliers-retro-45-donovan-mitchell",
+  "confirmar": false
+ },
+ {
+  "id_album": "218046039",
+  "nome": "Regata NBA Cavaliers Retrô #23 LeBron James",
+  "time": "Cavaliers",
+  "edicao": "Retrô",
+  "numero": "23",
+  "jogador": "LeBron James",
+  "slug": "regata-nba-cavaliers-retro-23-lebron-james",
+  "confirmar": false
+ },
+ {
+  "id_album": "218045991",
+  "nome": "Regata NBA Cavaliers Retrô #10 Darius Garland",
+  "time": "Cavaliers",
+  "edicao": "Retrô",
+  "numero": "10",
+  "jogador": "Darius Garland",
+  "slug": "regata-nba-cavaliers-retro-10-darius-garland",
+  "confirmar": false
+ },
+ {
+  "id_album": "218045369",
+  "nome": "Regata NBA 76ers Retrô Preta #21 Joel Embiid",
+  "time": "76ers",
+  "edicao": "Retrô Preta",
+  "numero": "21",
+  "jogador": "Joel Embiid",
+  "slug": "regata-nba-76ers-retro-preta-21-joel-embiid",
+  "confirmar": false
+ },
+ {
+  "id_album": "218045367",
+  "nome": "Regata NBA 76ers Retrô Preta #8 Paul George",
+  "time": "76ers",
+  "edicao": "Retrô Preta",
+  "numero": "8",
+  "jogador": "Paul George",
+  "slug": "regata-nba-76ers-retro-preta-8-paul-george",
+  "confirmar": false
+ },
+ {
+  "id_album": "218045363",
+  "nome": "Regata NBA 76ers Retrô Preta #0 Tyrese Maxey",
+  "time": "76ers",
+  "edicao": "Retrô Preta",
+  "numero": "0",
+  "jogador": "Tyrese Maxey",
+  "slug": "regata-nba-76ers-retro-preta-0-tyrese-maxey",
+  "confirmar": false
+ },
+ {
+  "id_album": "218045358",
+  "nome": "Regata NBA 76ers Retrô Preta #3 Allen Iverson",
+  "time": "76ers",
+  "edicao": "Retrô Preta",
+  "numero": "3",
+  "jogador": "Allen Iverson",
+  "slug": "regata-nba-76ers-retro-preta-3-allen-iverson",
+  "confirmar": false
+ },
+ {
+  "id_album": "213848648",
+  "nome": "Regata NBA Pelicans City Edition #3 Jordan Poole",
+  "time": "Pelicans",
+  "edicao": "City Edition",
+  "numero": "3",
+  "jogador": "Jordan Poole",
+  "slug": "regata-nba-pelicans-city-edition-3-jordan-poole",
+  "confirmar": false
+ },
+ {
+  "id_album": "216320452",
+  "nome": "Regata NBA Mavericks Retrô Verde #32 Cooper Flagg",
+  "time": "Mavericks",
+  "edicao": "Retrô Verde",
+  "numero": "32",
+  "jogador": "Cooper Flagg",
+  "slug": "regata-nba-mavericks-retro-verde-32-cooper-flagg",
+  "confirmar": false
+ },
+ {
+  "id_album": "216320436",
+  "nome": "Regata NBA Mavericks Retrô Verde #31 Klay Thompson",
+  "time": "Mavericks",
+  "edicao": "Retrô Verde",
+  "numero": "31",
+  "jogador": "Klay Thompson",
+  "slug": "regata-nba-mavericks-retro-verde-31-klay-thompson",
+  "confirmar": false
+ },
+ {
+  "id_album": "216320415",
+  "nome": "Regata NBA Mavericks Retrô Verde #5 D'Angelo Russell",
+  "time": "Mavericks",
+  "edicao": "Retrô Verde",
+  "numero": "5",
+  "jogador": "D'Angelo Russell",
+  "slug": "regata-nba-mavericks-retro-verde-5-d-angelo-russell",
+  "confirmar": false
+ },
+ {
+  "id_album": "216320394",
+  "nome": "Regata NBA Mavericks Retrô Verde #3 Anthony Davis",
+  "time": "Mavericks",
+  "edicao": "Retrô Verde",
+  "numero": "3",
+  "jogador": "Anthony Davis",
+  "slug": "regata-nba-mavericks-retro-verde-3-anthony-davis",
+  "confirmar": false
+ },
+ {
+  "id_album": "213507124",
+  "nome": "Regata NBA Raptors Retrô Branca #15 Vince Carter",
+  "time": "Raptors",
+  "edicao": "Retrô Branca",
+  "numero": "15",
+  "jogador": "Vince Carter",
+  "slug": "regata-nba-raptors-retro-branca-15-vince-carter",
+  "confirmar": false
+ },
+ {
+  "id_album": "213507076",
+  "nome": "Regata NBA Raptors Retrô Branca #1 Tracy McGrady",
+  "time": "Raptors",
+  "edicao": "Retrô Branca",
+  "numero": "1",
+  "jogador": "Tracy McGrady",
+  "slug": "regata-nba-raptors-retro-branca-1-tracy-mcgrady",
+  "confirmar": false
+ },
+ {
+  "id_album": "213506739",
+  "nome": "Regata NBA Raptors Retrô Roxa #1 Tracy McGrady",
+  "time": "Raptors",
+  "edicao": "Retrô Roxa",
+  "numero": "1",
+  "jogador": "Tracy McGrady",
+  "slug": "regata-nba-raptors-retro-roxa-1-tracy-mcgrady",
+  "confirmar": false
+ },
+ {
+  "id_album": "212676653",
+  "nome": "Regata NBA Magic Jordan Brand #32 Shaquille O'Neal",
+  "time": "Magic",
+  "edicao": "Jordan Brand",
+  "numero": "32",
+  "jogador": "Shaquille O'Neal",
+  "slug": "regata-nba-magic-jordan-brand-32-shaquille-o-neal",
+  "confirmar": false
+ },
+ {
+  "id_album": "212676633",
+  "nome": "Regata NBA Magic Jordan Brand #5 Paolo Banchero",
+  "time": "Magic",
+  "edicao": "Jordan Brand",
+  "numero": "5",
+  "jogador": "Paolo Banchero",
+  "slug": "regata-nba-magic-jordan-brand-5-paolo-banchero",
+  "confirmar": false
+ },
+ {
+  "id_album": "212676615",
+  "nome": "Regata NBA Magic Jordan Brand #1 Penny Hardaway",
+  "time": "Magic",
+  "edicao": "Jordan Brand",
+  "numero": "1",
+  "jogador": "Penny Hardaway",
+  "slug": "regata-nba-magic-jordan-brand-1-penny-hardaway",
+  "confirmar": false
+ },
+ {
+  "id_album": "212676585",
+  "nome": "Regata NBA Magic Away Azul #32 Shaquille O'Neal",
+  "time": "Magic",
+  "edicao": "Away Azul",
+  "numero": "32",
+  "jogador": "Shaquille O'Neal",
+  "slug": "regata-nba-magic-away-azul-32-shaquille-o-neal",
+  "confirmar": false
+ },
+ {
+  "id_album": "212676560",
+  "nome": "Regata NBA Magic Away Azul #5 Paolo Banchero",
+  "time": "Magic",
+  "edicao": "Away Azul",
+  "numero": "5",
+  "jogador": "Paolo Banchero",
+  "slug": "regata-nba-magic-away-azul-5-paolo-banchero",
+  "confirmar": false
+ },
+ {
+  "id_album": "212676502",
+  "nome": "Regata NBA Magic Away Azul #1 Penny Hardaway",
+  "time": "Magic",
+  "edicao": "Away Azul",
+  "numero": "1",
+  "jogador": "Penny Hardaway",
+  "slug": "regata-nba-magic-away-azul-1-penny-hardaway",
+  "confirmar": false
+ },
+ {
+  "id_album": "210402986",
+  "nome": "Regata NBA Trail Blazers City Edition #16 Yang Hansen",
+  "time": "Trail Blazers",
+  "edicao": "City Edition",
+  "numero": "16",
+  "jogador": "Yang Hansen",
+  "slug": "regata-nba-trail-blazers-city-edition-16-yang-hansen",
+  "confirmar": false
+ },
+ {
+  "id_album": "209084728",
+  "nome": "Regata NBA Trail Blazers Away Preta #0 Damian Lillard",
+  "time": "Trail Blazers",
+  "edicao": "Away Preta",
+  "numero": "0",
+  "jogador": "Damian Lillard",
+  "slug": "regata-nba-trail-blazers-away-preta-0-damian-lillard-209084728",
+  "confirmar": true,
+  "motivo": "Possível duplicado de álbum 209084694; manter só um"
+ },
+ {
+  "id_album": "209084713",
+  "nome": "Regata NBA Trail Blazers Away Preta #8 Deni Avdija",
+  "time": "Trail Blazers",
+  "edicao": "Away Preta",
+  "numero": "8",
+  "jogador": "Deni Avdija",
+  "slug": "regata-nba-trail-blazers-away-preta-8-deni-avdija",
+  "confirmar": false
+ },
+ {
+  "id_album": "209084694",
+  "nome": "Regata NBA Trail Blazers Away Preta #0 Damian Lillard",
+  "time": "Trail Blazers",
+  "edicao": "Away Preta",
+  "numero": "0",
+  "jogador": "Damian Lillard",
+  "slug": "regata-nba-trail-blazers-away-preta-0-damian-lillard-209084694",
+  "confirmar": true,
+  "motivo": "Possível duplicado de álbum 209084728; manter só um"
+ },
+ {
+  "id_album": "209084671",
+  "nome": "Regata NBA Trail Blazers Home Branca #16 Yang Hansen",
+  "time": "Trail Blazers",
+  "edicao": "Home Branca",
+  "numero": "16",
+  "jogador": "Yang Hansen",
+  "slug": "regata-nba-trail-blazers-home-branca-16-yang-hansen",
+  "confirmar": false
+ },
+ {
+  "id_album": "209084656",
+  "nome": "Regata NBA Trail Blazers Home Branca #8 Deni Avdija",
+  "time": "Trail Blazers",
+  "edicao": "Home Branca",
+  "numero": "8",
+  "jogador": "Deni Avdija",
+  "slug": "regata-nba-trail-blazers-home-branca-8-deni-avdija",
+  "confirmar": false
+ },
+ {
+  "id_album": "209083323",
+  "nome": "Regata NBA Trail Blazers Home Branca #0 Damian Lillard",
+  "time": "Trail Blazers",
+  "edicao": "Home Branca",
+  "numero": "0",
+  "jogador": "Damian Lillard",
+  "slug": "regata-nba-trail-blazers-home-branca-0-damian-lillard",
+  "confirmar": false
+ },
+ {
+  "id_album": "209083312",
+  "nome": "Regata NBA Bulls Jordan Brand #11 DeMar DeRozan",
+  "time": "Bulls",
+  "edicao": "Jordan Brand",
+  "numero": "11",
+  "jogador": "DeMar DeRozan",
+  "slug": "regata-nba-bulls-jordan-brand-11-demar-derozan",
+  "confirmar": false
+ },
+ {
+  "id_album": "209083302",
+  "nome": "Regata NBA Bulls Jordan Brand #91 Dennis Rodman",
+  "time": "Bulls",
+  "edicao": "Jordan Brand",
+  "numero": "91",
+  "jogador": "Dennis Rodman",
+  "slug": "regata-nba-bulls-jordan-brand-91-dennis-rodman",
+  "confirmar": false
+ },
+ {
+  "id_album": "209083291",
+  "nome": "Regata NBA Bulls Jordan Brand #45 Michael Jordan",
+  "time": "Bulls",
+  "edicao": "Jordan Brand",
+  "numero": "45",
+  "jogador": "Michael Jordan",
+  "slug": "regata-nba-bulls-jordan-brand-45-michael-jordan",
+  "confirmar": false
+ },
+ {
+  "id_album": "209083278",
+  "nome": "Regata NBA Bulls Jordan Brand #8 Zach LaVine",
+  "time": "Bulls",
+  "edicao": "Jordan Brand",
+  "numero": "8",
+  "jogador": "Zach LaVine",
+  "slug": "regata-nba-bulls-jordan-brand-8-zach-lavine",
+  "confirmar": false
+ },
+ {
+  "id_album": "209083263",
+  "nome": "Regata NBA Bulls Jordan Brand #33 Scottie Pippen",
+  "time": "Bulls",
+  "edicao": "Jordan Brand",
+  "numero": "33",
+  "jogador": "Scottie Pippen",
+  "slug": "regata-nba-bulls-jordan-brand-33-scottie-pippen",
+  "confirmar": false
+ },
+ {
+  "id_album": "209083208",
+  "nome": "Regata NBA Bulls Jordan Brand #23 Michael Jordan",
+  "time": "Bulls",
+  "edicao": "Jordan Brand",
+  "numero": "23",
+  "jogador": "Michael Jordan",
+  "slug": "regata-nba-bulls-jordan-brand-23-michael-jordan",
+  "confirmar": false
+ },
+ {
+  "id_album": "209083044",
+  "nome": "Regata NBA Timberwolves Retrô #25 Derrick Rose",
+  "time": "Timberwolves",
+  "edicao": "Retrô",
+  "numero": "25",
+  "jogador": "Derrick Rose",
+  "slug": "regata-nba-timberwolves-retro-25-derrick-rose",
+  "confirmar": false
+ },
+ {
+  "id_album": "209082828",
+  "nome": "Regata NBA Timberwolves Retrô #5 Anthony Edwards",
+  "time": "Timberwolves",
+  "edicao": "Retrô",
+  "numero": "5",
+  "jogador": "Anthony Edwards",
+  "slug": "regata-nba-timberwolves-retro-5-anthony-edwards",
+  "confirmar": false
+ },
+ {
+  "id_album": "209082655",
+  "nome": "Regata NBA Magic Home Branca #32 Shaquille O'Neal",
+  "time": "Magic",
+  "edicao": "Home Branca",
+  "numero": "32",
+  "jogador": "Shaquille O'Neal",
+  "slug": "regata-nba-magic-home-branca-32-shaquille-o-neal",
+  "confirmar": false
+ },
+ {
+  "id_album": "209082506",
+  "nome": "Regata NBA Magic Home Branca #5 Paolo Banchero",
+  "time": "Magic",
+  "edicao": "Home Branca",
+  "numero": "5",
+  "jogador": "Paolo Banchero",
+  "slug": "regata-nba-magic-home-branca-5-paolo-banchero",
+  "confirmar": false
+ },
+ {
+  "id_album": "209082325",
+  "nome": "Regata NBA Magic Home Branca #1 Penny Hardaway",
+  "time": "Magic",
+  "edicao": "Home Branca",
+  "numero": "1",
+  "jogador": "Penny Hardaway",
+  "slug": "regata-nba-magic-home-branca-1-penny-hardaway",
+  "confirmar": false
+ },
+ {
+  "id_album": "209082145",
+  "nome": "Regata NBA Raptors Retrô Roxa #15 Vince Carter",
+  "time": "Raptors",
+  "edicao": "Retrô Roxa",
+  "numero": "15",
+  "jogador": "Vince Carter",
+  "slug": "regata-nba-raptors-retro-roxa-15-vince-carter",
+  "confirmar": false
+ },
+ {
+  "id_album": "209081983",
+  "nome": "Regata NBA Lakers Jordan Brand #77 Luka Doncic",
+  "time": "Lakers",
+  "edicao": "Jordan Brand",
+  "numero": "77",
+  "jogador": "Luka Doncic",
+  "slug": "regata-nba-lakers-jordan-brand-77-luka-doncic",
+  "confirmar": false
+ },
+ {
+  "id_album": "209081793",
+  "nome": "Regata NBA Lakers Jordan Brand #23 LeBron James",
+  "time": "Lakers",
+  "edicao": "Jordan Brand",
+  "numero": "23",
+  "jogador": "LeBron James",
+  "slug": "regata-nba-lakers-jordan-brand-23-lebron-james",
+  "confirmar": false
+ },
+ {
+  "id_album": "151101070",
+  "nome": "Regata NBA Pelicans City Edition #14 Brandon Ingram",
+  "time": "Pelicans",
+  "edicao": "City Edition",
+  "numero": "14",
+  "jogador": "Brandon Ingram",
+  "slug": "regata-nba-pelicans-city-edition-14-brandon-ingram",
+  "confirmar": false
+ },
+ {
+  "id_album": "151101027",
+  "nome": "Regata NBA Pelicans City Edition #1 Williams",
+  "time": "Pelicans",
+  "edicao": "City Edition",
+  "numero": "1",
+  "jogador": "Williams",
+  "slug": "regata-nba-pelicans-city-edition-1-williams",
+  "confirmar": true,
+  "motivo": "Título diz Williams (Zion seria Williamson); conferir na foto"
+ },
+ {
+  "id_album": "130834348",
+  "nome": "Regata NBA Trail Blazers City Edition #0 Damian Lillard",
+  "time": "Trail Blazers",
+  "edicao": "City Edition",
+  "numero": "0",
+  "jogador": "Damian Lillard",
+  "slug": "regata-nba-trail-blazers-city-edition-0-damian-lillard",
+  "confirmar": false
+ },
+ {
+  "id_album": "160275115",
+  "nome": "Regata NBA Rockets City Edition #28 Alperen Sengun",
+  "time": "Rockets",
+  "edicao": "City Edition",
+  "numero": "28",
+  "jogador": "Alperen Sengun",
+  "slug": "regata-nba-rockets-city-edition-28-alperen-sengun",
+  "confirmar": false
+ },
+ {
+  "id_album": "151306378",
+  "nome": "Regata NBA Rockets City Edition #0 Russell Westbrook",
+  "time": "Rockets",
+  "edicao": "City Edition",
+  "numero": "0",
+  "jogador": "Russell Westbrook",
+  "slug": "regata-nba-rockets-city-edition-0-russell-westbrook",
+  "confirmar": false
+ },
+ {
+  "id_album": "151306387",
+  "nome": "Regata NBA Rockets City Edition #4 Jalen Green",
+  "time": "Rockets",
+  "edicao": "City Edition",
+  "numero": "4",
+  "jogador": "Jalen Green",
+  "slug": "regata-nba-rockets-city-edition-4-jalen-green",
+  "confirmar": false
+ },
+ {
+  "id_album": "151306402",
+  "nome": "Regata NBA Rockets City Edition #13 James Harden",
+  "time": "Rockets",
+  "edicao": "City Edition",
+  "numero": "13",
+  "jogador": "James Harden",
+  "slug": "regata-nba-rockets-city-edition-13-james-harden",
+  "confirmar": false
+ },
+ {
+  "id_album": "203254397",
+  "nome": "Regata NBA Rockets City Edition #7 Kevin Durant",
+  "time": "Rockets",
+  "edicao": "City Edition",
+  "numero": "7",
+  "jogador": "Kevin Durant",
+  "slug": "regata-nba-rockets-city-edition-7-kevin-durant",
+  "confirmar": false
+ },
+ {
+  "id_album": "189118270",
+  "nome": "Regata NBA Lakers City Edition #77 Luka Doncic",
+  "time": "Lakers",
+  "edicao": "City Edition",
+  "numero": "77",
+  "jogador": "Luka Doncic",
+  "slug": "regata-nba-lakers-city-edition-77-luka-doncic",
+  "confirmar": false
+ },
+ {
+  "id_album": "168525032",
+  "nome": "Regata NBA Lakers City Edition #9 Bronny James",
+  "time": "Lakers",
+  "edicao": "City Edition",
+  "numero": "9",
+  "jogador": "Bronny James",
+  "slug": "regata-nba-lakers-city-edition-9-bronny-james",
+  "confirmar": false
+ },
+ {
+  "id_album": "143153111",
+  "nome": "Regata NBA Lakers City Edition #24 Kobe Bryant",
+  "time": "Lakers",
+  "edicao": "City Edition",
+  "numero": "24",
+  "jogador": "Kobe Bryant",
+  "slug": "regata-nba-lakers-city-edition-24-kobe-bryant",
+  "confirmar": false
+ },
+ {
+  "id_album": "143152423",
+  "nome": "Regata NBA Lakers City Edition #23 LeBron James",
+  "time": "Lakers",
+  "edicao": "City Edition",
+  "numero": "23",
+  "jogador": "LeBron James",
+  "slug": "regata-nba-lakers-city-edition-23-lebron-james",
+  "confirmar": false
+ },
+ {
+  "id_album": "143152407",
+  "nome": "Regata NBA Lakers City Edition #15 Austin Reaves",
+  "time": "Lakers",
+  "edicao": "City Edition",
+  "numero": "15",
+  "jogador": "Austin Reaves",
+  "slug": "regata-nba-lakers-city-edition-15-austin-reaves",
+  "confirmar": false
+ },
+ {
+  "id_album": "143152387",
+  "nome": "Regata NBA Lakers City Edition #8 Kobe Bryant",
+  "time": "Lakers",
+  "edicao": "City Edition",
+  "numero": "8",
+  "jogador": "Kobe Bryant",
+  "slug": "regata-nba-lakers-city-edition-8-kobe-bryant",
+  "confirmar": false
+ },
+ {
+  "id_album": "143152360",
+  "nome": "Regata NBA Lakers City Edition #6 LeBron James",
+  "time": "Lakers",
+  "edicao": "City Edition",
+  "numero": "6",
+  "jogador": "LeBron James",
+  "slug": "regata-nba-lakers-city-edition-6-lebron-james",
+  "confirmar": false
+ },
+ {
+  "id_album": "143152312",
+  "nome": "Regata NBA Lakers City Edition #1 D'Angelo Russell",
+  "time": "Lakers",
+  "edicao": "City Edition",
+  "numero": "1",
+  "jogador": "D'Angelo Russell",
+  "slug": "regata-nba-lakers-city-edition-1-d-angelo-russell",
+  "confirmar": false
+ },
+ {
+  "id_album": "143152332",
+  "nome": "Regata NBA Lakers City Edition #3 Anthony Davis",
+  "time": "Lakers",
+  "edicao": "City Edition",
+  "numero": "3",
+  "jogador": "Anthony Davis",
+  "slug": "regata-nba-lakers-city-edition-3-anthony-davis",
+  "confirmar": false
+ },
+ {
+  "id_album": "143152294",
+  "nome": "Regata NBA Lakers City Edition #0 Russell Westbrook",
+  "time": "Lakers",
+  "edicao": "City Edition",
+  "numero": "0",
+  "jogador": "Russell Westbrook",
+  "slug": "regata-nba-lakers-city-edition-0-russell-westbrook",
+  "confirmar": false
+ }
+]

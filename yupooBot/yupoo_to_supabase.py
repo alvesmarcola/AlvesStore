@@ -5,6 +5,10 @@ Uso (PowerShell):
   $env:SUPABASE_SERVICE_ROLE_KEY = "<service-role-key>"
   python yupoo_to_supabase.py "https://minkang.x.yupoo.com/categories/680738"
 
+Exportação sem cadastro ou download de imagens:
+  python yupoo_to_supabase.py "https://xingkong-sports.x.yupoo.com/collections/4929343" `
+    --export-list nba-albuns.json --expected-count 142 --max-pages 20
+
 Os atributos comerciais que não podem ser deduzidos com segurança das páginas
 Yupoo ficam marcados como "revisar" (e preço 0). Ajuste-os no catálogo depois.
 """
@@ -12,6 +16,7 @@ Yupoo ficam marcados como "revisar" (e preço 0). Ajuste-os no catálogo depois.
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import random
 import re
@@ -19,6 +24,14 @@ import socket
 import sys
 import time
 import unicodedata
+from pathlib import Path
+import sys as _sys
+_sys.path.insert(0, str(Path(__file__).resolve().parent))
+try:
+    from nba_validation import validate as validate_nba, write_outputs as write_nba_outputs
+except Exception:  # pragma: no cover
+    validate_nba = None
+    write_nba_outputs = None
 from typing import Any
 from urllib.parse import parse_qsl, urlencode, urljoin, urlsplit, urlunsplit
 
@@ -179,6 +192,18 @@ def album_title(soup: BeautifulSoup, fallback: str) -> str:
     return title or fallback
 
 
+def original_album_title(soup: BeautifulSoup, fallback: str) -> str:
+    """Retorna o título do álbum sem tradução, normalização ou remoção de sufixos."""
+    title_node = (
+        soup.select_one(".showalbumheader__gallerytitle")
+        or soup.find("h1")
+        or soup.find("h2")
+        or soup.find("title")
+    )
+    title = title_node.get_text() if title_node else ""
+    return title if title else fallback
+
+
 def high_resolution_image(src: str) -> str | None:
     src = src.strip()
     if src.startswith("//"):
@@ -290,9 +315,71 @@ def import_album(
     return False
 
 
+def export_album_list(
+    session: requests.Session,
+    category_url: str,
+    output_path: Path,
+    delay: float,
+    max_pages: int,
+    expected_count: int | None,
+    attempts: int,
+) -> int:
+    """Exporta somente metadados dos álbuns, sem baixar imagens nem acessar o Supabase."""
+    albums = discover_albums(session, category_url, delay, max_pages)
+    print(f"Álbuns únicos encontrados: {len(albums)}")
+    if not albums:
+        raise RuntimeError("Nenhum álbum encontrado; confira se a coleção está acessível.")
+    if expected_count is not None and len(albums) != expected_count:
+        raise RuntimeError(
+            f"A coleção deveria conter {expected_count} álbuns, mas foram encontrados {len(albums)}; "
+            "o arquivo não foi gravado."
+        )
+
+    exported: list[dict[str, Any]] = []
+    for index, album_url in enumerate(albums, start=1):
+        album_id_match = ALBUM_PATH.search(urlsplit(album_url).path)
+        if not album_id_match:
+            raise RuntimeError(f"URL sem identificador de álbum: {album_url}")
+        album_id = album_id_match.group(1)
+        print(f"[{index}/{len(albums)}] {album_url}")
+        last_error: Exception | None = None
+        for attempt in range(1, attempts + 1):
+            try:
+                response = session.get(album_url, headers={"Referer": category_url}, timeout=(10, 35))
+                response.raise_for_status()
+                soup = BeautifulSoup(response.text, "html.parser")
+                images = extract_images(soup)
+                if not images:
+                    raise ValueError(f"nenhuma foto Yupoo reconhecida no álbum {album_id}")
+                exported.append({
+                    "id_album": album_id,
+                    "titulo_original": original_album_title(soup, album_id),
+                    "qtd_fotos": len(images),
+                    "url_capa": images[0],
+                })
+                print(f"  OK: {exported[-1]['titulo_original']} ({len(images)} fotos)")
+                last_error = None
+                break
+            except (requests.RequestException, ValueError) as exc:
+                last_error = exc
+                print(f"  Tentativa {attempt}/{attempts} falhou para o álbum {album_id}: {exc}", file=sys.stderr)
+                if attempt < attempts:
+                    wait_seconds = retry_delay(exc, attempt, delay)
+                    print(f"  Nova tentativa em {wait_seconds:.1f}s.", file=sys.stderr)
+                    time.sleep(wait_seconds)
+        if last_error:
+            raise RuntimeError(f"Falha ao exportar o álbum {album_id}; o arquivo não foi gravado.") from last_error
+        if index < len(albums) and delay:
+            time.sleep(delay)
+
+    output_path.write_text(json.dumps(exported, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(f"Exportados {len(exported)} álbuns para {output_path}.")
+    return len(exported)
+
+
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Importa produtos do Yupoo para Supabase")
-    parser.add_argument("url", help="URL de categoria Yupoo, /categories/... ou /collections/...")
+    parser = argparse.ArgumentParser(description="Importa produtos do Yupoo para Supabase ou exporta uma lista sem cadastrar produtos")
+    parser.add_argument("url", nargs="?", help="URL de categoria Yupoo, /categories/... ou /collections/... (opcional com --validate-nba)")
     parser.add_argument(
         "--category",
         default="Geral",
@@ -308,7 +395,50 @@ def main() -> int:
     parser.add_argument("--album-delay-max", type=float, default=5.0, help="Espera máxima entre álbuns (s)")
     parser.add_argument("--retries", type=int, default=4, help="Tentativas por álbum")
     parser.add_argument("--max-pages", type=int, default=MAX_PAGES_DEFAULT, help="Limite de páginas da categoria")
+    parser.add_argument(
+        "--export-list",
+        metavar="ARQUIVO",
+        help="Exporta id, título original, quantidade de fotos e URL da capa em JSON sem gravar no banco",
+    )
+    parser.add_argument(
+        "--expected-count",
+        type=int,
+        help="Quantidade esperada de álbuns; impede gravar o arquivo se a coleta estiver incompleta",
+    )
+    parser.add_argument(
+        "--validate-nba",
+        action="store_true",
+        help="Valida nba-albuns.json + nba-nomes.json sem acessar rede ou Supabase",
+    )
+    parser.add_argument("--nba-albuns", default="nba-albuns.json", help="Arquivo de álbuns NBA originais")
+    parser.add_argument("--nba-names", default="nba-nomes.json", help="Arquivo de traduções NBA")
+    parser.add_argument("--nba-validation-output", default="nba-validacao.json", help="JSON de validação NBA")
+    parser.add_argument("--nba-report", default="nba-validacao-relatorio.txt", help="Relatório legível NBA")
     args = parser.parse_args()
+
+    if args.validate_nba:
+        if validate_nba is None or write_nba_outputs is None:
+            print("Módulo nba_validation não disponível.", file=sys.stderr)
+            return 2
+        try:
+            result = validate_nba(args.nba_albuns, args.nba_names)
+            write_nba_outputs(result, args.nba_validation_output, args.nba_report)
+        except (OSError, RuntimeError, ValueError) as exc:
+            print(f"Falha na validação NBA: {exc}", file=sys.stderr)
+            return 1
+        resumo = result["resumo"]
+        print(f"Álbuns: {resumo['total_albuns_encontrados']}")
+        print(f"Traduções correspondentes: {resumo['total_traducoes_correspondentes']}")
+        print(f"Aprovados: {resumo['total_registros_aprovados']}")
+        print(f"Pendentes: {resumo['total_pendentes_conferencia']}")
+        print(f"Possíveis duplicados (grupos): {resumo['total_possiveis_duplicados']}")
+        print(f"Inconsistências: {resumo['total_inconsistencias']}")
+        print(f"Prontos para importação: {resumo['total_prontos_importacao']}")
+        print(f"Gerado: {args.nba_validation_output} e {args.nba_report}")
+        return 0
+
+    if not args.url:
+        parser.error("informe uma URL ou use --validate-nba")
 
     parsed = urlsplit(args.url)
     if parsed.scheme not in ("http", "https") or not parsed.hostname or not parsed.path:
@@ -320,6 +450,25 @@ def main() -> int:
 
     if args.album_delay_min < 0 or args.album_delay_max < args.album_delay_min:
         parser.error("album-delay-min/max inválidos")
+    if args.expected_count is not None and args.expected_count < 1:
+        parser.error("expected-count deve ser positivo")
+    if args.export_list:
+        session = build_session()
+        try:
+            export_album_list(
+                session=session,
+                category_url=args.url,
+                output_path=Path(args.export_list),
+                delay=args.delay,
+                max_pages=args.max_pages,
+                expected_count=args.expected_count,
+                attempts=args.retries,
+            )
+        except (OSError, RuntimeError) as exc:
+            print(f"Falha na exportação: {exc}", file=sys.stderr)
+            return 1
+        return 0
+
     supabase_url = os.environ.get("SUPABASE_URL", "").strip()
     supabase_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "").strip()
     if not supabase_url or not supabase_key:
@@ -368,4 +517,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

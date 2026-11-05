@@ -1,13 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AdminNavigation } from "@/components/admin-navigation";
 import { AdminSkeleton, EmptyState, ErrorState, StatCard, StatusBadge } from "@/components/admin-states";
 import { PackageOpen } from "lucide-react";
 import type { Audience, ProductType, Uniform } from "@/lib/types";
 import { adminFetch } from "@/lib/client/admin-fetch";
 import { SITE_NAME } from "@/lib/site";
+import { storeConfig } from "@/config";
 
 type ProductPhoto = { src: string; alt?: string };
 type ManualProduct = {
@@ -63,7 +64,7 @@ const emptyDraft: ProductDraft = {
   preco: 0,
   publico: "masculino",
   tipo: "torcedor",
-  liga: "revisar",
+  liga: "",
   clube: "",
   temporada: "2026",
   uniforme: "titular",
@@ -72,6 +73,39 @@ const emptyDraft: ProductDraft = {
   stock_by_size: { P: 0, M: 0, G: 0, GG: 0 },
   imageUrls: [],
 };
+
+const KNOWN_COMPETITIONS = [
+  { slug: "nba", label: "NBA (Basquete)" },
+  { slug: "brasileirao-serie-a", label: "Brasileirão Série A" },
+  { slug: "premier-league", label: "Premier League" },
+  { slug: "la-liga", label: "La Liga" },
+  { slug: "champions-league", label: "Champions League" },
+  { slug: "serie-a", label: "Serie A Italiana" },
+  { slug: "bundesliga", label: "Bundesliga" },
+  { slug: "ligue-1", label: "Ligue 1" },
+  { slug: "selecoes", label: "Seleções Nacionais" },
+  { slug: "libertadores", label: "Libertadores" },
+  { slug: "f1", label: "Fórmula 1" },
+  { slug: "revisar", label: "Revisar (pendente de definição)" },
+];
+
+const NBA_TEAM_KEYWORDS = [
+  "warriors", "golden state", "lakers", "los angeles lakers", "celtics", "boston",
+  "bulls", "chicago", "heat", "miami", "nets", "brooklyn", "knicks", "new york",
+  "bucks", "milwaukee", "mavericks", "dallas", "suns", "phoenix", "clippers",
+  "nuggets", "denver", "76ers", "sixers", "philadelphia", "spurs", "san antonio",
+  "raptors", "toronto", "rockets", "houston", "cavaliers", "cleveland",
+  "grizzlies", "memphis", "hawks", "atlanta", "pacers", "indiana", "magic", "orlando",
+  "pelicans", "new orleans", "timberwolves", "minnesota", "thunder", "oklahoma",
+  "trail blazers", "portland", "jazz", "utah", "kings", "sacramento", "wizards", "washington",
+  "pistons", "detroit", "hornets", "charlotte", "nba",
+];
+
+function isNbaTeamEvidence(text: string): boolean {
+  if (!text) return false;
+  const norm = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  return NBA_TEAM_KEYWORDS.some((kw) => norm.includes(kw));
+}
 
 const audienceLabels = {
   masculino: "Masculino",
@@ -184,6 +218,62 @@ export default function AdminProducts() {
     setDraft((current) => ({ ...current, [key]: value }));
   }
 
+  const competitionOptions = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const comp of KNOWN_COMPETITIONS) {
+      map.set(comp.slug, comp.label);
+    }
+    for (const p of products) {
+      if (p.liga && !map.has(p.liga)) {
+        map.set(p.liga, p.liga);
+      }
+    }
+    return Array.from(map.entries()).map(([slug, label]) => ({ slug, label }));
+  }, [products]);
+
+  function handleTipoChange(tipo: ProductDraft["tipo"]) {
+    setDraft((current) => {
+      const isNba = tipo === "regata" && isNbaTeamEvidence(`${current.clube} ${current.nome}`);
+      const shouldSuggestLiga = isNba && (!current.liga || current.liga === "revisar");
+      const shouldSuggestPrice = isNba && current.preco === 0;
+      return {
+        ...current,
+        tipo,
+        ...(shouldSuggestLiga ? { liga: "nba" } : {}),
+        ...(shouldSuggestPrice ? { preco: storeConfig.nbaTankTopPrice } : {}),
+      };
+    });
+  }
+
+  function handleClubeChange(clube: string) {
+    setDraft((current) => {
+      const isNba = current.tipo === "regata" && isNbaTeamEvidence(`${clube} ${current.nome}`);
+      const shouldSuggestLiga = isNba && (!current.liga || current.liga === "revisar");
+      const shouldSuggestPrice = isNba && current.preco === 0;
+      return {
+        ...current,
+        clube,
+        ...(shouldSuggestLiga ? { liga: "nba" } : {}),
+        ...(shouldSuggestPrice ? { preco: storeConfig.nbaTankTopPrice } : {}),
+      };
+    });
+  }
+
+  function handleNomeChange(nome: string) {
+    setDraft((current) => {
+      const isNba = current.tipo === "regata" && isNbaTeamEvidence(`${current.clube} ${nome}`);
+      const shouldSuggestLiga = isNba && (!current.liga || current.liga === "revisar");
+      const shouldSuggestPrice = isNba && current.preco === 0;
+      return {
+        ...current,
+        nome,
+        ...(!slugTouched ? { slug: slugify(nome) } : {}),
+        ...(shouldSuggestLiga ? { liga: "nba" } : {}),
+        ...(shouldSuggestPrice ? { preco: storeConfig.nbaTankTopPrice } : {}),
+      };
+    });
+  }
+
   function changeSizes(value: string) {
     setSizeInput(value);
     const sizes = [...new Set(value.split(",").map((size) => size.trim().toUpperCase()).filter(Boolean))];
@@ -235,6 +325,7 @@ export default function AdminProducts() {
       const payload = {
         ...draft,
         slug: draft.slug || slugify(draft.nome),
+        liga: slugify(draft.liga) || draft.liga.trim().toLowerCase() || "revisar",
       };
       const response = await adminFetch("/api/admin/products", {
         method: draft.id ? "PATCH" : "POST",
@@ -296,10 +387,7 @@ export default function AdminProducts() {
 
         <form onSubmit={(event) => void saveProduct(event)} className="mt-5 grid gap-4 md:grid-cols-2">
           <Field label="Nome do produto">
-            <input required minLength={3} maxLength={160} value={draft.nome} onChange={(event) => {
-              const nome = event.target.value;
-              setDraft((current) => ({ ...current, nome, ...(!slugTouched ? { slug: slugify(nome) } : {}) }));
-            }} className="rounded-lg border border-border px-3 py-2.5 font-normal" />
+            <input required minLength={3} maxLength={160} value={draft.nome} onChange={(event) => handleNomeChange(event.target.value)} className="rounded-lg border border-border px-3 py-2.5 font-normal" />
           </Field>
           <Field label="Endereço do produto (slug)">
             <input required pattern="[a-z0-9]+(?:-[a-z0-9]+)*" maxLength={100} value={draft.slug} onChange={(event) => {
@@ -309,6 +397,11 @@ export default function AdminProducts() {
           </Field>
           <Field label="Preço (R$)">
             <input required type="number" inputMode="decimal" min="0" max="100000" step="0.01" value={draft.preco} onChange={(event) => setField("preco", Number(event.target.value))} className="rounded-lg border border-border px-3 py-2.5 font-normal" />
+            {draft.tipo === "regata" && (draft.liga === "nba" || isNbaTeamEvidence(`${draft.clube} ${draft.nome}`)) && (
+              <p className="mt-1 text-[11px] text-muted">
+                Preço sugerido: {currency.format(storeConfig.nbaTankTopPrice)}. Regatas NBA têm preço único de {currency.format(storeConfig.nbaTankTopPrice)} garantido no catálogo, carrinho e checkout.
+              </p>
+            )}
           </Field>
           <Field label="Marca">
             <input maxLength={100} value={draft.brand} onChange={(event) => setField("brand", event.target.value)} className="rounded-lg border border-border px-3 py-2.5 font-normal" placeholder="Ex.: Adidas" />
@@ -325,15 +418,60 @@ export default function AdminProducts() {
             </select>
           </Field>
           <Field label="Tipo de produto">
-            <select value={draft.tipo} onChange={(event) => setField("tipo", event.target.value as ProductDraft["tipo"])} className="rounded-lg border border-border px-3 py-2.5 font-normal">
+            <select value={draft.tipo} onChange={(event) => handleTipoChange(event.target.value as ProductDraft["tipo"])} className="rounded-lg border border-border px-3 py-2.5 font-normal">
               {Object.entries(productTypeLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
             </select>
           </Field>
           <Field label="Competição / categoria (slug)">
-            <input required value={draft.liga} onChange={(event) => setField("liga", slugify(event.target.value) || "revisar")} className="rounded-lg border border-border px-3 py-2.5 font-normal" placeholder="selecoes, premier-league…" />
+            <input
+              required
+              list="competition-list"
+              value={draft.liga}
+              onChange={(event) => {
+                const sanitized = event.target.value
+                  .normalize("NFD")
+                  .replace(/[\u0300-\u036f]/g, "")
+                  .toLowerCase()
+                  .replace(/[^a-z0-9-]/g, "");
+                setField("liga", sanitized);
+              }}
+              className="rounded-lg border border-border px-3 py-2.5 font-normal"
+              placeholder="Ex.: nba, brasileirao-serie-a, premier-league…"
+            />
+            <datalist id="competition-list">
+              {competitionOptions.map((comp) => (
+                <option key={comp.slug} value={comp.slug}>
+                  {comp.label}
+                </option>
+              ))}
+            </datalist>
+            <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+              <span className="text-[10px] text-muted">Sugestões rápidas:</span>
+              {[
+                { slug: "nba", label: "NBA" },
+                { slug: "brasileirao-serie-a", label: "Brasileirão" },
+                { slug: "premier-league", label: "Premier League" },
+                { slug: "la-liga", label: "La Liga" },
+                { slug: "champions-league", label: "Champions" },
+                { slug: "selecoes", label: "Seleções" },
+              ].map((item) => (
+                <button
+                  key={item.slug}
+                  type="button"
+                  onClick={() => setField("liga", item.slug)}
+                  className={`rounded px-1.5 py-0.5 text-[10px] font-bold transition ${
+                    draft.liga === item.slug
+                      ? "bg-pitch text-white"
+                      : "bg-paper text-muted hover:text-ink hover:bg-zinc-200"
+                  }`}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
           </Field>
           <Field label="Clube ou equipe">
-            <input required minLength={2} maxLength={100} value={draft.clube} onChange={(event) => setField("clube", event.target.value)} className="rounded-lg border border-border px-3 py-2.5 font-normal" />
+            <input required minLength={2} maxLength={100} value={draft.clube} onChange={(event) => handleClubeChange(event.target.value)} className="rounded-lg border border-border px-3 py-2.5 font-normal" />
           </Field>
           <Field label="Temporada">
             <input required maxLength={32} value={draft.temporada} onChange={(event) => setField("temporada", event.target.value)} className="rounded-lg border border-border px-3 py-2.5 font-normal" placeholder="2026/27" />

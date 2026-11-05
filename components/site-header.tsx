@@ -9,13 +9,13 @@ import { useCart } from "@/store/cart";
 import type { CatalogLeague } from "@/lib/catalog-taxonomy";
 import { SITE_NAME } from "@/lib/site";
 
-const maleCategories = [["Versão Torcedor", "torcedor"], ["Versão Jogador", "jogador"], ["Retrô", "retro"], ["Conjunto de Treino", "treino"], ["Mangas compridas", "inverno"], ["Regatas", "regata"]];
+const maleCategories = [["Versão Torcedor", "torcedor"], ["Versão Jogador", "jogador"], ["Retrô", "retro"], ["Conjunto de Treino", "treino"], ["Mangas compridas", "inverno"], ["Regatas", "regata"], ["Regatas NBA", "regata-nba"]];
 const femaleCategories = [["Camisas Femininas", "torcedor"], ["Conjuntos", "treino"]];
 const dropdownTransition = { duration: 0.18, ease: "easeOut" as const };
 
 type SearchSuggestion = { slug: string; nome: string; clube: string; temporada: string };
 
-export function SiteHeader({ leagues }: { leagues: Pick<CatalogLeague, "slug" | "nome">[] }) {
+export function SiteHeader({ leagues, hasRegatas, hasNbaRegatas }: { leagues: Pick<CatalogLeague, "slug" | "nome">[]; hasRegatas: boolean; hasNbaRegatas: boolean }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [leagueOpen, setLeagueOpen] = useState(false);
   const [categoryOpen, setCategoryOpen] = useState("");
@@ -27,6 +27,7 @@ export function SiteHeader({ leagues }: { leagues: Pick<CatalogLeague, "slug" | 
   const reducedMotion = useReducedMotion();
   const count = useCart((state) => state.items.reduce((sum, item) => sum + item.quantity, 0));
   const setDrawerOpen = useCart((state) => state.setDrawerOpen);
+  const visibleMaleCategories = maleCategories.filter(([, type]) => type !== "regata" || hasRegatas).filter(([, type]) => type !== "regata-nba" || hasNbaRegatas);
   useEffect(() => {
     const normalized = query.trim();
     if (normalized.length < 2) {
@@ -99,7 +100,7 @@ export function SiteHeader({ leagues }: { leagues: Pick<CatalogLeague, "slug" | 
           <div className="mx-auto flex max-w-7xl items-center justify-center gap-9 px-8 text-[11px] font-bold uppercase tracking-[.11em]">
             <div className="relative" onMouseEnter={() => setCategoryOpen("masculino")} onMouseLeave={() => setCategoryOpen("")}>
               <Link className="nav-link" href="/masculino">Masculino</Link>
-              <AnimatePresence>{categoryOpen === "masculino" && <motion.div {...dropdownMotion} transition={dropdownTransition} className="absolute left-0 top-full z-50 w-64 rounded-b-lg border border-zinc-800 !bg-zinc-950 p-4 text-white shadow-xl">{maleCategories.map(([name, type], index) => <motion.div key={type} initial={reducedMotion ? false : { opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: reducedMotion ? 0 : index * 0.025 }}><Link href={`/masculino?tipo=${type}`} className="menu-option block rounded px-3 py-2.5 text-xs font-semibold normal-case text-white">{name}</Link></motion.div>)}</motion.div>}</AnimatePresence>
+              <AnimatePresence>{categoryOpen === "masculino" && <motion.div {...dropdownMotion} transition={dropdownTransition} className="absolute left-0 top-full z-50 w-64 rounded-b-lg border border-zinc-800 !bg-zinc-950 p-4 text-white shadow-xl">{visibleMaleCategories.map(([name, type], index) => <motion.div key={type} initial={reducedMotion ? false : { opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: reducedMotion ? 0 : index * 0.025 }}><Link href={`/masculino?tipo=${type}`} className="menu-option block rounded px-3 py-2.5 text-xs font-semibold normal-case text-white">{name}</Link></motion.div>)}</motion.div>}</AnimatePresence>
             </div>
             <div className="relative" onMouseEnter={() => setCategoryOpen("feminino")} onMouseLeave={() => setCategoryOpen("")}>
               <Link className="nav-link" href="/feminino">Feminino</Link>
@@ -125,7 +126,7 @@ export function SiteHeader({ leagues }: { leagues: Pick<CatalogLeague, "slug" | 
           <motion.aside initial={reducedMotion ? { x: 0, opacity: 0 } : { x: "-100%" }} animate={{ x: 0, opacity: 1 }} exit={reducedMotion ? { opacity: 0 } : { x: "-100%" }} transition={reducedMotion ? { duration: 0 } : { type: "spring", stiffness: 340, damping: 34 }} className="h-full w-[min(88vw,400px)] overflow-y-auto bg-white p-5 text-ink" onClick={(event) => event.stopPropagation()}>
             <div className="mb-6 flex items-center justify-between"><span className="text-lg font-bold uppercase tracking-wide">Navegue</span><button className="icon-button" onClick={() => setMenuOpen(false)} aria-label="Fechar menu"><X /></button></div>
             <button className="mobile-nav-link flex w-full items-center justify-between" aria-expanded={categoryOpen === "masculino"} onClick={() => setCategoryOpen(categoryOpen === "masculino" ? "" : "masculino")}>Masculino <ChevronDown size={16} /></button>
-            {categoryOpen === "masculino" && <div className="mb-3 pl-4"><Link href="/masculino" className="block py-2 text-xs font-bold">Ver tudo</Link>{maleCategories.map(([name, type]) => <Link key={type} href={`/masculino?tipo=${type}`} className="block py-2 text-xs text-muted">{name}</Link>)}</div>}
+            {categoryOpen === "masculino" && <div className="mb-3 pl-4"><Link href="/masculino" className="block py-2 text-xs font-bold">Ver tudo</Link>{visibleMaleCategories.map(([name, type]) => <Link key={type} href={`/masculino?tipo=${type}`} className="block py-2 text-xs text-muted">{name}</Link>)}</div>}
             <button className="mobile-nav-link flex w-full items-center justify-between" aria-expanded={categoryOpen === "feminino"} onClick={() => setCategoryOpen(categoryOpen === "feminino" ? "" : "feminino")}>Feminino <ChevronDown size={16} /></button>
             {categoryOpen === "feminino" && <div className="mb-3 pl-4"><Link href="/feminino" className="block py-2 text-xs font-bold">Ver tudo</Link>{femaleCategories.map(([name, type], index) => <Link key={`${type}-${index}`} href={`/feminino?tipo=${type}`} className="block py-2 text-xs text-muted">{name}</Link>)}</div>}
             <button className="mobile-nav-link flex w-full items-center justify-between" aria-expanded={leagueOpen} onClick={() => setLeagueOpen(!leagueOpen)}>Ligas <ChevronDown size={16} /></button>
