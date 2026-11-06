@@ -180,8 +180,17 @@ export function getProductUnitPrice(product: Product, size?: string) {
   return price === null ? null : price + getProductSizeSurcharge(size ?? "");
 }
 
-export function isPackageEligible(product: Product) {
+export function isPackageEligible(product: Product): boolean {
   if (isManualProduct(product)) return false;
+  if (product.sem_oferta_quantidade === true || product.ignorar_regras_preco === true) return false;
+  if (isKidsProduct(product)) return false;
+  if (isRetroProduct(product)) return false;
+  if (isNbaTankTop(product) || product.tipo === "regata" || product.liga === "nba") return false;
+  if (product.tipo === "f1" || product.tipo === "formula1" || product.liga === "f1") return false;
+
   const facts = classifyProduct(product);
-  return product.tipo === "torcedor" && facts.version === "fan" && !facts.fullPatch && facts.price === storeConfig.fanCommonPrice && !isKidsProduct(product);
+  if (facts.version !== "fan" || facts.sleeve === "long" || facts.fullPatch) return false;
+  if (facts.price !== storeConfig.fanCommonPrice) return false;
+
+  return product.tipo === "torcedor" || product.publico === "masculino" || product.publico === "feminino" || product.publico === "unissex";
 }

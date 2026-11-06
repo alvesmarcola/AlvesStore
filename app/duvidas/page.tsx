@@ -14,7 +14,7 @@ const questions = [
   },
   {
     question: "Quando recebo o código de rastreio?",
-    answer: "Após a confirmação do pagamento, o código de rastreio oficial é gerado e enviado para o e-mail cadastrado em até 3 a 4 dias úteis. Esse período é necessário para a liberação e a postagem logística do pedido.",
+    answer: "Após a confirmação do pagamento, o código de rastreio é gerado e enviado para o e-mail cadastrado em até 3 a 4 dias úteis. Esse período é necessário para a liberação e a postagem logística do pedido.",
   },
   {
     question: "Posso receber o rastreio pelo WhatsApp?",
@@ -22,7 +22,7 @@ const questions = [
   },
   {
     question: "Como acompanho a rota da encomenda?",
-    answer: `Use a página de rastreio da ${SITE_NAME} com o código do pedido e o e-mail ou CPF cadastrado na compra. Quando o código oficial estiver disponível, ele será exibido junto ao status.`,
+    answer: `Use a página de rastreio da ${SITE_NAME} com o código do pedido e o e-mail ou CPF cadastrado na compra. Quando o código de rastreio estiver disponível, ele será exibido junto ao status.`,
   },
 ];
 

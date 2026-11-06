@@ -17,8 +17,22 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ liga: string; clube: string }> }) {
   const { liga, clube } = await params;
   const products = await getSupabaseProducts();
-  const product = products.find((item) => item.liga === liga && item.clubeSlug === clube);
-  return { title: product ? `Camisas ${product.clube}` : "Clube", description: product ? `Explore os modelos de ${product.clube} disponíveis no catálogo.` : undefined, alternates: { canonical: `/ligas/${liga}/${clube}` } };
+  const clubProducts = products.filter((item) => item.liga === liga && item.clubeSlug === clube);
+  const club = clubProducts[0];
+  if (!club) {
+    return { title: "Clube", alternates: { canonical: `/ligas/${liga}/${clube}` } };
+  }
+  const description = `Compre camisas do ${club.clube} na Imports Alves. ${clubProducts.length} modelo(s) disponíveis com frete facilitado, parcelamento no cartão e opção de personalização.`;
+  return {
+    title: `Camisas do ${club.clube} | Imports Alves`,
+    description,
+    alternates: { canonical: `/ligas/${liga}/${clube}` },
+    openGraph: {
+      title: `Camisas do ${club.clube} | Imports Alves`,
+      description,
+      url: `/ligas/${liga}/${clube}`,
+    },
+  };
 }
 
 export default async function ClubPage({ params }: { params: Promise<{ liga: string; clube: string }> }) {

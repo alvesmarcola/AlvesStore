@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { AdminNavigation } from "@/components/admin-navigation";
 import { AdminSkeleton, EmptyState, ErrorState, StatCard, StatusBadge } from "@/components/admin-states";
-import { PackageOpen } from "lucide-react";
+import { PackageOpen, Trash2, AlertTriangle, EyeOff, X, ArrowLeft, Loader2, CheckCircle2 } from "lucide-react";
 import type { Audience, ProductType, Uniform } from "@/lib/types";
 import { adminFetch } from "@/lib/client/admin-fetch";
 import { SITE_NAME } from "@/lib/site";
@@ -32,6 +32,7 @@ type ManualProduct = {
   supplier_name: string;
   supplier_cost: number;
   tem_variacao_uniforme?: boolean;
+  oculto?: boolean;
 };
 
 type ProductDraft = {
@@ -54,6 +55,7 @@ type ProductDraft = {
   stock_by_size: Record<string, number>;
   imageUrls: string[];
   tem_variacao_uniforme: boolean;
+  oculto: boolean;
 };
 
 const emptyDraft: ProductDraft = {
@@ -75,6 +77,7 @@ const emptyDraft: ProductDraft = {
   stock_by_size: { P: 0, M: 0, G: 0, GG: 0 },
   imageUrls: [],
   tem_variacao_uniforme: false,
+  oculto: false,
 };
 
 const KNOWN_COMPETITIONS = [
@@ -157,6 +160,120 @@ export default function AdminProducts() {
   const [message, setMessage] = useState("");
   const [loadError, setLoadError] = useState("");
 
+  const [productToDelete, setProductToDelete] = useState<ManualProduct | null>(null);
+  const [deleteStep, setDeleteStep] = useState<1 | 2>(1);
+  const [orderCount, setOrderCount] = useState<number | null>(null);
+  const [checkingOrders, setCheckingOrders] = useState(false);
+  const [confirmationText, setConfirmationText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteActionError, setDeleteActionError] = useState("");
+
+  async function initiateDelete(product: ManualProduct) {
+    setProductToDelete(product);
+    setDeleteStep(1);
+    setOrderCount(null);
+    setConfirmationText("");
+    setDeleteActionError("");
+    setCheckingOrders(true);
+
+    try {
+      const res = await adminFetch(`/api/admin/products?check_orders=${encodeURIComponent(product.id)}`, {
+        cache: "no-store",
+      });
+      const body = await res.json();
+      if (res.ok && typeof body.orderCount === "number") {
+        setOrderCount(body.orderCount);
+      } else {
+        setOrderCount(0);
+      }
+    } catch {
+      setOrderCount(0);
+    } finally {
+      setCheckingOrders(false);
+    }
+  }
+
+  async function handleConfirmDelete() {
+    if (!productToDelete) return;
+    setIsDeleting(true);
+    setDeleteActionError("");
+    try {
+      const res = await adminFetch(`/api/admin/products?id=${encodeURIComponent(productToDelete.id)}`, {
+        method: "DELETE",
+      });
+      const body = await res.json();
+      if (!res.ok) {
+        throw new Error(body.error ?? "Não foi possível excluir o produto.");
+      }
+
+      const deletedId = productToDelete.id;
+      const deletedName = productToDelete.nome;
+
+      setProducts((prev) => prev.filter((p) => p.id !== deletedId));
+
+      if (draft.id === deletedId) {
+        resetForm();
+      }
+
+      setProductToDelete(null);
+      setMessage(`Produto "${deletedName}" excluído com sucesso.`);
+    } catch (err) {
+      setDeleteActionError(err instanceof Error ? err.message : "Erro ao excluir produto.");
+    } finally {
+      setIsDeleting(false);
+    }
+  }
+
+  async function handleQuickHide() {
+    if (!productToDelete) return;
+    setIsDeleting(true);
+    setDeleteActionError("");
+    try {
+      const res = await adminFetch("/api/admin/products", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: productToDelete.id,
+          slug: productToDelete.slug,
+          nome: productToDelete.nome,
+          clube: productToDelete.clube,
+          liga: productToDelete.liga,
+          publico: productToDelete.publico,
+          tipo: productToDelete.tipo,
+          temporada: productToDelete.temporada,
+          uniforme: productToDelete.uniforme,
+          preco: productToDelete.preco,
+          tamanhos: productToDelete.tamanhos,
+          cor: productToDelete.cor,
+          description: productToDelete.description,
+          stock_by_size: productToDelete.stock_by_size,
+          brand: productToDelete.brand,
+          supplier_name: productToDelete.supplier_name,
+          supplier_cost: productToDelete.supplier_cost,
+          imageUrls: [],
+          tem_variacao_uniforme: productToDelete.tem_variacao_uniforme,
+          oculto: true,
+        }),
+      });
+      const body = await res.json();
+      if (!res.ok) throw new Error(body.error ?? "Não foi possível ocultar o produto.");
+
+      setProducts((prev) =>
+        prev.map((p) => (p.id === productToDelete.id ? { ...p, oculto: true } : p))
+      );
+      if (draft.id === productToDelete.id) {
+        setDraft((curr) => ({ ...curr, oculto: true }));
+      }
+      const hiddenName = productToDelete.nome;
+      setProductToDelete(null);
+      setMessage(`Produto "${hiddenName}" foi ocultado no site.`);
+    } catch (err) {
+      setDeleteActionError(err instanceof Error ? err.message : "Erro ao ocultar produto.");
+    } finally {
+      setIsDeleting(false);
+    }
+  }
+
   async function loadProducts() {
     setLoading(true);
     setMessage("");
@@ -203,6 +320,7 @@ export default function AdminProducts() {
       stock_by_size: Object.fromEntries(sizes.map((size) => [size, product.stock_by_size?.[size] ?? 0])),
       imageUrls: [],
       tem_variacao_uniforme: Boolean(product.tem_variacao_uniforme),
+      oculto: Boolean(product.oculto),
     });
     setSizeInput(sizes.join(", "));
     setExistingPhotos(product.images ?? []);
@@ -502,6 +620,22 @@ export default function AdminProducts() {
               </div>
             </label>
           </div>
+          <div className="rounded-lg border border-border bg-paper/50 p-3 md:col-span-2">
+            <label className="flex cursor-pointer items-start gap-3">
+              <input
+                type="checkbox"
+                checked={draft.oculto}
+                onChange={(event) => setField("oculto", event.target.checked)}
+                className="mt-0.5 h-4 w-4 rounded border-border text-pitch focus:ring-pitch"
+              />
+              <div className="text-xs">
+                <span className="font-bold text-ink">Ocultar produto no site (Privado / Teste)</span>
+                <p className="mt-0.5 text-muted">
+                  Quando marcado, o produto NÃO aparece na home, na lista de ligas, na busca nem no sitemap. A rota pública retorna 404, mas administradores logados continuam podendo acessá-lo e testar compras.
+                </p>
+              </div>
+            </label>
+          </div>
           <Field label="Descrição" className="md:col-span-2">
             <textarea maxLength={4000} rows={4} value={draft.description} onChange={(event) => setField("description", event.target.value)} className="rounded-lg border border-border px-3 py-2.5 font-normal" />
           </Field>
@@ -530,8 +664,21 @@ export default function AdminProducts() {
               ))}
             </div>
           </div>
-          <div className="sticky bottom-0 z-10 -mx-3 flex flex-wrap gap-2 bg-white/95 p-3 backdrop-blur md:static md:mx-0 md:col-span-2 md:bg-transparent md:p-0 md:backdrop-blur-0">
-            <button type="submit" disabled={saving || uploading} className="rounded-lg bg-ink px-5 py-3 text-xs font-black uppercase text-white disabled:opacity-50">{saving ? "Salvando…" : draft.id ? "Salvar alterações" : "Cadastrar e publicar"}</button>
+          <div className="sticky bottom-0 z-10 -mx-3 flex flex-wrap items-center gap-2 bg-white/95 p-3 backdrop-blur md:static md:mx-0 md:col-span-2 md:bg-transparent md:p-0 md:backdrop-blur-0">
+            <button type="submit" disabled={saving || uploading} className="min-h-[44px] rounded-lg bg-ink px-5 py-3 text-xs font-black uppercase text-white disabled:opacity-50">{saving ? "Salvando…" : draft.id ? "Salvar alterações" : "Cadastrar e publicar"}</button>
+            {draft.id && (
+              <button
+                type="button"
+                onClick={() => {
+                  const currentProd = products.find((p) => p.id === draft.id);
+                  if (currentProd) void initiateDelete(currentProd);
+                }}
+                className="inline-flex min-h-[44px] items-center gap-1.5 rounded-lg border border-red-200 bg-red-50 px-4 py-2.5 text-xs font-bold text-red-700 hover:bg-red-100 transition-colors"
+              >
+                <Trash2 className="h-4 w-4" />
+                Excluir produto
+              </button>
+            )}
           </div>
         </form>
       </section>
@@ -540,6 +687,12 @@ export default function AdminProducts() {
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div><h2 className="text-xl font-black">Produtos cadastrados manualmente</h2><p className="mt-1 text-xs text-muted">{products.length} produto(s) · o catálogo importado continua preservado.</p></div>
           {products.length > 0 && <p className="text-xs text-muted">Estoque total registrado: {products.reduce((sum, product) => sum + Object.values(product.stock_by_size ?? {}).reduce((subtotal, count) => subtotal + count, 0), 0)} unidades</p>}
+        </div>
+        <div className="mt-3 rounded-lg border border-border bg-paper/60 p-3 text-xs text-muted flex items-center gap-2">
+          <span className="font-bold text-ink">Catálogo Geral (Yupoo):</span>
+          <span>
+            Camisas do catálogo importado são integradas em código. Apenas produtos manuais desta lista podem ser editados ou excluídos diretamente pelo painel.
+          </span>
         </div>
         {products.length === 0 ? (
           <div className="mt-4"><EmptyState icon={PackageOpen} title="Nenhum produto manual ainda" description="Cadastre seu primeiro produto no formulário acima. O catálogo importado continua preservado." /></div>
@@ -556,10 +709,23 @@ export default function AdminProducts() {
                   <p className="mt-2 text-sm font-black">{currency.format(Number(product.preco))}</p>
                   <p className="mt-1 text-[11px] text-muted">{product.tamanhos.map((size) => `${size}: ${product.stock_by_size?.[size] ?? 0}`).join(" · ")}</p>
                   <div className="mt-2 flex flex-wrap gap-1.5">
-                    <StatusBadge tone="blue">Publicado na vitrine</StatusBadge>
+                    <StatusBadge tone={product.oculto ? "red" : "blue"}>
+                      {product.oculto ? "Oculto no site" : "Publicado na vitrine"}
+                    </StatusBadge>
                     {product.tem_variacao_uniforme && <StatusBadge tone="amber">Casa / Fora</StatusBadge>}
                   </div>
-                  <button type="button" onClick={() => editProduct(product)} className="mt-3 min-h-11 rounded-md border border-border px-3 py-2 text-xs font-bold hover:bg-paper">Editar produto e estoque</button>
+                  <div className="mt-3 flex flex-wrap items-center gap-2">
+                    <button type="button" onClick={() => editProduct(product)} className="min-h-[44px] rounded-md border border-border px-3 py-1.5 text-xs font-bold hover:bg-paper">Editar produto e estoque</button>
+                    <a href={`/produto/${product.slug}`} target="_blank" rel="noreferrer" className="inline-flex min-h-[44px] items-center rounded-md border border-border bg-paper px-3 py-1.5 text-xs font-bold text-ink hover:bg-zinc-200">Ver página</a>
+                    <button
+                      type="button"
+                      onClick={() => void initiateDelete(product)}
+                      className="inline-flex min-h-[44px] items-center gap-1.5 rounded-md border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-bold text-red-700 hover:bg-red-100 transition-colors"
+                    >
+                      <Trash2 className="h-3.5 w-3.5" />
+                      Excluir
+                    </button>
+                  </div>
                 </div>
               </article>
             ))}
@@ -567,6 +733,231 @@ export default function AdminProducts() {
         )}
       </section>
       </>}
+
+      {productToDelete && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="delete-dialog-title"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+        >
+          <div className="relative max-h-[90vh] w-full max-w-md overflow-y-auto rounded-2xl bg-white p-6 shadow-2xl border border-border">
+            <button
+              type="button"
+              onClick={() => {
+                if (!isDeleting) setProductToDelete(null);
+              }}
+              aria-label="Fechar modal"
+              className="absolute right-4 top-4 rounded-lg p-2 text-muted hover:bg-paper hover:text-ink min-h-[44px] min-w-[44px] flex items-center justify-center"
+            >
+              <X className="h-5 w-5" />
+            </button>
+
+            <div className="flex items-center gap-2.5">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-100 text-red-600">
+                <Trash2 className="h-5 w-5" />
+              </div>
+              <div>
+                <h3 id="delete-dialog-title" className="text-lg font-black text-ink">
+                  {deleteStep === 1 ? "Remover produto" : "Confirmação de exclusão"}
+                </h3>
+                <p className="text-xs text-muted">
+                  {deleteStep === 1 ? "Etapa 1 de 2 · Verificação" : "Etapa 2 de 2 · Confirmação final"}
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-4 flex items-center gap-3 rounded-xl border border-border bg-paper/40 p-3">
+              <div className="relative h-14 w-12 shrink-0 overflow-hidden rounded bg-paper">
+                {productToDelete.images?.[0] ? (
+                  <Image
+                    src={productToDelete.images[0].src}
+                    alt={productToDelete.nome}
+                    fill
+                    sizes="48px"
+                    unoptimized
+                    className="object-cover"
+                  />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center text-[10px] text-muted">Sem foto</div>
+                )}
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="font-bold text-sm text-ink truncate">{productToDelete.nome}</p>
+                <p className="text-xs text-muted">
+                  {productToDelete.clube} · {currency.format(Number(productToDelete.preco))}
+                </p>
+                <p className="text-[11px] font-mono text-muted truncate">/{productToDelete.slug}</p>
+              </div>
+            </div>
+
+            {deleteActionError && (
+              <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-xs text-red-700">
+                <p className="font-bold flex items-center gap-1.5">
+                  <AlertTriangle className="h-4 w-4 shrink-0" />
+                  Não foi possível concluir
+                </p>
+                <p className="mt-1">{deleteActionError}</p>
+              </div>
+            )}
+
+            {deleteStep === 1 ? (
+              <div className="mt-5 space-y-4">
+                {checkingOrders ? (
+                  <div className="flex items-center justify-center gap-2 rounded-xl border border-border p-4 text-xs text-muted">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <span>Verificando pedidos vinculados a este produto...</span>
+                  </div>
+                ) : orderCount && orderCount > 0 ? (
+                  <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-xs text-amber-900 space-y-2">
+                    <div className="flex items-start gap-2">
+                      <AlertTriangle className="h-5 w-5 shrink-0 text-amber-600 mt-0.5" />
+                      <div>
+                        <p className="font-bold text-amber-950">
+                          Este produto possui {orderCount} pedido(s) registrado(s)
+                        </p>
+                        <p className="mt-1 text-amber-800 leading-relaxed">
+                          A exclusão definitiva está <strong>bloqueada</strong> para preservar o histórico financeiro e fiscal dos pedidos já realizados.
+                        </p>
+                        <p className="mt-2 text-amber-900 font-semibold">
+                          Recomendação: Oculte o produto para retirá-lo da vitrine e da busca sem comprometer o histórico de vendas.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-xs text-emerald-900">
+                    <div className="flex items-start gap-2">
+                      <CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-600 mt-0.5" />
+                      <div>
+                        <p className="font-bold text-emerald-950">Nenhum pedido vinculado encontrado</p>
+                        <p className="mt-1 text-emerald-800 leading-relaxed">
+                          Este produto nunca foi comprado. Você pode escolher entre ocultá-lo da loja ou excluí-lo definitivamente (junto com suas fotos).
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex flex-col gap-2 pt-2">
+                  <button
+                    type="button"
+                    disabled={isDeleting || checkingOrders}
+                    onClick={() => void handleQuickHide()}
+                    className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl bg-ink px-4 py-2.5 text-xs font-bold text-white hover:bg-pitch transition-colors disabled:opacity-50"
+                  >
+                    <EyeOff className="h-4 w-4" />
+                    {productToDelete.oculto ? "Já está oculto no site (manter)" : "Ocultar produto no site agora"}
+                  </button>
+
+                  <button
+                    type="button"
+                    disabled={isDeleting || checkingOrders || (orderCount !== null && orderCount > 0)}
+                    onClick={() => setDeleteStep(2)}
+                    className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl border border-red-300 bg-red-50 px-4 py-2.5 text-xs font-bold text-red-700 hover:bg-red-100 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                    {orderCount && orderCount > 0
+                      ? "Exclusão bloqueada (possui pedidos)"
+                      : "Continuar para exclusão definitiva →"}
+                  </button>
+
+                  <button
+                    type="button"
+                    disabled={isDeleting}
+                    onClick={() => setProductToDelete(null)}
+                    className="flex min-h-[44px] w-full items-center justify-center rounded-xl border border-border px-4 py-2.5 text-xs font-bold text-muted hover:text-ink hover:bg-paper transition-colors"
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="mt-5 space-y-4">
+                <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-xs text-red-900">
+                  <p className="font-bold flex items-center gap-1.5 text-red-950">
+                    <AlertTriangle className="h-4 w-4 shrink-0 text-red-600" />
+                    Atenção: Ação irreversível!
+                  </p>
+                  <p className="mt-1.5 leading-relaxed text-red-800">
+                    O produto será removido permanentemente do banco de dados e todas as fotos associadas no Supabase Storage serão apagadas.
+                  </p>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-ink">
+                    Para confirmar, digite o nome do produto:
+                  </label>
+                  <div className="mt-1 rounded-md bg-paper p-2 font-mono text-xs text-ink font-bold select-all border border-border">
+                    {productToDelete.nome}
+                  </div>
+                  <p className="mt-1 text-[11px] text-muted">Ou digite a palavra <span className="font-mono font-bold text-ink">EXCLUIR</span>:</p>
+                  <input
+                    type="text"
+                    autoFocus
+                    disabled={isDeleting}
+                    value={confirmationText}
+                    onChange={(e) => setConfirmationText(e.target.value)}
+                    placeholder="Digite o nome ou EXCLUIR"
+                    className="mt-2 w-full rounded-xl border border-border px-3 py-2.5 text-xs font-normal focus:border-red-500 focus:ring-1 focus:ring-red-500 outline-none"
+                  />
+                </div>
+
+                {(() => {
+                  const isConfirmed =
+                    confirmationText.trim().toLowerCase() === productToDelete.nome.trim().toLowerCase() ||
+                    confirmationText.trim() === "EXCLUIR";
+
+                  return (
+                    <div className="flex flex-col gap-2 pt-2">
+                      <button
+                        type="button"
+                        disabled={!isConfirmed || isDeleting}
+                        onClick={() => void handleConfirmDelete()}
+                        className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl bg-red-600 px-4 py-2.5 text-xs font-bold text-white hover:bg-red-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                      >
+                        {isDeleting ? (
+                          <>
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                            Excluindo produto e fotos...
+                          </>
+                        ) : (
+                          <>
+                            <Trash2 className="h-4 w-4" />
+                            Excluir definitivamente agora
+                          </>
+                        )}
+                      </button>
+
+                      <button
+                        type="button"
+                        disabled={isDeleting}
+                        onClick={() => {
+                          setDeleteStep(1);
+                          setConfirmationText("");
+                        }}
+                        className="flex min-h-[44px] w-full items-center justify-center gap-1.5 rounded-xl border border-border px-4 py-2.5 text-xs font-bold text-muted hover:text-ink hover:bg-paper transition-colors"
+                      >
+                        <ArrowLeft className="h-3.5 w-3.5" />
+                        Voltar à etapa anterior
+                      </button>
+
+                      <button
+                        type="button"
+                        disabled={isDeleting}
+                        onClick={() => setProductToDelete(null)}
+                        className="flex min-h-[44px] w-full items-center justify-center rounded-xl border border-transparent px-4 py-2 text-xs font-bold text-muted hover:text-ink"
+                      >
+                        Cancelar
+                      </button>
+                    </div>
+                  );
+                })()}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </main>
   );
 }

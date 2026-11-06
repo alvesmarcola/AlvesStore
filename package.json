@@ -9,7 +9,7 @@
     "build": "next build",
     "start": "next start",
     "catalog:override": "tsx scripts/set-product-override.ts",
-    "test": "tsx --test tests/payment.test.ts",
+    "test": "tsx --test tests/*.test.ts",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit"
   },

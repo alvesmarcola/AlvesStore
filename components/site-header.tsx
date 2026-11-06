@@ -15,7 +15,7 @@ const dropdownTransition = { duration: 0.18, ease: "easeOut" as const };
 
 type SearchSuggestion = { slug: string; nome: string; clube: string; temporada: string };
 
-export function SiteHeader({ leagues, hasRegatas, hasNbaRegatas }: { leagues: Pick<CatalogLeague, "slug" | "nome">[]; hasRegatas: boolean; hasNbaRegatas: boolean }) {
+export function SiteHeader({ leagues, hasNbaRegatas }: { leagues: Pick<CatalogLeague, "slug" | "nome">[]; hasRegatas?: boolean; hasNbaRegatas: boolean }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [leagueOpen, setLeagueOpen] = useState(false);
   const [categoryOpen, setCategoryOpen] = useState("");

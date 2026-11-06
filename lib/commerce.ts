@@ -1,6 +1,6 @@
 import { storeConfig } from "@/config";
 import type { CartItem } from "@/lib/types";
-import { classifyProduct, getProductSizeSurcharge, isFreeShippingProduct, isKidsProduct, isManualProduct, isNbaTankTop, isPackageEligible, isRetroProduct, isTestProduct } from "@/lib/product-classification";
+import { classifyProduct, getProductSizeSurcharge, isFreeShippingProduct, isManualProduct, isNbaTankTop, isPackageEligible, isRetroProduct, isTestProduct } from "@/lib/product-classification";
 import { getAvailablePatches } from "@/lib/patch-compatibility";
 import { formatCustomization } from "@/lib/customization";
 import { calcularPromoBlackFriday, isBlackFridayEligibleShirt } from "@/lib/black-friday";
@@ -30,7 +30,6 @@ export function getShippingOfferText() {
 }
 
 export function getCartPricing(items: CartItem[]) {
-  const units = items.reduce((sum, item) => sum + item.quantity, 0);
   const shippingUnits = items.reduce((sum, item) => sum + (isFreeShippingProduct(item.product) ? 0 : item.quantity), 0);
   const classified = items.map((item) => ({ item, facts: classifyProduct(item.product) }));
   const promo = calcularPromoBlackFriday(items, new Date());

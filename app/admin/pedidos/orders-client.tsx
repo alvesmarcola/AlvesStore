@@ -45,7 +45,22 @@ type Order = {
   created_at: string;
   updated_at: string;
 };
-type OperationalStatus = "aguardando_pagamento" | "pagamento_aprovado" | "aguardando_fornecedor" | "pedido_realizado" | "em_preparacao" | "enviado" | "cancelado";
+
+type PaymentEvent = {
+  id: string;
+  payment_id: string;
+  order_id: string | null;
+  topic: string | null;
+  action: string | null;
+  status: string;
+  payload: Record<string, unknown>;
+  is_orphan: boolean;
+  is_divergent: boolean;
+  processed: boolean;
+  error_message: string | null;
+  created_at: string;
+};
+type OperationalStatus = "aguardando_pagamento" | "pagamento_aprovado" | "aguardando_fornecedor" | "pedido_realizado" | "em_preparacao" | "enviado" | "cancelado" | "divergencia_pagamento" | "expirado";
 type SupplierStatus = "nao_solicitado" | "solicitado" | "confirmado" | "em_preparacao" | "recebido" | "cancelado";
 
 const operationalOptions: [OperationalStatus, string][] = [
@@ -56,6 +71,8 @@ const operationalOptions: [OperationalStatus, string][] = [
   ["em_preparacao", "Em preparação"],
   ["enviado", "Enviado"],
   ["cancelado", "Cancelado"],
+  ["divergencia_pagamento", "Divergência de pagamento"],
+  ["expirado", "Expirado"],
 ];
 const supplierOptions: [SupplierStatus, string][] = [
   ["nao_solicitado", "Não solicitado"],
@@ -74,6 +91,11 @@ const statusLabels: Record<string, string> = {
   cancelled: "Cancelado",
   refunded: "Reembolsado",
   in_process: "Em processamento",
+  divergencia_pagamento: "Divergência de pagamento",
+  pagamento_recusado: "Pagamento recusado",
+  reembolsado: "Reembolsado",
+  contestado: "Contestado",
+  expirado: "Expirado (> 48h)",
 };
 const paymentLabels: Record<string, string> = {
   credit_card: "Cartão de crédito",
@@ -202,6 +224,7 @@ function OrderOperations({ order, onSaved }: { order: Order; onSaved: () => void
 
 export default function AdminOrders() {
   const [orders, setOrders] = useState<Order[]>([]);
+  const [paymentEvents, setPaymentEvents] = useState<PaymentEvent[]>([]);
   const [trackingValues, setTrackingValues] = useState<Record<string, string>>({});
   const [trackingUrls, setTrackingUrls] = useState<Record<string, string>>({});
   const [savingId, setSavingId] = useState("");
@@ -213,6 +236,8 @@ export default function AdminOrders() {
   const paidOrders = orders.filter(isOrderPaid);
   const pendingOrders = orders.filter((order) => isOrderPending(order));
   const expiredOrders = orders.filter((order) => isOrderExpired(order));
+  const divergentOrders = orders.filter((order) => order.status === "divergencia_pagamento" || order.operational_status === "divergencia_pagamento");
+  const orphanEvents = paymentEvents.filter((event) => event.is_orphan || !event.order_id);
   const visibleOrders = filter === "paid"
     ? paidOrders
     : filter === "pending"
@@ -232,8 +257,10 @@ export default function AdminOrders() {
         return;
       }
       if (!response.ok) throw new Error(body.error ?? "Não foi possível carregar os pedidos.");
-      const rows = body.orders as Order[];
+      const rows = (body.orders ?? []) as Order[];
+      const events = (body.paymentEvents ?? []) as PaymentEvent[];
       setOrders(rows);
+      setPaymentEvents(events);
       setTrackingValues(Object.fromEntries(rows.map((order) => [order.id, order.tracking_code ?? ""])));
       setTrackingUrls(Object.fromEntries(rows.map((order) => [order.id, order.tracking_url ?? ""])));
     } catch (error) {
@@ -366,6 +393,63 @@ export default function AdminOrders() {
         <StatCard label="Expirados" value={String(expiredOrders.length)} detail="Abandonos de checkout (> 48h)" />
       </section>
       {message && <p role="status" aria-live="polite" className="mt-4 rounded-lg bg-paper px-4 py-3 text-sm">{message}</p>}
+
+      {orphanEvents.length > 0 && (
+        <section className="mt-4 rounded-xl border border-amber-300 bg-amber-50 p-4 text-xs text-amber-950">
+          <div className="flex items-center gap-2 text-sm font-bold text-amber-900">
+            <span>⚠️ Pagamentos sem pedido correspondente (órfãos): {orphanEvents.length}</span>
+          </div>
+          <p className="mt-1 text-muted">
+            Pagamentos recebidos no Mercado Pago cujo número de referência (external_reference) não foi encontrado no Supabase:
+          </p>
+          <div className="mt-3 overflow-x-auto rounded-lg border border-amber-200 bg-white p-2">
+            <table className="w-full text-left text-xs">
+              <thead>
+                <tr className="border-b border-border text-[10px] uppercase text-muted">
+                  <th className="px-2 py-1">ID Pagamento</th>
+                  <th className="px-2 py-1">Data / Hora</th>
+                  <th className="px-2 py-1">Status MP</th>
+                  <th className="px-2 py-1">Valor</th>
+                  <th className="px-2 py-1">Detalhes</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {orphanEvents.map((evt) => (
+                  <tr key={evt.id}>
+                    <td className="px-2 py-2 font-mono font-bold">{evt.payment_id}</td>
+                    <td className="px-2 py-2">{date.format(new Date(evt.created_at))}</td>
+                    <td className="px-2 py-2 font-bold text-amber-700">{evt.status}</td>
+                    <td className="px-2 py-2 font-bold">
+                      {evt.payload && typeof evt.payload.transaction_amount === "number"
+                        ? money.format(evt.payload.transaction_amount)
+                        : "—"}
+                    </td>
+                    <td className="px-2 py-2 text-[10px] text-muted">{evt.error_message ?? "Verifique no painel do Mercado Pago"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      )}
+
+      {divergentOrders.length > 0 && (
+        <section className="mt-4 rounded-xl border border-red-300 bg-red-50 p-4 text-xs text-red-950">
+          <div className="flex items-center gap-2 text-sm font-bold text-red-900">
+            <span>⚠️ Pedidos com divergência de pagamento: {divergentOrders.length}</span>
+          </div>
+          <p className="mt-1 text-muted">
+            O valor recebido difere do total do pedido. A confirmação foi bloqueada para revisão da equipe:
+          </p>
+          <ul className="mt-2 list-disc pl-5">
+            {divergentOrders.map((ord) => (
+              <li key={ord.id} className="py-0.5">
+                Pedido <strong>{ord.id.slice(0, 8).toUpperCase()}</strong> ({ord.customer.fullName}): esperado {money.format(ord.total_cents / 100)}.
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
       {orders.length > 0 && (
         <div className="mt-4 flex flex-wrap items-center gap-2">
           <button
@@ -424,7 +508,26 @@ export default function AdminOrders() {
                     <td className="px-4 py-4">
                       <span className="font-bold">{statusLabels[paymentStatus] ?? paymentStatus}</span>
                       <span className="mt-1 block text-[10px] text-muted">{paymentLabels[order.payment_type_id ?? ""] ?? paymentLabels[order.payment_method_id ?? ""] ?? order.payment_method_id ?? "Forma não informada"}</span>
-                      {order.mercado_pago_id && <span className="mt-1 block text-[10px] text-muted">ID {order.mercado_pago_id}</span>}
+                      {order.mercado_pago_id && <span className="mt-1 block font-mono text-[10px] text-muted">ID MP: {order.mercado_pago_id}</span>}
+                      {(() => {
+                        const orderEvents = paymentEvents.filter((evt) => evt.order_id === order.id || (order.mercado_pago_id && evt.payment_id === order.mercado_pago_id));
+                        if (!orderEvents.length) return null;
+                        return (
+                          <details className="mt-2">
+                            <summary className="cursor-pointer text-[10px] font-bold text-muted hover:text-ink">
+                              Eventos recebidos ({orderEvents.length})
+                            </summary>
+                            <ul className="mt-1 space-y-1 rounded border border-border bg-paper/60 p-2 text-[10px]">
+                              {orderEvents.map((evt) => (
+                                <li key={evt.id} className="border-b border-border/40 pb-1 last:border-0 last:pb-0">
+                                  <span className="font-bold">{evt.status}</span> · {shortDate.format(new Date(evt.created_at))}
+                                  {evt.error_message && <span className="block text-red-600">{evt.error_message}</span>}
+                                </li>
+                              ))}
+                            </ul>
+                          </details>
+                        );
+                      })()}
                       {!isPaid(order) && (
                         <button
                           type="button"

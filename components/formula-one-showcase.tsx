@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowUpRight, Flag, Gauge, MoveUpRight } from "lucide-react";
+import { ArrowUpRight, Flag, Gauge, MoveUpRight, ArrowRight } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
+import type { Product } from "@/lib/types";
+import { ProductCard } from "@/components/product-card";
 
 function RacingCarArtwork() {
   return (
@@ -52,7 +54,13 @@ function RacingCarArtwork() {
   );
 }
 
-export function FormulaOneShowcase({ href = "/f1" }: { href?: string }) {
+export function FormulaOneShowcase({
+  href = "/f1",
+  items = [],
+}: {
+  href?: string;
+  items?: Product[];
+}) {
   const reduceMotion = useReducedMotion();
 
   return (
@@ -62,7 +70,7 @@ export function FormulaOneShowcase({ href = "/f1" }: { href?: string }) {
       <div aria-hidden="true" className="f1-track absolute -right-28 top-1/2 -z-10 hidden h-[38rem] w-[38rem] -translate-y-1/2 rounded-full border border-white/[.08] lg:block" />
       <div aria-hidden="true" className="f1-track f1-track-inner absolute -right-8 top-1/2 -z-10 hidden h-[27rem] w-[27rem] -translate-y-1/2 rounded-full border border-white/[.06] lg:block" />
 
-      <div className="mx-auto max-w-7xl px-5 py-16 sm:py-20 lg:px-8 lg:py-28">
+      <div className="mx-auto max-w-7xl px-5 py-14 sm:py-16 lg:px-8 lg:py-20">
         <div className="grid items-center gap-10 lg:grid-cols-[.82fr_1.18fr] lg:gap-8">
           <motion.div
             initial={reduceMotion ? false : { opacity: 0, y: 24 }}
@@ -135,6 +143,31 @@ export function FormulaOneShowcase({ href = "/f1" }: { href?: string }) {
             <span aria-hidden="true" className="absolute -right-2 top-8 h-12 w-[3px] bg-[#e10600] sm:-right-4 sm:top-12 sm:h-16" />
           </motion.div>
         </div>
+
+        {/* Destaques de Produtos F1 no mesmo bloco */}
+        {items.length > 0 && (
+          <div className="mt-14 border-t border-white/10 pt-10">
+            <div className="mb-6 flex items-end justify-between gap-4">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-wider text-[#ff5550]">Coleção motorsport</p>
+                <h3 className="mt-1 text-2xl font-bold uppercase tracking-tight text-white sm:text-3xl">Destaques da Fórmula 1</h3>
+              </div>
+              <Link
+                href={href}
+                className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-white/80 hover:text-white transition"
+              >
+                Ver tudo da F1 <ArrowRight size={14} className="text-[#ff5550]" />
+              </Link>
+            </div>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
+              {items.map((product) => (
+                <div key={product.id} className="rounded-xl bg-[#111215] p-2 sm:p-2.5 border border-white/10">
+                  <ProductCard product={product} />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
       <div aria-hidden="true" className="f1-bottom-ribbon h-1 w-full" />
     </section>

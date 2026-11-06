@@ -1,8 +1,10 @@
 import { randomUUID } from "node:crypto";
 import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
+import { z } from "zod";
 import { manualProductSchema, type ManualProductInput } from "@/lib/admin/product-validation";
 import { ADMIN_PRIVATE_HEADERS, getAdminAuthFailure } from "@/lib/server/admin-auth";
+import { checkProductOrders, extractStoragePaths } from "@/lib/server/admin-product-deletion";
 import { hasBundledProductSlug } from "@/lib/server/supabase-catalog";
 import {
   describeSupabaseError,
@@ -13,7 +15,7 @@ import { SITE_NAME } from "@/lib/site";
 
 export const runtime = "nodejs";
 
-const PRODUCT_COLUMNS = "id,yupoo_id,slug,clube,clubeSlug,liga,publico,tipo,temporada,uniforme,nome,preco,tamanhos,cor,imageSeed,images,description,stock_by_size,brand,tem_variacao_uniforme";
+const PRODUCT_COLUMNS = "id,yupoo_id,slug,clube,clubeSlug,liga,publico,tipo,temporada,uniforme,nome,preco,tamanhos,cor,imageSeed,images,description,stock_by_size,brand,tem_variacao_uniforme,oculto";
 
 function publicImageRecords(imageUrls: string[], productName: string) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim() || process.env.SUPABASE_URL?.trim();
@@ -64,6 +66,7 @@ function productValues(input: ManualProductInput, id: string, imageUrls: string[
     stock_by_size: stockBySize,
     brand: input.brand,
     tem_variacao_uniforme: Boolean(input.tem_variacao_uniforme),
+    oculto: Boolean(input.oculto),
     updated_at: new Date().toISOString(),
   };
 }
@@ -95,6 +98,25 @@ function reportFailure(operation: string, error: unknown) {
 export async function GET(request: Request) {
   const authFailure = getAdminAuthFailure(request);
   if (authFailure) return jsonError(authFailure.message, authFailure.status);
+
+  const url = new URL(request.url);
+  const checkId = url.searchParams.get("check_orders");
+  if (checkId) {
+    const parsedId = z.string().uuid().safeParse(checkId);
+    if (!parsedId.success) return jsonError("ID de produto inválido.", 400);
+    try {
+      const supabase = getSupabaseOrdersClient();
+      const prod = await supabase.from("products").select("id, slug").eq("id", checkId).maybeSingle();
+      if (prod.error) throw prod.error;
+      if (!prod.data) return jsonError("Produto não encontrado.", 404);
+      const orderCount = await checkProductOrders(supabase, prod.data.id, prod.data.slug);
+      return NextResponse.json({ orderCount }, { headers: ADMIN_PRIVATE_HEADERS });
+    } catch (error) {
+      const configurationError = reportFailure("Falha ao checar pedidos do produto:", error);
+      return jsonError(configurationError ?? "Não foi possível verificar os pedidos do produto.", 500);
+    }
+  }
+
   try {
     const { data, error } = await getSupabaseOrdersClient().from("products")
       .select(PRODUCT_COLUMNS)
@@ -200,6 +222,7 @@ export async function PATCH(request: Request) {
         stock_by_size: stockBySize,
         brand: parsed.data.brand,
         tem_variacao_uniforme: Boolean(parsed.data.tem_variacao_uniforme),
+        oculto: Boolean(parsed.data.oculto),
         updated_at: new Date().toISOString(),
       })
       .eq("id", parsed.data.id)
@@ -216,5 +239,114 @@ export async function PATCH(request: Request) {
     if (code === "23505") return jsonError("Já existe um produto com esse endereço (slug). Escolha outro.", 409);
     if (configurationError) return jsonError(configurationError, 503);
     return jsonError("Não foi possível atualizar o produto. Confirme se as migrações de produtos e gestão administrativa foram aplicadas.", 503);
+  }
+}
+
+const deleteSchema = z.object({
+  id: z.string().uuid("ID de produto inválido."),
+});
+
+export async function DELETE(request: Request) {
+  const authFailure = getAdminAuthFailure(request);
+  if (authFailure) return jsonError(authFailure.message, authFailure.status);
+
+  let idToValidate: unknown;
+  const url = new URL(request.url);
+  const searchId = url.searchParams.get("id");
+  if (searchId) {
+    idToValidate = searchId;
+  } else {
+    try {
+      const body = await request.json();
+      idToValidate = body?.id;
+    } catch {
+      // corpo vazio ou sem json
+    }
+  }
+
+  const parsed = deleteSchema.safeParse({ id: idToValidate });
+  if (!parsed.success) {
+    return jsonError("ID de produto inválido.", 400);
+  }
+
+  const productId = parsed.data.id;
+
+  try {
+    const supabase = getSupabaseOrdersClient();
+    const existing = await supabase
+      .from("products")
+      .select("id,yupoo_id,nome,slug,preco,images")
+      .eq("id", productId)
+      .maybeSingle();
+
+    if (existing.error) throw existing.error;
+    if (!existing.data) {
+      return jsonError("Produto não encontrado.", 404);
+    }
+
+    if (!existing.data.yupoo_id.startsWith("manual:")) {
+      return jsonError("Apenas produtos manuais cadastrados no banco podem ser excluídos pelo painel.", 400);
+    }
+
+    const orderCount = await checkProductOrders(supabase, existing.data.id, existing.data.slug);
+    if (orderCount > 0) {
+      return NextResponse.json(
+        {
+          error: `Este produto possui ${orderCount} pedido(s) associado(s) e não pode ser apagado para preservar o histórico financeiro. Em vez de excluir, use a opção "Ocultar" para tirá-lo do site sem perder o histórico.`,
+          orderCount,
+          canHide: true,
+        },
+        { status: 409, headers: ADMIN_PRIVATE_HEADERS }
+      );
+    }
+
+    // 1. Remover fotos do Storage (apenas dentro de manual/ no bucket produtos)
+    const storagePaths = extractStoragePaths(existing.data.images);
+    if (storagePaths.length > 0) {
+      try {
+        await supabase.storage.from("produtos").remove(storagePaths);
+      } catch (storageErr) {
+        console.error("Erro ao remover fotos do Storage:", storageErr);
+      }
+    }
+
+    // 2. Remover fornecedor
+    await supabase.from("admin_product_supplier_details").delete().eq("product_id", productId);
+
+    // 3. Remover produto
+    const { error: deleteError } = await supabase.from("products").delete().eq("id", productId);
+    if (deleteError) throw deleteError;
+
+    // 4. Log de auditoria
+    try {
+      await supabase.from("admin_audit_log").insert({
+        acao: "produto_excluido",
+        entidade: "products",
+        entidade_id: productId,
+        resumo: {
+          nome: existing.data.nome,
+          slug: existing.data.slug,
+          preco: existing.data.preco,
+          fotos_removidas: storagePaths,
+        },
+      });
+    } catch (auditErr) {
+      console.warn("Falha ao registrar auditoria de exclusão de produto:", auditErr);
+    }
+
+    // 5. Invalidação de cache
+    revalidateTag("catalog");
+
+    return NextResponse.json(
+      {
+        deleted: true,
+        message: `Produto "${existing.data.nome}" excluído com sucesso.`,
+      },
+      { headers: ADMIN_PRIVATE_HEADERS }
+    );
+  } catch (error) {
+    const configurationError = reportFailure("Falha ao excluir produto manual:", error);
+    if (configurationError) return jsonError(configurationError, 503);
+    return jsonError("Não foi possível excluir o produto. Tente novamente mais tarde.", 500);
   }
 }

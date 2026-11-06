@@ -1,16 +1,15 @@
 import type { Product, ProductImage } from "@/lib/types";
 import bundledProducts from "@/data/products.json";
 import f1BundledProducts from "@/data/f1-products.json";
+import supabaseProductsCache from "@/data/supabase-products-cache.json";
 import { isFeminineProduct, prepareFeminineProduct } from "@/lib/feminine-catalog";
 import { isFormulaOneEvidence, isFormulaOneProduct, isJacketFormulaOneProduct } from "@/lib/formula-one";
 import { unstable_cache } from "next/cache";
 
-const PAGE_SIZE = 100;
+const PAGE_SIZE = 1000;
 const PRODUCT_COLUMNS = "id,yupoo_id,slug,clube,clubeSlug,liga,publico,tipo,temporada,uniforme,nome,preco,tamanhos,cor,imageSeed";
 const LIST_PRODUCT_COLUMNS = `${PRODUCT_COLUMNS},images`;
-const EXTENDED_LIST_PRODUCT_COLUMNS = `${LIST_PRODUCT_COLUMNS},category,gender,league,subcategory,tags,title,name,model,version`;
-const PUBLIC_LIST_PRODUCT_COLUMNS = `${EXTENDED_LIST_PRODUCT_COLUMNS},description,brand,tem_variacao_uniforme`;
-const DETAIL_PRODUCT_COLUMNS = `${PRODUCT_COLUMNS},images,description,brand,tem_variacao_uniforme`;
+const DETAIL_PRODUCT_COLUMNS = `${PRODUCT_COLUMNS},images,description,brand,tem_variacao_uniforme,oculto`;
 const bundledCatalog = [...(bundledProducts as unknown as Product[]), ...(f1BundledProducts as unknown as Product[])];
 
 export function getBundledFormulaOneProducts(): Product[] {
@@ -267,6 +266,9 @@ function mapProduct(value: unknown): Product | null {
     model: typeof value.model === "string" ? value.model : undefined,
     version: typeof value.version === "string" ? value.version : undefined,
     tem_variacao_uniforme: Boolean(value.tem_variacao_uniforme),
+    oculto: Boolean(value.oculto),
+    ignorar_regras_preco: Boolean(value.ignorar_regras_preco),
+    sem_oferta_quantidade: Boolean(value.sem_oferta_quantidade),
   };
 }
 
@@ -289,6 +291,7 @@ function hasStorefrontImages(product: Product) {
 }
 
 function isPublishedProduct(product: Product) {
+  if (product.oculto === true) return false;
   if (isJacketFormulaOneProduct(product)) return false;
   const isNba = product.liga === "nba" || product.tipo === "regata";
   const isRetro = product.tipo === "retro" || product.slug.startsWith("retro-") || product.slug.includes("-retro");
@@ -300,50 +303,89 @@ function isPublishedProduct(product: Product) {
   return hasImage && (product.tipo !== "revisar" || isNba || isRetro) && (hasKnownAudience || isFormulaOne);
 }
 
+export function getCachedSupabaseProducts(): Product[] {
+  const cachedRows = (supabaseProductsCache as unknown[]).map(mapProduct).filter((product): product is Product => product !== null);
+  return cachedRows.filter(isPublishedProduct);
+}
+
 export async function fetchSupabaseProducts(): Promise<Product[]> {
   const config = supabaseConfig();
-  if (!config) {
-    return bundledCatalog.filter(isPublishedProduct);
-  }
+  const cachedFallback = getCachedSupabaseProducts();
 
   const products: Product[] = [];
-  for (let offset = 0; ; offset += PAGE_SIZE) {
-    // A unique, stable key prevents rows from being skipped or repeated between pages.
-    const headers = {
-      apikey: config.key,
-      ...(config.key.startsWith("eyJ") ? { Authorization: `Bearer ${config.key}` } : {}),
-    };
-    const query = new URLSearchParams({ select: PUBLIC_LIST_PRODUCT_COLUMNS, order: "slug.asc", limit: String(PAGE_SIZE), offset: String(offset) });
-    let response = await fetch(`${config.url}/rest/v1/products?${query}`, { headers, next: { revalidate: 300, tags: ["catalog"] } });
-    if (!response.ok) {
-      query.set("select", EXTENDED_LIST_PRODUCT_COLUMNS);
-      response = await fetch(`${config.url}/rest/v1/products?${query}`, { headers, next: { revalidate: 300, tags: ["catalog"] } });
+  let fetchFailed = false;
+
+  if (config) {
+    try {
+      let activeColumns = LIST_PRODUCT_COLUMNS;
+      for (let offset = 0; ; offset += PAGE_SIZE) {
+        const headers = {
+          apikey: config.key,
+          ...(config.key.startsWith("eyJ") ? { Authorization: `Bearer ${config.key}` } : {}),
+        };
+        const query = new URLSearchParams({ select: activeColumns, order: "slug.asc", limit: String(PAGE_SIZE), offset: String(offset) });
+        let response = await fetch(`${config.url}/rest/v1/products?${query}`, {
+          headers,
+          next: { revalidate: 300, tags: ["catalog"] },
+          signal: AbortSignal.timeout(15_000),
+        });
+        if (!response.ok && offset === 0) {
+          // Se a seleção falhar na primeira página, recorre para as colunas básicas
+          activeColumns = LIST_PRODUCT_COLUMNS;
+          query.set("select", activeColumns);
+          response = await fetch(`${config.url}/rest/v1/products?${query}`, {
+            headers,
+            next: { revalidate: 300, tags: ["catalog"] },
+            signal: AbortSignal.timeout(15_000),
+          });
+        }
+        if (!response.ok) {
+          console.warn(`Falha ao consultar catálogo Supabase: HTTP ${response.status}. Utilizando snapshot válido em cache.`);
+          fetchFailed = true;
+          break;
+        }
+        const rows = await response.json() as unknown[];
+        const mapped = rows.map(mapProduct).filter((product): product is Product => product !== null)
+          .filter(isPublishedProduct)
+          .map((product) => ({ ...product, images: (product.images ?? []).slice(0, 2) }));
+        products.push(...mapped);
+        if (rows.length < PAGE_SIZE) break;
+      }
+    } catch (error) {
+      console.warn("Falha de conexão com Supabase durante carregamento do catálogo; utilizando último snapshot válido em cache:", error);
+      fetchFailed = true;
     }
-    if (!response.ok) {
-      // Older products schemas may not have optional category/tag/inventory columns.
-      query.set("select", LIST_PRODUCT_COLUMNS);
-      response = await fetch(`${config.url}/rest/v1/products?${query}`, { headers, next: { revalidate: 300, tags: ["catalog"] } });
-    }
-    if (!response.ok) {
-      console.error(`Falha ao consultar catálogo Supabase: HTTP ${response.status}.`);
-      throw new Error("Não foi possível carregar o catálogo atual da loja.");
-    }
-    const rows = await response.json() as unknown[];
-    // Mantém apenas produtos publicados e versão enxuta (2 imagens) para caber no cache (< 2 MB).
-    const mapped = rows.map(mapProduct).filter((product): product is Product => product !== null)
-      .filter(isPublishedProduct)
-      .map((product) => ({ ...product, images: (product.images ?? []).slice(0, 2) }));
-    products.push(...mapped);
-    if (rows.length < PAGE_SIZE) break;
+  } else {
+    fetchFailed = true;
   }
-  const published = products.filter(isPublishedProduct);
-  if (!published.length) return bundledCatalog.filter(isPublishedProduct);
+
+  let published = products.filter(isPublishedProduct);
+  if (fetchFailed || !published.length) {
+    if (cachedFallback.length > 0) {
+      published = cachedFallback;
+    } else {
+      // Se nem o Supabase nem o cache trouxerem produtos e for build de produção, o build deve falhar
+      if (process.env.NODE_ENV === "production" || process.env.NEXT_PHASE === "phase-production-build") {
+        throw new Error("Falha crítica no build: catálogo do Supabase inacessível e nenhum cache de produtos válido encontrado.");
+      }
+    }
+  }
+
   const mergedBySlug = new Map<string, Product>();
   for (const product of bundledCatalog.filter(isPublishedProduct)) mergedBySlug.set(product.slug, product);
   for (const product of getBundledFeminineProducts()) mergedBySlug.set(product.slug, product);
   for (const product of getBundledFormulaOneProducts()) mergedBySlug.set(product.slug, product);
   for (const product of published) mergedBySlug.set(product.slug, product);
   const result = [...mergedBySlug.values()];
+
+  // Verificação de integridade no build: nunca publicar catálogo parcial sem NBA ou ligas principais
+  const isBuildPhase = process.env.NODE_ENV === "production" || process.env.NEXT_PHASE === "phase-production-build";
+  const hasNba = result.some((p) => p.liga === "nba" || p.tipo === "regata");
+  const hasBrasileirao = result.some((p) => p.liga === "brasileirao-serie-a");
+  if (isBuildPhase && (!hasNba || !hasBrasileirao || result.length < 500)) {
+    throw new Error(`Integridade do catálogo violada no build: total=${result.length}, temNBA=${hasNba}, temBrasileirão=${hasBrasileirao}.`);
+  }
+
   return result;
 }
 
@@ -353,10 +395,14 @@ export const getSupabaseProducts = unstable_cache(
   { revalidate: 300, tags: ["catalog"] },
 );
 
-export async function getSupabaseProductBySlug(slug: string): Promise<Product | undefined> {
-  const bundledProduct = bundledCatalog.find((product) => product.slug.toLocaleLowerCase("en-US") === slug.toLocaleLowerCase("en-US") && isPublishedProduct(product));
+export async function getSupabaseProductBySlug(slug: string, options?: { allowHidden?: boolean }): Promise<Product | undefined> {
+  const allowHidden = options?.allowHidden === true;
+  const isMatch = (product: Product) => (allowHidden || isPublishedProduct(product));
+  const bundledProduct = bundledCatalog.find((product) => product.slug.toLocaleLowerCase("en-US") === slug.toLocaleLowerCase("en-US") && isMatch(product));
+  const cachedProduct = getCachedSupabaseProducts().find((product) => product.slug.toLocaleLowerCase("en-US") === slug.toLocaleLowerCase("en-US") && isMatch(product));
+  const fallbackProduct = bundledProduct || cachedProduct;
   const config = supabaseConfig();
-  if (!config) return bundledProduct;
+  if (!config) return fallbackProduct;
 
   const query = new URLSearchParams({ select: DETAIL_PRODUCT_COLUMNS, slug: `ilike.${slug.toLocaleLowerCase("en-US")}`, limit: "1" });
   let response = await fetch(`${config.url}/rest/v1/products?${query}`, {
@@ -367,10 +413,10 @@ export async function getSupabaseProductBySlug(slug: string): Promise<Product | 
       ...(config.key.startsWith("eyJ") ? { Authorization: `Bearer ${config.key}` } : {}),
     },
   }).catch((error: unknown) => {
-    console.error("Falha ao consultar produto no Supabase.", error);
+    console.warn("Falha ao consultar produto no Supabase; usando fallback local:", error);
     return null;
   });
-  if (!response) return bundledProduct;
+  if (!response) return fallbackProduct;
   if (!response.ok) {
     query.set("select", `${PRODUCT_COLUMNS},images`);
     response = await fetch(`${config.url}/rest/v1/products?${query}`, {
@@ -381,18 +427,16 @@ export async function getSupabaseProductBySlug(slug: string): Promise<Product | 
         ...(config.key.startsWith("eyJ") ? { Authorization: "Bearer " + config.key } : {}),
       },
     }).catch((error: unknown) => {
-      console.error("Falha ao consultar produto no schema legado do Supabase.", error);
+      console.warn("Falha ao consultar produto no schema legado do Supabase; usando fallback local:", error);
       return null;
     });
   }
   if (!response || !response.ok) {
-    const responseStatus = response ? response.status : "sem resposta";
-    console.error("Falha ao consultar produto Supabase: HTTP " + responseStatus + ".");
-    return bundledProduct;
+    return fallbackProduct;
   }
   const rows = await response.json() as unknown[];
   const product = rows.length ? mapProduct(rows[0]) ?? undefined : undefined;
-  return product && isPublishedProduct(product) ? product : bundledProduct;
+  return product && isMatch(product) ? product : fallbackProduct;
 }
 
 export function getBundledRelatedProducts(product: Product): Product[] {

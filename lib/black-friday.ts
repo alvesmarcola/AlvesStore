@@ -3,7 +3,12 @@ import { storeConfig } from "@/config";
 import type { Product } from "@/lib/types";
 
 export const BLACK_FRIDAY_PROMO_CODE = "BF-NBA-2026";
-const promoEndsAt = Date.UTC(2026, 11, 2, 2, 59, 59, 999);
+export const promoEndsAt = Date.UTC(2026, 11, 2, 2, 59, 59, 999);
+
+export function isBlackFridayActive(dataAtual: Date = new Date()): boolean {
+  const timestamp = dataAtual.getTime();
+  return Number.isFinite(timestamp) && timestamp <= promoEndsAt;
+}
 
 export type BlackFridayItem = {
   product: Product;
@@ -67,8 +72,7 @@ export function isBlackFridayEligibleShirt(product: Product): boolean {
 }
 
 export function calcularPromoBlackFriday(itens: BlackFridayItem[], dataAtual: Date) {
-  const timestamp = dataAtual.getTime();
-  const ativa = Number.isFinite(timestamp) && timestamp <= promoEndsAt;
+  const ativa = isBlackFridayActive(dataAtual);
   if (!ativa) return { desconto: 0, itensComDesconto: [] as BlackFridayDiscountedItem[], ativa };
 
   const regatas = itens.reduce((sum, item) => sum + (isNbaTankTop(item.product) ? item.quantity : 0), 0);

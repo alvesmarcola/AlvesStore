@@ -118,12 +118,12 @@ export function InstagramCTA() {
           transition={{ duration: reducedMotion ? 0 : 0.6, ease: [0.2, 0.7, 0.25, 1] }}
           className="flex flex-col items-center text-center text-white"
         >
-          {/* Logo / Ícone clicável direcionando para o perfil oficial */}
+          {/* Logo / Ícone clicável direcionando para o perfil no Instagram */}
           <motion.a
             href={INSTAGRAM_PROFILE_URL}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label={`Visitar perfil oficial da ${SITE_NAME} no Instagram`}
+            aria-label={`Visitar perfil da ${SITE_NAME} no Instagram`}
             className="mb-6 grid h-20 w-20 place-items-center rounded-2xl border border-white/30 bg-white/10 shadow-lg backdrop-blur-md transition-colors hover:border-white/50 hover:bg-white/20 sm:h-24 sm:w-24 sm:rounded-3xl"
             whileHover={reducedMotion ? undefined : { scale: 1.08, rotate: 3 }}
             whileTap={reducedMotion ? undefined : { scale: 0.95 }}

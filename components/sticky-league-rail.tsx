@@ -38,7 +38,7 @@ export function StickyLeagueRail({ leagues }: { leagues: CatalogLeague[] }) {
                 <span className="absolute inset-0 -z-10 bg-gradient-to-t from-black via-black/20 to-blue-900/15" />
                 <span className="pointer-events-none absolute -right-4 top-4 -z-10 text-[7rem] font-bold uppercase leading-none tracking-normal text-white/10 sm:text-[10rem]">{String(index + 1).padStart(2, "0")}</span>
                 <span className="relative z-10">
-                  <span className="mb-2 block text-[10px] font-bold uppercase tracking-wider text-action">Coleção oficial</span>
+                  <span className="mb-2 block text-[10px] font-bold uppercase tracking-wider text-action">Coleção</span>
                   <span className="block max-w-[16ch] text-3xl font-bold uppercase leading-tight tracking-normal sm:text-4xl">{league.nome}</span>
                   <span className="mt-3 block text-xs font-semibold text-white/70">{league.productCount} produtos · {league.clubes.length} clubes</span>
                 </span>

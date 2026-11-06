@@ -9,9 +9,18 @@ import type { Product } from "@/lib/types";
 import { storeConfig } from "@/config";
 import { useCart } from "@/store/cart";
 import { flyThumbnailToCart } from "@/lib/fly-to-cart";
-import { classifyProduct, getProductUnitPrice } from "@/lib/product-classification";
-import { getProductOfferText } from "@/lib/commerce";
-import { allowsCustomization } from "@/lib/formula-one";
+import { classifyProduct, getProductUnitPrice, isNbaTankTop, isPackageEligible } from "@/lib/product-classification";
+import { isBlackFridayActive, isBlackFridayEligibleShirt } from "@/lib/black-friday";
+
+export function getCardOfferBadge(product: Product, now: Date = new Date()): string | null {
+  if (isBlackFridayActive(now) && (isBlackFridayEligibleShirt(product) || isNbaTankTop(product))) {
+    return "Black Friday";
+  }
+  if (isPackageEligible(product)) {
+    return `2 por R$ ${storeConfig.twoShirtPrice}`;
+  }
+  return null;
+}
 
 export function ProductCard({ product }: { product: Product }) {
   const [size, setSize] = useState("");
@@ -20,6 +29,7 @@ export function ProductCard({ product }: { product: Product }) {
   const primaryImage = productImageAsset(product);
   const alternateImage = productImageAsset(product, true);
   const classification = classifyProduct(product);
+  const offerBadge = getCardOfferBadge(product);
 
   function add() {
     if (!size) return;
@@ -47,7 +57,7 @@ export function ProductCard({ product }: { product: Product }) {
       </Link>
     </div>
     <div className="flex flex-1 flex-col justify-between pt-3 min-w-0 w-full">
-      <div className="min-w-0 w-full space-y-1">
+      <div className="min-w-0 w-full space-y-1.5">
         <p className="line-clamp-2 min-h-10 text-xs font-semibold leading-5 text-ink sm:text-sm break-words overflow-hidden" title={product.nome}>
           {product.nome}
         </p>
@@ -56,16 +66,12 @@ export function ProductCard({ product }: { product: Product }) {
             {classification.reviewRequired ? classification.priceLabel : `A partir de ${formatCurrency(getProductUnitPrice(product)!)}`}
           </span>
         </div>
-        <p className="line-clamp-2 text-[10px] leading-4 text-muted break-words overflow-hidden">
-          {getProductOfferText(product)}
-        </p>
-        <p className="text-[10px] text-muted truncate">
-          Tamanho 2GG: +{formatCurrency(storeConfig.size2GGPrice)}
-        </p>
-        {allowsCustomization(product) && (
-          <p className="text-[10px] text-muted truncate">
-            Personalização: +{formatCurrency(storeConfig.customizationPrice)} por camisa
-          </p>
+        {offerBadge && (
+          <div>
+            <span className="inline-block rounded-full bg-amber-100 px-2.5 py-0.5 text-[10px] font-bold text-amber-900">
+              {offerBadge}
+            </span>
+          </div>
         )}
       </div>
       <div className="mt-3 pt-1">

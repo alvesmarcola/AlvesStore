@@ -104,6 +104,39 @@ export function CustomerReviews() {
 
   const totalReviewsCount = totalCount ?? reviews.length;
 
+  if (!loading && reviews.length < 3) {
+    return (
+      <section className="bg-[#FAFAFA] py-8 sm:py-10 border-t border-border" aria-label="Avaliação de clientes">
+        <div className="mx-auto max-w-7xl px-5 lg:px-8">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 rounded-2xl border border-zinc-200 bg-white p-5 sm:p-7 shadow-sm">
+            <div className="flex items-center gap-3.5">
+              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-amber-100 text-amber-700">
+                <Star size={18} className="fill-amber-400 text-amber-400" />
+              </span>
+              <div>
+                <h3 className="text-sm font-bold text-zinc-950">Já comprou na {SITE_NAME}?</h3>
+                <p className="text-xs text-zinc-500">Sua opinião é fundamental para nós. Conte como foi sua experiência.</p>
+              </div>
+            </div>
+            <a
+              href="#avaliacao-form-section"
+              className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-zinc-800 bg-zinc-950 px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-white transition hover:bg-zinc-800 shadow-sm shrink-0"
+            >
+              <MessageSquarePlus size={15} />
+              <span>Avaliar compra</span>
+            </a>
+          </div>
+
+          <div id="avaliacao-form-section" className="mt-8 pt-8 border-t border-zinc-200">
+            <div className="mx-auto max-w-2xl">
+              <AvaliacaoForm />
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="bg-[#FAFAFA] py-16 sm:py-20" aria-labelledby="reviews-title">
       <div className="mx-auto max-w-7xl px-5 lg:px-8">

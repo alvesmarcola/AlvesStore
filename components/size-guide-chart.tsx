@@ -39,7 +39,7 @@ export function SizeGuideChart({
       <div className="relative w-full bg-white" style={{ aspectRatio: `810 / ${imageHeight}` }}>
         <Image src={image} alt={imageAlt} fill sizes="(max-width: 810px) 100vw, 810px" className="object-contain" />
       </div>
-      <figcaption className="border-t border-border px-3 py-2 text-center text-xs text-muted">Imagem oficial da tabela de referência</figcaption>
+      <figcaption className="border-t border-border px-3 py-2 text-center text-xs text-muted">Imagem da tabela de referência</figcaption>
     </figure>
 
     <div className="mt-5 hidden overflow-x-auto rounded-xl border border-border sm:block">

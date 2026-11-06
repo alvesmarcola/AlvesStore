@@ -52,9 +52,12 @@ export async function POST(request: Request) {
     hasRequestId: Boolean(requestIdHeader),
   });
 
-  const secret = process.env.MERCADO_PAGO_WEBHOOK_SECRET;
+  // Aceita tanto MERCADOPAGO_WEBHOOK_SECRET quanto MERCADO_PAGO_WEBHOOK_SECRET
+  const secret = process.env.MERCADOPAGO_WEBHOOK_SECRET?.trim()
+    || process.env.MERCADO_PAGO_WEBHOOK_SECRET?.trim();
+
   if (!secret) {
-    console.error("[Webhook Mercado Pago] ERRO CRÍTICO: Variável MERCADO_PAGO_WEBHOOK_SECRET não está definida na Vercel! A notificação não pode ser validada.");
+    console.error("[Webhook Mercado Pago] ERRO CRÍTICO: Nem MERCADOPAGO_WEBHOOK_SECRET nem MERCADO_PAGO_WEBHOOK_SECRET estão configuradas na Vercel! A notificação não pode ser validada.");
     return NextResponse.json({ error: "Assinatura de webhook não configurada no servidor." }, { status: 401 });
   }
 
@@ -74,6 +77,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Assinatura de webhook inválida." }, { status: 401 });
   }
 
+  // Eventos não relacionados a pagamento ou sem ID válido são confirmados com 200
   if (!isPaymentEvent || !/^\d{1,30}$/.test(paymentId)) {
     console.log("[Webhook Mercado Pago] Evento ignorado (não é pagamento ou ID inválido):", { isPaymentEvent, paymentId });
     return NextResponse.json({ received: true });
@@ -81,9 +85,24 @@ export async function POST(request: Request) {
 
   try {
     console.log(`[Webhook Mercado Pago] Iniciando aplicação do pagamento ${paymentId}...`);
-    const result = await applyMercadoPagoPayment(paymentId);
+    const result = await applyMercadoPagoPayment(paymentId, {
+      topic: queryType || bodyType,
+      action: actionType,
+      rawEvent: body,
+    });
+
+    if (result.orphan) {
+      console.warn(`[Webhook Mercado Pago] Pagamento ${paymentId} registrado como ÓRFÃO (sem pedido correspondente).`);
+      return NextResponse.json({ received: true, orphan: true });
+    }
+
+    if (result.divergent) {
+      console.warn(`[Webhook Mercado Pago] Pagamento ${paymentId} registrado como DIVERGENTE para o pedido ${result.orderId}.`);
+      return NextResponse.json({ received: true, divergent: true, orderId: result.orderId });
+    }
+
     if (!result.applied) {
-      console.warn(`[Webhook Mercado Pago] Pagamento ${paymentId} não foi aplicado. Motivo provável: status não aprovado ou valor/ambiente divergente.`);
+      console.warn(`[Webhook Mercado Pago] Pagamento ${paymentId} não foi aplicado. Motivo: status não aprovado ou valor/ambiente divergente.`);
       return NextResponse.json({ received: true });
     }
 
@@ -99,9 +118,13 @@ export async function POST(request: Request) {
       });
     }
 
-    return NextResponse.json({ received: true });
+    return NextResponse.json({ received: true, orderId: result.orderId, status: result.status });
   } catch (error) {
-    console.error(`[Webhook Mercado Pago] Falha ao processar pagamento ${paymentId}:`, describeSupabaseError(error));
-    return NextResponse.json({ error: "Não foi possível confirmar a notificação." }, { status: 500 });
+    console.error(`[Webhook Mercado Pago] Falha técnica ao processar pagamento ${paymentId}:`, error);
+    // Retorna status 500 para falhas de infraestrutura, permitindo que o Mercado Pago tente reenviar a notificação
+    return NextResponse.json({
+      error: "Erro transitório ao processar pagamento. Tentativa será reagendada.",
+      details: error instanceof Error ? error.message : String(error),
+    }, { status: 500 });
   }
 }

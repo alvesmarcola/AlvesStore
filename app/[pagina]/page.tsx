@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ArrowUpRight, Mail, MessageCircle } from "lucide-react";
 import { storeConfig } from "@/config";
 import { SITE_NAME } from "@/lib/site";
+import { siteCompanyConfig } from "@/lib/site-config";
 import { ContactForm } from "./contact-form";
 
 type InstitutionalPage = {
@@ -23,7 +24,7 @@ const pages: Record<string, InstitutionalPage> = {
         "Selecionamos produtos com atenção à qualidade, variedade e clareza das informações. Cada página de produto apresenta os detalhes disponíveis e o Guia de Medidas ajuda você a escolher o tamanho com mais segurança.",
       ] },
       { heading: "Atendimento em todo o Brasil", paragraphs: [
-        "Os pedidos são encaminhados aos centros de distribuição internacionais dos nossos parceiros e enviados ao endereço informado na compra. Acompanhamos o pedido e disponibilizamos o rastreio assim que o código oficial estiver disponível.",
+        "Os pedidos são encaminhados aos centros de distribuição internacionais dos nossos parceiros e enviados ao endereço informado na compra. Acompanhamos o pedido e disponibilizamos o rastreio assim que o código de rastreio estiver disponível.",
         "Atendemos e enviamos para todo o Brasil. Nosso compromisso é oferecer uma experiência de compra transparente, com pagamento processado pelo Mercado Pago e canais de atendimento por e-mail e WhatsApp.",
       ] },
     ],
@@ -56,14 +57,16 @@ const pages: Record<string, InstitutionalPage> = {
     sections: [
       { heading: "Preparação e postagem", paragraphs: [
         "Após a confirmação do pagamento, o pedido é encaminhado ao centro de distribuição internacional do parceiro responsável. O despacho segue para o endereço informado no checkout.",
-        "O código de rastreio oficial é gerado e enviado ao e-mail cadastrado em até 3 a 4 dias úteis após a confirmação do pagamento. Se você autorizou notificações pelo WhatsApp no checkout, também poderá receber a atualização por esse canal. Esse período é usado para liberação e postagem logística; não representa o prazo total de entrega.",
+        "O código de rastreio é gerado e enviado ao e-mail cadastrado em até 3 a 4 dias úteis após a confirmação do pagamento. Se você autorizou notificações pelo WhatsApp no checkout, também poderá receber a atualização por esse canal. Esse período é usado para liberação e postagem logística; não representa o prazo total de entrega.",
       ] },
       { heading: "Frete", paragraphs: [
         `O valor do frete é o mesmo para qualquer produto: ${formatCurrency(storeConfig.shippingPrice)} para 1 ou 2 itens e grátis a partir de ${storeConfig.freeShippingQuantity} itens no pedido. O total do frete aparece antes da confirmação do pagamento.`,
       ] },
       { heading: "Acompanhe a entrega", paragraphs: [
-        "Quando receber o código, acesse a página de Rastreio da loja e informe o código do pedido e o e-mail ou CPF usados na compra. O rastreio oficial será exibido assim que estiver disponível.",
-        "O prazo total de transporte pode variar conforme a operação logística e o destino. Consulte as informações apresentadas no checkout e as atualizações do rastreio; não prometemos um prazo de entrega que não esteja confirmado para o seu pedido.",
+        "Quando receber o código, acesse a página de Rastreio da loja e informe o código do pedido e o e-mail ou CPF usados na compra. O rastreio será exibido assim que estiver disponível.",
+        siteCompanyConfig.prazoEstimadoEntrega
+          ? `O prazo estimado de entrega é de ${siteCompanyConfig.prazoEstimadoEntrega} a partir da postagem internacional. Consulte as informações apresentadas no checkout e as atualizações do rastreio do seu pedido.`
+          : "O prazo total de transporte pode variar conforme a operação logística e o destino. Consulte as informações apresentadas no checkout e as atualizações do rastreio; não prometemos um prazo de entrega que não esteja confirmado para o seu pedido.",
       ] },
     ],
   },
@@ -97,7 +100,7 @@ const pages: Record<string, InstitutionalPage> = {
         "O preço e o frete aplicáveis são apresentados no carrinho e no checkout antes da confirmação. O pagamento é processado pelo Mercado Pago. O pedido segue para preparação depois da confirmação do pagamento.",
       ] },
       { heading: "Entrega, atendimento e direitos", paragraphs: [
-        "O código oficial de rastreio é informado em até 3 a 4 dias úteis após a confirmação do pagamento; se você autorizou notificações no checkout, a atualização também pode chegar pelo WhatsApp. O prazo de transporte pode variar. Para dúvidas, cancelamento ou suporte, utilize os canais da página de Contato.",
+        "O código de rastreio é informado em até 3 a 4 dias úteis após a confirmação do pagamento; se você autorizou notificações no checkout, a atualização também pode chegar pelo WhatsApp. O prazo de transporte pode variar. Para dúvidas, cancelamento ou suporte, utilize os canais da página de Contato.",
         "Estes termos não limitam direitos garantidos pela legislação brasileira, incluindo os direitos de arrependimento, troca e privacidade descritos nas páginas correspondentes.",
       ] },
     ],
@@ -116,7 +119,7 @@ const pages: Record<string, InstitutionalPage> = {
     intro: "Escolha seus produtos, confira os tamanhos e conclua o pagamento com os dados de entrega corretos.",
     sections: [{ heading: "Passo a passo", paragraphs: [
       "1. Navegue pelas categorias, ligas ou clubes e abra o produto desejado.\n2. Confira as informações e selecione o tamanho disponível; consulte o Guia de Medidas se precisar.\n3. Adicione os itens ao carrinho, confira o frete e informe seus dados de contato e entrega.\n4. Revise o total e finalize o pagamento pelo Mercado Pago.",
-      "Depois da confirmação do pagamento, o pedido segue para preparação internacional. O código oficial de rastreio é enviado em até 3 a 4 dias úteis e poderá ser consultado na página Rastreio.",
+      "Depois da confirmação do pagamento, o pedido segue para preparação internacional. O código de rastreio é enviado em até 3 a 4 dias úteis e poderá ser consultado na página Rastreio.",
     ] }],
   },
   "politica-de-personalizacao": {

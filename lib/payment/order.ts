@@ -6,7 +6,7 @@ import type { Product } from "@/lib/types";
 import { classifyProduct, getProductSizeSurcharge, isFreeShippingProduct, isManualProduct, isNbaTankTop, isPackageEligible } from "@/lib/product-classification";
 import { getAvailablePatches } from "@/lib/patch-compatibility";
 import { allowsCustomization } from "@/lib/formula-one";
-import { getSupabaseProducts, hasSupabaseCatalogConfiguration } from "@/lib/server/supabase-catalog";
+import { getSupabaseProductBySlug, getSupabaseProducts, hasSupabaseCatalogConfiguration } from "@/lib/server/supabase-catalog";
 import { CUSTOMIZATION_NAME_MAX_LENGTH, sanitizeCustomizationName } from "@/lib/customization";
 import { calcularPromoBlackFriday, BLACK_FRIDAY_PROMO_CODE } from "@/lib/black-friday";
 
@@ -101,7 +101,20 @@ export async function validateOrderLinesFromCatalog(lines: OrderLineInput[]) {
   if (!hasSupabaseCatalogConfiguration()) {
     throw new Error("Não é possível iniciar um pagamento sem validar o catálogo atual do Supabase.");
   }
-  return validateOrderLines(lines, await getSupabaseProducts());
+  const publishedProducts = await getSupabaseProducts();
+  const knownIdentifiers = new Set(publishedProducts.flatMap((p) => [p.id, p.slug]));
+  const missingLines = lines.filter((line) => !knownIdentifiers.has(line.productId));
+
+  const additionalProducts: Product[] = [];
+  for (const line of missingLines) {
+    const hiddenProduct = await getSupabaseProductBySlug(line.productId, { allowHidden: true });
+    if (hiddenProduct) {
+      additionalProducts.push(hiddenProduct);
+    }
+  }
+
+  const allCandidateProducts = [...publishedProducts, ...additionalProducts];
+  return validateOrderLines(lines, allCandidateProducts);
 }
 
 export function calculateOrderTotals(lines: VerifiedOrderLine[], dataAtual = new Date()) {

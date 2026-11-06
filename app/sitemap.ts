@@ -12,6 +12,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     `/ligas/${league.slug}`,
     ...league.clubes.map((club) => `/ligas/${league.slug}/${club.slug}`),
   ]);
-  const productPaths = products.map((product) => `/produto/${product.slug}`);
+  const visibleProducts = products.filter((product) => !product.oculto);
+  const productPaths = visibleProducts.map((product) => `/produto/${product.slug}`);
   return [...staticPaths, ...leaguePaths, ...productPaths].map((path) => ({ url: `${baseUrl}${path}`, lastModified: new Date(), changeFrequency: "weekly", priority: path === "" ? 1 : 0.7 }));
 }

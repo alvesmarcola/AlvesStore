@@ -22,7 +22,7 @@ const charts: {
     title: "Masculino / Torcedor",
     description: "Consulte comprimento, largura, altura e faixa de peso indicativa para cada tamanho.",
     image: "/guia-de-medidas/masculino.png",
-    imageAlt: "Tabela oficial de medidas da camisa masculina versão torcedor",
+    imageAlt: "Tabela de medidas da camisa masculina versão torcedor",
     imageHeight: 321,
     sizes: ["S", "M", "L", "XL", "XXL", "XXXL", "XXXXL"],
     measurements: [
@@ -35,9 +35,9 @@ const charts: {
   {
     id: "feminino",
     title: "Feminino",
-    description: "Medidas de referência da camisa feminina. A tabela original não indica tamanhos acima de XXL.",
+    description: "Medidas de referência da camisa feminina. A tabela de referência não indica tamanhos acima de XXL.",
     image: "/guia-de-medidas/feminino.png",
-    imageAlt: "Tabela oficial de medidas da camisa feminina versão torcedora",
+    imageAlt: "Tabela de medidas da camisa feminina versão torcedora",
     imageHeight: 321,
     sizes: ["S", "M", "L", "XL", "XXL"],
     measurements: [
@@ -52,7 +52,7 @@ const charts: {
     title: "Infantil (Kids)",
     description: "Além da camisa, esta tabela apresenta a medida da calça e uma faixa de idade indicativa.",
     image: "/guia-de-medidas/kids.png",
-    imageAlt: "Tabela oficial de medidas do conjunto infantil de camisa e calção",
+    imageAlt: "Tabela de medidas do conjunto infantil de camisa e calção",
     imageHeight: 361,
     sizes: ["16", "18", "20", "22", "24", "26", "28"],
     measurements: [

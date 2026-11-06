@@ -84,7 +84,19 @@ export async function GET(request: Request) {
       .order("created_at", { ascending: false })
       .limit(500);
     if (error) throw error;
-    return NextResponse.json({ orders: data }, { headers: ADMIN_PRIVATE_HEADERS });
+
+    let paymentEvents: unknown[] = [];
+    try {
+      const { data: eventsData } = await supabase.from("payment_events")
+        .select("id,payment_id,order_id,topic,action,status,payload,is_orphan,is_divergent,processed,error_message,created_at")
+        .order("created_at", { ascending: false })
+        .limit(300);
+      if (eventsData) paymentEvents = eventsData;
+    } catch {
+      // Ignora erro caso a tabela payment_events ainda não tenha sido criada no ambiente atual
+    }
+
+    return NextResponse.json({ orders: data, paymentEvents }, { headers: ADMIN_PRIVATE_HEADERS });
   } catch (error) {
     const configurationError = reportFailure("Falha ao carregar pedidos administrativos:", error);
     return jsonError(configurationError ?? "Não foi possível carregar os pedidos. Verifique se a migração de gestão administrativa foi aplicada.", 503);

@@ -15,7 +15,8 @@ import type { Metadata } from "next";
 import type { Product } from "@/lib/types";
 import { deriveCatalogLeagues } from "@/lib/catalog-taxonomy";
 import { editorialPriorities, prioritizeClubs, prioritizeEditorialProducts, sortCatalogProducts } from "@/lib/catalog-order";
-import { classifyProduct, isNbaTankTop, isRetroProduct } from "@/lib/product-classification";
+import { isNbaTankTop, isRetroProduct } from "@/lib/product-classification";
+import { isBlackFridayEligibleShirt } from "@/lib/black-friday";
 import { getBundledFormulaOneProducts, getSupabaseProducts } from "@/lib/server/supabase-catalog";
 import { isFormulaOneProduct } from "@/lib/formula-one";
 
@@ -26,7 +27,7 @@ const features: { icon: typeof ShoppingBag; title: string; text: string; link?: 
   { icon: ShoppingBag, title: "Frete facilitado", text: `${formatCurrency(storeConfig.shippingPrice)} (1 ou 2 itens) · Grátis a partir de ${storeConfig.freeShippingQuantity} peças`, link: { label: "Ver regras completas", href: "/envios-e-prazos" } },
   { icon: WalletCards, title: "Pagamento seguro", text: "Pix imediato ou cartão em até 12x via Mercado Pago." },
   { icon: Truck, title: "Envio rastreado", text: "Acompanhamento completo do despacho até sua casa." },
-  { icon: HeartHandshake, title: "Personalização", text: `Nome e número oficiais por +${formatCurrency(storeConfig.customizationPrice)}.` },
+  { icon: HeartHandshake, title: "Personalização", text: `Nome e número por +${formatCurrency(storeConfig.customizationPrice)}.` },
 ];
 
 const collections = [
@@ -37,7 +38,7 @@ const collections = [
 
 const differentials = [
   { title: "Clubes e seleções", body: "Explore os principais mantos de clubes do Brasil e do mundo, além de seleções nacionais.", links: [{ label: "Ver clubes", href: "/clubes" }, { label: "Ver seleções", href: "/selecoes" }] },
-  { title: "Personalização oficial", body: `Adicione seu nome, número ou ambos por apenas ${formatCurrency(storeConfig.customizationPrice)} por camisa.`, links: [{ label: "Escolher uma camisa", href: "/masculino" }] },
+  { title: "Personalização", body: `Adicione seu nome, número ou ambos por apenas ${formatCurrency(storeConfig.customizationPrice)} por camisa.`, links: [{ label: "Escolher uma camisa", href: "/masculino" }] },
   { title: "Qualidade premium", body: "Tecidos tecnológicos respiráveis, bordados precisos e acabamento de alto padrão para quem vive o esporte.", links: [{ label: "Conhecer a loja", href: "/quem-somos" }] },
 ];
 
@@ -82,21 +83,55 @@ export default async function HomePage() {
   const leagues = deriveCatalogLeagues(products);
   const nationalTeamSlugs = new Set(leagues.find((league) => league.slug === "selecoes")?.clubes.map((team) => team.slug) ?? []);
   const catalogProducts = sortCatalogProducts(products);
-  const clubCandidates = catalogProducts.filter((product) => product.liga !== "selecoes" && !nationalTeamSlugs.has(product.clubeSlug) && product.clubeSlug !== "revisar" && !isFormulaOneProduct(product));
+
+  // 1. Promoção Black Friday (leve 2 e ganhe 50% na 2ª)
+  const blackFridayProducts = catalogProducts.filter((product) =>
+    (isBlackFridayEligibleShirt(product) || isNbaTankTop(product)) && product.publico !== "infantil"
+  ).slice(0, 8);
+
+  // 2. Regatas NBA
+  const nbaProducts = catalogProducts.filter(isNbaTankTop).slice(0, 8);
+
+  // 3. Camisas de clubes (sem NBA, sem regatas, sem infantil, sem seleções)
+  const clubCandidates = catalogProducts.filter((product) =>
+    product.liga !== "selecoes" &&
+    !nationalTeamSlugs.has(product.clubeSlug) &&
+    product.clubeSlug !== "revisar" &&
+    !isFormulaOneProduct(product) &&
+    product.liga !== "nba" &&
+    product.tipo !== "regata" &&
+    product.publico !== "infantil"
+  );
   const selectedClubProducts = prioritizeEditorialProducts(
     clubCandidates,
     editorialPriorities.clubs,
     8,
   );
-  const clubProducts = selectedClubProducts.length ? selectedClubProducts : catalogProducts.slice(0, 8);
+  const clubProducts = selectedClubProducts.length ? selectedClubProducts : clubCandidates.slice(0, 8);
+
+  // 4. Seleções nacionais (apenas produtos adultos)
   const nationalSelections = prioritizeEditorialProducts(
-    catalogProducts.filter((product) => (product.liga === "selecoes" || nationalTeamSlugs.has(product.clubeSlug)) && !isFormulaOneProduct(product)),
+    catalogProducts.filter((product) =>
+      (product.liga === "selecoes" || nationalTeamSlugs.has(product.clubeSlug)) &&
+      !isFormulaOneProduct(product) &&
+      product.publico !== "infantil" &&
+      !/\b(?:kids|junior|youth|infantil|children)\b/i.test(`${product.nome} ${product.imageSeed}`)
+    ),
     editorialPriorities.selections,
     8,
   );
+
+  // 5. Kits infantis
+  const kidsProducts = catalogProducts.filter((product) =>
+    (product.publico === "infantil" || /\b(?:kids|junior|youth|infantil|children)\b/i.test(`${product.nome} ${product.imageSeed}`)) &&
+    !isFormulaOneProduct(product)
+  ).slice(0, 8);
+
+  // 6. Clássicos retrô
   const retros = catalogProducts.filter(isRetroProduct).slice(0, 8);
-  const kidsProducts = catalogProducts.filter((product) => (product.publico === "infantil" || /\b(?:kids|junior|youth|infantil|children)\b/i.test(`${product.nome} ${product.imageSeed}`)) && !isFormulaOneProduct(product)).slice(0, 8);
-  const formulaOneProducts = sortCatalogProducts([...formulaOneBySlug.values()]).slice(0, 12);
+
+  // Destaques da F1 (bloco único)
+  const formulaOneProducts = sortCatalogProducts([...formulaOneBySlug.values()]).slice(0, 8);
   const destinations = new Map<string, { name: string; league: string; slug: string; popularity: number }>();
   products
     .filter((product) => product.liga !== "revisar" && product.clubeSlug !== "revisar")
@@ -220,10 +255,38 @@ export default async function HomePage() {
       {/* ─── 6. LEAGUE RAIL ─── */}
       <StickyLeagueRail leagues={leagues} />
 
-      {/* ─── 7. CLUB PRODUCTS ─── */}
-      {clubProducts.length > 0 && <ProductSection title="Camisas de clubes" kicker="Explore o catálogo" href="/clubes" items={clubProducts} />}
+      {/* ─── 1. PROMOÇÃO BLACK FRIDAY ─── */}
+      {blackFridayProducts.length > 0 && (
+        <ProductSection
+          title="Promoção Black Friday"
+          kicker="50% de desconto na 2ª peça"
+          href="/masculino"
+          items={blackFridayProducts}
+        />
+      )}
 
-      {/* ─── 8. FEATURED CLUBS ─── */}
+      {/* ─── 2. REGATAS NBA ─── */}
+      {nbaProducts.length > 0 && (
+        <ProductSection
+          title="Regatas NBA"
+          kicker="Basquete americano"
+          href="/masculino?tipo=regata-nba"
+          items={nbaProducts}
+          dark
+        />
+      )}
+
+      {/* ─── 3. CAMISAS DE CLUBES ─── */}
+      {clubProducts.length > 0 && (
+        <ProductSection
+          title="Camisas de clubes"
+          kicker="Explore o catálogo"
+          href="/clubes"
+          items={clubProducts}
+        />
+      )}
+
+      {/* ─── CLUBES EM DESTAQUE ─── */}
       <section className="bg-[#F5F5F5] py-14 sm:py-20">
         <div className="mx-auto max-w-7xl px-5 lg:px-8">
           <Reveal>
@@ -244,28 +307,39 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ─── 9. RETRO ─── */}
-      {retros.length > 0 && <ProductSection title="Clássicos retrô" kicker="Para quem vive de história" href="/retro" items={retros} />}
-
-      {/* ─── 10. SESSÃO INFORMATIVA F1 ─── */}
-      <FormulaOneShowcase href="/f1" />
-
-      {/* ─── 11. PRODUTOS FÓRMULA 1 (Logo abaixo da sessão informativa F1) ─── */}
-      {formulaOneProducts.length > 0 && (
+      {/* ─── 4. SELEÇÕES NACIONAIS (APENAS ADULTOS) ─── */}
+      {nationalSelections.length > 0 && (
         <ProductSection
-          title="F1"
-          kicker="Universo motorsport"
-          href="/f1"
-          items={formulaOneProducts}
+          title="Seleções nacionais"
+          kicker="Camisas de seleções"
+          href="/selecoes"
+          items={nationalSelections}
           dark
         />
       )}
 
-      {/* ─── 12. KIDS ─── */}
-      {kidsProducts.length > 0 && <ProductSection title="Kits infantis" kicker="A torcida começa cedo" href="/infantil" items={kidsProducts} dark />}
+      {/* ─── 5. KITS INFANTIS ─── */}
+      {kidsProducts.length > 0 && (
+        <ProductSection
+          title="Kits infantis"
+          kicker="A torcida começa cedo"
+          href="/infantil"
+          items={kidsProducts}
+        />
+      )}
 
-      {/* ─── 13. SELEÇÕES NACIONAIS ─── */}
-      {nationalSelections.length > 0 && <ProductSection title="Seleções nacionais" kicker="Camisas de seleções" href="/selecoes" items={nationalSelections} dark />}
+      {/* ─── 6. CLÁSSICOS RETRÔ ─── */}
+      {retros.length > 0 && (
+        <ProductSection
+          title="Clássicos retrô"
+          kicker="Para quem vive de história"
+          href="/retro"
+          items={retros}
+        />
+      )}
+
+      {/* ─── FÓRMULA 1 (BLOCO ÚNICO COM OS DESTAQUES) ─── */}
+      <FormulaOneShowcase href="/f1" items={formulaOneProducts.slice(0, 4)} />
 
       {/* ─── 14. DIFFERENTIALS ─── */}
       <section className="mx-auto grid max-w-7xl gap-4 px-5 py-14 sm:grid-cols-3 lg:px-8 lg:py-20">

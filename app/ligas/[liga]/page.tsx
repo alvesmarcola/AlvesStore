@@ -16,7 +16,21 @@ export async function generateMetadata({ params }: { params: Promise<{ liga: str
   const { liga } = await params;
   const products = await getSupabaseProducts();
   const league = deriveCatalogLeagues(products).find((item) => item.slug === liga);
-  return { title: league ? `Camisas ${league.nome}` : "Ligas", description: league ? `Explore ${league.productCount} produtos de ${league.nome}.` : undefined, alternates: { canonical: `/ligas/${liga}` } };
+  if (!league) {
+    return { title: "Ligas", alternates: { canonical: `/ligas/${liga}` } };
+  }
+  const clubCount = league.clubes.length;
+  const description = `Compre camisas e mantos de ${league.nome} na Imports Alves. Confira ${league.productCount} modelos de ${clubCount} equipes com frete facilitado, parcelamento em até 12x e personalização.`;
+  return {
+    title: `Camisas de ${league.nome} | Imports Alves`,
+    description,
+    alternates: { canonical: `/ligas/${liga}` },
+    openGraph: {
+      title: `Camisas de ${league.nome} | Imports Alves`,
+      description,
+      url: `/ligas/${liga}`,
+    },
+  };
 }
 
 export default async function LeaguePage({ params }: { params: Promise<{ liga: string }> }) {

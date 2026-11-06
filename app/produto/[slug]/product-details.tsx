@@ -18,6 +18,7 @@ import { allowsCustomization } from "@/lib/formula-one";
 import { detectUniformVariants, cleanAndDeduplicateImages } from "@/lib/uniform-variants";
 import { CUSTOMIZATION_NAME_MAX_LENGTH, filterCustomizationNumber, formatCustomization, getCustomizationError, sanitizeCustomizationName } from "@/lib/customization";
 import { whatsappLink } from "@/lib/whatsapp";
+import { siteCompanyConfig } from "@/lib/site-config";
 
 export function ProductDetails({ product, relatedProducts = [] }: { product: Product; relatedProducts?: Product[] }) {
   const [size, setSize] = useState("");
@@ -413,6 +414,11 @@ export function ProductDetails({ product, relatedProducts = [] }: { product: Pro
                   ⚠️ Por favor, selecione um tamanho antes de continuar.
                 </p>
               )}
+              {availableSizes.includes("2GG") && (
+                <p className="mt-2 text-[11px] font-semibold text-muted">
+                  Tamanho 2GG: +{formatCurrency(storeConfig.size2GGPrice)}
+                </p>
+              )}
               {!size && !validationAttempted && product.tamanhos.length > 0 && (
                 <p className="mt-2 text-[11px] text-muted">Selecione um dos tamanhos acima para avançar.</p>
               )}
@@ -612,6 +618,17 @@ export function ProductDetails({ product, relatedProducts = [] }: { product: Pro
                   <><ShoppingBag size={18} /> Adicionar à sacola · {formatCurrency(price + selectedPatchTotal)}</>
                 )}
               </button>
+              {siteCompanyConfig.prazoEstimadoEntrega && (
+                <div className="mt-3.5 flex items-center justify-center gap-2 rounded-xl border border-border bg-paper/80 p-3 text-xs text-muted">
+                  <Truck size={15} className="shrink-0 text-blue-600" />
+                  <span>
+                    Prazo estimado de entrega: <strong className="text-ink">{siteCompanyConfig.prazoEstimadoEntrega}</strong>.{" "}
+                    <Link href="/envios-e-prazos" className="font-semibold text-blue-700 underline hover:text-blue-800">
+                      Envios e prazos
+                    </Link>
+                  </span>
+                </div>
+              )}
             </div>
           </section>
         </div>
@@ -715,27 +732,6 @@ export function ProductDetails({ product, relatedProducts = [] }: { product: Pro
           )}
         </button>
       </div>
-
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Product",
-            name: product.nome,
-            image: gallery.map((image) => new URL(image.src, "https://importsalves.com.br").toString()),
-            ...(classification.price === null ? {} : {
-              offers: {
-                "@type": "Offer",
-                url: `https://importsalves.com.br/produto/${product.slug}`,
-                priceCurrency: "BRL",
-                price: classification.price,
-                availability: product.tamanhos.length ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
-              },
-            }),
-          }).replace(/</g, "\\u003c"),
-        }}
-      />
     </main>
   );
 }

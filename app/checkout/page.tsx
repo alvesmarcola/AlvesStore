@@ -4,9 +4,10 @@ import Link from "next/link";
 import { useRef, useState } from "react";
 import { useForm, type FieldErrors, type Path, type UseFormRegister } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ChevronLeft, ChevronRight, LockKeyhole, MapPin } from "lucide-react";
+import { ChevronLeft, ChevronRight, LockKeyhole, MapPin, Truck } from "lucide-react";
 import { storeConfig } from "@/config";
 import { formatCurrency } from "@/lib/catalog";
+import { siteCompanyConfig } from "@/lib/site-config";
 import { getCartPricing } from "@/lib/commerce";
 import { getProductUnitPrice } from "@/lib/product-classification";
 import { getAvailablePatches } from "@/lib/patch-compatibility";
@@ -195,7 +196,22 @@ export default function CheckoutPage() {
           <div className="mt-6 flex gap-2"><button type="button" onClick={() => setStep(1)} disabled={isSubmitting} className="flex items-center gap-2 rounded-lg border border-ink px-5 py-3 text-xs font-bold uppercase disabled:opacity-50"><ChevronLeft size={15} /> Voltar</button><button type="submit" disabled={isSubmitting} className="primary-button flex items-center gap-2 px-5 py-3 text-xs font-bold uppercase disabled:opacity-50">{isSubmitting ? "Preparando pagamento..." : "Ir ao Mercado Pago"} {!isSubmitting && <ChevronRight size={15} />}</button></div>
         </section>
       </div>
-      <aside className="h-fit rounded-xl border border-border p-5"><h2 className="text-lg font-bold">Resumo do pedido</h2>{items.map((item) => { const unitPrice = getProductUnitPrice(item.product, item.size) ?? 0; const patchPrice = (item.patches ?? []).reduce((sum, selected) => sum + (getAvailablePatches(item.product).find((patch) => patch.id === selected.id)?.priceCents ?? 0), 0) / 100; const customizationText = formatCustomization(item.customization); return <div key={item.lineId} className="mt-4 flex justify-between gap-3 text-xs"><span className="flex-1">{item.product.nome} · tam. {item.size}{item.uniformVariation ? ` · Uniforme: ${item.uniformVariation}` : ""} × {item.quantity}{customizationText ? ` · ${customizationText}` : ""}{item.patches?.length ? ` · ${item.patches.length} patch(es)` : ""}</span><span>{formatCurrency((unitPrice + patchPrice + (customizationText ? storeConfig.customizationPrice : 0)) * item.quantity)}</span></div>; })}<div className="mt-5 space-y-2 border-t border-border pt-4 text-sm"><div className="flex justify-between"><span>Subtotal</span><span>{formatCurrency(subtotal)}</span></div>{bundleDiscount > 0 && <div className="flex justify-between text-success"><span>Oferta por quantidade</span><span>-{formatCurrency(bundleDiscount)}</span></div>}{promoDiscount > 0 && <div className="flex justify-between font-bold text-blue-700"><span>Promo Black Friday NBA</span><span>-{formatCurrency(promoDiscount)}</span></div>}{promoNotice && <p className="rounded bg-blue-50 p-3 text-xs leading-5 text-blue-900">{promoNotice}</p>}<div className="flex justify-between"><span>Frete</span><span>{shipping === 0 ? "Grátis" : formatCurrency(shipping)}</span></div><div className="flex justify-between border-t border-border pt-3 text-lg font-black"><span>Total</span><span>{formatCurrency(grandTotal)}</span></div></div><p className="mt-4 text-[10px] leading-4 text-muted">O servidor confere produtos, patches, preços e frete antes de criar o pagamento.</p></aside>
+      <aside className="h-fit rounded-xl border border-border p-5"><h2 className="text-lg font-bold">Resumo do pedido</h2>{items.map((item) => { const unitPrice = getProductUnitPrice(item.product, item.size) ?? 0; const patchPrice = (item.patches ?? []).reduce((sum, selected) => sum + (getAvailablePatches(item.product).find((patch) => patch.id === selected.id)?.priceCents ?? 0), 0) / 100; const customizationText = formatCustomization(item.customization); return <div key={item.lineId} className="mt-4 flex justify-between gap-3 text-xs"><span className="flex-1">{item.product.nome} · tam. {item.size}{item.uniformVariation ? ` · Uniforme: ${item.uniformVariation}` : ""} × {item.quantity}{customizationText ? ` · ${customizationText}` : ""}{item.patches?.length ? ` · ${item.patches.length} patch(es)` : ""}</span><span>{formatCurrency((unitPrice + patchPrice + (customizationText ? storeConfig.customizationPrice : 0)) * item.quantity)}</span></div>; })}<div className="mt-5 space-y-2 border-t border-border pt-4 text-sm"><div className="flex justify-between"><span>Subtotal</span><span>{formatCurrency(subtotal)}</span></div>{bundleDiscount > 0 && <div className="flex justify-between text-success"><span>Oferta por quantidade</span><span>-{formatCurrency(bundleDiscount)}</span></div>}{promoDiscount > 0 && <div className="flex justify-between font-bold text-blue-700"><span>Promo Black Friday NBA</span><span>-{formatCurrency(promoDiscount)}</span></div>}{promoNotice && <p className="rounded bg-blue-50 p-3 text-xs leading-5 text-blue-900">{promoNotice}</p>}<div className="flex justify-between"><span>Frete</span><span>{shipping === 0 ? "Grátis" : formatCurrency(shipping)}</span></div><div className="flex justify-between border-t border-border pt-3 text-lg font-black"><span>Total</span><span>{formatCurrency(grandTotal)}</span></div></div>
+{siteCompanyConfig.prazoEstimadoEntrega && (
+  <div className="mt-4 rounded-lg bg-blue-50/70 p-3 text-xs leading-relaxed text-blue-950 border border-blue-200/60">
+    <p className="flex items-center gap-1.5 font-bold">
+      <Truck size={14} className="text-blue-700 shrink-0" />
+      Prazo estimado: {siteCompanyConfig.prazoEstimadoEntrega}
+    </p>
+    <p className="mt-1 text-[11px] text-blue-900/80">
+      Envio internacional com código de rastreio. Veja mais em{" "}
+      <Link href="/envios-e-prazos" target="_blank" className="font-semibold text-blue-800 underline hover:text-blue-950">
+        Envios e prazos
+      </Link>.
+    </p>
+  </div>
+)}
+<p className="mt-4 text-[10px] leading-4 text-muted">O servidor confere produtos, patches, preços e frete antes de criar o pagamento.</p></aside>
     </form>
   </main>;
 }
