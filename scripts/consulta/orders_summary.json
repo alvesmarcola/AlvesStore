@@ -1,0 +1,36 @@
+{
+  "total": 14,
+  "porStatus": {
+    "pago": 1,
+    "pending": 3,
+    "cancelled": 10
+  },
+  "porStatusOperacional": {
+    "aguardando_fornecedor": 1,
+    "aguardando_pagamento": 3,
+    "cancelado": 10
+  },
+  "porMpStatus": {
+    "approved": 1,
+    "sem_status_mp": 13
+  },
+  "pagosCount": 1,
+  "pagosSemRastreioCount": 1,
+  "aguardandoCount": 3,
+  "maisAntigoAguardando": {
+    "id": "6f749312-3bc8-404d-a0b6-73645a00db42",
+    "created_at": "2026-11-05T00:07:42.341847+00:00",
+    "valor": "R$ 230.00"
+  },
+  "pedidosTeste": [
+    {
+      "id": "21cf6548-69fc-4658-8d78-719e2a441999",
+      "valor": "R$ 1.50",
+      "status": "pago",
+      "operational_status": "aguardando_fornecedor",
+      "mp_status": "approved",
+      "mp_id": "187974804650",
+      "created_at": "2026-11-05T20:14:27.100429+00:00"
+    }
+  ]
+}

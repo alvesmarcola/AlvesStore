@@ -57,13 +57,13 @@ const pages: Record<string, InstitutionalPage> = {
     sections: [
       { heading: "Preparação e postagem", paragraphs: [
         "Após a confirmação do pagamento, o pedido é encaminhado ao centro de distribuição internacional do parceiro responsável. O despacho segue para o endereço informado no checkout.",
-        "O código de rastreio é gerado e enviado ao e-mail cadastrado em até 3 a 4 dias úteis após a confirmação do pagamento. Se você autorizou notificações pelo WhatsApp no checkout, também poderá receber a atualização por esse canal. Esse período é usado para liberação e postagem logística; não representa o prazo total de entrega.",
+        "Após a confirmação do pagamento, o código oficial de rastreamento normalmente fica disponível em 3 a 4 dias úteis. Assim que estiver disponível, ele será enviado ao e-mail cadastrado; se você autorizou notificações pelo WhatsApp no checkout, também poderá receber a atualização por esse canal. Esse prazo de processamento não representa o prazo total de entrega.",
       ] },
       { heading: "Frete", paragraphs: [
         `O valor do frete é o mesmo para qualquer produto: ${formatCurrency(storeConfig.shippingPrice)} para 1 ou 2 itens e grátis a partir de ${storeConfig.freeShippingQuantity} itens no pedido. O total do frete aparece antes da confirmação do pagamento.`,
       ] },
       { heading: "Acompanhe a entrega", paragraphs: [
-        "Quando receber o código, acesse a página de Rastreio da loja e informe o código do pedido e o e-mail ou CPF usados na compra. O rastreio será exibido assim que estiver disponível.",
+        "Quando o código oficial de rastreamento estiver disponível, acesse a página de Rastreio da loja e informe o código interno do pedido e o e-mail ou CPF usados na compra. O código interno localiza seu pedido; o código oficial acompanha o transporte.",
         siteCompanyConfig.prazoEstimadoEntrega
           ? `O prazo estimado de entrega é de ${siteCompanyConfig.prazoEstimadoEntrega} a partir da postagem internacional. Consulte as informações apresentadas no checkout e as atualizações do rastreio do seu pedido.`
           : "O prazo total de transporte pode variar conforme a operação logística e o destino. Consulte as informações apresentadas no checkout e as atualizações do rastreio; não prometemos um prazo de entrega que não esteja confirmado para o seu pedido.",

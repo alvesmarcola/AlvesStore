@@ -52,6 +52,7 @@ export interface Product {
   yupoo_id?: string;
   ignorar_regras_preco?: boolean;
   sem_oferta_quantidade?: boolean;
+  deleted_at?: string;
 }
 
 export interface League {

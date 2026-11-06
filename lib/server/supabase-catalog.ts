@@ -8,9 +8,17 @@ import { unstable_cache } from "next/cache";
 
 const PAGE_SIZE = 1000;
 const PRODUCT_COLUMNS = "id,yupoo_id,slug,clube,clubeSlug,liga,publico,tipo,temporada,uniforme,nome,preco,tamanhos,cor,imageSeed";
-const LIST_PRODUCT_COLUMNS = `${PRODUCT_COLUMNS},images`;
-const DETAIL_PRODUCT_COLUMNS = `${PRODUCT_COLUMNS},images,description,brand,tem_variacao_uniforme,oculto`;
+export const LIST_PRODUCT_COLUMNS = `${PRODUCT_COLUMNS},images,tem_variacao_uniforme,oculto`;
+export const DETAIL_PRODUCT_COLUMNS = `${PRODUCT_COLUMNS},images,description,brand,tem_variacao_uniforme,oculto`;
 const bundledCatalog = [...(bundledProducts as unknown as Product[]), ...(f1BundledProducts as unknown as Product[])];
+
+export function findBundledProduct(identifier: string): Product | undefined {
+  const normalized = identifier.trim().toLocaleLowerCase("en-US");
+  return bundledCatalog.find(
+    (product) => isPublishedProduct(product) &&
+      (product.id.toLocaleLowerCase("en-US") === normalized || product.slug.toLocaleLowerCase("en-US") === normalized)
+  );
+}
 
 export function getBundledFormulaOneProducts(): Product[] {
   return bundledCatalog.filter((product) => isPublishedProduct(product) && isFormulaOneProduct(product));
@@ -269,6 +277,7 @@ function mapProduct(value: unknown): Product | null {
     oculto: Boolean(value.oculto),
     ignorar_regras_preco: Boolean(value.ignorar_regras_preco),
     sem_oferta_quantidade: Boolean(value.sem_oferta_quantidade),
+    deleted_at: typeof value.deleted_at === "string" ? value.deleted_at : undefined,
   };
 }
 
@@ -308,50 +317,164 @@ export function getCachedSupabaseProducts(): Product[] {
   return cachedRows.filter(isPublishedProduct);
 }
 
+export async function fetchDirectOrderProducts(identifiers: string[]): Promise<Product[]> {
+  const config = supabaseConfig();
+  if (!config) {
+    throw new Error("Não é possível iniciar um pagamento sem validar o catálogo atual do Supabase.");
+  }
+  const cleanIds = Array.from(new Set(identifiers.map((id) => id.trim()).filter(Boolean)));
+  if (cleanIds.length === 0) return [];
+
+  const formatted = cleanIds.map((id) => `"${id.replace(/"/g, "")}"`).join(",");
+  const filter = `or=(id.in.(${formatted}),slug.in.(${formatted}))`;
+  const query = new URLSearchParams({
+    select: DETAIL_PRODUCT_COLUMNS,
+  });
+  const url = `${config.url}/rest/v1/products?${query.toString()}&${encodeURI(filter)}`;
+
+  const response = await fetch(url, {
+    headers: {
+      apikey: config.key,
+      ...(config.key.startsWith("eyJ") ? { Authorization: `Bearer ${config.key}` } : {}),
+    },
+    cache: "no-store",
+    signal: AbortSignal.timeout(8_000),
+  }).catch((err) => {
+    throw new Error(`Falha de conexão ao validar produtos do pedido: ${err instanceof Error ? err.message : String(err)}`);
+  });
+
+  if (!response.ok) {
+    const errorBody = await response.json().catch(() => ({}));
+    if (response.status === 400 && (
+      errorBody?.code === "42703" ||
+      String(errorBody?.message).includes("does not exist") ||
+      String(errorBody?.message).includes("oculto") ||
+      String(errorBody?.message).includes("tem_variacao_uniforme")
+    )) {
+      throw new Error("Erro de migração do banco de dados: as colunas 'oculto' ou 'tem_variacao_uniforme' não foram encontradas na tabela 'products' do Supabase. Execute as migrações 20261105000001, 20261105000002 e 20261105000003 no SQL Editor do Supabase.");
+    }
+    throw new Error(`Erro ao consultar produtos no Supabase (HTTP ${response.status}).`);
+  }
+
+  const rows = await response.json() as unknown[];
+  return (rows as unknown[]).map(mapProduct).filter((p): p is Product => p !== null);
+}
+
 export async function fetchSupabaseProducts(): Promise<Product[]> {
   const config = supabaseConfig();
   const cachedFallback = getCachedSupabaseProducts();
+  const isBuildPhase = process.env.NODE_ENV === "production" || process.env.NEXT_PHASE === "phase-production-build";
 
   const products: Product[] = [];
   let fetchFailed = false;
+  let requestCount = 0;
+  const startTime = Date.now();
 
   if (config) {
     try {
-      let activeColumns = LIST_PRODUCT_COLUMNS;
-      for (let offset = 0; ; offset += PAGE_SIZE) {
-        const headers = {
-          apikey: config.key,
-          ...(config.key.startsWith("eyJ") ? { Authorization: `Bearer ${config.key}` } : {}),
-        };
-        const query = new URLSearchParams({ select: activeColumns, order: "slug.asc", limit: String(PAGE_SIZE), offset: String(offset) });
-        let response = await fetch(`${config.url}/rest/v1/products?${query}`, {
-          headers,
-          next: { revalidate: 300, tags: ["catalog"] },
-          signal: AbortSignal.timeout(15_000),
-        });
-        if (!response.ok && offset === 0) {
-          // Se a seleção falhar na primeira página, recorre para as colunas básicas
-          activeColumns = LIST_PRODUCT_COLUMNS;
-          query.set("select", activeColumns);
-          response = await fetch(`${config.url}/rest/v1/products?${query}`, {
-            headers,
-            next: { revalidate: 300, tags: ["catalog"] },
-            signal: AbortSignal.timeout(15_000),
-          });
+      const serverFilter = "or=(liga.eq.nba,tipo.eq.regata,yupoo_id.like.manual:*,id.like.manual:*)&oculto=eq.false";
+      const headers: Record<string, string> = {
+        apikey: config.key,
+        ...(config.key.startsWith("eyJ") ? { Authorization: `Bearer ${config.key}` } : {}),
+        Prefer: "count=exact",
+      };
+
+      const firstQuery = new URLSearchParams({
+        select: LIST_PRODUCT_COLUMNS,
+        order: "slug.asc",
+        limit: String(PAGE_SIZE),
+        offset: "0",
+      });
+      const firstUrl = `${config.url}/rest/v1/products?${firstQuery.toString()}&${serverFilter}`;
+
+      requestCount++;
+      const firstResponse = await fetch(firstUrl, {
+        headers,
+        next: { revalidate: 300, tags: ["catalog"] },
+        signal: AbortSignal.timeout(15_000),
+      });
+
+      if (!firstResponse.ok) {
+        const errorBody = await firstResponse.json().catch(() => ({}));
+        const isMissingColumns = firstResponse.status === 400 && (
+          errorBody?.code === "42703" ||
+          String(errorBody?.message).includes("does not exist") ||
+          String(errorBody?.message).includes("oculto") ||
+          String(errorBody?.message).includes("tem_variacao_uniforme")
+        );
+
+        if (isMissingColumns) {
+          const migrationMsg = "Erro crítico de migração no Supabase: as colunas 'oculto' ou 'tem_variacao_uniforme' não existem na tabela 'products'. Execute as migrações 20261105000001, 20261105000002 e 20261105000003 no SQL Editor do Supabase antes de continuar.";
+          if (isBuildPhase && process.env.ALLOW_UNMIGRATED_SUPABASE_BUILD !== "true") {
+            throw new Error(migrationMsg);
+          }
+          console.error(migrationMsg);
         }
-        if (!response.ok) {
-          console.warn(`Falha ao consultar catálogo Supabase: HTTP ${response.status}. Utilizando snapshot válido em cache.`);
-          fetchFailed = true;
-          break;
-        }
-        const rows = await response.json() as unknown[];
-        const mapped = rows.map(mapProduct).filter((product): product is Product => product !== null)
+
+        console.warn(`Falha ao consultar catálogo Supabase: HTTP ${firstResponse.status}. Utilizando snapshot válido em cache.`);
+        fetchFailed = true;
+      } else {
+        const firstRows = await firstResponse.json() as unknown[];
+        const mappedFirst = firstRows
+          .map(mapProduct)
+          .filter((product): product is Product => product !== null)
           .filter(isPublishedProduct)
           .map((product) => ({ ...product, images: (product.images ?? []).slice(0, 2) }));
-        products.push(...mapped);
-        if (rows.length < PAGE_SIZE) break;
+        products.push(...mappedFirst);
+
+        const contentRange = firstResponse.headers.get("content-range");
+        let totalCount = firstRows.length;
+        if (contentRange && contentRange.includes("/")) {
+          const parts = contentRange.split("/");
+          const parsedTotal = parseInt(parts[1], 10);
+          if (Number.isFinite(parsedTotal)) totalCount = parsedTotal;
+        }
+
+        if (totalCount > PAGE_SIZE) {
+          const remainingOffsets: number[] = [];
+          for (let offset = PAGE_SIZE; offset < totalCount; offset += PAGE_SIZE) {
+            remainingOffsets.push(offset);
+          }
+
+          const BATCH_SIZE = 4;
+          for (let i = 0; i < remainingOffsets.length; i += BATCH_SIZE) {
+            const batch = remainingOffsets.slice(i, i + BATCH_SIZE);
+            requestCount += batch.length;
+            const batchPromises = batch.map(async (offset) => {
+              const query = new URLSearchParams({
+                select: LIST_PRODUCT_COLUMNS,
+                order: "slug.asc",
+                limit: String(PAGE_SIZE),
+                offset: String(offset),
+              });
+              const url = `${config.url}/rest/v1/products?${query.toString()}&${serverFilter}`;
+              const resp = await fetch(url, {
+                headers,
+                next: { revalidate: 300, tags: ["catalog"] },
+                signal: AbortSignal.timeout(15_000),
+              });
+              if (!resp.ok) {
+                throw new Error(`Falha HTTP ${resp.status} na página com offset ${offset}`);
+              }
+              const rows = await resp.json() as unknown[];
+              return rows
+                .map(mapProduct)
+                .filter((p): p is Product => p !== null)
+                .filter(isPublishedProduct)
+                .map((p) => ({ ...p, images: (p.images ?? []).slice(0, 2) }));
+            });
+
+            const batchResults = await Promise.all(batchPromises);
+            for (const pageProducts of batchResults) {
+              products.push(...pageProducts);
+            }
+          }
+        }
       }
     } catch (error) {
+      if (isBuildPhase && error instanceof Error && error.message.includes("migrações")) {
+        throw error;
+      }
       console.warn("Falha de conexão com Supabase durante carregamento do catálogo; utilizando último snapshot válido em cache:", error);
       fetchFailed = true;
     }
@@ -359,13 +482,17 @@ export async function fetchSupabaseProducts(): Promise<Product[]> {
     fetchFailed = true;
   }
 
+  const elapsedMs = Date.now() - startTime;
+  if (!fetchFailed && products.length > 0) {
+    console.info(`[Supabase Catalog] ${products.length} produtos carregados do Supabase em ${requestCount} requisição(ões) (${elapsedMs}ms).`);
+  }
+
   let published = products.filter(isPublishedProduct);
   if (fetchFailed || !published.length) {
     if (cachedFallback.length > 0) {
       published = cachedFallback;
     } else {
-      // Se nem o Supabase nem o cache trouxerem produtos e for build de produção, o build deve falhar
-      if (process.env.NODE_ENV === "production" || process.env.NEXT_PHASE === "phase-production-build") {
+      if (isBuildPhase) {
         throw new Error("Falha crítica no build: catálogo do Supabase inacessível e nenhum cache de produtos válido encontrado.");
       }
     }
@@ -378,8 +505,6 @@ export async function fetchSupabaseProducts(): Promise<Product[]> {
   for (const product of published) mergedBySlug.set(product.slug, product);
   const result = [...mergedBySlug.values()];
 
-  // Verificação de integridade no build: nunca publicar catálogo parcial sem NBA ou ligas principais
-  const isBuildPhase = process.env.NODE_ENV === "production" || process.env.NEXT_PHASE === "phase-production-build";
   const hasNba = result.some((p) => p.liga === "nba" || p.tipo === "regata");
   const hasBrasileirao = result.some((p) => p.liga === "brasileirao-serie-a");
   if (isBuildPhase && (!hasNba || !hasBrasileirao || result.length < 500)) {
@@ -391,21 +516,23 @@ export async function fetchSupabaseProducts(): Promise<Product[]> {
 
 export const getSupabaseProducts = unstable_cache(
   fetchSupabaseProducts,
-  ["supabase-products-v3"],
+  ["supabase-products-v4"],
   { revalidate: 300, tags: ["catalog"] },
 );
 
 export async function getSupabaseProductBySlug(slug: string, options?: { allowHidden?: boolean }): Promise<Product | undefined> {
   const allowHidden = options?.allowHidden === true;
   const isMatch = (product: Product) => (allowHidden || isPublishedProduct(product));
-  const bundledProduct = bundledCatalog.find((product) => product.slug.toLocaleLowerCase("en-US") === slug.toLocaleLowerCase("en-US") && isMatch(product));
+  const bundledProduct = findBundledProduct(slug);
+  if (bundledProduct && isMatch(bundledProduct)) return bundledProduct;
+
   const cachedProduct = getCachedSupabaseProducts().find((product) => product.slug.toLocaleLowerCase("en-US") === slug.toLocaleLowerCase("en-US") && isMatch(product));
   const fallbackProduct = bundledProduct || cachedProduct;
   const config = supabaseConfig();
   if (!config) return fallbackProduct;
 
   const query = new URLSearchParams({ select: DETAIL_PRODUCT_COLUMNS, slug: `ilike.${slug.toLocaleLowerCase("en-US")}`, limit: "1" });
-  let response = await fetch(`${config.url}/rest/v1/products?${query}`, {
+  const response = await fetch(`${config.url}/rest/v1/products?${query}`, {
     next: { revalidate: 300, tags: ["catalog"] },
     signal: AbortSignal.timeout(8_000),
     headers: {
@@ -416,24 +543,14 @@ export async function getSupabaseProductBySlug(slug: string, options?: { allowHi
     console.warn("Falha ao consultar produto no Supabase; usando fallback local:", error);
     return null;
   });
-  if (!response) return fallbackProduct;
-  if (!response.ok) {
-    query.set("select", `${PRODUCT_COLUMNS},images`);
-    response = await fetch(`${config.url}/rest/v1/products?${query}`, {
-      next: { revalidate: 300, tags: ["catalog"] },
-      signal: AbortSignal.timeout(8_000),
-      headers: {
-        apikey: config.key,
-        ...(config.key.startsWith("eyJ") ? { Authorization: "Bearer " + config.key } : {}),
-      },
-    }).catch((error: unknown) => {
-      console.warn("Falha ao consultar produto no schema legado do Supabase; usando fallback local:", error);
-      return null;
-    });
-  }
+
   if (!response || !response.ok) {
+    if (response && response.status === 400) {
+      console.warn("Erro HTTP 400 ao consultar produto por slug no Supabase (verifique se as migrações foram executadas).");
+    }
     return fallbackProduct;
   }
+
   const rows = await response.json() as unknown[];
   const product = rows.length ? mapProduct(rows[0]) ?? undefined : undefined;
   return product && isMatch(product) ? product : fallbackProduct;

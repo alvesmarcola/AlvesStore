@@ -1,0 +1,218 @@
+[
+  {
+    "variavel": "ADMIN_ORDERS_TOKEN",
+    "no_env_example": true,
+    "impacto": "Opcional / Fallback seguro",
+    "onde_le": "app/api/admin/session/route.ts, app/api/admin/summary/route.ts, lib/server/admin-auth.ts, tests/payment.test.ts, tests/product-deletion.test.ts"
+  },
+  {
+    "variavel": "ALLOW_UNMIGRATED_SUPABASE_BUILD",
+    "no_env_example": false,
+    "impacto": "Opcional / Fallback seguro",
+    "onde_le": "lib/server/supabase-catalog.ts"
+  },
+  {
+    "variavel": "CRON_SECRET",
+    "no_env_example": true,
+    "impacto": "MÉDIA: Cron de reconciliação na Vercel falha sem ela",
+    "onde_le": "app/api/cron/mercado-pago/route.ts, app/api/cron/reconcile-payments/route.ts"
+  },
+  {
+    "variavel": "INSTAGRAM_ACCESS_TOKEN",
+    "no_env_example": true,
+    "impacto": "Opcional / Fallback seguro",
+    "onde_le": "lib/instagram.ts, tests/instagram.test.ts, tests/payment.test.ts"
+  },
+  {
+    "variavel": "INSTAGRAM_USER_ID",
+    "no_env_example": true,
+    "impacto": "Opcional / Fallback seguro",
+    "onde_le": "lib/instagram.ts, tests/payment.test.ts"
+  },
+  {
+    "variavel": "MERCADOPAGO_ACCESS_TOKEN",
+    "no_env_example": false,
+    "impacto": "CRÍTICA: Se ausente, quebra catálogo ou checkout",
+    "onde_le": "app/api/admin/summary/route.ts, lib/server/mercado-pago.ts"
+  },
+  {
+    "variavel": "MERCADOPAGO_WEBHOOK_SECRET",
+    "no_env_example": false,
+    "impacto": "CRÍTICA: Se ausente, webhook retorna 401 e não aprova pedidos automaticamente",
+    "onde_le": "app/api/mercado-pago/webhook/route.ts"
+  },
+  {
+    "variavel": "MERCADO_PAGO_ACCESS_TOKEN",
+    "no_env_example": true,
+    "impacto": "CRÍTICA: Se ausente, quebra catálogo ou checkout",
+    "onde_le": "app/api/admin/summary/route.ts, lib/server/mercado-pago.ts, tests/payment.test.ts"
+  },
+  {
+    "variavel": "MERCADO_PAGO_WEBHOOK_SECRET",
+    "no_env_example": true,
+    "impacto": "CRÍTICA: Se ausente, webhook retorna 401 e não aprova pedidos automaticamente",
+    "onde_le": "app/api/admin/summary/route.ts, app/api/mercado-pago/webhook/route.ts, tests/payment.test.ts"
+  },
+  {
+    "variavel": "MP_ACCESS_TOKEN",
+    "no_env_example": false,
+    "impacto": "Opcional / Fallback seguro",
+    "onde_le": "app/api/admin/summary/route.ts, lib/server/mercado-pago.ts"
+  },
+  {
+    "variavel": "MP_TOKEN",
+    "no_env_example": false,
+    "impacto": "Opcional / Fallback seguro",
+    "onde_le": "app/api/admin/summary/route.ts, lib/server/mercado-pago.ts"
+  },
+  {
+    "variavel": "NEXT_PHASE",
+    "no_env_example": false,
+    "impacto": "Opcional / Fallback seguro",
+    "onde_le": "lib/server/supabase-catalog.ts, tests/supabase-catalog-optimization.test.ts"
+  },
+  {
+    "variavel": "NEXT_PUBLIC_COMPANY_ADDRESS",
+    "no_env_example": false,
+    "impacto": "Opcional / Fallback seguro",
+    "onde_le": "lib/site-config.ts"
+  },
+  {
+    "variavel": "NEXT_PUBLIC_COMPANY_CNPJ",
+    "no_env_example": false,
+    "impacto": "Opcional / Fallback seguro",
+    "onde_le": "lib/site-config.ts"
+  },
+  {
+    "variavel": "NEXT_PUBLIC_COMPANY_DELIVERY_TIME",
+    "no_env_example": false,
+    "impacto": "Opcional / Fallback seguro",
+    "onde_le": "lib/site-config.ts"
+  },
+  {
+    "variavel": "NEXT_PUBLIC_COMPANY_EMAIL",
+    "no_env_example": false,
+    "impacto": "Opcional / Fallback seguro",
+    "onde_le": "lib/site-config.ts"
+  },
+  {
+    "variavel": "NEXT_PUBLIC_COMPANY_HOURS",
+    "no_env_example": false,
+    "impacto": "Opcional / Fallback seguro",
+    "onde_le": "lib/site-config.ts"
+  },
+  {
+    "variavel": "NEXT_PUBLIC_COMPANY_NAME",
+    "no_env_example": false,
+    "impacto": "Opcional / Fallback seguro",
+    "onde_le": "lib/site-config.ts"
+  },
+  {
+    "variavel": "NEXT_PUBLIC_COMPANY_WHATSAPP",
+    "no_env_example": false,
+    "impacto": "Opcional / Fallback seguro",
+    "onde_le": "lib/site-config.ts"
+  },
+  {
+    "variavel": "NEXT_PUBLIC_COMPANY_WHATSAPP_DISPLAY",
+    "no_env_example": false,
+    "impacto": "Opcional / Fallback seguro",
+    "onde_le": "lib/site-config.ts"
+  },
+  {
+    "variavel": "NEXT_PUBLIC_DELIVERY_ESTIMATE",
+    "no_env_example": false,
+    "impacto": "Opcional / Fallback seguro",
+    "onde_le": "lib/site-config.ts, tests/home-trust-and-cards.test.ts"
+  },
+  {
+    "variavel": "NEXT_PUBLIC_SITE_URL",
+    "no_env_example": true,
+    "impacto": "Opcional / Fallback seguro",
+    "onde_le": "lib/server/mercado-pago.ts"
+  },
+  {
+    "variavel": "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+    "no_env_example": true,
+    "impacto": "Opcional / Fallback seguro",
+    "onde_le": "lib/server/supabase-catalog.ts, tests/supabase-catalog-optimization.test.ts"
+  },
+  {
+    "variavel": "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
+    "no_env_example": true,
+    "impacto": "Opcional / Fallback seguro",
+    "onde_le": "lib/server/supabase-catalog.ts"
+  },
+  {
+    "variavel": "NEXT_PUBLIC_SUPABASE_URL",
+    "no_env_example": true,
+    "impacto": "CRÍTICA: Se ausente, quebra catálogo ou checkout",
+    "onde_le": "app/api/admin/products/route.ts, app/api/admin/summary/route.ts, lib/server/supabase-catalog.ts, lib/server/supabase-orders.ts, tests/supabase-catalog-optimization.test.ts"
+  },
+  {
+    "variavel": "ORDER_EMAIL_FROM",
+    "no_env_example": true,
+    "impacto": "Opcional / Fallback seguro",
+    "onde_le": "lib/server/order-emails.ts, lib/server/order-notifications.ts"
+  },
+  {
+    "variavel": "PAYMENT_ENVIRONMENT",
+    "no_env_example": true,
+    "impacto": "Opcional / Fallback seguro",
+    "onde_le": "app/checkout/layout.tsx, lib/server/mercado-pago.ts, tests/payment.test.ts"
+  },
+  {
+    "variavel": "RESEND_API_KEY",
+    "no_env_example": true,
+    "impacto": "Opcional / Fallback seguro",
+    "onde_le": "lib/server/order-emails.ts, lib/server/order-notifications.ts"
+  },
+  {
+    "variavel": "SITE_URL",
+    "no_env_example": true,
+    "impacto": "Opcional / Fallback seguro",
+    "onde_le": "lib/server/mercado-pago.ts, lib/server/order-notification-outbox.ts, lib/server/order-notifications.ts"
+  },
+  {
+    "variavel": "SUPABASE_ROLE_KEY",
+    "no_env_example": false,
+    "impacto": "Opcional / Fallback seguro",
+    "onde_le": "app/api/admin/summary/route.ts, lib/server/supabase-orders.ts"
+  },
+  {
+    "variavel": "SUPABASE_SECRET_KEY",
+    "no_env_example": false,
+    "impacto": "Opcional / Fallback seguro",
+    "onde_le": "app/api/admin/summary/route.ts, lib/server/supabase-catalog.ts, lib/server/supabase-orders.ts"
+  },
+  {
+    "variavel": "SUPABASE_SERVICE_KEY",
+    "no_env_example": false,
+    "impacto": "Opcional / Fallback seguro",
+    "onde_le": "app/api/admin/summary/route.ts, lib/server/supabase-orders.ts"
+  },
+  {
+    "variavel": "SUPABASE_SERVICE_ROLE_KEY",
+    "no_env_example": true,
+    "impacto": "CRÍTICA: Se ausente, quebra catálogo ou checkout",
+    "onde_le": "app/api/admin/summary/route.ts, lib/server/supabase-catalog.ts, lib/server/supabase-orders.ts"
+  },
+  {
+    "variavel": "SUPABASE_URL",
+    "no_env_example": true,
+    "impacto": "Opcional / Fallback seguro",
+    "onde_le": "app/api/admin/products/route.ts, app/api/admin/summary/route.ts, lib/server/supabase-catalog.ts, lib/server/supabase-orders.ts"
+  },
+  {
+    "variavel": "WHATSAPP_ORDER_WEBHOOK_TOKEN",
+    "no_env_example": true,
+    "impacto": "Opcional / Fallback seguro",
+    "onde_le": "app/api/admin/summary/route.ts, lib/server/order-notifications.ts"
+  },
+  {
+    "variavel": "WHATSAPP_ORDER_WEBHOOK_URL",
+    "no_env_example": true,
+    "impacto": "Opcional / Fallback seguro",
+    "onde_le": "app/api/admin/summary/route.ts, lib/server/order-notifications.ts, tests/payment.test.ts"
+  }
+]

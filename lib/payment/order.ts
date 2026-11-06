@@ -6,7 +6,7 @@ import type { Product } from "@/lib/types";
 import { classifyProduct, getProductSizeSurcharge, isFreeShippingProduct, isManualProduct, isNbaTankTop, isPackageEligible } from "@/lib/product-classification";
 import { getAvailablePatches } from "@/lib/patch-compatibility";
 import { allowsCustomization } from "@/lib/formula-one";
-import { getSupabaseProductBySlug, getSupabaseProducts, hasSupabaseCatalogConfiguration } from "@/lib/server/supabase-catalog";
+import { fetchDirectOrderProducts, findBundledProduct, hasSupabaseCatalogConfiguration } from "@/lib/server/supabase-catalog";
 import { CUSTOMIZATION_NAME_MAX_LENGTH, sanitizeCustomizationName } from "@/lib/customization";
 import { calcularPromoBlackFriday, BLACK_FRIDAY_PROMO_CODE } from "@/lib/black-friday";
 
@@ -101,19 +101,37 @@ export async function validateOrderLinesFromCatalog(lines: OrderLineInput[]) {
   if (!hasSupabaseCatalogConfiguration()) {
     throw new Error("Não é possível iniciar um pagamento sem validar o catálogo atual do Supabase.");
   }
-  const publishedProducts = await getSupabaseProducts();
-  const knownIdentifiers = new Set(publishedProducts.flatMap((p) => [p.id, p.slug]));
-  const missingLines = lines.filter((line) => !knownIdentifiers.has(line.productId));
 
-  const additionalProducts: Product[] = [];
-  for (const line of missingLines) {
-    const hiddenProduct = await getSupabaseProductBySlug(line.productId, { allowHidden: true });
-    if (hiddenProduct) {
-      additionalProducts.push(hiddenProduct);
+  // 1. Resolver produtos locais (bundled catalog de futebol e F1) sem requisições de rede
+  const candidateMap = new Map<string, Product>();
+  const pendingIdentifiers: string[] = [];
+
+  for (const line of lines) {
+    const bundledMatch = findBundledProduct(line.productId);
+    if (bundledMatch) {
+      candidateMap.set(bundledMatch.id, bundledMatch);
+      candidateMap.set(bundledMatch.slug, bundledMatch);
+    } else {
+      pendingIdentifiers.push(line.productId);
     }
   }
 
-  const allCandidateProducts = [...publishedProducts, ...additionalProducts];
+  // 2. Se houver itens do Supabase (ex.: NBA, manuais), buscar SOMENTE esses produtos em query direta (sem unstable_cache, timeout 8s)
+  if (pendingIdentifiers.length > 0) {
+    const directProducts = await fetchDirectOrderProducts(pendingIdentifiers);
+    for (const product of directProducts) {
+      if (product.oculto === true) {
+        throw new InvalidOrderError(`O produto "${product.nome}" não está mais disponível para compra.`);
+      }
+      if (product.deleted_at) {
+        throw new InvalidOrderError(`O produto "${product.nome}" foi removido e não está mais disponível.`);
+      }
+      candidateMap.set(product.id, product);
+      candidateMap.set(product.slug, product);
+    }
+  }
+
+  const allCandidateProducts = Array.from(new Set(candidateMap.values()));
   return validateOrderLines(lines, allCandidateProducts);
 }
 

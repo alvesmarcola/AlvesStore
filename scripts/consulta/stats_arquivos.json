@@ -1,0 +1,33 @@
+{
+  "publicStats": {
+    "count": 3990,
+    "totalBytes": 393134707
+  },
+  "otimizadasStats": {
+    "count": 3968,
+    "totalBytes": 391613072
+  },
+  "dataStats": {
+    "count": 16,
+    "totalBytes": 2842340
+  },
+  "largeFiles": [
+    {
+      "file": "scripts/consulta/supabase_dump.json",
+      "sizeMb": "30.54",
+      "bytes": 32020915
+    }
+  ],
+  "imagensAtivo": {
+    "imgPublic": 958,
+    "prodPublic": 720,
+    "imgSupabaseStorage": 489,
+    "prodSupabaseStorage": 123,
+    "imgYupooProxy": 24,
+    "prodYupooProxy": 12
+  },
+  "imagensDump": {
+    "dumpStorageImgs": 489,
+    "dumpYupooImgs": 107739
+  }
+}

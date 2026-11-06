@@ -1,0 +1,3342 @@
+[
+  {
+    "slug": "camisa-jogador-campeonato-argentino-boca-juniors-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-campeonato-argentino-boca-juniors-26-27-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-campeonato-argentino-river-plate-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-campeonato-argentino-river-plate-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-brasileirao-atletico-mineiro-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-brasileirao-bahia-26-27-reserva-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-brasileirao-bahia-26-27-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-brasileirao-botafogo-24-25",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-brasileirao-corinthians-24-25",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-brasileirao-corinthians-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-brasileirao-corinthians-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-brasileirao-corinthians-26-27-pre-jogo",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-brasileirao-flamengo-24-25",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-brasileirao-flamengo-24-25-titular",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-brasileirao-flamengo-25-26-terceiro-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-brasileirao-flamengo-25-26-terceiro",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-brasileirao-flamengo-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-brasileirao-flamengo-26-27-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-brasileirao-flamengo-26-27-titular",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-brasileirao-fluminense-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-brasileirao-fluminense-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-brasileirao-fluminense-26-27-terceiro",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-brasileirao-fluminense-26-27-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-brasileirao-gremio-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-brasileirao-palmeiras-24-25-reserva-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-brasileirao-palmeiras-24-25-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-brasileirao-palmeiras-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-brasileirao-palmeiras-25-26-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-brasileirao-palmeiras-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-brasileirao-santos-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-brasileirao-santos-26-27-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-brasileirao-sao-paulo-24-25",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-brasileirao-sao-paulo-24-25-titular",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-brasileirao-sao-paulo-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-brasileirao-sport-26-27-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-brasileirao-vasco-da-gama-26-27-titular-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-brasileirao-vasco-da-gama-26-27-titular",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-campeonato-da-colombia-atletico-nacional-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-campeonato-alemao-bayern-munich-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-campeonato-alemao-bayern-munich-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-la-liga-atletico-madrid-25-26-reserva-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-la-liga-atletico-madrid-25-26-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-la-liga-atletico-madrid-26-27-reserva-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-la-liga-atletico-madrid-26-27-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-la-liga-barcelona-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-la-liga-barcelona-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-la-liga-real-betis-26-27-reserva-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-la-liga-real-betis-26-27-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-la-liga-real-madrid-25-26-reserva-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-la-liga-real-madrid-25-26-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-la-liga-real-madrid-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-la-liga-real-madrid-26-27-terceiro",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-la-liga-real-madrid-26-27-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-campeonato-frances-lyon-26-27-reserva-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-campeonato-frances-lyon-26-27-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-campeonato-frances-monaco-26-27-reserva-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-campeonato-frances-monaco-26-27-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-campeonato-frances-olympique-de-marselle-26-27-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-campeonato-frances-olympique-de-marselle-26-27-26-27-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-campeonato-frances-paris-saint-germain-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-campeonato-frances-paris-saint-germain-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-campeonato-frances-paris-saint-germain-26-27-dior",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-campeonato-italiano-inter-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-campeonato-italiano-inter-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-campeonato-italiano-juventus-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-campeonato-italiano-milan-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-campeonato-italiano-milan-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-campeonato-italiano-napoli-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-campeonato-italiano-roma-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-campeonato-italiano-roma-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-liga-mexicana-atlante-26-27-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-liga-mexicana-atlas-26-27-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-liga-mexicana-atletico-san-luis-26-27-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-liga-mexicana-chivas-26-27-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-liga-mexicana-cruz-azul-26-27-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-liga-mexicana-leon-26-27-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-liga-mexicana-mexico-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-liga-mexicana-pumas-26-27-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-liga-mexicana-santos-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-liga-mexicana-tigres-26-27-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-liga-mexicana-toluca-26-27-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-campeonato-holandes-ajax-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-campeonato-portugues-benfica-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-campeonato-portugues-benfica-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-campeonato-portugues-porto-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-campeonato-da-arabia-al-hilal-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-campeonato-da-arabia-al-nassr-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-campeonato-da-arabia-al-nassr-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-campeonato-turco-galatasaray-26-27-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-mls-inter-miami-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-mls-inter-miami-26-27-titular-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-mls-inter-miami-26-27-titular",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-mls-inter-miami-26-27-terceiro",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-africa-africa-do-sul-26-27-copa-do-mundo-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-africa-algeria-26-27-copa-do-mundo-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-africa-costa-do-marfim-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-africa-egito-26-27-copa-do-mundo-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-africa-marrocos-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-africa-nigeria-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-america-do-norte-central-canada-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-america-do-norte-central-curacao-26-27-copa-do-mundo-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-america-do-norte-central-estados-unidos-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-america-do-norte-central-estados-unidos-26-27-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-america-do-norte-central-jamaica-26-27-copa-do-mundo-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-america-do-norte-central-mexico-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-america-do-sul-argentina-23-24",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-america-do-sul-argentina-24-25-reserva-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-america-do-sul-argentina-24-25-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-america-do-sul-argentina-24-25-terceiro",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-america-do-sul-argentina-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-america-do-sul-argentina-26-27-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-america-do-sul-brasil",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-america-do-sul-brasil-22-23",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-america-do-sul-brasil-22-23-titular",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-america-do-sul-brasil-23-24",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-america-do-sul-brasil-23-24-titular",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-america-do-sul-brasil-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-america-do-sul-brasil-26-27-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-america-do-sul-colombia-24-25-24-25",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-america-do-sul-colombia-26-27-copa-do-mundo-26-27-reserva-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-america-do-sul-colombia-26-27-copa-do-mundo-26-27-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-america-do-sul-uruguai-26-27-titular-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-america-do-sul-uruguai-26-27-titular",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-america-do-sul-venezuela-26-27-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-asia-oriente-medio-coreia-do-sul-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-asia-oriente-medio-iraque-26-27-copa-do-mundo-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-asia-oriente-medio-japao-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-europa-alemanha-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-europa-belgica-26-27-copa-do-mundo-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-europa-croacia-26-27-copa-do-mundo-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-europa-espanha-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-europa-espanha-26-27-titular",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-europa-franca-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-europa-holanda-26-27-copa-do-mundo-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-europa-holanda-26-27-copa-do-mundo-26-27-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-europa-inglaterra-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-europa-inglaterra-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-europa-italia-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-europa-italia-26-27-titular",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-europa-noruega-26-27-copa-do-mundo-26-27-reserva-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-europa-noruega-26-27-copa-do-mundo-26-27-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-europa-noruega-26-27-copa-do-mundo-26-27-terceiro",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-europa-portugal-26-27-reserva-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-europa-portugal-26-27-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-europa-suica-26-27-copa-do-mundo-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-selecoes-europa-turquia-26-27-copa-do-mundo-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-campeonato-da-escocia-celtic-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-premier-league-arsenal-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-premier-league-arsenal-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-premier-league-aston-villa-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-premier-league-aston-villa-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-premier-league-chelsea-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-premier-league-chelsea-26-27-reserva-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-premier-league-chelsea-26-27-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-premier-league-chelsea-26-27-terceiro",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-premier-league-liverpool-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-premier-league-liverpool-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-premier-league-liverpool-26-27-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-premier-league-manchester-city-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-premier-league-manchester-city-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-premier-league-manchester-united-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-premier-league-manchester-united-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-premier-league-newcastle-united-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-premier-league-newcastle-united-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-premier-league-tottenham-hotspur-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-premier-league-tottenham-hotspur-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-jogador-premier-league-tottenham-hotspur-26-27-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-atletico-mineiro-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-atletico-mineiro-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-bahia-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-bahia-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-botafogo-24-25",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-botafogo-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-botafogo-26-27-reserva-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-botafogo-26-27-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-corinthians-24-25",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-corinthians-24-25-modelo-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-corinthians-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-corinthians-25-26-modelo-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-corinthians-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-cruzeiro-24-25",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-cruzeiro-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-cruzeiro-25-26-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-cruzeiro-25-26-treino",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-cruzeiro-25-26-treino-modelo-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-cruzeiro-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-cruzeiro-26-27-treino",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-flamengo-24-25",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-flamengo-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-flamengo-25-26-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-flamengo-25-26-terceiro",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-flamengo-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-flamengo-26-27-treino",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-flamengo-26-27-treino-modelo-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-fluminense-24-25",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-fluminense-24-25-titular",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-fluminense-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-fluminense-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-gremio-24-25",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-gremio-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-gremio-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-internacional-24-25",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-internacional-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-internacional-25-26-titular",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-internacional-26-27-titular-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-internacional-26-27-titular",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-internacional-26-27-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-nautico-26-27-26-27-reserva-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-nautico-26-27-26-27-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-palmeiras",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-palmeiras-24-25",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-palmeiras-24-25-titular",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-palmeiras-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-palmeiras-25-26-titular",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-palmeiras-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-paysandu-24-25-24-25",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-paysandu-25-26-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-paysandu-26-27-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-paysandu-26-27-26-27-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-remo-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-santa-cruz-26-27-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-santa-cruz-26-27-26-27-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-santos-24-25-reserva-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-santos-24-25-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-santos-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-santos-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-santos-26-27-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-sao-paulo-24-25",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-sao-paulo-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-sao-paulo-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-sport-24-25-24-25",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-sport-25-26-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-sport-26-27-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-vasco-da-gama-24-25",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-vasco-da-gama-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-vasco-da-gama-25-26-edicao-especial",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-vasco-da-gama-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-vitoria-24-25",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-vitoria-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-vitoria-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-alemao-bayern-munich-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-la-liga-real-madrid-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-la-liga-real-madrid-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-frances-paris-saint-germain-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-campeonato-da-arabia-saudita-al-nassr-23-24",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-selecoes-america-do-norte-estados-unidos-26-27-reserva-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-selecoes-america-do-norte-estados-unidos-26-27-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-selecoes-america-do-norte-mexico-26-27-modelo-2-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-selecoes-america-do-norte-mexico-26-27-modelo-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-selecoes-america-do-sul-argentina-24-25",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-selecoes-america-do-sul-argentina-24-25-titular",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-selecoes-america-do-sul-argentina-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-selecoes-america-do-sul-brasil-18-19",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-selecoes-america-do-sul-brasil-22-23",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-selecoes-america-do-sul-brasil-22-23-titular",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-selecoes-america-do-sul-brasil-24-25",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-selecoes-america-do-sul-brasil-24-25-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-selecoes-america-do-sul-brasil-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-selecoes-america-do-sul-brasil-26-27-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-selecoes-america-do-sul-brasil-26-27-goleiro",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-selecoes-america-do-sul-chile-26-27-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-selecoes-america-do-sul-colombia-24-25-24-25",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-selecoes-america-do-sul-colombia-24-25-24-25-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-selecoes-america-do-sul-colombia-26-27-copa-do-mundo-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-selecoes-america-do-sul-croped-colombia-26-27-copa-do-mundo-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-selecoes-asia-japao-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-selecoes-europa-alemanha-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-selecoes-europa-alemanha-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-selecoes-europa-alemanha-26-27-modelo-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-selecoes-europa-argentina-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-selecoes-europa-argentina-26-27-modelo-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-selecoes-europa-belgica-26-27-copa-do-mundo-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-selecoes-europa-espanha-26-27-modelo-2-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-selecoes-europa-espanha-26-27-modelo-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-selecoes-europa-franca-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-selecoes-europa-holanda-26-27-copa-do-mundo-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-selecoes-europa-italia-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-selecoes-europa-portugal-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-selecoes-europa-portugal-26-27-edicao-especial",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-premier-league-arsenal-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-premier-league-chelsea-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-premier-league-liverpool-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-premier-league-manchester-city-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "femininas-premier-league-manchester-united-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-atletico-mineiro",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-atletico-mineiro-1995",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-atletico-mineiro-2013",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-bahia",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-bahia-1996",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-bahia-1998",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-bahia-2013",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-botafogo-1994",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-botafogo-1995",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-botafogo-1996",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-botafogo-1997",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-botafogo-1999",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-corinthians-05-06",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-corinthians-95-96",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-corinthians-98-99",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-corinthians-1982",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-corinthians-1988",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-corinthians-1994",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-corinthians-1995",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-corinthians-1995-goleiro",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-corinthians-1996",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-corinthians-1997",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-corinthians-1998",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-corinthians-1998-goleiro",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-corinthians-1999",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-corinthians-2000",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-corinthians-2004",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-corinthians-2005",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-corinthians-2008",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-corinthians-2009",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-corinthians-2011",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-corinthians-2012",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-corinthians-2013",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-corinthians-2015",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-corinthians-2018",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-cruzeiro-1994-reserva-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-cruzeiro-1994-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-flamengo",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-flamengo-modelo-2-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-flamengo-modelo-3-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-flamengo-modelo-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-flamengo-modelo-3",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-flamengo-1987",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-flamengo-1995",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-flamengo-1997",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-flamengo-1999",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-flamengo-2000",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-flamengo-2001",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-flamengo-2005",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-flamengo-2009",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-flamengo-2010",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-flamengo-2012",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-flamengo-2014",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-fluminense",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-gremio",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-gremio-1998",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-internacional-1997",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-internacional-2006",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-internacional-2006-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-palmeiras",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-palmeiras-94-95",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-palmeiras-1980",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-palmeiras-1996",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-palmeiras-1997",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-palmeiras-1999",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-palmeiras-2011",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-paysandu-2003-2003",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-remo-1990",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-santos-edicao-especial",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-santos-edicao-especial-modelo-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-santos-1956",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-santos-1997",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-santos-1998",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-santos-2011",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-sao-paulo",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-sao-paulo-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-sport-2016-2016",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-vasco-da-gama",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-vasco-da-gama-1988",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-vasco-da-gama-1998",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-vasco-da-gama-1998-titular",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-vasco-da-gama-2013",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-espanhol-atletico-madrid",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-espanhol-atletico-madrid-titular",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-espanhol-barcelona",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-espanhol-barcelona-1990",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-espanhol-barcelona-1991",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-espanhol-barcelona-1998",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-espanhol-barcelona-2007",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-espanhol-fiorentina-1995",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-espanhol-real-madrid",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-espanhol-real-betis-1995",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-espanhol-real-madrid-2003",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-espanhol-real-madrid-2004",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-espanhol-real-madrid-2008",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-espanhol-real-madrid-2013",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-espanhol-real-madrid-2017",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-espanhol-sevilla-1987",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-espanhol-sevilla-2003",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-espanhol-sevilla-2015",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-italiano-fiorentina-1998",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-italiano-inter",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-italiano-inter-2002",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-italiano-juventus-2004",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-italiano-milan",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-italiano-napoli",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-italiano-roma-1991",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-campeonato-italiano-roma-2000",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-africa-jamaica",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-africa-nigeria",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-africa-nigeria-1998",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-africa-senegal",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-america-do-norte-estados-unidos-2002",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-america-do-norte-estados-unidos-2004",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-america-do-norte-estados-unidos-2011",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-america-do-norte-estados-unidos-2018",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-america-do-norte-mexico",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-america-do-norte-mexico-1986",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-america-do-norte-mexico-2002",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-america-do-sul-argentina",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-america-do-sul-argentina-1998",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-america-do-sul-brasil",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-america-do-sul-brasil-1977",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-america-do-sul-brasil-1984",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-america-do-sul-brasil-1994",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-america-do-sul-brasil-1994-titular",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-america-do-sul-brasil-1994-goleiro",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-america-do-sul-brasil-1998",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-america-do-sul-brasil-1998-modelo-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-america-do-sul-brasil-1998-modelo-3",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-america-do-sul-brasil-2002",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-america-do-sul-brasil-2002-goleiro",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-america-do-sul-brasil-2006",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-america-do-sul-brasil-2014",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-america-do-sul-brasil-2018",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-america-do-sul-chile-1982-1982",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-america-do-sul-chile-1998-1998",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-america-do-sul-chile-2014-2014",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-america-do-sul-chile-2017-2017",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-america-do-sul-colombia",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-america-do-sul-colombia-1998-1998",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-america-do-sul-uruguai-1986",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-america-do-sul-uruguai-1990",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-america-do-sul-uruguai-2010",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-asia-japao-1998",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-asia-japao-2006",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-asia-japao-2010",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-europa-alemanha",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-europa-alemanha-1996",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-europa-alemanha-2006",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-europa-alemanha-2014",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-europa-belgica",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-europa-belgica-2000-2000",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-europa-belgica-2002-2002",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-europa-croacia-2018-2018",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-europa-dinamarca",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-europa-espanha",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-europa-espanha-1994",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-europa-espanha-2000",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-europa-espanha-2012",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-europa-franca",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-europa-franca-1994",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-europa-franca-2002",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-europa-franca-2006",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-europa-franca-2014",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-europa-holanda",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-europa-holanda-12-13-12-13",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-europa-holanda-1980-1980",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-europa-holanda-2010-2010",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-europa-holanda-2014-2014",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-europa-inglaterra",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-europa-inglaterra-2004",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-europa-inglaterra-2016",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-europa-italia",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-europa-italia-1982",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-europa-noruega-1997-1997",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-europa-portugal",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-europa-portugal-titular",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-europa-portugal-modelo-3",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-europa-portugal-1972",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-europa-portugal-2002",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-europa-portugal-2002-modelo-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-europa-portugal-2004",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-europa-portugal-2012",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-europa-portugal-2013",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-europa-portugal-2015",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-europa-portugal-2016",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-europa-portugal-2020",
+    "origin": "products.json"
+  },
+  {
+    "slug": "retro-selecoes-europa-turquia-2008-2008",
+    "origin": "products.json"
+  },
+  {
+    "slug": "kits-infantis-selecoes-africa-africa-do-sul-26-27-copa-do-mundo-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "kits-infantis-selecoes-africa-algeria-26-27-copa-do-mundo-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "kits-infantis-selecoes-africa-jamaica-26-27-copa-do-mundo-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "kits-infantis-selecoes-africa-marrocos-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "kits-infantis-selecoes-africa-tunisia-26-27-copa-do-mundo-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "kits-infantis-selecoes-america-do-norte-costa-rica-26-27-copa-do-mundo-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "kits-infantis-selecoes-america-do-norte-mexico-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "kits-infantis-selecoes-america-do-sul-argentina-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "kits-infantis-selecoes-america-do-sul-brasil-24-25",
+    "origin": "products.json"
+  },
+  {
+    "slug": "kits-infantis-selecoes-america-do-sul-brasil-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "kits-infantis-selecoes-america-do-sul-chile-26-27-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "kits-infantis-selecoes-america-do-sul-colombia-26-27-copa-do-mundo-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "kits-infantis-selecoes-america-do-sul-peru-26-27-copa-do-mundo-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "kits-infantis-selecoes-asia-arabia-saudita-26-27-copa-do-mundo-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "kits-infantis-selecoes-asia-japao-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "kits-infantis-selecoes-asia-qatar-26-27-copa-do-mundo-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "kits-infantis-selecoes-europa-alemanha-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "kits-infantis-selecoes-europa-alemanha-26-27-goleiro",
+    "origin": "products.json"
+  },
+  {
+    "slug": "kits-infantis-selecoes-europa-austria-26-27-copa-do-mundo-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "kits-infantis-selecoes-europa-belgica-26-27-copa-do-mundo-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "kits-infantis-selecoes-europa-croacia-26-27-copa-do-mundo-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "kits-infantis-selecoes-europa-escocia-26-27-copa-do-mundo-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "kits-infantis-selecoes-europa-espanha-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "kits-infantis-selecoes-europa-franca-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "kits-infantis-selecoes-europa-holanda-26-27-copa-do-mundo-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "kits-infantis-selecoes-europa-inglaterra-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "kits-infantis-selecoes-europa-irlanda-26-27-copa-do-mundo-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "kits-infantis-selecoes-europa-italia-24-25",
+    "origin": "products.json"
+  },
+  {
+    "slug": "kits-infantis-selecoes-europa-italia-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "kits-infantis-selecoes-europa-pais-de-gales-26-27-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "kits-infantis-selecoes-europa-portugal-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "kits-infantis-selecoes-europa-portugal-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "kits-infantis-selecoes-europa-portugal-26-27-goleiro",
+    "origin": "products.json"
+  },
+  {
+    "slug": "kits-infantis-selecoes-europa-suica-26-27-copa-do-mundo-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-retro-selecoes-america-do-sul-brasil-96-97-goleiro",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-retro-selecoes-america-do-sul-colombia-1990-1990",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-retro-selecoes-america-do-sul-colombia-1994-1994",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-retro-selecoes-asia-oceania-japao-1998-goleiro",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-retro-selecoes-europa-alemanha-90-91",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-retro-selecoes-europa-alemanha-2006",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-retro-selecoes-europa-franca",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-retro-selecoes-europa-inglaterra-1990",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-retro-selecoes-europa-inglaterra-1998",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-retro-selecoes-europa-portugal-2006",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-retro-selecoes-europa-portugal-2012",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-retro-selecoes-europa-portugal-2013",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-retro-selecoes-europa-portugal-2020",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-campeonato-brasileiro-cruzeiro-26-27-reserva-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-campeonato-brasileiro-cruzeiro-26-27-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-campeonato-brasileiro-flamengo-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-campeonato-brasileiro-flamengo-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-campeonato-brasileiro-flamengo-26-27-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-campeonato-brasileiro-fluminense-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-campeonato-brasileiro-gremio-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-campeonato-brasileiro-gremio-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-campeonato-brasileiro-internacional-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-campeonato-chileno-universidade-do-chile-26-27-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-campeonato-alemao-bayern-munich-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-campeonato-alemao-borussia-dortmund-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-campeonato-alemao-st-pauli-26-27-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-la-liga-atletico-madrid-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-la-liga-barcelona-26-27-reserva-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-la-liga-barcelona-26-27-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-la-liga-barcelona-26-27-goleiro",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-la-liga-real-betis-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-la-liga-real-madrid-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-la-liga-real-madrid-26-27-titular",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-campeonato-frances-paris-saint-germain-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-campeonato-frances-paris-saint-germain-26-27-reserva-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-campeonato-frances-paris-saint-germain-26-27-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-campeonato-italiano-inter-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-campeonato-italiano-milan-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-campeonato-holandes-ajax-22-23",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-campeonato-portugues-benfica-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-mls-inter-miami-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-selecoes-america-do-norte-mexico-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-selecoes-america-do-norte-mexico-26-27-goleiro",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-selecoes-america-do-sul-argentina-26-27-reserva-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-selecoes-america-do-sul-argentina-26-27-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-selecoes-america-do-sul-brasil-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-selecoes-america-do-sul-brasil-26-27-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-selecoes-america-do-sul-colombia-26-27-copa-do-mundo-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-selecoes-asia-japao-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-selecoes-europa-alemanha-26-27-reserva-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-selecoes-europa-alemanha-26-27-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-selecoes-europa-alemanha-26-27-goleiro",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-selecoes-europa-belgica-26-27-copa-do-mundo-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-selecoes-europa-escocia-26-27-copa-do-mundo-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-selecoes-europa-escocia-26-27-copa-do-mundo-26-27-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-selecoes-europa-espanha-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-selecoes-europa-franca-26-27-reserva-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-selecoes-europa-franca-26-27-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-selecoes-europa-inglaterra-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-selecoes-europa-italia-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-selecoes-europa-portugal-25-26",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-selecoes-europa-portugal-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-premier-league-arsenal-26-27-reserva-2",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-premier-league-arsenal-26-27-reserva",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-premier-league-chelsea-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-premier-league-manchester-city-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-premier-league-manchester-united-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-premier-league-newcastle-united-26-27",
+    "origin": "products.json"
+  },
+  {
+    "slug": "camisa-polo-scuderia-ferrari-f1-2026",
+    "origin": "f1-products.json"
+  },
+  {
+    "slug": "camisa-scuderia-ferrari-f1-2026-vermelha",
+    "origin": "f1-products.json"
+  },
+  {
+    "slug": "camisa-polo-red-bull-racing-f1-navy-blue",
+    "origin": "f1-products.json"
+  },
+  {
+    "slug": "camisa-red-bull-racing-f1-t-shirt-navy-blue",
+    "origin": "f1-products.json"
+  },
+  {
+    "slug": "camisa-mercedes-amg-petronas-f1-2026-preta",
+    "origin": "f1-products.json"
+  },
+  {
+    "slug": "camisa-polo-mercedes-amg-petronas-f1-2026-branca",
+    "origin": "f1-products.json"
+  },
+  {
+    "slug": "camisa-mercedes-amg-petronas-f1-2026-azul",
+    "origin": "f1-products.json"
+  },
+  {
+    "slug": "camisa-polo-mclaren-f1-team-laranja-preta",
+    "origin": "f1-products.json"
+  },
+  {
+    "slug": "camisa-mclaren-f1-team-preta-laranja",
+    "origin": "f1-products.json"
+  },
+  {
+    "slug": "camisa-polo-williams-racing-f1-preta-azul",
+    "origin": "f1-products.json"
+  },
+  {
+    "slug": "camisa-tommy-hilfiger-cadillac-f1-team-polo",
+    "origin": "f1-products.json"
+  },
+  {
+    "slug": "jaqueta-f1-ferrari-retro-racing-vermelha",
+    "origin": "f1-products.json"
+  },
+  {
+    "slug": "2022-f1-0001-s-5xl-116130969",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2022-f1-0002-s-5xl-116131021",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2022-f1-0003-s-5xl-116131035",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2022-f1-0004-s-5xl-116131049",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2022-f1-0005-s-5xl-116131068",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2022-f1-0006-s-5xl-116131086",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2022-f1-0007-s-5xl-116131104",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2022-f1-0008-s-5xl-116131117",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2022-f1-0009-s-5xl-116339103",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2022-f1-0010-s-5xl-116339144",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2022-f1-0011-s-5xl-116339331",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2022-f1-0012-s-5xl-116561473",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2022-f1-formula-one-alphatauri-crew-neck-s-5xl-112850762",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2022-f1-formula-one-alphatauri-polo-s-5xl-112850777",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2022-f1-formula-one-ferrari-racing-suit-crew-neck-red-55-s-5xl-112850716",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2022-f1-formula-one-honda-red-bull-black-s-5xl-113757983",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2022-f1-formula-one-mclaren-crew-neck-s-5xl-113757971",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2022-f1-formula-one-mclaren-polo-s-5xl-112850788",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2022-f1-formula-one-mercedes-benz-63-polo-black-s-5xl-113757995",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2022-f1-formula-one-red-bull-crew-royal-blue-s-5xl-112850831",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2022-f1-formula-one-red-bull-polo-royal-blue-s-5xl-112850818",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2022-f1-formula-one-red-bull-polo-white-s-5xl-112850736",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2022-f1-vest-0001-116130895",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2022-f1-vest-0002-116130932",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2024-f1-formula-one-s-5xl-163996664",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2024-f1-formula-one-s-5xl-163996677",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2024-f1-formula-one-s-5xl-163996696",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2024-f1-formula-one-s-5xl-163996705",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2024-f1-formula-one-s-5xl-163996714",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2024-f1-formula-one-s-5xl-163996728",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2024-f1-formula-one-s-5xl-163996753",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2024-f1-formula-one-s-5xl-163996760",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2024-polo-f1-formula-one-s-5xl-163996670",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2024-polo-f1-formula-one-s-5xl-163996681",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2024-polo-f1-formula-one-s-5xl-163996722",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2024-polo-f1-formula-one-s-5xl-163996734",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2024-polo-f1-formula-one-s-5xl-163996742",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2024-polo-f1-formula-one-s-5xl-163996746",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2024-polo-f1-formula-one-s-5xl-163996767",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2025-f1-ferrari-t-shirt-red-s-5xl-220907837",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2025-f1-formula-one-s-3xl-189563739",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2025-f1-formula-one-s-3xl-189563748",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2025-f1-formula-one-s-3xl-189563756",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2025-f1-formula-one-s-5xl-189563781",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2025-f1-formula-one-s-5xl-189563786",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2025-f1-formula-one-s-5xl-189563791",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2025-f1-formula-one-s-5xl-189563797",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2025-f1-formula-one-s-5xl-189563805",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2025-f1-formula-one-s-5xl-189563812",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2025-f1-formula-one-s-5xl-189563818",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2025-f1-formula-one-s-5xl-189563824",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2025-f1-formula-one-s-5xl-189563834",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2025-f1-formula-one-s-5xl-189563844",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2025-f1-formula-one-s-5xl-214781640",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2025-f1-formula-one-s-5xl-214781785",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2025-f1-formula-one-s-5xl-215021102",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2025-f1-formula-one-s-5xl-215021195",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2025-f1-formula-one-s-5xl-215021394",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2025-f1-formula-one-s-5xl-215022146",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2025-f1-formula-one-s-5xl-215022315",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2025-f1-formula-one-s-5xl-215022379",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2025-f1-formula-one-s-5xl-215022460",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2025-f1-mercedes-benz-apxgp-movie-edition-polo-white-s-5xl-220908148",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2025-f1-mercedes-benz-polo-black-s-3xl-220908354",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2025-f1-mercedes-benz-polo-white-s-3xl-220908242",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2025-f1-red-bull-racing-polo-navy-blue-s-3xl-220908422",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2025-f1-red-bull-racing-t-shirt-navy-blue-s-3xl-220908493",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2025-polo-f1-formula-one-s-3xl-214781786",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2025-polo-f1-formula-one-s-3xl-215021628",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2025-polo-f1-formula-one-s-3xl-215021699",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2025-polo-f1-formula-one-s-5xl-189563859",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2025-polo-f1-formula-one-s-5xl-189563865",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2025-polo-f1-formula-one-s-5xl-215020517",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2025-polo-f1-formula-one-s-5xl-215021294",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2025-polo-f1-formula-one-s-5xl-215021491",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "2025-polo-f1-formula-one-s-5xl-215021575",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "adidas-x-mercedes-amg-petronas-f1-team-blue-wonder-t-shirt-s-5xl-256693037",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "audi-revolut-f1-2026-dark-gray-polo-s-5xl-256693179",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "audi-revolut-f1-2026-dark-gray-t-shirt-s-5xl-256693345",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "castore-mclaren-f1-orange-and-black-t-shirt-s-4xl-255795189",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "f1-formula-one-2022-blue-s-5xl-111508247",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "f1-formula-one-2022-mercedes-black-s-5xl-111508156",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "f1-formula-one-2022-red-bull-honda-s-5xl-111508098",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "mclaren-f1-team-2025-black-and-orange-t-shirt-255795396",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "mclaren-f1-team-2025-black-and-orange-t-shirt-s-4xl-255794329",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "mclaren-f1-team-2025-orange-and-black-hoodie-s-4xl-255796270",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "mclaren-f1-team-2025-orange-and-black-polo-shirt-s-4xl-255795903",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "mercedes-amg-f1-petronas-formula-one-team-technician-suit-s-5xl-221734667",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "mercedes-amg-petronas-f1-2026-black-polo-s-5xl-1-256693753",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "mercedes-amg-petronas-f1-2026-black-polo-s-5xl-256693664",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "mercedes-amg-petronas-f1-2026-black-t-shirt-s-5xl-1-256693927",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "mercedes-amg-petronas-f1-2026-black-t-shirt-s-5xl-256693841",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "mercedes-amg-petronas-f1-2026-black-t-shirt-s-5xl-3-256694159",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "mercedes-amg-petronas-f1-2026-blue-polo-s-5xl-256694228",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "mercedes-amg-petronas-f1-2026-blue-t-shirt-s-5xl-256694433",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "mercedes-amg-petronas-f1-2026-player-version-black-t-shirt-s-5xl-2-256694032",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "mercedes-amg-petronas-f1-2026-player-version-blue-polo-s-5xl-1-256694339",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "mercedes-amg-petronas-f1-2026-player-version-blue-t-shirt-s-5xl-1-256694533",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "mercedes-amg-petronas-f1-2026-player-version-purple-t-shirt-s-5xl-256694633",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "mercedes-amg-petronas-f1-2026-player-version-white-t-shirt-s-5xl-2-256695289",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "mercedes-amg-petronas-f1-2026-player-version-white-t-shirt-s-5xl-256695091",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "mercedes-amg-petronas-f1-2026-white-polo-s-5xl-1-256694948",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "mercedes-amg-petronas-f1-2026-white-polo-s-5xl-256694780",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "mercedes-amg-petronas-f1-2026-white-t-shirt-s-5xl-1-256695178",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "new-era-atlassian-williams-f1-2026-black-and-blue-polo-shirt-s-4xl-255793412",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "oracle-red-bull-racing-2026-white-t-shirt-s-5xl-256695408",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "puma-scuderia-ferrari-f1-2025-red-polo-shirt-s-4xl-255793780",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "puma-scuderia-ferrari-f1-2025-red-polo-shirt-s-4xl-255795642",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "puma-x-mclaren-f1-1000th-grand-prix-special-edition-team-t-shirt-s-4xl-255794083",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "red-bull-26-27-home-jersey-s-4xl-253817863",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "red-bull-new-york-26-27-home-kids-kit-size-16-28-251867184",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "red-bull-racing-f1-hypebeast-polo-s-3xl-221734724",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "regata-nba-76ers-retro-branca-0-tyrese-maxey",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-76ers-retro-branca-21-joel-embiid",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-76ers-retro-branca-3-allen-iverson",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-76ers-retro-branca-8-paul-george",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-76ers-retro-preta-0-tyrese-maxey",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-76ers-retro-preta-21-joel-embiid",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-76ers-retro-preta-3-allen-iverson",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-76ers-retro-preta-8-paul-george",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-bulls-city-edition-0",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-bulls-city-edition-14",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-bulls-city-edition-23",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-bulls-city-edition-3",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-bulls-jordan-brand-11-demar-derozan",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-bulls-jordan-brand-23-michael-jordan",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-bulls-jordan-brand-33-scottie-pippen",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-bulls-jordan-brand-45-michael-jordan",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-bulls-jordan-brand-8-zach-lavine",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-bulls-jordan-brand-91-dennis-rodman",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-cavaliers-city-edition-1-james-harden",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-cavaliers-city-edition-10-darius-garland",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-cavaliers-city-edition-23-lebron-james",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-cavaliers-city-edition-45-donovan-mitchell",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-cavaliers-retro-1-james-harden",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-cavaliers-retro-10-darius-garland",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-cavaliers-retro-23-lebron-james",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-cavaliers-retro-45-donovan-mitchell",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-celtics-city-edition-0-jayson-tatum",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-clippers-city-edition-1-james-harden",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-clippers-city-edition-13",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-clippers-city-edition-2-kawhi-leonard",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-hornets-city-edition-1-lamelo-ball",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-hornets-city-edition-7",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-jazz-00-jordan-clarkson",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-jazz-branca-19",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-jazz-branca-23",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-jazz-jordan-brand-00",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-jazz-jordan-brand-19",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-jazz-jordan-brand-23",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-jazz-roxa-19",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-jazz-roxa-23",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-knicks-jordan-brand-8",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-knicks-limitada-00-jordan-clarkson",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-knicks-limitada-11-jalen-brunson",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-knicks-limitada-25-mikal-bridges",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-knicks-limitada-32-karl-anthony-towns",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-lakers-city-edition-0-russell-westbrook",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-lakers-city-edition-1-d-angelo-russell",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-lakers-city-edition-15-austin-reaves",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-lakers-city-edition-23-lebron-james",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-lakers-city-edition-24-kobe-bryant",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-lakers-city-edition-3-anthony-davis",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-lakers-city-edition-6-lebron-james",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-lakers-city-edition-77-luka-doncic",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-lakers-city-edition-8-kobe-bryant",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-lakers-city-edition-9-bronny-james",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-lakers-jordan-brand-15-austin-reaves",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-lakers-jordan-brand-23-lebron-james",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-lakers-jordan-brand-24-kobe-bryant",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-lakers-jordan-brand-77-luka-doncic",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-lakers-jordan-brand-8-kobe-bryant",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-magic-away-azul-1-penny-hardaway",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-magic-away-azul-32-shaquille-o-neal",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-magic-away-azul-5-paolo-banchero",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-magic-home-azul-22-franz-wagner",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-magic-home-branca-1-penny-hardaway",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-magic-home-branca-22-franz-wagner",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-magic-home-branca-32-shaquille-o-neal",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-magic-home-branca-5-paolo-banchero",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-magic-jordan-brand-1-penny-hardaway",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-magic-jordan-brand-22-franz-wagner",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-magic-jordan-brand-32-shaquille-o-neal",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-magic-jordan-brand-5-paolo-banchero",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-mavericks-city-edition-11",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-mavericks-city-edition-3",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-mavericks-city-edition-32",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-mavericks-city-edition-77",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-mavericks-retro-verde-11-kyrie-irving",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-mavericks-retro-verde-3-anthony-davis",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-mavericks-retro-verde-31-klay-thompson",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-mavericks-retro-verde-32-cooper-flagg",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-mavericks-retro-verde-5-d-angelo-russell",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-mavericks-retro-verde-77-luka-doncic",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-nuggets-city-edition-15",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-nuggets-city-edition-27",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-nuggets-city-edition-32",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-pelicans-city-edition-14-brandon-ingram",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-pelicans-city-edition-3-jordan-poole",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-raptors-city-edition-15",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-raptors-city-edition-3",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-raptors-city-edition-4",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-raptors-city-edition-9",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-raptors-retro-branca-1-tracy-mcgrady",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-raptors-retro-branca-15-vince-carter",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-raptors-retro-roxa-1-tracy-mcgrady",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-raptors-retro-roxa-15-vince-carter",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-rockets-city-edition-0-russell-westbrook",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-rockets-city-edition-13-james-harden",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-rockets-city-edition-28-alperen-sengun",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-rockets-city-edition-4-jalen-green",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-rockets-city-edition-7-kevin-durant",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-spurs-city-edition-1",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-spurs-city-edition-10",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-spurs-city-edition-4",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-spurs-limitada-cinza-1-victor-wembanyama",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-spurs-limitada-cinza-10-jeremy-sochan",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-spurs-limitada-cinza-4-de-aaron-fox",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-suns-limitada-1-devin-booker",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-suns-limitada-35-kevin-durant",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-thunder-city-edition-2-shai-gilgeous-alexander",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-thunder-city-edition-7-chet-holmgren",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-thunder-city-edition-8-jalen-williams",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-timberwolves-retro-25-derrick-rose",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-timberwolves-retro-5-anthony-edwards",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-trail-blazers-away-preta-8-deni-avdija",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-trail-blazers-city-edition-0-damian-lillard",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-trail-blazers-city-edition-16-yang-hansen",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-trail-blazers-home-branca-0-damian-lillard",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-trail-blazers-home-branca-16-yang-hansen",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-trail-blazers-home-branca-8-deni-avdija",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-warriors-city-edition-10-jimmy-butler",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-warriors-city-edition-23-draymond-green",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "regata-nba-warriors-city-edition-30-stephen-curry",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "scuderia-ferrari-f1-2025-black-polo-s-3xl-221734787",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "scuderia-ferrari-f1-2025-black-t-shirt-s-3xl-221734900",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "scuderia-ferrari-f1-2025-red-polo-s-3xl-221734941",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "scuderia-ferrari-f1-2025-red-t-shirt-s-3xl-221734979",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "scuderia-ferrari-f1-2025-white-polo-s-3xl-221735063",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "scuderia-ferrari-f1-2025-white-t-shirt-s-3xl-221735106",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "scuderia-ferrari-f1-2026-red-hoodie-s-3xl-256695624",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "scuderia-ferrari-f1-2026-red-t-shirt-s-5xl-256695677",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "teste",
+    "origin": "supabase-products-cache.json (NBA/manual)"
+  },
+  {
+    "slug": "tommy-hilfiger-x-cadillac-f1-team-replica-black-polo-s-5xl-256695728",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "tommy-hilfiger-x-cadillac-f1-team-replica-polo-s-5xl-256695775",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "tommy-hilfiger-x-cadillac-formula-1-team-sergio-perez-t-shirt-s-5xl-256695888",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "y-3-mercedes-amg-petronas-f1-black-t-shirt-s-5xl-256695934",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  },
+  {
+    "slug": "y-3-x-mercedes-amg-petronas-formula-1-team-driver-s-5xl-256695984",
+    "origin": "supabase-revisar (álbuns brutos/F1 antigos)"
+  }
+]
