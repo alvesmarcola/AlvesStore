@@ -1,0 +1,1556 @@
+{
+  "totalProdutosHigienizados": 94,
+  "totalImagensDesvinculadas": 155,
+  "imagensDesvinculadas": [
+    {
+      "produtoSlug": "selecoes-america-do-norte-haiti-26-27-copa-do-mundo-26-27",
+      "produtoNome": "Camisa Haiti Copa do Mundo 26/27",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/selecoes-america-do-norte-haiti-26-27-copa-do-mundo-26-27/02-800.webp",
+      "source": "catalogo/🌍 Seleções/AMÉRICA DO NORTE/Haiti 26_27 Copa do Mundo(1).jpg",
+      "alt": "Camisa Haiti Copa do Mundo 26/27 ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "selecoes-america-do-norte-haiti-26-27-copa-do-mundo-26-27",
+      "produtoNome": "Camisa Haiti Copa do Mundo 26/27",
+      "imageIndexOriginal": 2,
+      "src": "/otimizadas/selecoes-america-do-norte-haiti-26-27-copa-do-mundo-26-27/03-800.webp",
+      "source": "catalogo/🌍 Seleções/AMÉRICA DO NORTE/Haiti 26_27 Copa do Mundo(2).jpg",
+      "alt": "Camisa Haiti Copa do Mundo 26/27 ? foto 3",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "selecoes-america-do-norte-jamaica-26-27-26-27",
+      "produtoNome": "Camisa Jamaica 26/27",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/selecoes-america-do-norte-jamaica-26-27-26-27/02-800.webp",
+      "source": "catalogo/🌍 Seleções/AMÉRICA DO NORTE/Jamaica 26_27(1).jpg",
+      "alt": "Camisa Jamaica 26/27 ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "selecoes-america-do-sul-uruguai-24-25",
+      "produtoNome": "Camisa Uruguai 24/25",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/selecoes-america-do-sul-uruguai-24-25/02-800.webp",
+      "source": "catalogo/🌍 Seleções/AMÉRICA DO SUL/Uruguai 24_25(1).jpg",
+      "alt": "Camisa Uruguai 24/25 ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "selecoes-asia-oceania-oriente-medio-coreia-do-sul-24-25",
+      "produtoNome": "Camisa Coreia do Sul 24/25",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/selecoes-asia-oceania-oriente-medio-coreia-do-sul-24-25/02-800.webp",
+      "source": "catalogo/🌍 Seleções/ÁSIA - OCEANIA - ORIENTE MÉDIO_/Korea do Sul 24_25(1).jpg",
+      "alt": "Camisa Coreia do Sul 24/25 ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "selecoes-asia-oceania-oriente-medio-coreia-do-sul-25-26",
+      "produtoNome": "Camisa Coreia do Sul 25/26",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/selecoes-asia-oceania-oriente-medio-coreia-do-sul-25-26/02-800.webp",
+      "source": "catalogo/🌍 Seleções/ÁSIA - OCEANIA - ORIENTE MÉDIO_/Korea do Sul 25_26(1).jpg",
+      "alt": "Camisa Coreia do Sul 25/26 ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "selecoes-asia-oceania-oriente-medio-coreia-do-sul-25-26",
+      "produtoNome": "Camisa Coreia do Sul 25/26",
+      "imageIndexOriginal": 2,
+      "src": "/otimizadas/selecoes-asia-oceania-oriente-medio-coreia-do-sul-25-26/03-800.webp",
+      "source": "catalogo/🌍 Seleções/ÁSIA - OCEANIA - ORIENTE MÉDIO_/Koreia do Sul 25_26.jpg",
+      "alt": "Camisa Coreia do Sul 25/26 ? foto 3",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "selecoes-europa-austria-26-27-copa-do-mundo-26-27",
+      "produtoNome": "Camisa Áustria Copa do Mundo 26/27",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/selecoes-europa-austria-26-27-copa-do-mundo-26-27/02-800.webp",
+      "source": "catalogo/🌍 Seleções/EUROPA/Áustria 26_27 Copa do Mundo.png",
+      "alt": "Camisa Áustria Copa do Mundo 26/27 ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "selecoes-europa-austria-26-27-copa-do-mundo-26-27",
+      "produtoNome": "Camisa Áustria Copa do Mundo 26/27",
+      "imageIndexOriginal": 2,
+      "src": "/otimizadas/selecoes-europa-austria-26-27-copa-do-mundo-26-27/03-800.webp",
+      "source": "catalogo/🌍 Seleções/EUROPA/Áustria 26_27 Copa do Mundo(1).jpg",
+      "alt": "Camisa Áustria Copa do Mundo 26/27 ? foto 3",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "selecoes-europa-grecia-26-27-26-27",
+      "produtoNome": "Camisa Grécia 26/27",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/selecoes-europa-grecia-26-27-26-27/02-800.webp",
+      "source": "catalogo/🌍 Seleções/EUROPA/Grécia 26_27.jpg",
+      "alt": "Camisa Grécia 26/27 ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "selecoes-europa-holanda-26-27-copa-do-mundo-26-27",
+      "produtoNome": "Camisa Holanda Copa do Mundo 26/27",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/selecoes-europa-holanda-26-27-copa-do-mundo-26-27/02-800.webp",
+      "source": "catalogo/🌍 Seleções/EUROPA/Holanda 26_27 Copa do Mundo.png",
+      "alt": "Camisa Holanda Copa do Mundo 26/27 ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "selecoes-europa-suica-26-27-copa-do-mundo-26-27",
+      "produtoNome": "Camisa Suíça Copa do Mundo 26/27",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/selecoes-europa-suica-26-27-copa-do-mundo-26-27/02-800.webp",
+      "source": "catalogo/🌍 Seleções/EUROPA/Suíça 26_27 Copa do Mundo_(1).jpg",
+      "alt": "Camisa Suíça Copa do Mundo 26/27 ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "selecoes-europa-suica-26-27-copa-do-mundo-26-27",
+      "produtoNome": "Camisa Suíça Copa do Mundo 26/27",
+      "imageIndexOriginal": 2,
+      "src": "/otimizadas/selecoes-europa-suica-26-27-copa-do-mundo-26-27/03-800.webp",
+      "source": "catalogo/🌍 Seleções/EUROPA/Suíça 26_27 Copa do Mundo.jpg",
+      "alt": "Camisa Suíça Copa do Mundo 26/27 ? foto 3",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "camisa-jogador-campeonato-argentino-river-plate-26-27",
+      "produtoNome": "Camisa River Plate 26/27 jogador masculino",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/camisa-jogador-campeonato-argentino-river-plate-26-27/02-800.webp",
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇦🇷 Campeonato Argentino/River Plate 26_27.png",
+      "alt": "Camisa River Plate 26/27 jogador masculino ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "camisa-jogador-campeonato-argentino-river-plate-26-27",
+      "produtoNome": "Camisa River Plate 26/27 jogador masculino",
+      "imageIndexOriginal": 2,
+      "src": "/otimizadas/camisa-jogador-campeonato-argentino-river-plate-26-27/03-800.webp",
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇦🇷 Campeonato Argentino/River Plate 26_27(1).jpg",
+      "alt": "Camisa River Plate 26/27 jogador masculino ? foto 3",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "camisa-jogador-brasileirao-flamengo-26-27",
+      "produtoNome": "Camisa Flamengo 26/27 jogador masculino",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/camisa-jogador-brasileirao-flamengo-26-27/02-800.webp",
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇧🇷 Brasileirão_/Flamengo 26_27.png",
+      "alt": "Camisa Flamengo 26/27 jogador masculino ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "camisa-jogador-brasileirao-palmeiras-26-27",
+      "produtoNome": "Camisa Palmeiras 26/27 jogador masculino",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/camisa-jogador-brasileirao-palmeiras-26-27/02-800.webp",
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇧🇷 Brasileirão_/Palmeiras 26_27.jpg",
+      "alt": "Camisa Palmeiras 26/27 jogador masculino ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "camisa-jogador-campeonato-alemao-bayern-munich-26-27",
+      "produtoNome": "Camisa Bayern Munich 26/27 jogador masculino",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/camisa-jogador-campeonato-alemao-bayern-munich-26-27/02-800.webp",
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇩🇪 Campeonato Alemão_/Bayer de Munique 26_27.png",
+      "alt": "Camisa Bayern Munich 26/27 jogador masculino ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "camisa-jogador-campeonato-alemao-bayern-munich-26-27",
+      "produtoNome": "Camisa Bayern Munich 26/27 jogador masculino",
+      "imageIndexOriginal": 2,
+      "src": "/otimizadas/camisa-jogador-campeonato-alemao-bayern-munich-26-27/03-800.webp",
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇩🇪 Campeonato Alemão_/Bayer de Munique 26_27(1).png",
+      "alt": "Camisa Bayern Munich 26/27 jogador masculino ? foto 3",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "camisa-jogador-la-liga-barcelona-26-27",
+      "produtoNome": "Camisa Barcelona 26/27 jogador masculino",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/camisa-jogador-la-liga-barcelona-26-27/02-800.webp",
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇪🇸 La Liga/Barcelona 26_27.png",
+      "alt": "Camisa Barcelona 26/27 jogador masculino ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "camisa-jogador-la-liga-barcelona-26-27",
+      "produtoNome": "Camisa Barcelona 26/27 jogador masculino",
+      "imageIndexOriginal": 3,
+      "src": "/otimizadas/camisa-jogador-la-liga-barcelona-26-27/04-800.webp",
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇪🇸 La Liga/Barcelona 26_27(2).jpg",
+      "alt": "Camisa Barcelona 26/27 jogador masculino ? foto 4",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "camisa-jogador-campeonato-frances-paris-saint-germain-25-26",
+      "produtoNome": "Camisa Paris Saint-Germain 25/26 jogador masculino",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/camisa-jogador-campeonato-frances-paris-saint-germain-25-26/02-800.webp",
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇫🇷 Campeonato Francês/PSG 25_26(1).jpg",
+      "alt": "Camisa Paris Saint-Germain 25/26 jogador masculino ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "camisa-jogador-campeonato-frances-paris-saint-germain-26-27",
+      "produtoNome": "Camisa Paris Saint-Germain 26/27 jogador masculino",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/camisa-jogador-campeonato-frances-paris-saint-germain-26-27/02-800.webp",
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇫🇷 Campeonato Francês/PSG 26_27.png",
+      "alt": "Camisa Paris Saint-Germain 26/27 jogador masculino ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "camisa-jogador-campeonato-italiano-inter-25-26",
+      "produtoNome": "Camisa Inter 25/26 jogador masculino",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/camisa-jogador-campeonato-italiano-inter-25-26/02-800.webp",
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇮🇹 Campeonato Italiano/Inter de Milão 25_26(1).jpg",
+      "alt": "Camisa Inter 25/26 jogador masculino ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "camisa-jogador-campeonato-italiano-juventus-25-26",
+      "produtoNome": "Camisa Juventus 25/26 jogador masculino",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/camisa-jogador-campeonato-italiano-juventus-25-26/02-800.webp",
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇮🇹 Campeonato Italiano/Juventus 25_26.png",
+      "alt": "Camisa Juventus 25/26 jogador masculino ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "camisa-jogador-campeonato-italiano-milan-25-26",
+      "produtoNome": "Camisa Milan 25/26 jogador masculino",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/camisa-jogador-campeonato-italiano-milan-25-26/02-800.webp",
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇮🇹 Campeonato Italiano/Milan 25_26.png",
+      "alt": "Camisa Milan 25/26 jogador masculino ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "camisa-jogador-liga-mexicana-chivas-26-27-26-27",
+      "produtoNome": "Camisa Chivas 26/27 jogador masculino",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/camisa-jogador-liga-mexicana-chivas-26-27-26-27/02-800.webp",
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇲🇽 Liga Mexicana_/Chivas 26_27.png",
+      "alt": "Camisa Chivas 26/27 jogador masculino ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "camisa-jogador-liga-mexicana-cruz-azul-26-27-26-27",
+      "produtoNome": "Camisa Cruz Azul 26/27 jogador masculino",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/camisa-jogador-liga-mexicana-cruz-azul-26-27-26-27/02-800.webp",
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇲🇽 Liga Mexicana_/Cruz Azul 26_27(1).jpg",
+      "alt": "Camisa Cruz Azul 26/27 jogador masculino ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "camisa-jogador-liga-mexicana-tigres-26-27-26-27",
+      "produtoNome": "Camisa Tigres 26/27 jogador masculino",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/camisa-jogador-liga-mexicana-tigres-26-27-26-27/02-800.webp",
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇲🇽 Liga Mexicana_/Tigres 26_27(1).png",
+      "alt": "Camisa Tigres 26/27 jogador masculino ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "camisa-jogador-liga-mexicana-toluca-26-27-26-27",
+      "produtoNome": "Camisa Toluca 26/27 jogador masculino",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/camisa-jogador-liga-mexicana-toluca-26-27-26-27/02-800.webp",
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇲🇽 Liga Mexicana_/Toluca 26_27(1).jpg",
+      "alt": "Camisa Toluca 26/27 jogador masculino ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "camisa-jogador-campeonato-holandes-ajax-26-27",
+      "produtoNome": "Camisa Ajax 26/27 jogador masculino",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/camisa-jogador-campeonato-holandes-ajax-26-27/02-800.webp",
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇳🇱 Campeonato Holandês_/Ajax 26_27(1).jpg",
+      "alt": "Camisa Ajax 26/27 jogador masculino ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "camisa-jogador-campeonato-portugues-benfica-26-27",
+      "produtoNome": "Camisa Benfica 26/27 jogador masculino",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/camisa-jogador-campeonato-portugues-benfica-26-27/02-800.webp",
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇵🇹 Campeonato Português_/Benfica 26_27(1).jpg",
+      "alt": "Camisa Benfica 26/27 jogador masculino ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "camisa-jogador-campeonato-portugues-porto-26-27",
+      "produtoNome": "Camisa Porto 26/27 jogador masculino",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/camisa-jogador-campeonato-portugues-porto-26-27/02-800.webp",
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇵🇹 Campeonato Português_/Porto 26_27(1).jpg",
+      "alt": "Camisa Porto 26/27 jogador masculino ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "camisa-jogador-campeonato-da-arabia-al-hilal-25-26",
+      "produtoNome": "Camisa Al-Hilal 25/26 jogador masculino",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/camisa-jogador-campeonato-da-arabia-al-hilal-25-26/02-800.webp",
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇸🇦 Campeonato da Arábia_/Al Hillal 25_26(1).jpg",
+      "alt": "Camisa Al-Hilal 25/26 jogador masculino ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "camisa-jogador-campeonato-da-arabia-al-nassr-26-27",
+      "produtoNome": "Camisa Al-Nassr 26/27 jogador masculino",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/camisa-jogador-campeonato-da-arabia-al-nassr-26-27/02-800.webp",
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇸🇦 Campeonato da Arábia_/Al Nassr 26_27(1).jpg",
+      "alt": "Camisa Al-Nassr 26/27 jogador masculino ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "camisa-jogador-campeonato-turco-galatasaray-26-27-26-27",
+      "produtoNome": "Camisa Galatasaray 26/27 jogador masculino",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/camisa-jogador-campeonato-turco-galatasaray-26-27-26-27/02-800.webp",
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇹🇷 Campeonato Turco/Galatasaray 26_27(1).jpg",
+      "alt": "Camisa Galatasaray 26/27 jogador masculino ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "camisa-jogador-selecoes-africa-africa-do-sul-26-27-copa-do-mundo-26-27",
+      "produtoNome": "Camisa África do Sul Copa do Mundo 26/27 jogador masculino",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/camisa-jogador-selecoes-africa-africa-do-sul-26-27-copa-do-mundo-26-27/02-800.webp",
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🌍 Seleções_/ÁFRICA_/África do Sul 26_27 Copa do Mundo_.png",
+      "alt": "Camisa África do Sul Copa do Mundo 26/27 jogador masculino ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "camisa-jogador-selecoes-asia-oriente-medio-japao-26-27",
+      "produtoNome": "Camisa Japão 26/27 jogador masculino",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/camisa-jogador-selecoes-asia-oriente-medio-japao-26-27/02-800.webp",
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🌍 Seleções_/ÁSIA - ORIENTE MÉDIO_/Japão 26_27 Copa do Mundo(1).jpg",
+      "alt": "Camisa Japão 26/27 jogador masculino ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "camisa-jogador-selecoes-europa-croacia-26-27-copa-do-mundo-26-27",
+      "produtoNome": "Camisa Croácia Copa do Mundo 26/27 jogador masculino",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/camisa-jogador-selecoes-europa-croacia-26-27-copa-do-mundo-26-27/02-800.webp",
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🌍 Seleções_/EUROPA/Croácia 26_27 Copa do Mundo(1).jpg",
+      "alt": "Camisa Croácia Copa do Mundo 26/27 jogador masculino ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "camisa-jogador-selecoes-europa-franca-26-27",
+      "produtoNome": "Camisa França 26/27 jogador masculino",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/camisa-jogador-selecoes-europa-franca-26-27/02-800.webp",
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🌍 Seleções_/EUROPA/França 26_27 Copa do Mundo(1).jpg",
+      "alt": "Camisa França 26/27 jogador masculino ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "camisa-jogador-selecoes-europa-suica-26-27-copa-do-mundo-26-27",
+      "produtoNome": "Camisa Suíça Copa do Mundo 26/27 jogador masculino",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/camisa-jogador-selecoes-europa-suica-26-27-copa-do-mundo-26-27/02-800.webp",
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🌍 Seleções_/EUROPA/Suíça 26_27 Copa do Mundo(1).jpg",
+      "alt": "Camisa Suíça Copa do Mundo 26/27 jogador masculino ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "camisa-jogador-premier-league-arsenal-25-26",
+      "produtoNome": "Camisa Arsenal 25/26 jogador masculino",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/camisa-jogador-premier-league-arsenal-25-26/02-800.webp",
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League/Arsenal 25_26(1).jpg",
+      "alt": "Camisa Arsenal 25/26 jogador masculino ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "camisa-jogador-premier-league-arsenal-25-26",
+      "produtoNome": "Camisa Arsenal 25/26 jogador masculino",
+      "imageIndexOriginal": 2,
+      "src": "/otimizadas/camisa-jogador-premier-league-arsenal-25-26/03-800.webp",
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League/Arsenal 25_26(2).jpg",
+      "alt": "Camisa Arsenal 25/26 jogador masculino ? foto 3",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "camisa-jogador-premier-league-arsenal-26-27",
+      "produtoNome": "Camisa Arsenal 26/27 jogador masculino",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/camisa-jogador-premier-league-arsenal-26-27/02-800.webp",
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League/Arsenal 26_27.png",
+      "alt": "Camisa Arsenal 26/27 jogador masculino ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "camisa-jogador-premier-league-arsenal-26-27",
+      "produtoNome": "Camisa Arsenal 26/27 jogador masculino",
+      "imageIndexOriginal": 2,
+      "src": "/otimizadas/camisa-jogador-premier-league-arsenal-26-27/03-800.webp",
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League/Arsenal 26_27(1).png",
+      "alt": "Camisa Arsenal 26/27 jogador masculino ? foto 3",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "camisa-jogador-premier-league-chelsea-25-26",
+      "produtoNome": "Camisa Chelsea 25/26 jogador masculino",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/camisa-jogador-premier-league-chelsea-25-26/02-800.webp",
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League/Chelsea 25_26(1).png",
+      "alt": "Camisa Chelsea 25/26 jogador masculino ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "camisa-jogador-premier-league-manchester-united-26-27",
+      "produtoNome": "Camisa Manchester United 26/27 jogador masculino",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/camisa-jogador-premier-league-manchester-united-26-27/02-800.webp",
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League/Manchester United 26_27.png",
+      "alt": "Camisa Manchester United 26/27 jogador masculino ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "camisa-jogador-premier-league-manchester-united-26-27",
+      "produtoNome": "Camisa Manchester United 26/27 jogador masculino",
+      "imageIndexOriginal": 2,
+      "src": "/otimizadas/camisa-jogador-premier-league-manchester-united-26-27/03-800.webp",
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League/Manchester United 26_27(1).jpg",
+      "alt": "Camisa Manchester United 26/27 jogador masculino ? foto 3",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "femininas-campeonato-brasileiro-bahia-26-27",
+      "produtoNome": "Camisa Bahia 26/27 feminino",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/femininas-campeonato-brasileiro-bahia-26-27/02-800.webp",
+      "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Bahia 26_27(1).jpg",
+      "alt": "Camisa Bahia 26/27 feminino ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "femininas-campeonato-brasileiro-botafogo-25-26",
+      "produtoNome": "Camisa Botafogo 25/26 feminino",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/femininas-campeonato-brasileiro-botafogo-25-26/02-800.webp",
+      "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Botafogo 25_26(1).jpg",
+      "alt": "Camisa Botafogo 25/26 feminino ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "femininas-campeonato-brasileiro-cruzeiro-24-25",
+      "produtoNome": "Camisa Cruzeiro 24/25 feminino",
+      "imageIndexOriginal": 2,
+      "src": "/otimizadas/femininas-campeonato-brasileiro-cruzeiro-24-25/03-800.webp",
+      "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Cruzeiro 24_25(2).jpg",
+      "alt": "Camisa Cruzeiro 24/25 feminino ? foto 3",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "femininas-campeonato-brasileiro-cruzeiro-26-27",
+      "produtoNome": "Camisa Cruzeiro 26/27 feminino",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/femininas-campeonato-brasileiro-cruzeiro-26-27/02-800.webp",
+      "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Cruzeiro 26_27.png",
+      "alt": "Camisa Cruzeiro 26/27 feminino ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "femininas-campeonato-brasileiro-cruzeiro-26-27",
+      "produtoNome": "Camisa Cruzeiro 26/27 feminino",
+      "imageIndexOriginal": 2,
+      "src": "/otimizadas/femininas-campeonato-brasileiro-cruzeiro-26-27/03-800.webp",
+      "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Cruzeiro 26_27(1).jpg",
+      "alt": "Camisa Cruzeiro 26/27 feminino ? foto 3",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "femininas-campeonato-brasileiro-flamengo-24-25",
+      "produtoNome": "Camisa Flamengo 24/25 feminino",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/femininas-campeonato-brasileiro-flamengo-24-25/02-800.webp",
+      "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Flamengo 24_25.jpg",
+      "alt": "Camisa Flamengo 24/25 feminino ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "femininas-campeonato-brasileiro-flamengo-26-27",
+      "produtoNome": "Camisa Flamengo 26/27 feminino",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/femininas-campeonato-brasileiro-flamengo-26-27/02-800.webp",
+      "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Flamengo 26_27.jpg",
+      "alt": "Camisa Flamengo 26/27 feminino ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "femininas-campeonato-brasileiro-flamengo-26-27",
+      "produtoNome": "Camisa Flamengo 26/27 feminino",
+      "imageIndexOriginal": 2,
+      "src": "/otimizadas/femininas-campeonato-brasileiro-flamengo-26-27/03-800.webp",
+      "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Flamengo 26_27.png",
+      "alt": "Camisa Flamengo 26/27 feminino ? foto 3",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "femininas-campeonato-brasileiro-flamengo-26-27",
+      "produtoNome": "Camisa Flamengo 26/27 feminino",
+      "imageIndexOriginal": 3,
+      "src": "/otimizadas/femininas-campeonato-brasileiro-flamengo-26-27/04-800.webp",
+      "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Flamengo 26_27(1).jpg",
+      "alt": "Camisa Flamengo 26/27 feminino ? foto 4",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "femininas-campeonato-brasileiro-gremio-26-27",
+      "produtoNome": "Camisa Grêmio 26/27 feminino",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/femininas-campeonato-brasileiro-gremio-26-27/02-800.webp",
+      "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Grêmio 26_27(1).jpg",
+      "alt": "Camisa Grêmio 26/27 feminino ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "femininas-campeonato-brasileiro-gremio-26-27",
+      "produtoNome": "Camisa Grêmio 26/27 feminino",
+      "imageIndexOriginal": 2,
+      "src": "/otimizadas/femininas-campeonato-brasileiro-gremio-26-27/03-800.webp",
+      "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Grêmio 26_27(2).jpg",
+      "alt": "Camisa Grêmio 26/27 feminino ? foto 3",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "femininas-campeonato-brasileiro-remo-26-27",
+      "produtoNome": "Camisa Remo 26/27 feminino",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/femininas-campeonato-brasileiro-remo-26-27/02-800.webp",
+      "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Remo 26_27.png",
+      "alt": "Camisa Remo 26/27 feminino ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "femininas-campeonato-brasileiro-sao-paulo-26-27",
+      "produtoNome": "Camisa São Paulo 26/27 feminino",
+      "imageIndexOriginal": 2,
+      "src": "/otimizadas/femininas-campeonato-brasileiro-sao-paulo-26-27/03-800.webp",
+      "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/São Paulo 26_27(2).jpg",
+      "alt": "Camisa São Paulo 26/27 feminino ? foto 3",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "femininas-campeonato-brasileiro-sport-24-25-24-25",
+      "produtoNome": "Camisa Sport 24/25 feminino",
+      "imageIndexOriginal": 2,
+      "src": "/otimizadas/femininas-campeonato-brasileiro-sport-24-25-24-25/03-800.webp",
+      "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Sport 24_25(2).jpg",
+      "alt": "Camisa Sport 24/25 feminino ? foto 3",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "femininas-campeonato-da-arabia-saudita-al-nassr-23-24",
+      "produtoNome": "Camisa Al-Nassr 23/24 feminino",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/femininas-campeonato-da-arabia-saudita-al-nassr-23-24/02-800.webp",
+      "source": "catalogo/👩🏻 Femininas/🇸🇦 Campeonato da Arábia Saudita/Al Nassr 23_24(1).jpg",
+      "alt": "Camisa Al-Nassr 23/24 feminino ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "femininas-selecoes-europa-italia-26-27",
+      "produtoNome": "Camisa Itália 26/27 feminino",
+      "imageIndexOriginal": 0,
+      "src": "/otimizadas/femininas-selecoes-europa-italia-26-27/01-800.webp",
+      "source": "catalogo/👩🏻 Femininas/🌍 Seleções_/EUROPA/Croped Itália 26_27 Copa do Mundo.jpg",
+      "alt": "Camisa Itália 26/27 feminino ? foto 1",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "cropped"
+    },
+    {
+      "produtoSlug": "femininas-selecoes-europa-portugal-26-27",
+      "produtoNome": "Camisa Portugal 26/27 feminino",
+      "imageIndexOriginal": 0,
+      "src": "/otimizadas/femininas-selecoes-europa-portugal-26-27/01-800.webp",
+      "source": "catalogo/👩🏻 Femininas/🌍 Seleções_/EUROPA/Croped Portugal 26_27 Copa do Mundo.jpg",
+      "alt": "Camisa Portugal 26/27 feminino ? foto 1",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "cropped"
+    },
+    {
+      "produtoSlug": "femininas-premier-league-manchester-united-26-27",
+      "produtoNome": "Camisa Manchester United 26/27 feminino",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/femininas-premier-league-manchester-united-26-27/02-800.webp",
+      "source": "catalogo/👩🏻 Femininas/🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League_/Manchester United 26_27.png",
+      "alt": "Camisa Manchester United 26/27 feminino ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "femininas-premier-league-manchester-united-26-27",
+      "produtoNome": "Camisa Manchester United 26/27 feminino",
+      "imageIndexOriginal": 2,
+      "src": "/otimizadas/femininas-premier-league-manchester-united-26-27/03-800.webp",
+      "source": "catalogo/👩🏻 Femininas/🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League_/Manchester United 26_27(1).png",
+      "alt": "Camisa Manchester United 26/27 feminino ? foto 3",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "retro-campeonato-brasileiro-bahia-2013",
+      "produtoNome": "Camisa Bahia 2013 retro",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/retro-campeonato-brasileiro-bahia-2013/02-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Bahia 2013(1).jpg",
+      "alt": "Camisa Bahia 2013 retro ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-campeonato-brasileiro-corinthians-2012",
+      "produtoNome": "Camisa Corinthians 2012 retro",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/retro-campeonato-brasileiro-corinthians-2012/02-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Corinthians 2012.jpg",
+      "alt": "Camisa Corinthians 2012 retro ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-campeonato-brasileiro-corinthians-2012",
+      "produtoNome": "Camisa Corinthians 2012 retro",
+      "imageIndexOriginal": 2,
+      "src": "/otimizadas/retro-campeonato-brasileiro-corinthians-2012/03-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Corinthians 2012(1).jpg",
+      "alt": "Camisa Corinthians 2012 retro ? foto 3",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-campeonato-brasileiro-flamengo-2010",
+      "produtoNome": "Camisa Flamengo 2010 retro",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/retro-campeonato-brasileiro-flamengo-2010/02-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Flamengo 2010(1).jpg",
+      "alt": "Camisa Flamengo 2010 retro ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-campeonato-brasileiro-fluminense",
+      "produtoNome": "Camisa Fluminense retro",
+      "imageIndexOriginal": 2,
+      "src": "/otimizadas/retro-campeonato-brasileiro-fluminense/03-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Fluminense_(2).jpg",
+      "alt": "Camisa Fluminense retro ? foto 3",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-campeonato-brasileiro-palmeiras-1996",
+      "produtoNome": "Camisa Palmeiras 1996 retro",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/retro-campeonato-brasileiro-palmeiras-1996/02-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Palmeiras 1996(1).jpg",
+      "alt": "Camisa Palmeiras 1996 retro ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-campeonato-brasileiro-palmeiras-1996",
+      "produtoNome": "Camisa Palmeiras 1996 retro",
+      "imageIndexOriginal": 2,
+      "src": "/otimizadas/retro-campeonato-brasileiro-palmeiras-1996/03-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Palmeiras 1996(2).jpg",
+      "alt": "Camisa Palmeiras 1996 retro ? foto 3",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-campeonato-brasileiro-palmeiras-1999",
+      "produtoNome": "Camisa Palmeiras 1999 retro",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/retro-campeonato-brasileiro-palmeiras-1999/02-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Palmeiras 1999.jpg",
+      "alt": "Camisa Palmeiras 1999 retro ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-campeonato-brasileiro-palmeiras-1999",
+      "produtoNome": "Camisa Palmeiras 1999 retro",
+      "imageIndexOriginal": 2,
+      "src": "/otimizadas/retro-campeonato-brasileiro-palmeiras-1999/03-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Palmeiras 1999(1).jpg",
+      "alt": "Camisa Palmeiras 1999 retro ? foto 3",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-campeonato-brasileiro-sao-paulo",
+      "produtoNome": "Camisa São Paulo retro",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/retro-campeonato-brasileiro-sao-paulo/02-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/São Paulo_(1).jpg",
+      "alt": "Camisa São Paulo retro ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-campeonato-brasileiro-sao-paulo",
+      "produtoNome": "Camisa São Paulo retro",
+      "imageIndexOriginal": 2,
+      "src": "/otimizadas/retro-campeonato-brasileiro-sao-paulo/03-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/São Paulo_(2).jpg",
+      "alt": "Camisa São Paulo retro ? foto 3",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-campeonato-brasileiro-sao-paulo",
+      "produtoNome": "Camisa São Paulo retro",
+      "imageIndexOriginal": 3,
+      "src": "/otimizadas/retro-campeonato-brasileiro-sao-paulo/04-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/São Paulo.jpg",
+      "alt": "Camisa São Paulo retro ? foto 4",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-campeonato-brasileiro-sao-paulo",
+      "produtoNome": "Camisa São Paulo retro",
+      "imageIndexOriginal": 4,
+      "src": "/otimizadas/retro-campeonato-brasileiro-sao-paulo/05-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/São Paulo(1).jpg",
+      "alt": "Camisa São Paulo retro ? foto 5",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-campeonato-brasileiro-sao-paulo",
+      "produtoNome": "Camisa São Paulo retro",
+      "imageIndexOriginal": 5,
+      "src": "/otimizadas/retro-campeonato-brasileiro-sao-paulo/06-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/São Paulo(2).jpg",
+      "alt": "Camisa São Paulo retro ? foto 6",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-campeonato-espanhol-barcelona",
+      "produtoNome": "Camisa Barcelona retro",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/retro-campeonato-espanhol-barcelona/02-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🇪🇸 Campeonato Espanhol_/Barcelona_(1).jpg",
+      "alt": "Camisa Barcelona retro ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-campeonato-espanhol-barcelona",
+      "produtoNome": "Camisa Barcelona retro",
+      "imageIndexOriginal": 2,
+      "src": "/otimizadas/retro-campeonato-espanhol-barcelona/03-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🇪🇸 Campeonato Espanhol_/Barcelona_(2).jpg",
+      "alt": "Camisa Barcelona retro ? foto 3",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-campeonato-espanhol-barcelona",
+      "produtoNome": "Camisa Barcelona retro",
+      "imageIndexOriginal": 3,
+      "src": "/otimizadas/retro-campeonato-espanhol-barcelona/04-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🇪🇸 Campeonato Espanhol_/Barcelona_(3).jpg",
+      "alt": "Camisa Barcelona retro ? foto 4",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-campeonato-espanhol-barcelona",
+      "produtoNome": "Camisa Barcelona retro",
+      "imageIndexOriginal": 4,
+      "src": "/otimizadas/retro-campeonato-espanhol-barcelona/05-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🇪🇸 Campeonato Espanhol_/Barcelona_(4).jpg",
+      "alt": "Camisa Barcelona retro ? foto 5",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-campeonato-espanhol-barcelona",
+      "produtoNome": "Camisa Barcelona retro",
+      "imageIndexOriginal": 5,
+      "src": "/otimizadas/retro-campeonato-espanhol-barcelona/06-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🇪🇸 Campeonato Espanhol_/Barcelona_(5).jpg",
+      "alt": "Camisa Barcelona retro ? foto 6",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-campeonato-espanhol-barcelona",
+      "produtoNome": "Camisa Barcelona retro",
+      "imageIndexOriginal": 6,
+      "src": "/otimizadas/retro-campeonato-espanhol-barcelona/07-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🇪🇸 Campeonato Espanhol_/Barcelona_(6).jpg",
+      "alt": "Camisa Barcelona retro ? foto 7",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-campeonato-espanhol-barcelona-1998",
+      "produtoNome": "Camisa Barcelona 1998 retro",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/retro-campeonato-espanhol-barcelona-1998/02-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🇪🇸 Campeonato Espanhol_/Barcelona 1998(2).jpg",
+      "alt": "Camisa Barcelona 1998 retro ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-campeonato-espanhol-real-madrid",
+      "produtoNome": "Camisa Real Madrid retro",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/retro-campeonato-espanhol-real-madrid/02-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🇪🇸 Campeonato Espanhol_/Real Madrid_(1).jpg",
+      "alt": "Camisa Real Madrid retro ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-campeonato-espanhol-real-madrid",
+      "produtoNome": "Camisa Real Madrid retro",
+      "imageIndexOriginal": 2,
+      "src": "/otimizadas/retro-campeonato-espanhol-real-madrid/03-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🇪🇸 Campeonato Espanhol_/Real Madrid_(2).jpg",
+      "alt": "Camisa Real Madrid retro ? foto 3",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-campeonato-espanhol-real-madrid",
+      "produtoNome": "Camisa Real Madrid retro",
+      "imageIndexOriginal": 3,
+      "src": "/otimizadas/retro-campeonato-espanhol-real-madrid/04-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🇪🇸 Campeonato Espanhol_/Real Madrid_(3).jpg",
+      "alt": "Camisa Real Madrid retro ? foto 4",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-campeonato-espanhol-real-madrid",
+      "produtoNome": "Camisa Real Madrid retro",
+      "imageIndexOriginal": 4,
+      "src": "/otimizadas/retro-campeonato-espanhol-real-madrid/05-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🇪🇸 Campeonato Espanhol_/Real Madrid_(4).jpg",
+      "alt": "Camisa Real Madrid retro ? foto 5",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-campeonato-espanhol-real-madrid",
+      "produtoNome": "Camisa Real Madrid retro",
+      "imageIndexOriginal": 5,
+      "src": "/otimizadas/retro-campeonato-espanhol-real-madrid/06-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🇪🇸 Campeonato Espanhol_/Real Madrid_(5).jpg",
+      "alt": "Camisa Real Madrid retro ? foto 6",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-campeonato-espanhol-real-madrid",
+      "produtoNome": "Camisa Real Madrid retro",
+      "imageIndexOriginal": 6,
+      "src": "/otimizadas/retro-campeonato-espanhol-real-madrid/07-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🇪🇸 Campeonato Espanhol_/Real Madrid_(6).jpg",
+      "alt": "Camisa Real Madrid retro ? foto 7",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-campeonato-espanhol-real-madrid",
+      "produtoNome": "Camisa Real Madrid retro",
+      "imageIndexOriginal": 7,
+      "src": "/otimizadas/retro-campeonato-espanhol-real-madrid/08-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🇪🇸 Campeonato Espanhol_/Real Madrid_(7).jpg",
+      "alt": "Camisa Real Madrid retro ? foto 8",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-campeonato-espanhol-real-madrid",
+      "produtoNome": "Camisa Real Madrid retro",
+      "imageIndexOriginal": 8,
+      "src": "/otimizadas/retro-campeonato-espanhol-real-madrid/09-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🇪🇸 Campeonato Espanhol_/Real Madrid_(8).jpg",
+      "alt": "Camisa Real Madrid retro ? foto 9",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-campeonato-espanhol-real-madrid",
+      "produtoNome": "Camisa Real Madrid retro",
+      "imageIndexOriginal": 9,
+      "src": "/otimizadas/retro-campeonato-espanhol-real-madrid/10-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🇪🇸 Campeonato Espanhol_/Real Madrid_(9).jpg",
+      "alt": "Camisa Real Madrid retro ? foto 10",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-campeonato-espanhol-real-madrid",
+      "produtoNome": "Camisa Real Madrid retro",
+      "imageIndexOriginal": 10,
+      "src": "/otimizadas/retro-campeonato-espanhol-real-madrid/11-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🇪🇸 Campeonato Espanhol_/Real Madrid_(10).jpg",
+      "alt": "Camisa Real Madrid retro ? foto 11",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-campeonato-espanhol-real-madrid",
+      "produtoNome": "Camisa Real Madrid retro",
+      "imageIndexOriginal": 11,
+      "src": "/otimizadas/retro-campeonato-espanhol-real-madrid/12-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🇪🇸 Campeonato Espanhol_/Real Madrid_(11).jpg",
+      "alt": "Camisa Real Madrid retro ? foto 12",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-campeonato-espanhol-real-madrid",
+      "produtoNome": "Camisa Real Madrid retro",
+      "imageIndexOriginal": 12,
+      "src": "/otimizadas/retro-campeonato-espanhol-real-madrid/13-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🇪🇸 Campeonato Espanhol_/Real Madrid_(12).jpg",
+      "alt": "Camisa Real Madrid retro ? foto 13",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-campeonato-espanhol-real-madrid",
+      "produtoNome": "Camisa Real Madrid retro",
+      "imageIndexOriginal": 13,
+      "src": "/otimizadas/retro-campeonato-espanhol-real-madrid/14-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🇪🇸 Campeonato Espanhol_/Real Madrid_(13).jpg",
+      "alt": "Camisa Real Madrid retro ? foto 14",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-campeonato-italiano-napoli",
+      "produtoNome": "Camisa Napoli retro",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/retro-campeonato-italiano-napoli/02-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🇮🇹 Campeonato Italiano_/Napoli(1).jpg",
+      "alt": "Camisa Napoli retro ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-selecoes-africa-jamaica",
+      "produtoNome": "Camisa Jamaica retro",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/retro-selecoes-africa-jamaica/02-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/ÁFRICA_/Jamaica_(1).jpg",
+      "alt": "Camisa Jamaica retro ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-selecoes-america-do-norte-estados-unidos-2002",
+      "produtoNome": "Camisa Estados Unidos 2002 retro",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/retro-selecoes-america-do-norte-estados-unidos-2002/02-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/AMÉRICA DO NORTE_/Estados Unidos 2002(1).jpg",
+      "alt": "Camisa Estados Unidos 2002 retro ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-selecoes-america-do-norte-mexico",
+      "produtoNome": "Camisa México retro",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/retro-selecoes-america-do-norte-mexico/02-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/AMÉRICA DO NORTE_/México_.jpg",
+      "alt": "Camisa México retro ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-selecoes-america-do-norte-mexico",
+      "produtoNome": "Camisa México retro",
+      "imageIndexOriginal": 2,
+      "src": "/otimizadas/retro-selecoes-america-do-norte-mexico/03-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/AMÉRICA DO NORTE_/Mexico_(1).jpg",
+      "alt": "Camisa México retro ? foto 3",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-selecoes-america-do-norte-mexico",
+      "produtoNome": "Camisa México retro",
+      "imageIndexOriginal": 3,
+      "src": "/otimizadas/retro-selecoes-america-do-norte-mexico/04-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/AMÉRICA DO NORTE_/México_(1).jpg",
+      "alt": "Camisa México retro ? foto 4",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-selecoes-america-do-sul-argentina",
+      "produtoNome": "Camisa Argentina retro",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/retro-selecoes-america-do-sul-argentina/02-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/AMÉRICA DO SUL/Argentina_(1).jpg",
+      "alt": "Camisa Argentina retro ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-selecoes-america-do-sul-argentina",
+      "produtoNome": "Camisa Argentina retro",
+      "imageIndexOriginal": 2,
+      "src": "/otimizadas/retro-selecoes-america-do-sul-argentina/03-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/AMÉRICA DO SUL/Argentina_(2).jpg",
+      "alt": "Camisa Argentina retro ? foto 3",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-selecoes-america-do-sul-argentina",
+      "produtoNome": "Camisa Argentina retro",
+      "imageIndexOriginal": 3,
+      "src": "/otimizadas/retro-selecoes-america-do-sul-argentina/04-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/AMÉRICA DO SUL/Argentina_(3).jpg",
+      "alt": "Camisa Argentina retro ? foto 4",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-selecoes-america-do-sul-argentina",
+      "produtoNome": "Camisa Argentina retro",
+      "imageIndexOriginal": 4,
+      "src": "/otimizadas/retro-selecoes-america-do-sul-argentina/05-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/AMÉRICA DO SUL/Argentina_(4).jpg",
+      "alt": "Camisa Argentina retro ? foto 5",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-selecoes-america-do-sul-brasil",
+      "produtoNome": "Camisa Brasil retro",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/retro-selecoes-america-do-sul-brasil/02-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/AMÉRICA DO SUL/Brasil.jpg",
+      "alt": "Camisa Brasil retro ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-selecoes-america-do-sul-brasil",
+      "produtoNome": "Camisa Brasil retro",
+      "imageIndexOriginal": 2,
+      "src": "/otimizadas/retro-selecoes-america-do-sul-brasil/03-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/AMÉRICA DO SUL/Brasil(1).jpg",
+      "alt": "Camisa Brasil retro ? foto 3",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-selecoes-america-do-sul-brasil",
+      "produtoNome": "Camisa Brasil retro",
+      "imageIndexOriginal": 3,
+      "src": "/otimizadas/retro-selecoes-america-do-sul-brasil/04-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/AMÉRICA DO SUL/Brasil(2).jpg",
+      "alt": "Camisa Brasil retro ? foto 4",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-selecoes-america-do-sul-brasil",
+      "produtoNome": "Camisa Brasil retro",
+      "imageIndexOriginal": 4,
+      "src": "/otimizadas/retro-selecoes-america-do-sul-brasil/05-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/AMÉRICA DO SUL/Brasil(3).jpg",
+      "alt": "Camisa Brasil retro ? foto 5",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-selecoes-america-do-sul-uruguai-2010",
+      "produtoNome": "Camisa Uruguai 2010 retro",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/retro-selecoes-america-do-sul-uruguai-2010/02-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/AMÉRICA DO SUL/Uruguai 2010(1).jpg",
+      "alt": "Camisa Uruguai 2010 retro ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-selecoes-europa-espanha",
+      "produtoNome": "Camisa Espanha retro",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/retro-selecoes-europa-espanha/02-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Espanha_(1).jpg",
+      "alt": "Camisa Espanha retro ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-selecoes-europa-espanha",
+      "produtoNome": "Camisa Espanha retro",
+      "imageIndexOriginal": 2,
+      "src": "/otimizadas/retro-selecoes-europa-espanha/03-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Espanha_(2).jpg",
+      "alt": "Camisa Espanha retro ? foto 3",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-selecoes-europa-espanha",
+      "produtoNome": "Camisa Espanha retro",
+      "imageIndexOriginal": 3,
+      "src": "/otimizadas/retro-selecoes-europa-espanha/04-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Espanha_(3).jpg",
+      "alt": "Camisa Espanha retro ? foto 4",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-selecoes-europa-espanha-2000",
+      "produtoNome": "Camisa Espanha 2000 retro",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/retro-selecoes-europa-espanha-2000/02-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Espanha 2000.png",
+      "alt": "Camisa Espanha 2000 retro ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-selecoes-europa-franca",
+      "produtoNome": "Camisa França retro",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/retro-selecoes-europa-franca/02-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/França_(1).jpg",
+      "alt": "Camisa França retro ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-selecoes-europa-holanda",
+      "produtoNome": "Camisa Holanda retro",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/retro-selecoes-europa-holanda/02-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Holanda_(1).jpg",
+      "alt": "Camisa Holanda retro ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-selecoes-europa-holanda",
+      "produtoNome": "Camisa Holanda retro",
+      "imageIndexOriginal": 2,
+      "src": "/otimizadas/retro-selecoes-europa-holanda/03-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Holanda_(2).jpg",
+      "alt": "Camisa Holanda retro ? foto 3",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-selecoes-europa-holanda",
+      "produtoNome": "Camisa Holanda retro",
+      "imageIndexOriginal": 3,
+      "src": "/otimizadas/retro-selecoes-europa-holanda/04-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Holanda_(3).jpg",
+      "alt": "Camisa Holanda retro ? foto 4",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-selecoes-europa-holanda",
+      "produtoNome": "Camisa Holanda retro",
+      "imageIndexOriginal": 4,
+      "src": "/otimizadas/retro-selecoes-europa-holanda/05-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Holanda_(4).jpg",
+      "alt": "Camisa Holanda retro ? foto 5",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-selecoes-europa-holanda",
+      "produtoNome": "Camisa Holanda retro",
+      "imageIndexOriginal": 5,
+      "src": "/otimizadas/retro-selecoes-europa-holanda/06-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Holanda.jpg",
+      "alt": "Camisa Holanda retro ? foto 6",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-selecoes-europa-holanda-2014-2014",
+      "produtoNome": "Camisa Holanda 2014 retro",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/retro-selecoes-europa-holanda-2014-2014/02-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Holanda 2014(1).jpg",
+      "alt": "Camisa Holanda 2014 retro ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-selecoes-europa-inglaterra",
+      "produtoNome": "Camisa Inglaterra retro",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/retro-selecoes-europa-inglaterra/02-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Inglaterra_(1).jpg",
+      "alt": "Camisa Inglaterra retro ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-selecoes-europa-inglaterra",
+      "produtoNome": "Camisa Inglaterra retro",
+      "imageIndexOriginal": 2,
+      "src": "/otimizadas/retro-selecoes-europa-inglaterra/03-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Inglaterra_(2).jpg",
+      "alt": "Camisa Inglaterra retro ? foto 3",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-selecoes-europa-inglaterra",
+      "produtoNome": "Camisa Inglaterra retro",
+      "imageIndexOriginal": 3,
+      "src": "/otimizadas/retro-selecoes-europa-inglaterra/04-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Inglaterra_(3).jpg",
+      "alt": "Camisa Inglaterra retro ? foto 4",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-selecoes-europa-inglaterra",
+      "produtoNome": "Camisa Inglaterra retro",
+      "imageIndexOriginal": 4,
+      "src": "/otimizadas/retro-selecoes-europa-inglaterra/05-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Inglaterra_(4).jpg",
+      "alt": "Camisa Inglaterra retro ? foto 5",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-selecoes-europa-inglaterra",
+      "produtoNome": "Camisa Inglaterra retro",
+      "imageIndexOriginal": 5,
+      "src": "/otimizadas/retro-selecoes-europa-inglaterra/06-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Inglaterra_(5).jpg",
+      "alt": "Camisa Inglaterra retro ? foto 6",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-selecoes-europa-inglaterra",
+      "produtoNome": "Camisa Inglaterra retro",
+      "imageIndexOriginal": 6,
+      "src": "/otimizadas/retro-selecoes-europa-inglaterra/07-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Inglaterra_(6).jpg",
+      "alt": "Camisa Inglaterra retro ? foto 7",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-selecoes-europa-inglaterra",
+      "produtoNome": "Camisa Inglaterra retro",
+      "imageIndexOriginal": 7,
+      "src": "/otimizadas/retro-selecoes-europa-inglaterra/08-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Inglaterra_(7).jpg",
+      "alt": "Camisa Inglaterra retro ? foto 8",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "retro-selecoes-europa-inglaterra",
+      "produtoNome": "Camisa Inglaterra retro",
+      "imageIndexOriginal": 8,
+      "src": "/otimizadas/retro-selecoes-europa-inglaterra/09-800.webp",
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Inglaterra_(8).jpg",
+      "alt": "Camisa Inglaterra retro ? foto 9",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "ano_alternativo"
+    },
+    {
+      "produtoSlug": "kits-infantis-selecoes-africa-africa-do-sul-26-27-copa-do-mundo-26-27",
+      "produtoNome": "Camisa África do Sul Copa do Mundo 26/27 infantil",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/kits-infantis-selecoes-africa-africa-do-sul-26-27-copa-do-mundo-26-27/02-800.webp",
+      "source": "catalogo/👶🏻 Kits Infantis/🌍 Seleções_/ÁFRICA_/África do Sul 26_27 Copa do Mundo_(1).jpg",
+      "alt": "Camisa África do Sul Copa do Mundo 26/27 infantil ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "kits-infantis-selecoes-africa-tunisia-26-27-copa-do-mundo-26-27",
+      "produtoNome": "Camisa Tunísia Copa do Mundo 26/27 infantil",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/kits-infantis-selecoes-africa-tunisia-26-27-copa-do-mundo-26-27/02-800.webp",
+      "source": "catalogo/👶🏻 Kits Infantis/🌍 Seleções_/ÁFRICA_/Tunísia 26_27 Copa do Mundo(1).jpg",
+      "alt": "Camisa Tunísia Copa do Mundo 26/27 infantil ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "kits-infantis-selecoes-america-do-norte-mexico-26-27",
+      "produtoNome": "Camisa México 26/27 infantil",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/kits-infantis-selecoes-america-do-norte-mexico-26-27/02-800.webp",
+      "source": "catalogo/👶🏻 Kits Infantis/🌍 Seleções_/AMÉRICA DO NORTE/México 26_27 Copa do Mundo_(1).jpg",
+      "alt": "Camisa México 26/27 infantil ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "kits-infantis-selecoes-asia-japao-26-27",
+      "produtoNome": "Camisa Japão 26/27 infantil",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/kits-infantis-selecoes-asia-japao-26-27/02-800.webp",
+      "source": "catalogo/👶🏻 Kits Infantis/🌍 Seleções_/ÁSIA_/Japão 26_27 Copa do Mundo.jpg",
+      "alt": "Camisa Japão 26/27 infantil ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "kits-infantis-selecoes-europa-alemanha-26-27",
+      "produtoNome": "Camisa Alemanha 26/27 infantil",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/kits-infantis-selecoes-europa-alemanha-26-27/02-800.webp",
+      "source": "catalogo/👶🏻 Kits Infantis/🌍 Seleções_/EUROPA/Alemanha 26_27 Copa do Mundo(1).jpg",
+      "alt": "Camisa Alemanha 26/27 infantil ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "kits-infantis-selecoes-europa-belgica-26-27-copa-do-mundo-26-27",
+      "produtoNome": "Camisa Bélgica Copa do Mundo 26/27 infantil",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/kits-infantis-selecoes-europa-belgica-26-27-copa-do-mundo-26-27/02-800.webp",
+      "source": "catalogo/👶🏻 Kits Infantis/🌍 Seleções_/EUROPA/Bélgica 26_27 Copa do Mundo.jpg",
+      "alt": "Camisa Bélgica Copa do Mundo 26/27 infantil ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "kits-infantis-selecoes-europa-escocia-26-27-copa-do-mundo-26-27",
+      "produtoNome": "Camisa Escócia Copa do Mundo 26/27 infantil",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/kits-infantis-selecoes-europa-escocia-26-27-copa-do-mundo-26-27/02-800.webp",
+      "source": "catalogo/👶🏻 Kits Infantis/🌍 Seleções_/EUROPA/Escócia 26_27 Copa do Mundo(1).jpg",
+      "alt": "Camisa Escócia Copa do Mundo 26/27 infantil ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "kits-infantis-selecoes-europa-espanha-26-27",
+      "produtoNome": "Camisa Espanha 26/27 infantil",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/kits-infantis-selecoes-europa-espanha-26-27/02-800.webp",
+      "source": "catalogo/👶🏻 Kits Infantis/🌍 Seleções_/EUROPA/Espanha 26_27 Copa do Mundo.jpg",
+      "alt": "Camisa Espanha 26/27 infantil ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "kits-infantis-selecoes-europa-franca-26-27",
+      "produtoNome": "Camisa França 26/27 infantil",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/kits-infantis-selecoes-europa-franca-26-27/02-800.webp",
+      "source": "catalogo/👶🏻 Kits Infantis/🌍 Seleções_/EUROPA/França 26_27 Copa do Mundo_(1).jpg",
+      "alt": "Camisa França 26/27 infantil ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "kits-infantis-selecoes-europa-holanda-26-27-copa-do-mundo-26-27",
+      "produtoNome": "Camisa Holanda Copa do Mundo 26/27 infantil",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/kits-infantis-selecoes-europa-holanda-26-27-copa-do-mundo-26-27/02-800.webp",
+      "source": "catalogo/👶🏻 Kits Infantis/🌍 Seleções_/EUROPA/Holanda 26_27 Copa do Mundo_(1).jpg",
+      "alt": "Camisa Holanda Copa do Mundo 26/27 infantil ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "kits-infantis-selecoes-europa-italia-24-25",
+      "produtoNome": "Camisa Itália 24/25 infantil",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/kits-infantis-selecoes-europa-italia-24-25/02-800.webp",
+      "source": "catalogo/👶🏻 Kits Infantis/🌍 Seleções_/EUROPA/Itália 24_25(1).jpg",
+      "alt": "Camisa Itália 24/25 infantil ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "kits-infantis-selecoes-europa-italia-26-27",
+      "produtoNome": "Camisa Itália 26/27 infantil",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/kits-infantis-selecoes-europa-italia-26-27/02-800.webp",
+      "source": "catalogo/👶🏻 Kits Infantis/🌍 Seleções_/EUROPA/Itália 26_27 Copa do Mundo(1).jpg",
+      "alt": "Camisa Itália 26/27 infantil ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "kits-infantis-selecoes-europa-portugal-26-27",
+      "produtoNome": "Camisa Portugal 26/27 infantil",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/kits-infantis-selecoes-europa-portugal-26-27/02-800.webp",
+      "source": "catalogo/👶🏻 Kits Infantis/🌍 Seleções_/EUROPA/Portugal 26_27 Copa do Mundo(1).jpg",
+      "alt": "Camisa Portugal 26/27 infantil ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "kits-infantis-selecoes-europa-portugal-26-27",
+      "produtoNome": "Camisa Portugal 26/27 infantil",
+      "imageIndexOriginal": 2,
+      "src": "/otimizadas/kits-infantis-selecoes-europa-portugal-26-27/03-800.webp",
+      "source": "catalogo/👶🏻 Kits Infantis/🌍 Seleções_/EUROPA/Portugal 26_27 Copa do Mundo(2).jpg",
+      "alt": "Camisa Portugal 26/27 infantil ? foto 3",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "terceiro"
+    },
+    {
+      "produtoSlug": "camisa-manga-longa-retro-selecoes-europa-franca",
+      "produtoNome": "Camisa França retro manga longa",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/camisa-manga-longa-retro-selecoes-europa-franca/02-800.webp",
+      "source": "catalogo/🥼 Camisa Manga Longa Retrô_/🌍 Seleções/Europa/França 80_82(1).jpg",
+      "alt": "Camisa França retro manga longa ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "camisa-manga-longa-torcedor-campeonato-frances-paris-saint-germain-25-26",
+      "produtoNome": "Camisa Paris Saint-Germain 25/26 inverno masculino manga longa",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/camisa-manga-longa-torcedor-campeonato-frances-paris-saint-germain-25-26/02-800.webp",
+      "source": "catalogo/🥼Camisa Manga Longa Torcedor/🇫🇷 Campeonato Francês_/PSG 25_26(1).jpg",
+      "alt": "Camisa Paris Saint-Germain 25/26 inverno masculino manga longa ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "camisa-manga-longa-torcedor-selecoes-america-do-sul-colombia-26-27-copa-do-mundo-26-27",
+      "produtoNome": "Camisa Colômbia Copa do Mundo 26/27 inverno masculino manga longa",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/camisa-manga-longa-torcedor-selecoes-america-do-sul-colombia-26-27-copa-do-mundo-26-27/02-800.webp",
+      "source": "catalogo/🥼Camisa Manga Longa Torcedor/🌍 Seleções_/AMÉRICA DO SUL/Colômbia 26_27 Copa do Mundo(1).jpg",
+      "alt": "Camisa Colômbia Copa do Mundo 26/27 inverno masculino manga longa ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "camisa-manga-longa-torcedor-selecoes-europa-inglaterra-26-27",
+      "produtoNome": "Camisa Inglaterra 26/27 inverno masculino manga longa",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/camisa-manga-longa-torcedor-selecoes-europa-inglaterra-26-27/02-800.webp",
+      "source": "catalogo/🥼Camisa Manga Longa Torcedor/🌍 Seleções_/EUROPA/Inglaterra 26_27 Copa do Mundo_(1).jpg",
+      "alt": "Camisa Inglaterra 26/27 inverno masculino manga longa ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "camisa-manga-longa-torcedor-selecoes-europa-portugal-25-26",
+      "produtoNome": "Camisa Portugal 25/26 inverno masculino manga longa",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/camisa-manga-longa-torcedor-selecoes-europa-portugal-25-26/02-800.webp",
+      "source": "catalogo/🥼Camisa Manga Longa Torcedor/🌍 Seleções_/EUROPA/Portugal 25_26(1).jpg",
+      "alt": "Camisa Portugal 25/26 inverno masculino manga longa ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    },
+    {
+      "produtoSlug": "camisa-manga-longa-torcedor-selecoes-europa-portugal-26-27",
+      "produtoNome": "Camisa Portugal 26/27 inverno masculino manga longa",
+      "imageIndexOriginal": 1,
+      "src": "/otimizadas/camisa-manga-longa-torcedor-selecoes-europa-portugal-26-27/02-800.webp",
+      "source": "catalogo/🥼Camisa Manga Longa Torcedor/🌍 Seleções_/EUROPA/Portugal 26_27 Copa do Mundo(1).jpg",
+      "alt": "Camisa Portugal 26/27 inverno masculino manga longa ? foto 2",
+      "motivo": "Uniforme divergente/alternativo agrupado indevidamente no mesmo produto",
+      "uniformeSugerido": "reserva"
+    }
+  ]
+}

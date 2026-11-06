@@ -1,8 +1,11 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import fs from "node:fs";
+import path from "node:path";
 import { siteCompanyConfig } from "@/lib/site-config";
 import { isNbaTankTop, isPackageEligible, isRetroProduct } from "@/lib/product-classification";
 import { isBlackFridayEligibleShirt } from "@/lib/black-friday";
+import { deriveCatalogLeagues } from "@/lib/catalog-taxonomy";
 import type { Product } from "@/lib/types";
 
 const mockImage = {
@@ -148,4 +151,50 @@ test("Sitemap filtra e omite produtos com oculto: true", () => {
   const visibleProducts = products.filter((product) => !product.oculto);
   assert.equal(visibleProducts.length, 2);
   assert.equal(visibleProducts.some((p) => p.slug === "camisa-teste-privada"), false);
+});
+
+test("Card da coleção F1 na Home possui foto de camisa oficial local válida e não quebrada", () => {
+  const mockF1Product: Product = {
+    id: "f1-ferrari-polo",
+    slug: "camisa-polo-scuderia-ferrari-f1-2026",
+    clube: "Ferrari",
+    clubeSlug: "ferrari",
+    liga: "f1",
+    publico: "unissex",
+    tipo: "f1",
+    temporada: "2026",
+    uniforme: "titular",
+    nome: "Camisa Polo Scuderia Ferrari F1 2026 Vermelha",
+    preco: 180,
+    tamanhos: ["P", "M", "G", "GG", "2GG"],
+    cor: "Vermelho",
+    imageSeed: "scuderia-ferrari-f1-polo-2026",
+    images: [{
+      src: "https://photo.yupoo.com/minkang/2ddfd0ef/big.jpg",
+      source: "https://photo.yupoo.com/minkang/2ddfd0ef/big.jpg",
+      alt: "Camisa Polo Scuderia Ferrari F1 2026 Vermelha",
+      credit: "Yupoo",
+      focalPoint: { x: 50, y: 50 },
+      blurDataURL: "",
+    }],
+  };
+
+  const leagues = deriveCatalogLeagues([mockFanShirt, mockF1Product]);
+  const f1League = leagues.find((l) => l.slug === "f1");
+
+  assert.ok(f1League, "Liga F1 deve constar nas ligas derivadas");
+  assert.ok(f1League.coverImage, "Liga F1 deve ter coverImage definida");
+
+  // Não pode ser hotlink remoto do Yupoo que quebra com 502 Bad Gateway
+  assert.ok(!f1League.coverImage.startsWith("https://photo.yupoo.com"), "Capa da F1 não deve depender de hotlink do Yupoo");
+
+  // Deve apontar para arquivo local estático válido em /arena/
+  assert.ok(f1League.coverImage.startsWith("/arena/"), "Capa da F1 deve apontar para ativo local em /arena/");
+
+  // O arquivo físico deve existir em public/
+  const filePath = path.join(process.cwd(), "public", f1League.coverImage.replace(/^\//, ""));
+  assert.ok(fs.existsSync(filePath), `Arquivo físico deve existir em disco: ${filePath}`);
+
+  const stat = fs.statSync(filePath);
+  assert.ok(stat.size > 10_000, `Arquivo de imagem da F1 deve ter tamanho válido (>10KB), encontrado: ${stat.size} bytes`);
 });

@@ -301,6 +301,7 @@ function hasStorefrontImages(product: Product) {
 
 function isPublishedProduct(product: Product) {
   if (product.oculto === true) return false;
+  if (!Number.isFinite(product.preco) || product.preco <= 0) return false;
   if (isJacketFormulaOneProduct(product)) return false;
   const isNba = product.liga === "nba" || product.tipo === "regata";
   const isRetro = product.tipo === "retro" || product.slug.startsWith("retro-") || product.slug.includes("-retro");
@@ -372,7 +373,7 @@ export async function fetchSupabaseProducts(): Promise<Product[]> {
 
   if (config) {
     try {
-      const serverFilter = "or=(liga.eq.nba,tipo.eq.regata,yupoo_id.like.manual:*,id.like.manual:*)&oculto=eq.false";
+      const serverFilter = "or=(liga.eq.nba,tipo.eq.regata,yupoo_id.like.manual:*,id.like.manual:*,preco.gt.0)&oculto=eq.false";
       const headers: Record<string, string> = {
         apikey: config.key,
         ...(config.key.startsWith("eyJ") ? { Authorization: `Bearer ${config.key}` } : {}),

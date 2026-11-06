@@ -1,0 +1,184 @@
+
+> imports-alves@1.0.0 test
+> tsx --test tests/*.test.ts
+
+▶ Validação do Script de Aplicação de Decisões de Galerias
+  ✔ 1. Script em dry-run não altera arquivos em disco (26.3855ms)
+  ✔ 2. Rejeita decisão que deixa produto sem imagem (images vazio) (57.5866ms)
+  ✔ 3. Rejeita arquivo de imagem inexistente no disco (17.8271ms)
+  ✔ 4. Rejeita decisão onde main não está presente em images (20.4406ms)
+  ✔ 5. Altera estritamente o campo images, preservando todos os demais atributos intactos (89.8332ms)
+✔ Validação do Script de Aplicação de Decisões de Galerias (214.8212ms)
+✔ Cards de benefícios possuem layout responsivo, quebra de linha e largura flexível sem corte (1.9969ms)
+✔ Cenário 1: Camisa tradicional de clube é elegível para a promoção de 50% (5.3798ms)
+✔ Cenário 2: Camisa de seleção é elegível para a promoção de 50% (0.5063ms)
+✔ Cenário 3: Camisa feminina comum é elegível para a promoção de 50% (1.1825ms)
+✔ Cenário 4: Camisa de treino é elegível para a promoção de 50% (1.6344ms)
+✔ Cenário 5: Camisa versão jogador NÃO é elegível para a promoção de 50% (0.6594ms)
+✔ Cenário 6: Carrinho com produtos elegíveis e não elegíveis aplica desconto de 50% somente aos elegíveis (4.8635ms)
+✔ Desconto não é aplicado duas vezes ao mesmo produto e prioriza maior valor elegível (1.2761ms)
+✔ Etiqueta '2 por R$ 300': só aparece em torcedor comum de clube/seleção e NUNCA em exceções (4.6759ms)
+✔ Etiqueta 'Black Friday' depende de data e some após 01/12/2026 23:59:59 (America/Sao_Paulo) (1.6217ms)
+✔ app/robots.ts bloqueia /api/ mas libera expressamente /api/yupoo-image (0.4731ms)
+✔ Snapshot em cache e fetchSupabaseProducts mantêm NBA, Brasileirão e total íntegro de rotas (536.6715ms)
+✔ Black Friday deadline is set to 01/12/2026 23:59:59 Brasília time (UTC-3) (1.8361ms)
+✔ Default hero slides are preserved without deletion (0.303ms)
+✔ Black Friday banner files exist and meet size target (< 200 KB) (1.678ms)
+✔ siteCompanyConfig exporta configurações institucionais com fallbacks e variáveis de ambiente (2.3221ms)
+✔ Camisas com tamanho 2GG disponível indicam o tamanho, enquanto NBA e Kids não possuem 2GG (0.2814ms)
+✔ Filtro de Camisas de Clubes exclui regatas NBA e produtos infantis (0.3389ms)
+✔ Filtro de Seleções Nacionais da Home inclui apenas produtos adultos, excluindo kits infantis (0.4555ms)
+✔ Etiqueta de oferta nos cards identifica Black Friday e pacote 2 por R$ 300 (3.5595ms)
+✔ Sitemap filtra e omite produtos com oculto: true (0.3553ms)
+✔ Card da coleção F1 na Home possui foto de camisa oficial local válida e não quebrada (25.9945ms)
+✔ Instagram feed returns fallback posts when no token is present (2.3437ms)
+✔ Instagram feed limits number of fallback posts (0.4166ms)
+✔ produto manual 'teste' respeita preço cadastrado de R$ 1,50 e não vira R$ 230,00 (52.0939ms)
+✔ produto 'teste' não tem frete no carrinho (frete grátis) (1.7679ms)
+✔ carrinho com 2 unidades do item 'teste' continua sem frete e sem desconto de pacote (0.7082ms)
+✔ itens regulares continuam cobrando frete normalmente quando misturados com o item 'teste' (2.9828ms)
+✔ valor enviado ao Mercado Pago Checkout Pro é exatamente o preço do item teste (1.9353ms)
+✔ texto de oferta do produto teste destaca frete grátis e preço cadastrado (0.8266ms)
+✔ validação de assinatura de webhook suporta tanto id de query quanto webhook sem query param (5.0255ms)
+✔ Regatas NBA são identificadas corretamente como NBA e não são classificadas como F1 (2.4546ms)
+✔ Busca inteligente encontra regatas NBA tanto por 'nba' quanto por 'regata' (5.4662ms)
+✔ Menu e categorias de Masculino possuem apenas 'Regatas NBA', e rota antiga possui redirect (46.1633ms)
+✔ isOrderPaid reconhece status e mercado_pago_status aprovados (3.557ms)
+✔ isOrderExpired detecta pedidos pendentes há mais de 48 horas (0.6786ms)
+✔ isOrderPending detecta pedidos pendentes dentro do prazo de 48 horas (0.4367ms)
+✔ calcula pacotes de camisa com preços únicos (20.4179ms)
+✔ retro shirts keep their R$185 price and do not receive package discounts (2.7839ms)
+✔ classifica Torcedor, Ultrapasso, Full Patches e mangas sem confundir versões (27.9203ms)
+✔ promo Black Friday NBA aplica pares, prioriza maior preço e não dá desconto em adicionais (6.2576ms)
+✔ importador respeita a categoria da pasta antes de mangas e variações (0.9535ms)
+✔ preços de categorias diferentes não recebem o pacote do torcedor comum (1.1009ms)
+✔ ordenação editorial prioriza clubes e seleções e organiza temporadas (2.0711ms)
+✔ calcula frete fixo para 0, 1, 2, 3, 4 e 10 unidades (0.497ms)
+✔ camisa de Fórmula 1 tem tamanhos, mas não aceita personalização (1.7822ms)
+✔ somente produtos F1 com Jacket no nome ou título ficam indisponíveis (0.7644ms)
+✔ catálogo F1 publicado omite Jacket e mantém os demais produtos (105.3512ms)
+✔ identifica intenções Home, Away, Third, versões, temporada e manga (102.1184ms)
+✔ busca encontra categoria Full Patches confirmada sem confundir patches individuais (1.3871ms)
+✔ não atribui preço a categorias não confirmadas (0.4135ms)
+✔ usa R$ 180 para torcedor full patch somente com classificação administrativa (0.1827ms)
+✔ revalida patch compatível, preço e posição no servidor (1.1759ms)
+✔ patches custam R$ 10 cada, respeitam a liga e não aparecem em retrô nem F1 (1.5761ms)
+✔ soma quantidades de produtos e linhas diferentes para definir frete (1.8641ms)
+✔ valida produto, tamanho e campos de linha pelo catálogo do servidor (4.9669ms)
+✔ vitrine usa slug público no lugar do ID interno e checkout resolve pelo slug (0.4558ms)
+✔ checkout não usa o catálogo empacotado se a configuração live do Supabase estiver ausente (0.6832ms)
+✔ personalização aceita nome, número ou ambos e rejeita combinações inválidas no servidor (2.8233ms)
+✔ a rota de checkout rejeita personalização ativa vazia com mensagem amigável (10.6045ms)
+✔ personalização só cobra uma vez por camisa quando há nome ou número (3.6431ms)
+✔ carrinho, pedido e e-mail mostram somente os campos de personalização preenchidos (0.2647ms)
+✔ rejeita frete do navegador e checkout não depende de configuração de transportadora (1.1088ms)
+✔ itens do Mercado Pago refletem exatamente os preços dos produtos (0.8239ms)
+✔ Mercado Pago exige ambiente explícito e aceita somente test ou production (0.5511ms)
+✔ Access Token do Mercado Pago deve corresponder ao ambiente explícito (0.5579ms)
+✔ checkout usa somente init_point HTTPS de host oficial do Mercado Pago (0.2531ms)
+✔ URLs de retorno locais preservam HTTP e produção exige HTTPS (0.2741ms)
+[Webhook Mercado Pago] Notificação recebida: {
+  url: 'https://loja.test/api/mercado-pago/webhook?type=merchant_order&id=123',
+  queryType: 'merchant_order',
+  bodyType: 'merchant_order',
+  actionType: '',
+  isPaymentEvent: false,
+  paymentId: '123',
+  hasSignature: false,
+  hasRequestId: false
+}
+[Webhook Mercado Pago] Assinatura do webhook inválida: { signatureHeader: null, requestIdHeader: null, dataIdChecked: '123' }
+[Mercado Pago Validation] ID de pagamento inválido ou divergente: informado='998877', retornado='998878'
+[Mercado Pago Validation] Divergência de ambiente: payment.live_mode=true enquanto environment=test. Em produção, PAYMENT_ENVIRONMENT deve ser 'production'.
+[Mercado Pago Validation] Moeda não suportada: USD
+[Mercado Pago Validation] external_reference 'other' não é um UUID de pedido válido.
+[Mercado Pago Validation] Valor da transação inválido: 0
+Notificação WhatsApp order_paid ignorada: cliente sem consentimento ou telefone válido.
+✔ tentativa de checkout reutiliza chave após reload sem armazenar dados pessoais (19.1279ms)
+✔ carrinho persistido exclui linhas com personalização que pode identificar o cliente (0.3925ms)
+✔ checkout rejeita valores adulterados enviados pelo navegador (2.9841ms)
+✔ webhook exige assinatura válida mesmo para eventos não suportados (2.2394ms)
+✔ upload de produto valida a assinatura real do conteúdo da imagem (0.6231ms)
+✔ rastreio responde igual a entradas inválidas e códigos incompletos (2.459ms)
+✔ token do Instagram vai no cabeçalho do servidor, nunca na URL (0.7834ms)
+✔ reconciliação aceita somente pagamento correspondente ao pedido, ambiente e valor (0.65ms)
+✔ valida assinatura do webhook e converte estados de pagamento (0.7977ms)
+✔ distingue token administrativo ausente de senha inválida e aceita espaços externos (1.5301ms)
+✔ sessão admin usa cookie assinado, autentica com token, expira e encerra sem armazenar o token no cookie (5.3138ms)
+✔ login administrativo limita tentativas por IP (2.8067ms)
+✔ a resposta pública inclui aprovadas e exclui pendentes e rejeitadas (0.3464ms)
+✔ valida avaliação, remove HTML e limita nota e tamanho do comentário (1.4739ms)
+✔ a rota de moderação retorna 401 sem token administrativo (0.6396ms)
+✔ proxy Yupoo rejeita hosts externos e limita o corpo transmitido (6.6752ms)
+✔ valida cadastro manual e estoques por tamanho sem alterar regra do checkout (2.9188ms)
+✔ código do pedido aceita código curto e UUID, e rejeita códigos incompletos (0.2024ms)
+✔ e-mails do pedido trazem o código e as instruções de rastreio (0.5141ms)
+✔ notificações WhatsApp vão ao cliente optado e incluem mensagens de pagamento e rastreio (1.3772ms)
+▶ limite de tentativas bloqueia por IP e libera na janela seguinte
+  ✔ infantil custa R$ 180,00 por camisa (0.49ms)
+  ✔ 2 e 3 unidades de infantil somam R$ 180 por unidade (sem pacote) (0.3794ms)
+  ✔ infantil misturado com torcedor calcula cada linha e frete pelo total de unidades (0.6083ms)
+  ✔ produto infantil sem tipo confirmado não vira R$ 160 por engano (0.166ms)
+✔ limite de tentativas bloqueia por IP e libera na janela seguinte (2.8035ms)
+✔ DELETE /api/admin/products rejeita requisições sem autenticação com status 401 (18.0179ms)
+✔ DELETE /api/admin/products rejeita ID inválido (não UUID) com status 400 (5.2007ms)
+✔ extractStoragePaths extrai apenas caminhos de dentro da pasta manual/ no bucket produtos (0.6035ms)
+✔ checkProductOrders conta corretamente pedidos vinculados pelo productId ou slug (0.9631ms)
+✔ snapshot de itens em store_orders preserva histórico completo após remoção do produto do catálogo (0.3864ms)
+✔ script delete-test-product executa em modo dry-run por padrão sem apagar nada (1902.0291ms)
+✔ Camisa Tommy Hilfiger x Cadillac F1 Team Polo tem imagens válidas e publicadas (187.5187ms)
+✔ Todos os 34 conjuntos infantis do catálogo estão publicados e recuperados (116.8508ms)
+▶ Auditoria e Integridade das Galerias de Produtos
+  ✔ deve manter o catálogo com 720 produtos e sem produtos vazios (4.8299ms)
+  ✔ deve garantir que a camisa do Al-Hilal 25/26 exibe somente fotos do uniforme anunciado (sem fotos do uniforme reserva branco misturadas) (0.3595ms)
+  ✔ deve garantir que a camisa do Ajax 26/27 exibe somente fotos do uniforme titular (sem camisa reserva celeste misturada) (0.5533ms)
+  ✔ deve garantir que os kits infantis não possuem conjuntos titular e reserva misturados na mesma galeria (1.0494ms)
+  ✔ deve preservar as galerias legítimas com múltiplas fotos da mesma peça (frente/costas/detalhes) (0.4387ms)
+  ✔ deve conter o relatório de imagens desvinculadas para futura revisão e criação de novos produtos (1.6913ms)
+✔ Auditoria e Integridade das Galerias de Produtos (12.1812ms)
+✔ Filtro unificado de Retrô exclui NBA e utiliza isRetroProduct (52.5817ms)
+✔ Normalização de categoria e reconhecimento de 'Retrô' sem sensibilidade a acento, caixa ou hífen (0.4399ms)
+✔ 1. manualProductSchema aceita tanto UUID quanto IDs numéricos existentes de álbuns (12.9574ms)
+✔ 2. Produtos do Supabase com preco = 0 são impedidos de publicação na vitrine (35.24ms)
+✔ 3. Produtos existentes com preco > 0 e oculto = false são elegíveis para exibição (0.5326ms)
+✔ 1. findBundledProduct resolve produtos de futebol e F1 em memória sem requisições de rede (192.288ms)
+✔ 2. validateOrderLinesFromCatalog com produto bundled resolve sem chamar Supabase (50.8389ms)
+✔ 3. validateOrderLinesFromCatalog busca produtos não-bundled diretamente com or=(id.in,slug.in) e cache no-store (78.4753ms)
+✔ 4. validateOrderLinesFromCatalog rejeita com erro claro se produto estiver com oculto = true (65.5095ms)
+✔ 5. validateOrderLinesFromCatalog rejeita se produto tiver deleted_at (57.3077ms)
+✔ 6. validateOrderLinesFromCatalog rejeita se produto do Supabase não for encontrado (59.5886ms)
+✔ 7. LIST_PRODUCT_COLUMNS e DETAIL_PRODUCT_COLUMNS incluem tem_variacao_uniforme e oculto (0.2586ms)
+✔ 8. getSupabaseProductBySlug faz requisição única com DETAIL_PRODUCT_COLUMNS (69.5494ms)
+Falha de conexão com Supabase durante carregamento do catálogo; utilizando último snapshot válido em cache: [TypeError: fetch failed] {
+  [cause]: Error: getaddrinfo ENOTFOUND test.supabase.co
+      at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:123:26) {
+    errno: -3008,
+    code: 'ENOTFOUND',
+    syscall: 'getaddrinfo',
+    hostname: 'test.supabase.co'
+  }
+}
+✔ 9. Paridade de catálogo por liga: confere total de produtos em cada liga (236.6712ms)
+✔ 10. fetchSupabaseProducts no build falha com mensagem clara se faltar migração no Supabase (código 42703) (8.5665ms)
+✔ manualProductSchema aceita e valida tem_variacao_uniforme (8.9323ms)
+✔ validateOrderLines exige uniforme Casa ou Fora quando produto tem tem_variacao_uniforme = true (4.078ms)
+✔ validateOrderLines não exige uniforme quando tem_variacao_uniforme não está ativo (0.3866ms)
+✔ Permite no mesmo pedido o mesmo produto com uniformes diferentes (Casa e Fora) em linhas separadas (2.6605ms)
+✔ Mercado Pago Preference Items inclui Uniforme: Casa e Uniforme: Fora no título do item (1.6522ms)
+✔ verificar-banco-remoto.ts usa apenas GET/HEAD (sem escrita remota) (2.0272ms)
+[Mercado Pago Validation] Divergência de ambiente: payment.live_mode=true enquanto environment=test. Em produção, PAYMENT_ENVIRONMENT deve ser 'production'.
+[Mercado Pago Validation] Moeda não suportada: USD
+[Mercado Pago Validation] external_reference 'pedido-invalido' não é um UUID de pedido válido.
+✔ 1. Validação de assinatura do webhook Mercado Pago (válida, inválida, segredo ausente) (3.7104ms)
+✔ 2. Validação e normalização de pagamentos do Mercado Pago (2.0572ms)
+✔ 3. Mapeamento de status e regra de não-regressão (0.3606ms)
+✔ 4. Produto oculto não entra no catálogo de ligas nem na vitrine pública (1.7729ms)
+✔ 5. Preço digitado no cadastro manual prevalece sobre regra de tipo/categoria (ex.: regata R$ 1,50 vs R$ 230) (53.3803ms)
+ℹ tests 138
+ℹ suites 2
+ℹ pass 138
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5556.0891

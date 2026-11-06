@@ -1,0 +1,1542 @@
+[
+  {
+    "slug": "femininas-campeonato-brasileiro-bahia-26-27",
+    "nome": "Camisa Bahia 26/27 feminino",
+    "clube": "Bahia",
+    "publico": "feminino",
+    "tipo": "torcedor",
+    "uniforme": "revisar",
+    "totalImgs": 2,
+    "colorDistance": 167,
+    "img0": {
+      "src": "/otimizadas/femininas-campeonato-brasileiro-bahia-26-27/01-800.webp",
+      "rgb": [
+        67,
+        68,
+        79
+      ],
+      "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Bahia 26_27.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/femininas-campeonato-brasileiro-bahia-26-27/02-800.webp",
+      "rgb": [
+        176,
+        166,
+        158
+      ],
+      "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Bahia 26_27(1).jpg"
+    }
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-cruzeiro-26-27",
+    "nome": "Camisa Cruzeiro 26/27 feminino",
+    "clube": "Cruzeiro",
+    "publico": "feminino",
+    "tipo": "torcedor",
+    "uniforme": "revisar",
+    "totalImgs": 3,
+    "colorDistance": 163,
+    "img0": {
+      "src": "/otimizadas/femininas-campeonato-brasileiro-cruzeiro-26-27/01-800.webp",
+      "rgb": [
+        72,
+        72,
+        72
+      ],
+      "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Cruzeiro 26_27.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/femininas-campeonato-brasileiro-cruzeiro-26-27/02-800.webp",
+      "rgb": [
+        181,
+        173,
+        139
+      ],
+      "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Cruzeiro 26_27.png"
+    }
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-gremio-26-27",
+    "nome": "Camisa Grêmio 26/27 feminino",
+    "clube": "Grêmio",
+    "publico": "feminino",
+    "tipo": "torcedor",
+    "uniforme": "revisar",
+    "totalImgs": 3,
+    "colorDistance": 161,
+    "img0": {
+      "src": "/otimizadas/femininas-campeonato-brasileiro-gremio-26-27/01-800.webp",
+      "rgb": [
+        54,
+        63,
+        74
+      ],
+      "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Grêmio 26_27.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/femininas-campeonato-brasileiro-gremio-26-27/02-800.webp",
+      "rgb": [
+        162,
+        156,
+        149
+      ],
+      "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Grêmio 26_27(1).jpg"
+    }
+  },
+  {
+    "slug": "camisa-jogador-brasileirao-flamengo-26-27",
+    "nome": "Camisa Flamengo 26/27 jogador masculino",
+    "clube": "Flamengo",
+    "publico": "masculino",
+    "tipo": "jogador",
+    "uniforme": "revisar",
+    "totalImgs": 2,
+    "colorDistance": 155,
+    "img0": {
+      "src": "/otimizadas/camisa-jogador-brasileirao-flamengo-26-27/01-800.webp",
+      "rgb": [
+        84,
+        47,
+        50
+      ],
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇧🇷 Brasileirão_/Flamengo 26_27.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/camisa-jogador-brasileirao-flamengo-26-27/02-800.webp",
+      "rgb": [
+        164,
+        159,
+        122
+      ],
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇧🇷 Brasileirão_/Flamengo 26_27.png"
+    }
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-palmeiras-1996",
+    "nome": "Camisa Palmeiras 1996 retro",
+    "clube": "Palmeiras",
+    "publico": "masculino",
+    "tipo": "retro",
+    "uniforme": "revisar",
+    "totalImgs": 3,
+    "colorDistance": 151,
+    "img0": {
+      "src": "/otimizadas/retro-campeonato-brasileiro-palmeiras-1996/01-800.webp",
+      "rgb": [
+        59,
+        67,
+        62
+      ],
+      "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Palmeiras 1996.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/retro-campeonato-brasileiro-palmeiras-1996/02-800.webp",
+      "rgb": [
+        151,
+        153,
+        145
+      ],
+      "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Palmeiras 1996(1).jpg"
+    }
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-remo-26-27",
+    "nome": "Camisa Remo 26/27 feminino",
+    "clube": "Remo",
+    "publico": "feminino",
+    "tipo": "torcedor",
+    "uniforme": "revisar",
+    "totalImgs": 2,
+    "colorDistance": 147,
+    "img0": {
+      "src": "/otimizadas/femininas-campeonato-brasileiro-remo-26-27/01-800.webp",
+      "rgb": [
+        78,
+        80,
+        81
+      ],
+      "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Remo 26_27.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/femininas-campeonato-brasileiro-remo-26-27/02-800.webp",
+      "rgb": [
+        169,
+        165,
+        159
+      ],
+      "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Remo 26_27.png"
+    }
+  },
+  {
+    "slug": "camisa-jogador-liga-mexicana-chivas-26-27-26-27",
+    "nome": "Camisa Chivas 26/27 jogador masculino",
+    "clube": "revisar",
+    "publico": "masculino",
+    "tipo": "jogador",
+    "uniforme": "revisar",
+    "totalImgs": 2,
+    "colorDistance": 146,
+    "img0": {
+      "src": "/otimizadas/camisa-jogador-liga-mexicana-chivas-26-27-26-27/01-800.webp",
+      "rgb": [
+        98,
+        72,
+        78
+      ],
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇲🇽 Liga Mexicana_/Chivas 26_27.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/camisa-jogador-liga-mexicana-chivas-26-27-26-27/02-800.webp",
+      "rgb": [
+        172,
+        166,
+        162
+      ],
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇲🇽 Liga Mexicana_/Chivas 26_27.png"
+    }
+  },
+  {
+    "slug": "selecoes-europa-grecia-26-27-26-27",
+    "nome": "Camisa Grécia 26/27",
+    "clube": "revisar",
+    "publico": "revisar",
+    "tipo": "torcedor",
+    "uniforme": "titular",
+    "totalImgs": 2,
+    "colorDistance": 141,
+    "img0": {
+      "src": "/otimizadas/selecoes-europa-grecia-26-27-26-27/01-800.webp",
+      "rgb": [
+        92,
+        93,
+        97
+      ],
+      "source": "catalogo/🌍 Seleções/EUROPA/Grécia 26_27_.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/selecoes-europa-grecia-26-27-26-27/02-800.webp",
+      "rgb": [
+        174,
+        177,
+        176
+      ],
+      "source": "catalogo/🌍 Seleções/EUROPA/Grécia 26_27.jpg"
+    }
+  },
+  {
+    "slug": "camisa-jogador-campeonato-alemao-bayern-munich-26-27",
+    "nome": "Camisa Bayern Munich 26/27 jogador masculino",
+    "clube": "Bayern Munich",
+    "publico": "masculino",
+    "tipo": "jogador",
+    "uniforme": "revisar",
+    "totalImgs": 3,
+    "colorDistance": 140,
+    "img0": {
+      "src": "/otimizadas/camisa-jogador-campeonato-alemao-bayern-munich-26-27/01-800.webp",
+      "rgb": [
+        66,
+        53,
+        64
+      ],
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇩🇪 Campeonato Alemão_/Bayer de Munique 26_27.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/camisa-jogador-campeonato-alemao-bayern-munich-26-27/02-800.webp",
+      "rgb": [
+        164,
+        130,
+        128
+      ],
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇩🇪 Campeonato Alemão_/Bayer de Munique 26_27.png"
+    }
+  },
+  {
+    "slug": "camisa-jogador-selecoes-europa-franca-26-27",
+    "nome": "Camisa França 26/27 jogador masculino",
+    "clube": "França",
+    "publico": "masculino",
+    "tipo": "jogador",
+    "uniforme": "revisar",
+    "totalImgs": 2,
+    "colorDistance": 137,
+    "img0": {
+      "src": "/otimizadas/camisa-jogador-selecoes-europa-franca-26-27/01-800.webp",
+      "rgb": [
+        162,
+        158,
+        152
+      ],
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🌍 Seleções_/EUROPA/França 26_27 Copa do Mundo.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/camisa-jogador-selecoes-europa-franca-26-27/02-800.webp",
+      "rgb": [
+        67,
+        78,
+        95
+      ],
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🌍 Seleções_/EUROPA/França 26_27 Copa do Mundo(1).jpg"
+    }
+  },
+  {
+    "slug": "femininas-premier-league-manchester-united-26-27",
+    "nome": "Camisa Manchester United 26/27 feminino",
+    "clube": "Manchester United",
+    "publico": "feminino",
+    "tipo": "torcedor",
+    "uniforme": "revisar",
+    "totalImgs": 3,
+    "colorDistance": 134,
+    "img0": {
+      "src": "/otimizadas/femininas-premier-league-manchester-united-26-27/01-800.webp",
+      "rgb": [
+        87,
+        62,
+        66
+      ],
+      "source": "catalogo/👩🏻 Femininas/🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League_/Manchester United 26_27.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/femininas-premier-league-manchester-united-26-27/02-800.webp",
+      "rgb": [
+        144,
+        144,
+        156
+      ],
+      "source": "catalogo/👩🏻 Femininas/🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League_/Manchester United 26_27.png"
+    }
+  },
+  {
+    "slug": "camisa-jogador-la-liga-barcelona-26-27",
+    "nome": "Camisa Barcelona 26/27 jogador masculino",
+    "clube": "Barcelona",
+    "publico": "masculino",
+    "tipo": "jogador",
+    "uniforme": "revisar",
+    "totalImgs": 4,
+    "colorDistance": 133,
+    "img0": {
+      "src": "/otimizadas/camisa-jogador-la-liga-barcelona-26-27/01-800.webp",
+      "rgb": [
+        81,
+        71,
+        75
+      ],
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇪🇸 La Liga/Barcelona 26_27.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/camisa-jogador-la-liga-barcelona-26-27/02-800.webp",
+      "rgb": [
+        158,
+        148,
+        151
+      ],
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇪🇸 La Liga/Barcelona 26_27.png"
+    }
+  },
+  {
+    "slug": "camisa-jogador-selecoes-asia-oriente-medio-japao-26-27",
+    "nome": "Camisa Japão 26/27 jogador masculino",
+    "clube": "Japão",
+    "publico": "masculino",
+    "tipo": "jogador",
+    "uniforme": "revisar",
+    "totalImgs": 2,
+    "colorDistance": 133,
+    "img0": {
+      "src": "/otimizadas/camisa-jogador-selecoes-asia-oriente-medio-japao-26-27/01-800.webp",
+      "rgb": [
+        165,
+        162,
+        154
+      ],
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🌍 Seleções_/ÁSIA - ORIENTE MÉDIO_/Japão 26_27 Copa do Mundo.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/camisa-jogador-selecoes-asia-oriente-medio-japao-26-27/02-800.webp",
+      "rgb": [
+        74,
+        80,
+        101
+      ],
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🌍 Seleções_/ÁSIA - ORIENTE MÉDIO_/Japão 26_27 Copa do Mundo(1).jpg"
+    }
+  },
+  {
+    "slug": "camisa-jogador-campeonato-da-arabia-al-hilal-25-26",
+    "nome": "Camisa Al-Hilal 25/26 jogador masculino",
+    "clube": "Al-Hilal",
+    "publico": "masculino",
+    "tipo": "jogador",
+    "uniforme": "revisar",
+    "totalImgs": 2,
+    "colorDistance": 128,
+    "img0": {
+      "src": "/otimizadas/camisa-jogador-campeonato-da-arabia-al-hilal-25-26/01-800.webp",
+      "rgb": [
+        95,
+        129,
+        127
+      ],
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇸🇦 Campeonato da Arábia_/Al Hillal 25_26.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/camisa-jogador-campeonato-da-arabia-al-hilal-25-26/02-800.webp",
+      "rgb": [
+        187,
+        206,
+        173
+      ],
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇸🇦 Campeonato da Arábia_/Al Hillal 25_26(1).jpg"
+    }
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-flamengo-2010",
+    "nome": "Camisa Flamengo 2010 retro",
+    "clube": "Flamengo",
+    "publico": "masculino",
+    "tipo": "retro",
+    "uniforme": "revisar",
+    "totalImgs": 2,
+    "colorDistance": 126,
+    "img0": {
+      "src": "/otimizadas/retro-campeonato-brasileiro-flamengo-2010/01-800.webp",
+      "rgb": [
+        72,
+        73,
+        68
+      ],
+      "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Flamengo 2010.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/retro-campeonato-brasileiro-flamengo-2010/02-800.webp",
+      "rgb": [
+        160,
+        135,
+        134
+      ],
+      "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Flamengo 2010(1).jpg"
+    }
+  },
+  {
+    "slug": "retro-selecoes-america-do-norte-estados-unidos-2002",
+    "nome": "Camisa Estados Unidos 2002 retro",
+    "clube": "Estados Unidos",
+    "publico": "masculino",
+    "tipo": "retro",
+    "uniforme": "revisar",
+    "totalImgs": 2,
+    "colorDistance": 125,
+    "img0": {
+      "src": "/otimizadas/retro-selecoes-america-do-norte-estados-unidos-2002/01-800.webp",
+      "rgb": [
+        85,
+        91,
+        96
+      ],
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/AMÉRICA DO NORTE_/Estados Unidos 2002.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/retro-selecoes-america-do-norte-estados-unidos-2002/02-800.webp",
+      "rgb": [
+        166,
+        162,
+        159
+      ],
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/AMÉRICA DO NORTE_/Estados Unidos 2002(1).jpg"
+    }
+  },
+  {
+    "slug": "kits-infantis-selecoes-europa-espanha-26-27",
+    "nome": "Camisa Espanha 26/27 infantil",
+    "clube": "Espanha",
+    "publico": "infantil",
+    "tipo": "torcedor",
+    "uniforme": "titular",
+    "totalImgs": 2,
+    "colorDistance": 123,
+    "img0": {
+      "src": "/otimizadas/kits-infantis-selecoes-europa-espanha-26-27/01-800.webp",
+      "rgb": [
+        145,
+        141,
+        140
+      ],
+      "source": "catalogo/👶🏻 Kits Infantis/🌍 Seleções_/EUROPA/Espanha 26_27 Copa do Mundo_.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/kits-infantis-selecoes-europa-espanha-26-27/02-800.webp",
+      "rgb": [
+        78,
+        66,
+        70
+      ],
+      "source": "catalogo/👶🏻 Kits Infantis/🌍 Seleções_/EUROPA/Espanha 26_27 Copa do Mundo.jpg"
+    }
+  },
+  {
+    "slug": "kits-infantis-selecoes-europa-franca-26-27",
+    "nome": "Camisa França 26/27 infantil",
+    "clube": "França",
+    "publico": "infantil",
+    "tipo": "torcedor",
+    "uniforme": "titular",
+    "totalImgs": 2,
+    "colorDistance": 123,
+    "img0": {
+      "src": "/otimizadas/kits-infantis-selecoes-europa-franca-26-27/01-800.webp",
+      "rgb": [
+        144,
+        145,
+        152
+      ],
+      "source": "catalogo/👶🏻 Kits Infantis/🌍 Seleções_/EUROPA/França 26_27 Copa do Mundo_.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/kits-infantis-selecoes-europa-franca-26-27/02-800.webp",
+      "rgb": [
+        70,
+        80,
+        79
+      ],
+      "source": "catalogo/👶🏻 Kits Infantis/🌍 Seleções_/EUROPA/França 26_27 Copa do Mundo_(1).jpg"
+    }
+  },
+  {
+    "slug": "camisa-jogador-premier-league-arsenal-26-27",
+    "nome": "Camisa Arsenal 26/27 jogador masculino",
+    "clube": "Arsenal",
+    "publico": "masculino",
+    "tipo": "jogador",
+    "uniforme": "revisar",
+    "totalImgs": 3,
+    "colorDistance": 121,
+    "img0": {
+      "src": "/otimizadas/camisa-jogador-premier-league-arsenal-26-27/01-800.webp",
+      "rgb": [
+        84,
+        89,
+        97
+      ],
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League/Arsenal 26_27.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/camisa-jogador-premier-league-arsenal-26-27/02-800.webp",
+      "rgb": [
+        168,
+        162,
+        144
+      ],
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League/Arsenal 26_27.png"
+    }
+  },
+  {
+    "slug": "camisa-jogador-campeonato-italiano-inter-25-26",
+    "nome": "Camisa Inter 25/26 jogador masculino",
+    "clube": "Inter",
+    "publico": "masculino",
+    "tipo": "jogador",
+    "uniforme": "revisar",
+    "totalImgs": 2,
+    "colorDistance": 120,
+    "img0": {
+      "src": "/otimizadas/camisa-jogador-campeonato-italiano-inter-25-26/01-800.webp",
+      "rgb": [
+        95,
+        119,
+        99
+      ],
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇮🇹 Campeonato Italiano/Inter de Milão 25_26.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/camisa-jogador-campeonato-italiano-inter-25-26/02-800.webp",
+      "rgb": [
+        167,
+        193,
+        161
+      ],
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇮🇹 Campeonato Italiano/Inter de Milão 25_26(1).jpg"
+    }
+  },
+  {
+    "slug": "camisa-jogador-campeonato-argentino-river-plate-26-27",
+    "nome": "Camisa River Plate 26/27 jogador masculino",
+    "clube": "River Plate",
+    "publico": "masculino",
+    "tipo": "jogador",
+    "uniforme": "revisar",
+    "totalImgs": 3,
+    "colorDistance": 113,
+    "img0": {
+      "src": "/otimizadas/camisa-jogador-campeonato-argentino-river-plate-26-27/01-800.webp",
+      "rgb": [
+        96,
+        88,
+        93
+      ],
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇦🇷 Campeonato Argentino/River Plate 26_27.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/camisa-jogador-campeonato-argentino-river-plate-26-27/02-800.webp",
+      "rgb": [
+        166,
+        156,
+        150
+      ],
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇦🇷 Campeonato Argentino/River Plate 26_27.png"
+    }
+  },
+  {
+    "slug": "camisa-jogador-campeonato-frances-paris-saint-germain-26-27",
+    "nome": "Camisa Paris Saint-Germain 26/27 jogador masculino",
+    "clube": "Paris Saint-Germain",
+    "publico": "masculino",
+    "tipo": "jogador",
+    "uniforme": "revisar",
+    "totalImgs": 3,
+    "colorDistance": 112,
+    "img0": {
+      "src": "/otimizadas/camisa-jogador-campeonato-frances-paris-saint-germain-26-27/01-800.webp",
+      "rgb": [
+        85,
+        82,
+        90
+      ],
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇫🇷 Campeonato Francês/PSG 26_27.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/camisa-jogador-campeonato-frances-paris-saint-germain-26-27/02-800.webp",
+      "rgb": [
+        161,
+        142,
+        146
+      ],
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇫🇷 Campeonato Francês/PSG 26_27.png"
+    }
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-botafogo-25-26",
+    "nome": "Camisa Botafogo 25/26 feminino",
+    "clube": "Botafogo",
+    "publico": "feminino",
+    "tipo": "torcedor",
+    "uniforme": "revisar",
+    "totalImgs": 3,
+    "colorDistance": 111,
+    "img0": {
+      "src": "/otimizadas/femininas-campeonato-brasileiro-botafogo-25-26/01-800.webp",
+      "rgb": [
+        173,
+        176,
+        173
+      ],
+      "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Botafogo 25_26.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/femininas-campeonato-brasileiro-botafogo-25-26/02-800.webp",
+      "rgb": [
+        112,
+        111,
+        107
+      ],
+      "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Botafogo 25_26(1).jpg"
+    }
+  },
+  {
+    "slug": "camisa-jogador-premier-league-manchester-united-26-27",
+    "nome": "Camisa Manchester United 26/27 jogador masculino",
+    "clube": "Manchester United",
+    "publico": "masculino",
+    "tipo": "jogador",
+    "uniforme": "revisar",
+    "totalImgs": 3,
+    "colorDistance": 110,
+    "img0": {
+      "src": "/otimizadas/camisa-jogador-premier-league-manchester-united-26-27/01-800.webp",
+      "rgb": [
+        79,
+        81,
+        82
+      ],
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League/Manchester United 26_27.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/camisa-jogador-premier-league-manchester-united-26-27/02-800.webp",
+      "rgb": [
+        138,
+        140,
+        153
+      ],
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League/Manchester United 26_27.png"
+    }
+  },
+  {
+    "slug": "femininas-selecoes-europa-portugal-26-27",
+    "nome": "Camisa Portugal 26/27 feminino",
+    "clube": "Portugal",
+    "publico": "feminino",
+    "tipo": "torcedor",
+    "uniforme": "revisar",
+    "totalImgs": 4,
+    "colorDistance": 102,
+    "img0": {
+      "src": "/otimizadas/femininas-selecoes-europa-portugal-26-27/01-800.webp",
+      "rgb": [
+        99,
+        73,
+        79
+      ],
+      "source": "catalogo/👩🏻 Femininas/🌍 Seleções_/EUROPA/Croped Portugal 26_27 Copa do Mundo.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/femininas-selecoes-europa-portugal-26-27/02-800.webp",
+      "rgb": [
+        139,
+        141,
+        143
+      ],
+      "source": "catalogo/👩🏻 Femininas/🌍 Seleções_/EUROPA/Portugal 26_27 Copa do Mundo.jpg"
+    }
+  },
+  {
+    "slug": "retro-campeonato-espanhol-barcelona-1998",
+    "nome": "Camisa Barcelona 1998 retro",
+    "clube": "Barcelona",
+    "publico": "masculino",
+    "tipo": "retro",
+    "uniforme": "revisar",
+    "totalImgs": 2,
+    "colorDistance": 101,
+    "img0": {
+      "src": "/otimizadas/retro-campeonato-espanhol-barcelona-1998/01-800.webp",
+      "rgb": [
+        71,
+        56,
+        66
+      ],
+      "source": "catalogo/👴🏻 Retrô_/🇪🇸 Campeonato Espanhol_/Barcelona 1998.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/retro-campeonato-espanhol-barcelona-1998/02-800.webp",
+      "rgb": [
+        149,
+        115,
+        90
+      ],
+      "source": "catalogo/👴🏻 Retrô_/🇪🇸 Campeonato Espanhol_/Barcelona 1998(2).jpg"
+    }
+  },
+  {
+    "slug": "retro-selecoes-europa-espanha-2000",
+    "nome": "Camisa Espanha 2000 retro",
+    "clube": "Espanha",
+    "publico": "masculino",
+    "tipo": "retro",
+    "uniforme": "revisar",
+    "totalImgs": 2,
+    "colorDistance": 98,
+    "img0": {
+      "src": "/otimizadas/retro-selecoes-europa-espanha-2000/01-800.webp",
+      "rgb": [
+        145,
+        90,
+        95
+      ],
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Espanha 2000.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/retro-selecoes-europa-espanha-2000/02-800.webp",
+      "rgb": [
+        163,
+        161,
+        160
+      ],
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Espanha 2000.png"
+    }
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-selecoes-america-do-sul-colombia-26-27-copa-do-mundo-26-27",
+    "nome": "Camisa Colômbia Copa do Mundo 26/27 inverno masculino manga longa",
+    "clube": "revisar",
+    "publico": "masculino",
+    "tipo": "inverno",
+    "uniforme": "revisar",
+    "totalImgs": 2,
+    "colorDistance": 97,
+    "img0": {
+      "src": "/otimizadas/camisa-manga-longa-torcedor-selecoes-america-do-sul-colombia-26-27-copa-do-mundo-26-27/01-800.webp",
+      "rgb": [
+        113,
+        135,
+        143
+      ],
+      "source": "catalogo/🥼Camisa Manga Longa Torcedor/🌍 Seleções_/AMÉRICA DO SUL/Colômbia 26_27 Copa do Mundo.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/camisa-manga-longa-torcedor-selecoes-america-do-sul-colombia-26-27-copa-do-mundo-26-27/02-800.webp",
+      "rgb": [
+        113,
+        97,
+        54
+      ],
+      "source": "catalogo/🥼Camisa Manga Longa Torcedor/🌍 Seleções_/AMÉRICA DO SUL/Colômbia 26_27 Copa do Mundo(1).jpg"
+    }
+  },
+  {
+    "slug": "retro-selecoes-europa-alemanha",
+    "nome": "Camisa Alemanha retro",
+    "clube": "Alemanha",
+    "publico": "masculino",
+    "tipo": "retro",
+    "uniforme": "revisar",
+    "totalImgs": 3,
+    "colorDistance": 94,
+    "img0": {
+      "src": "/otimizadas/retro-selecoes-europa-alemanha/01-800.webp",
+      "rgb": [
+        144,
+        142,
+        138
+      ],
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Alemanha_.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/retro-selecoes-europa-alemanha/02-800.webp",
+      "rgb": [
+        200,
+        194,
+        192
+      ],
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Alemanha_(1).jpg"
+    }
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-corinthians-2009",
+    "nome": "Camisa Corinthians 2009 retro",
+    "clube": "Corinthians",
+    "publico": "masculino",
+    "tipo": "retro",
+    "uniforme": "revisar",
+    "totalImgs": 3,
+    "colorDistance": 89,
+    "img0": {
+      "src": "/otimizadas/retro-campeonato-brasileiro-corinthians-2009/01-800.webp",
+      "rgb": [
+        147,
+        145,
+        144
+      ],
+      "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Corinthians 2009_.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/retro-campeonato-brasileiro-corinthians-2009/02-800.webp",
+      "rgb": [
+        92,
+        93,
+        97
+      ],
+      "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Corinthians 2009.jpg"
+    }
+  },
+  {
+    "slug": "selecoes-asia-oceania-oriente-medio-coreia-do-sul-25-26",
+    "nome": "Camisa Coreia do Sul 25/26",
+    "clube": "Coreia do Sul",
+    "publico": "revisar",
+    "tipo": "torcedor",
+    "uniforme": "revisar",
+    "totalImgs": 3,
+    "colorDistance": 87,
+    "img0": {
+      "src": "/otimizadas/selecoes-asia-oceania-oriente-medio-coreia-do-sul-25-26/01-800.webp",
+      "rgb": [
+        100,
+        126,
+        120
+      ],
+      "source": "catalogo/🌍 Seleções/ÁSIA - OCEANIA - ORIENTE MÉDIO_/Korea do Sul 25_26.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/selecoes-asia-oceania-oriente-medio-coreia-do-sul-25-26/02-800.webp",
+      "rgb": [
+        177,
+        117,
+        80
+      ],
+      "source": "catalogo/🌍 Seleções/ÁSIA - OCEANIA - ORIENTE MÉDIO_/Korea do Sul 25_26(1).jpg"
+    }
+  },
+  {
+    "slug": "kits-infantis-selecoes-asia-japao-26-27",
+    "nome": "Camisa Japão 26/27 infantil",
+    "clube": "Japão",
+    "publico": "infantil",
+    "tipo": "torcedor",
+    "uniforme": "titular",
+    "totalImgs": 2,
+    "colorDistance": 87,
+    "img0": {
+      "src": "/otimizadas/kits-infantis-selecoes-asia-japao-26-27/01-800.webp",
+      "rgb": [
+        143,
+        144,
+        141
+      ],
+      "source": "catalogo/👶🏻 Kits Infantis/🌍 Seleções_/ÁSIA_/Japão 26_27 Copa do Mundo_.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/kits-infantis-selecoes-asia-japao-26-27/02-800.webp",
+      "rgb": [
+        89,
+        90,
+        99
+      ],
+      "source": "catalogo/👶🏻 Kits Infantis/🌍 Seleções_/ÁSIA_/Japão 26_27 Copa do Mundo.jpg"
+    }
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-bahia-2013",
+    "nome": "Camisa Bahia 2013 retro",
+    "clube": "Bahia",
+    "publico": "masculino",
+    "tipo": "retro",
+    "uniforme": "revisar",
+    "totalImgs": 2,
+    "colorDistance": 86,
+    "img0": {
+      "src": "/otimizadas/retro-campeonato-brasileiro-bahia-2013/01-800.webp",
+      "rgb": [
+        111,
+        95,
+        107
+      ],
+      "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Bahia 2013.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/retro-campeonato-brasileiro-bahia-2013/02-800.webp",
+      "rgb": [
+        156,
+        155,
+        149
+      ],
+      "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Bahia 2013(1).jpg"
+    }
+  },
+  {
+    "slug": "retro-selecoes-europa-holanda-2014-2014",
+    "nome": "Camisa Holanda 2014 retro",
+    "clube": "revisar",
+    "publico": "masculino",
+    "tipo": "retro",
+    "uniforme": "revisar",
+    "totalImgs": 2,
+    "colorDistance": 86,
+    "img0": {
+      "src": "/otimizadas/retro-selecoes-europa-holanda-2014-2014/01-800.webp",
+      "rgb": [
+        177,
+        107,
+        89
+      ],
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Holanda 2014.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/retro-selecoes-europa-holanda-2014-2014/02-800.webp",
+      "rgb": [
+        141,
+        143,
+        158
+      ],
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Holanda 2014(1).jpg"
+    }
+  },
+  {
+    "slug": "retro-selecoes-america-do-sul-brasil",
+    "nome": "Camisa Brasil retro",
+    "clube": "Brasil",
+    "publico": "masculino",
+    "tipo": "retro",
+    "uniforme": "revisar",
+    "totalImgs": 5,
+    "colorDistance": 84,
+    "img0": {
+      "src": "/otimizadas/retro-selecoes-america-do-sul-brasil/01-800.webp",
+      "rgb": [
+        118,
+        125,
+        150
+      ],
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/AMÉRICA DO SUL/Brasil_.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/retro-selecoes-america-do-sul-brasil/02-800.webp",
+      "rgb": [
+        186,
+        171,
+        133
+      ],
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/AMÉRICA DO SUL/Brasil.jpg"
+    }
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-vasco-da-gama",
+    "nome": "Camisa Vasco da Gama retro",
+    "clube": "Vasco da Gama",
+    "publico": "masculino",
+    "tipo": "retro",
+    "uniforme": "revisar",
+    "totalImgs": 2,
+    "colorDistance": 74,
+    "img0": {
+      "src": "/otimizadas/retro-campeonato-brasileiro-vasco-da-gama/01-800.webp",
+      "rgb": [
+        202,
+        200,
+        198
+      ],
+      "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Vasco.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/retro-campeonato-brasileiro-vasco-da-gama/02-800.webp",
+      "rgb": [
+        159,
+        157,
+        155
+      ],
+      "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Vasco(1).jpg"
+    }
+  },
+  {
+    "slug": "retro-campeonato-italiano-roma-1991",
+    "nome": "Camisa Roma 1991 retro",
+    "clube": "Roma",
+    "publico": "masculino",
+    "tipo": "retro",
+    "uniforme": "revisar",
+    "totalImgs": 2,
+    "colorDistance": 73,
+    "img0": {
+      "src": "/otimizadas/retro-campeonato-italiano-roma-1991/01-800.webp",
+      "rgb": [
+        146,
+        148,
+        150
+      ],
+      "source": "catalogo/👴🏻 Retrô_/🇮🇹 Campeonato Italiano_/Roma 1991.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/retro-campeonato-italiano-roma-1991/02-800.webp",
+      "rgb": [
+        106,
+        106,
+        106
+      ],
+      "source": "catalogo/👴🏻 Retrô_/🇮🇹 Campeonato Italiano_/Roma 1991(1).jpg"
+    }
+  },
+  {
+    "slug": "camisa-jogador-premier-league-arsenal-25-26",
+    "nome": "Camisa Arsenal 25/26 jogador masculino",
+    "clube": "Arsenal",
+    "publico": "masculino",
+    "tipo": "jogador",
+    "uniforme": "revisar",
+    "totalImgs": 3,
+    "colorDistance": 71,
+    "img0": {
+      "src": "/otimizadas/camisa-jogador-premier-league-arsenal-25-26/01-800.webp",
+      "rgb": [
+        117,
+        77,
+        74
+      ],
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League/Arsenal 25_26.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/camisa-jogador-premier-league-arsenal-25-26/02-800.webp",
+      "rgb": [
+        112,
+        132,
+        119
+      ],
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League/Arsenal 25_26(1).jpg"
+    }
+  },
+  {
+    "slug": "retro-campeonato-espanhol-real-madrid",
+    "nome": "Camisa Real Madrid retro",
+    "clube": "Real Madrid",
+    "publico": "masculino",
+    "tipo": "retro",
+    "uniforme": "revisar",
+    "totalImgs": 14,
+    "colorDistance": 70,
+    "img0": {
+      "src": "/otimizadas/retro-campeonato-espanhol-real-madrid/01-800.webp",
+      "rgb": [
+        154,
+        145,
+        88
+      ],
+      "source": "catalogo/👴🏻 Retrô_/🇪🇸 Campeonato Espanhol_/Real Madrid_.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/retro-campeonato-espanhol-real-madrid/02-800.webp",
+      "rgb": [
+        121,
+        148,
+        150
+      ],
+      "source": "catalogo/👴🏻 Retrô_/🇪🇸 Campeonato Espanhol_/Real Madrid_(1).jpg"
+    }
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-selecoes-europa-inglaterra-26-27",
+    "nome": "Camisa Inglaterra 26/27 inverno masculino manga longa",
+    "clube": "Inglaterra",
+    "publico": "masculino",
+    "tipo": "inverno",
+    "uniforme": "revisar",
+    "totalImgs": 2,
+    "colorDistance": 69,
+    "img0": {
+      "src": "/otimizadas/camisa-manga-longa-torcedor-selecoes-europa-inglaterra-26-27/01-800.webp",
+      "rgb": [
+        157,
+        160,
+        156
+      ],
+      "source": "catalogo/🥼Camisa Manga Longa Torcedor/🌍 Seleções_/EUROPA/Inglaterra 26_27 Copa do Mundo_.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/camisa-manga-longa-torcedor-selecoes-europa-inglaterra-26-27/02-800.webp",
+      "rgb": [
+        171,
+        109,
+        112
+      ],
+      "source": "catalogo/🥼Camisa Manga Longa Torcedor/🌍 Seleções_/EUROPA/Inglaterra 26_27 Copa do Mundo_(1).jpg"
+    }
+  },
+  {
+    "slug": "camisa-jogador-campeonato-portugues-benfica-26-27",
+    "nome": "Camisa Benfica 26/27 jogador masculino",
+    "clube": "Benfica",
+    "publico": "masculino",
+    "tipo": "jogador",
+    "uniforme": "revisar",
+    "totalImgs": 2,
+    "colorDistance": 66,
+    "img0": {
+      "src": "/otimizadas/camisa-jogador-campeonato-portugues-benfica-26-27/01-800.webp",
+      "rgb": [
+        171,
+        140,
+        139
+      ],
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇵🇹 Campeonato Português_/Benfica 26_27.png"
+    },
+    "img1": {
+      "src": "/otimizadas/camisa-jogador-campeonato-portugues-benfica-26-27/02-800.webp",
+      "rgb": [
+        117,
+        112,
+        114
+      ],
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇵🇹 Campeonato Português_/Benfica 26_27(1).jpg"
+    }
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-selecoes-europa-portugal-25-26",
+    "nome": "Camisa Portugal 25/26 inverno masculino manga longa",
+    "clube": "Portugal",
+    "publico": "masculino",
+    "tipo": "inverno",
+    "uniforme": "revisar",
+    "totalImgs": 2,
+    "colorDistance": 65,
+    "img0": {
+      "src": "/otimizadas/camisa-manga-longa-torcedor-selecoes-europa-portugal-25-26/01-800.webp",
+      "rgb": [
+        159,
+        162,
+        159
+      ],
+      "source": "catalogo/🥼Camisa Manga Longa Torcedor/🌍 Seleções_/EUROPA/Portugal 25_26.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/camisa-manga-longa-torcedor-selecoes-europa-portugal-25-26/02-800.webp",
+      "rgb": [
+        175,
+        119,
+        113
+      ],
+      "source": "catalogo/🥼Camisa Manga Longa Torcedor/🌍 Seleções_/EUROPA/Portugal 25_26(1).jpg"
+    }
+  },
+  {
+    "slug": "camisa-jogador-liga-mexicana-leon-26-27-26-27",
+    "nome": "Camisa León 26/27 jogador masculino",
+    "clube": "revisar",
+    "publico": "masculino",
+    "tipo": "jogador",
+    "uniforme": "revisar",
+    "totalImgs": 2,
+    "colorDistance": 62,
+    "img0": {
+      "src": "/otimizadas/camisa-jogador-liga-mexicana-leon-26-27-26-27/01-800.webp",
+      "rgb": [
+        108,
+        115,
+        117
+      ],
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇲🇽 Liga Mexicana_/León 26_27.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/camisa-jogador-liga-mexicana-leon-26-27-26-27/02-800.webp",
+      "rgb": [
+        64,
+        88,
+        82
+      ],
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇲🇽 Liga Mexicana_/León 26_27(1).jpg"
+    }
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-sao-paulo-25-26",
+    "nome": "Camisa São Paulo 25/26 feminino",
+    "clube": "São Paulo",
+    "publico": "feminino",
+    "tipo": "torcedor",
+    "uniforme": "revisar",
+    "totalImgs": 2,
+    "colorDistance": 61,
+    "img0": {
+      "src": "/otimizadas/femininas-campeonato-brasileiro-sao-paulo-25-26/01-800.webp",
+      "rgb": [
+        116,
+        116,
+        116
+      ],
+      "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/São Paulo 25_26.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/femininas-campeonato-brasileiro-sao-paulo-25-26/02-800.webp",
+      "rgb": [
+        156,
+        152,
+        144
+      ],
+      "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/São Paulo 25_26(1).jpg"
+    }
+  },
+  {
+    "slug": "selecoes-europa-holanda-26-27-copa-do-mundo-26-27",
+    "nome": "Camisa Holanda Copa do Mundo 26/27",
+    "clube": "revisar",
+    "publico": "revisar",
+    "tipo": "torcedor",
+    "uniforme": "revisar",
+    "totalImgs": 2,
+    "colorDistance": 60,
+    "img0": {
+      "src": "/otimizadas/selecoes-europa-holanda-26-27-copa-do-mundo-26-27/01-800.webp",
+      "rgb": [
+        174,
+        125,
+        107
+      ],
+      "source": "catalogo/🌍 Seleções/EUROPA/Holanda 26_27 Copa do Mundo.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/selecoes-europa-holanda-26-27-copa-do-mundo-26-27/02-800.webp",
+      "rgb": [
+        172,
+        162,
+        154
+      ],
+      "source": "catalogo/🌍 Seleções/EUROPA/Holanda 26_27 Copa do Mundo.png"
+    }
+  },
+  {
+    "slug": "retro-selecoes-europa-espanha",
+    "nome": "Camisa Espanha retro",
+    "clube": "Espanha",
+    "publico": "masculino",
+    "tipo": "retro",
+    "uniforme": "revisar",
+    "totalImgs": 4,
+    "colorDistance": 60,
+    "img0": {
+      "src": "/otimizadas/retro-selecoes-europa-espanha/01-800.webp",
+      "rgb": [
+        115,
+        116,
+        125
+      ],
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Espanha_.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/retro-selecoes-europa-espanha/02-800.webp",
+      "rgb": [
+        174,
+        123,
+        117
+      ],
+      "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Espanha_(1).jpg"
+    }
+  },
+  {
+    "slug": "camisa-jogador-campeonato-italiano-roma-26-27",
+    "nome": "Camisa Roma 26/27 jogador masculino",
+    "clube": "Roma",
+    "publico": "masculino",
+    "tipo": "jogador",
+    "uniforme": "revisar",
+    "totalImgs": 2,
+    "colorDistance": 58,
+    "img0": {
+      "src": "/otimizadas/camisa-jogador-campeonato-italiano-roma-26-27/01-800.webp",
+      "rgb": [
+        96,
+        89,
+        87
+      ],
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇮🇹 Campeonato Italiano/Roma 26_27.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/camisa-jogador-campeonato-italiano-roma-26-27/02-800.webp",
+      "rgb": [
+        75,
+        50,
+        49
+      ],
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇮🇹 Campeonato Italiano/Roma 26_27(1).jpg"
+    }
+  },
+  {
+    "slug": "camisa-jogador-liga-mexicana-cruz-azul-26-27-26-27",
+    "nome": "Camisa Cruz Azul 26/27 jogador masculino",
+    "clube": "revisar",
+    "publico": "masculino",
+    "tipo": "jogador",
+    "uniforme": "revisar",
+    "totalImgs": 2,
+    "colorDistance": 55,
+    "img0": {
+      "src": "/otimizadas/camisa-jogador-liga-mexicana-cruz-azul-26-27-26-27/01-800.webp",
+      "rgb": [
+        93,
+        94,
+        98
+      ],
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇲🇽 Liga Mexicana_/Cruz Azul 26_27.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/camisa-jogador-liga-mexicana-cruz-azul-26-27-26-27/02-800.webp",
+      "rgb": [
+        45,
+        68,
+        94
+      ],
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇲🇽 Liga Mexicana_/Cruz Azul 26_27(1).jpg"
+    }
+  },
+  {
+    "slug": "camisa-jogador-selecoes-america-do-norte-central-mexico-26-27",
+    "nome": "Camisa México 26/27 jogador masculino",
+    "clube": "México",
+    "publico": "masculino",
+    "tipo": "jogador",
+    "uniforme": "revisar",
+    "totalImgs": 2,
+    "colorDistance": 55,
+    "img0": {
+      "src": "/otimizadas/camisa-jogador-selecoes-america-do-norte-central-mexico-26-27/01-800.webp",
+      "rgb": [
+        102,
+        103,
+        110
+      ],
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🌍 Seleções_/AMÉRICA DO NORTE - CENTRAL/México 26_27 Copa do Mundo.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/camisa-jogador-selecoes-america-do-norte-central-mexico-26-27/02-800.webp",
+      "rgb": [
+        61,
+        82,
+        80
+      ],
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🌍 Seleções_/AMÉRICA DO NORTE - CENTRAL/México 26_27 Copa do Mundo(1).jpg"
+    }
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-corinthians-2005",
+    "nome": "Camisa Corinthians 2005 retro",
+    "clube": "Corinthians",
+    "publico": "masculino",
+    "tipo": "retro",
+    "uniforme": "revisar",
+    "totalImgs": 2,
+    "colorDistance": 54,
+    "img0": {
+      "src": "/otimizadas/retro-campeonato-brasileiro-corinthians-2005/01-800.webp",
+      "rgb": [
+        176,
+        170,
+        165
+      ],
+      "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Corinthians 2005.png"
+    },
+    "img1": {
+      "src": "/otimizadas/retro-campeonato-brasileiro-corinthians-2005/02-800.webp",
+      "rgb": [
+        145,
+        138,
+        134
+      ],
+      "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Corinthians 2005(1).png"
+    }
+  },
+  {
+    "slug": "camisa-jogador-campeonato-turco-galatasaray-26-27-26-27",
+    "nome": "Camisa Galatasaray 26/27 jogador masculino",
+    "clube": "revisar",
+    "publico": "masculino",
+    "tipo": "jogador",
+    "uniforme": "revisar",
+    "totalImgs": 2,
+    "colorDistance": 52,
+    "img0": {
+      "src": "/otimizadas/camisa-jogador-campeonato-turco-galatasaray-26-27-26-27/01-800.webp",
+      "rgb": [
+        94,
+        96,
+        100
+      ],
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇹🇷 Campeonato Turco/Galatasaray 26_27.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/camisa-jogador-campeonato-turco-galatasaray-26-27-26-27/02-800.webp",
+      "rgb": [
+        106,
+        72,
+        56
+      ],
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇹🇷 Campeonato Turco/Galatasaray 26_27(1).jpg"
+    }
+  },
+  {
+    "slug": "selecoes-europa-portugal-25-26-treino",
+    "nome": "Camisa Portugal 25/26 treino",
+    "clube": "Portugal",
+    "publico": "revisar",
+    "tipo": "treino",
+    "uniforme": "revisar",
+    "totalImgs": 2,
+    "colorDistance": 51,
+    "img0": {
+      "src": "/otimizadas/selecoes-europa-portugal-25-26-treino/01-800.webp",
+      "rgb": [
+        147,
+        147,
+        145
+      ],
+      "source": "catalogo/🌍 Seleções/EUROPA/Portugal 25_26 - Treino.png"
+    },
+    "img1": {
+      "src": "/otimizadas/selecoes-europa-portugal-25-26-treino/02-800.webp",
+      "rgb": [
+        174,
+        177,
+        176
+      ],
+      "source": "catalogo/🌍 Seleções/EUROPA/Portugal 25_26 - Treino(1).jpg"
+    }
+  },
+  {
+    "slug": "camisa-jogador-campeonato-italiano-inter-26-27",
+    "nome": "Camisa Inter 26/27 jogador masculino",
+    "clube": "Inter",
+    "publico": "masculino",
+    "tipo": "jogador",
+    "uniforme": "revisar",
+    "totalImgs": 3,
+    "colorDistance": 50,
+    "img0": {
+      "src": "/otimizadas/camisa-jogador-campeonato-italiano-inter-26-27/01-800.webp",
+      "rgb": [
+        66,
+        70,
+        71
+      ],
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇮🇹 Campeonato Italiano/Inter de Milão 26_27.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/camisa-jogador-campeonato-italiano-inter-26-27/02-800.webp",
+      "rgb": [
+        93,
+        97,
+        103
+      ],
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇮🇹 Campeonato Italiano/Inter de Milão 26_27(1).jpg"
+    }
+  },
+  {
+    "slug": "camisa-jogador-selecoes-europa-suica-26-27-copa-do-mundo-26-27",
+    "nome": "Camisa Suíça Copa do Mundo 26/27 jogador masculino",
+    "clube": "revisar",
+    "publico": "masculino",
+    "tipo": "jogador",
+    "uniforme": "revisar",
+    "totalImgs": 2,
+    "colorDistance": 50,
+    "img0": {
+      "src": "/otimizadas/camisa-jogador-selecoes-europa-suica-26-27-copa-do-mundo-26-27/01-800.webp",
+      "rgb": [
+        103,
+        54,
+        64
+      ],
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🌍 Seleções_/EUROPA/Suíça 26_27 Copa do Mundo.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/camisa-jogador-selecoes-europa-suica-26-27-copa-do-mundo-26-27/02-800.webp",
+      "rgb": [
+        70,
+        88,
+        79
+      ],
+      "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🌍 Seleções_/EUROPA/Suíça 26_27 Copa do Mundo(1).jpg"
+    }
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-corinthians-1997",
+    "nome": "Camisa Corinthians 1997 retro",
+    "clube": "Corinthians",
+    "publico": "masculino",
+    "tipo": "retro",
+    "uniforme": "revisar",
+    "totalImgs": 2,
+    "colorDistance": 50,
+    "img0": {
+      "src": "/otimizadas/retro-campeonato-brasileiro-corinthians-1997/01-800.webp",
+      "rgb": [
+        149,
+        147,
+        146
+      ],
+      "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Corinthians 1997.jpg"
+    },
+    "img1": {
+      "src": "/otimizadas/retro-campeonato-brasileiro-corinthians-1997/02-800.webp",
+      "rgb": [
+        124,
+        121,
+        111
+      ],
+      "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Corinthians 1997(1).jpg"
+    }
+  }
+]

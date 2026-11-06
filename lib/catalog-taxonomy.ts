@@ -20,6 +20,11 @@ const specialNames: Record<string, string> = {
   "selecoes": "Seleções nacionais",
 };
 
+const LEAGUE_COVER_OVERRIDES: Record<string, string> = {
+  "f1": "/arena/f1-collection-cover.webp",
+  "formula-1": "/arena/f1-collection-cover.webp",
+};
+
 export function catalogLabel(slug: string) {
   return specialNames[slug] ?? slug.split("-").filter(Boolean).map((word) => word[0]?.toLocaleUpperCase("pt-BR") + word.slice(1)).join(" ");
 }
@@ -42,6 +47,6 @@ export function deriveCatalogLeagues(products: Product[]): CatalogLeague[] {
     nome: catalogLabel(slug),
     clubes: [...value.clubs.entries()].map(([clubSlug, nome]) => ({ slug: clubSlug, nome })).sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR")),
     productCount: value.productCount,
-    coverImage: value.coverImage,
+    coverImage: LEAGUE_COVER_OVERRIDES[slug] ?? value.coverImage,
   })).sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"));
 }

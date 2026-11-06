@@ -5,7 +5,7 @@ const productSize = z.string().trim().min(1).max(12).refine((size) => size !== "
 });
 
 export const manualProductSchema = z.object({
-  id: z.string().uuid().optional(),
+  id: z.string().trim().min(1).max(100).optional(),
   slug: z.string().trim().min(2).max(100).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
   nome: z.string().trim().min(3).max(160),
   description: z.string().trim().max(4000),

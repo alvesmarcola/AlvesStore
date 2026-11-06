@@ -1,0 +1,3708 @@
+{
+  "total": 62,
+  "altas": 2,
+  "medias": 28,
+  "baixas": 32,
+  "itens": [
+    {
+      "slug": "camisa-jogador-campeonato-italiano-roma-26-27",
+      "nome": "Camisa Roma 26/27 jogador masculino",
+      "clube": "Roma",
+      "liga": "serie-a",
+      "totalImgs": 2,
+      "maxDeltaE": 17.9,
+      "maxDiffBal": 16,
+      "score": 42.8,
+      "probabilidade": "MÉDIA (Possível Variação/Intruso)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/camisa-jogador-campeonato-italiano-roma-26-27/01-800.webp",
+          "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇮🇹 Campeonato Italiano/Roma 26_27.jpg",
+          "ch": [
+            95,
+            89,
+            87
+          ],
+          "r_minus_b": 8,
+          "domRgb": [
+            95,
+            90,
+            87
+          ],
+          "hex": "#5f5a57",
+          "colorDesc": "Cinza escuro / Grafite"
+        },
+        {
+          "src": "/otimizadas/camisa-jogador-campeonato-italiano-roma-26-27/02-800.webp",
+          "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇮🇹 Campeonato Italiano/Roma 26_27(1).jpg",
+          "ch": [
+            74,
+            50,
+            50
+          ],
+          "r_minus_b": 24,
+          "domRgb": [
+            74,
+            50,
+            50
+          ],
+          "hex": "#4a3232",
+          "colorDesc": "Neutro / Misto"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 17.9,
+          "diffBal": 16
+        }
+      ]
+    },
+    {
+      "slug": "retro-campeonato-brasileiro-palmeiras",
+      "nome": "Camisa Palmeiras retro",
+      "clube": "Palmeiras",
+      "liga": "brasileirao-serie-a",
+      "totalImgs": 2,
+      "maxDeltaE": 15.7,
+      "maxDiffBal": 16,
+      "score": 39.5,
+      "probabilidade": "MÉDIA (Possível Variação/Intruso)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/retro-campeonato-brasileiro-palmeiras/01-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Palmeiras.jpg",
+          "ch": [
+            125,
+            130,
+            146
+          ],
+          "r_minus_b": -21,
+          "domRgb": [
+            126,
+            131,
+            147
+          ],
+          "hex": "#7e8393",
+          "colorDesc": "Azul / Azul Marinho"
+        },
+        {
+          "src": "/otimizadas/retro-campeonato-brasileiro-palmeiras/02-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Palmeiras(1).jpg",
+          "ch": [
+            123,
+            138,
+            128
+          ],
+          "r_minus_b": -5,
+          "domRgb": [
+            124,
+            139,
+            129
+          ],
+          "hex": "#7c8b81",
+          "colorDesc": "Cinza escuro / Grafite"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 15.7,
+          "diffBal": 16
+        }
+      ]
+    },
+    {
+      "slug": "femininas-selecoes-europa-portugal-26-27",
+      "nome": "Camisa Portugal 26/27 feminino",
+      "clube": "Portugal",
+      "liga": "selecoes",
+      "totalImgs": 3,
+      "maxDeltaE": 19.9,
+      "maxDiffBal": 9,
+      "score": 38.8,
+      "probabilidade": "ALTA (Possível Uniforme Diferente)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/femininas-selecoes-europa-portugal-26-27/02-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🌍 Seleções_/EUROPA/Portugal 26_27 Copa do Mundo.jpg",
+          "ch": [
+            140,
+            142,
+            142
+          ],
+          "r_minus_b": -2,
+          "domRgb": [
+            140,
+            142,
+            142
+          ],
+          "hex": "#8c8e8e",
+          "colorDesc": "Cinza médio"
+        },
+        {
+          "src": "/otimizadas/femininas-selecoes-europa-portugal-26-27/03-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🌍 Seleções_/EUROPA/Portugal 26_27 Copa do Mundo(1).jpg",
+          "ch": [
+            98,
+            98,
+            99
+          ],
+          "r_minus_b": -1,
+          "domRgb": [
+            98,
+            98,
+            99
+          ],
+          "hex": "#626263",
+          "colorDesc": "Cinza escuro / Grafite"
+        },
+        {
+          "src": "/otimizadas/femininas-selecoes-europa-portugal-26-27/04-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🌍 Seleções_/EUROPA/Portugal 26_27 Copa do Mundo(2).jpg",
+          "ch": [
+            85,
+            94,
+            96
+          ],
+          "r_minus_b": -11,
+          "domRgb": [
+            85,
+            94,
+            96
+          ],
+          "hex": "#555e60",
+          "colorDesc": "Cinza escuro / Grafite"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 17.3,
+          "diffBal": 1
+        },
+        {
+          "i": 2,
+          "dE": 19.9,
+          "diffBal": 9
+        }
+      ]
+    },
+    {
+      "slug": "retro-campeonato-brasileiro-flamengo-modelo-3",
+      "nome": "Camisa Flamengo retro – Modelo 3",
+      "clube": "Flamengo",
+      "liga": "brasileirao-serie-a",
+      "totalImgs": 2,
+      "maxDeltaE": 12.3,
+      "maxDiffBal": 18,
+      "score": 36.5,
+      "probabilidade": "MÉDIA (Possível Variação/Intruso)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/retro-campeonato-brasileiro-flamengo/03-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Flamengo_(2).jpg",
+          "ch": [
+            142,
+            118,
+            118
+          ],
+          "r_minus_b": 24,
+          "domRgb": [
+            143,
+            119,
+            118
+          ],
+          "hex": "#8f7776",
+          "colorDesc": "Neutro / Misto"
+        },
+        {
+          "src": "/otimizadas/retro-campeonato-brasileiro-flamengo/06-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Flamengo(1).jpg",
+          "ch": [
+            149,
+            145,
+            143
+          ],
+          "r_minus_b": 6,
+          "domRgb": [
+            151,
+            147,
+            144
+          ],
+          "hex": "#979390",
+          "colorDesc": "Cinza médio"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 12.3,
+          "diffBal": 18
+        }
+      ]
+    },
+    {
+      "slug": "femininas-campeonato-brasileiro-sao-paulo-24-25",
+      "nome": "Camisa São Paulo 24/25 feminino",
+      "clube": "São Paulo",
+      "liga": "brasileirao-serie-a",
+      "totalImgs": 3,
+      "maxDeltaE": 16.1,
+      "maxDiffBal": 12,
+      "score": 36.2,
+      "probabilidade": "MÉDIA (Possível Variação/Intruso)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/femininas-campeonato-brasileiro-sao-paulo-24-25/01-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/São Paulo 24_25.jpg",
+          "ch": [
+            130,
+            112,
+            106
+          ],
+          "r_minus_b": 24,
+          "domRgb": [
+            131,
+            113,
+            107
+          ],
+          "hex": "#83716b",
+          "colorDesc": "Neutro / Misto"
+        },
+        {
+          "src": "/otimizadas/femininas-campeonato-brasileiro-sao-paulo-24-25/02-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/São Paulo 24_25(1).jpg",
+          "ch": [
+            147,
+            124,
+            123
+          ],
+          "r_minus_b": 24,
+          "domRgb": [
+            149,
+            126,
+            124
+          ],
+          "hex": "#957e7c",
+          "colorDesc": "Neutro / Misto"
+        },
+        {
+          "src": "/otimizadas/femininas-campeonato-brasileiro-sao-paulo-24-25/03-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/São Paulo 24_25(2).jpg",
+          "ch": [
+            159,
+            153,
+            147
+          ],
+          "r_minus_b": 12,
+          "domRgb": [
+            160,
+            155,
+            148
+          ],
+          "hex": "#a09b94",
+          "colorDesc": "Cinza médio"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 6.4,
+          "diffBal": 0
+        },
+        {
+          "i": 2,
+          "dE": 16.1,
+          "diffBal": 12
+        }
+      ]
+    },
+    {
+      "slug": "camisa-jogador-liga-mexicana-atlas-26-27-26-27",
+      "nome": "Camisa Atlas 26/27 jogador masculino",
+      "clube": "revisar",
+      "liga": "revisar",
+      "totalImgs": 2,
+      "maxDeltaE": 12,
+      "maxDiffBal": 18,
+      "score": 36,
+      "probabilidade": "MÉDIA (Possível Variação/Intruso)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/camisa-jogador-liga-mexicana-atlas-26-27-26-27/01-800.webp",
+          "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇲🇽 Liga Mexicana_/Atlas 26_27.jpg",
+          "ch": [
+            83,
+            77,
+            80
+          ],
+          "r_minus_b": 3,
+          "domRgb": [
+            83,
+            77,
+            80
+          ],
+          "hex": "#534d50",
+          "colorDesc": "Cinza escuro / Grafite"
+        },
+        {
+          "src": "/otimizadas/camisa-jogador-liga-mexicana-atlas-26-27-26-27/02-800.webp",
+          "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇲🇽 Liga Mexicana_/Atlas 26_27(1).jpg",
+          "ch": [
+            73,
+            52,
+            52
+          ],
+          "r_minus_b": 21,
+          "domRgb": [
+            74,
+            53,
+            52
+          ],
+          "hex": "#4a3534",
+          "colorDesc": "Neutro / Misto"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 12,
+          "diffBal": 18
+        }
+      ]
+    },
+    {
+      "slug": "femininas-campeonato-brasileiro-sao-paulo-25-26",
+      "nome": "Camisa São Paulo 25/26 feminino",
+      "clube": "São Paulo",
+      "liga": "brasileirao-serie-a",
+      "totalImgs": 2,
+      "maxDeltaE": 14.9,
+      "maxDiffBal": 13,
+      "score": 35.4,
+      "probabilidade": "MÉDIA (Possível Variação/Intruso)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/femininas-campeonato-brasileiro-sao-paulo-25-26/01-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/São Paulo 25_26.jpg",
+          "ch": [
+            117,
+            116,
+            117
+          ],
+          "r_minus_b": 0,
+          "domRgb": [
+            117,
+            117,
+            117
+          ],
+          "hex": "#757575",
+          "colorDesc": "Cinza escuro / Grafite"
+        },
+        {
+          "src": "/otimizadas/femininas-campeonato-brasileiro-sao-paulo-25-26/02-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/São Paulo 25_26(1).jpg",
+          "ch": [
+            157,
+            153,
+            144
+          ],
+          "r_minus_b": 13,
+          "domRgb": [
+            157,
+            153,
+            145
+          ],
+          "hex": "#9d9991",
+          "colorDesc": "Cinza médio"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 14.9,
+          "diffBal": 13
+        }
+      ]
+    },
+    {
+      "slug": "femininas-premier-league-arsenal-26-27",
+      "nome": "Camisa Arsenal 26/27 feminino",
+      "clube": "Arsenal",
+      "liga": "premier-league",
+      "totalImgs": 3,
+      "maxDeltaE": 12.2,
+      "maxDiffBal": 17,
+      "score": 35.3,
+      "probabilidade": "MÉDIA (Possível Variação/Intruso)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/femininas-premier-league-arsenal-26-27/01-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League_/Arsenal 26_27.png",
+          "ch": [
+            172,
+            167,
+            151
+          ],
+          "r_minus_b": 21,
+          "domRgb": [
+            174,
+            168,
+            152
+          ],
+          "hex": "#aea898",
+          "colorDesc": "Neutro / Misto"
+        },
+        {
+          "src": "/otimizadas/femininas-premier-league-arsenal-26-27/02-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League_/Arsenal 26_27(1).png",
+          "ch": [
+            154,
+            151,
+            150
+          ],
+          "r_minus_b": 4,
+          "domRgb": [
+            154,
+            152,
+            149
+          ],
+          "hex": "#9a9895",
+          "colorDesc": "Cinza médio"
+        },
+        {
+          "src": "/otimizadas/femininas-premier-league-arsenal-26-27/03-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League_/Arsenal 26_27(2).png",
+          "ch": [
+            181,
+            151,
+            148
+          ],
+          "r_minus_b": 33,
+          "domRgb": [
+            181,
+            151,
+            147
+          ],
+          "hex": "#b59793",
+          "colorDesc": "Vermelho / Vinho"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 9.4,
+          "diffBal": 17
+        },
+        {
+          "i": 2,
+          "dE": 12.2,
+          "diffBal": 12
+        }
+      ]
+    },
+    {
+      "slug": "camisa-manga-longa-torcedor-selecoes-asia-japao-26-27",
+      "nome": "Camisa Japão 26/27 inverno masculino manga longa",
+      "clube": "Japão",
+      "liga": "selecoes",
+      "totalImgs": 2,
+      "maxDeltaE": 10.7,
+      "maxDiffBal": 19,
+      "score": 35,
+      "probabilidade": "MÉDIA (Possível Variação/Intruso)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/camisa-manga-longa-torcedor-selecoes-asia-japao-26-27/01-800.webp",
+          "source": "catalogo/🥼Camisa Manga Longa Torcedor/🌍 Seleções_/ÁSIA_/Japão 26_27 Copa do Mundo.jpg",
+          "ch": [
+            88,
+            89,
+            89
+          ],
+          "r_minus_b": -1,
+          "domRgb": [
+            88,
+            89,
+            89
+          ],
+          "hex": "#585959",
+          "colorDesc": "Cinza escuro / Grafite"
+        },
+        {
+          "src": "/otimizadas/camisa-manga-longa-torcedor-selecoes-asia-japao-26-27/02-800.webp",
+          "source": "catalogo/🥼Camisa Manga Longa Torcedor/🌍 Seleções_/ÁSIA_/Japão 26_27 Copa do Mundo(1).jpg",
+          "ch": [
+            76,
+            80,
+            96
+          ],
+          "r_minus_b": -20,
+          "domRgb": [
+            75,
+            80,
+            96
+          ],
+          "hex": "#4b5060",
+          "colorDesc": "Azul / Azul Marinho"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 10.7,
+          "diffBal": 19
+        }
+      ]
+    },
+    {
+      "slug": "camisa-jogador-brasileirao-palmeiras-26-27",
+      "nome": "Camisa Palmeiras 26/27 jogador masculino",
+      "clube": "Palmeiras",
+      "liga": "brasileirao-serie-a",
+      "totalImgs": 2,
+      "maxDeltaE": 16.6,
+      "maxDiffBal": 10,
+      "score": 34.9,
+      "probabilidade": "MÉDIA (Possível Variação/Intruso)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/camisa-jogador-brasileirao-palmeiras-26-27/01-800.webp",
+          "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇧🇷 Brasileirão_/Palmeiras 26_27_.jpg",
+          "ch": [
+            54,
+            76,
+            71
+          ],
+          "r_minus_b": -17,
+          "domRgb": [
+            54,
+            77,
+            72
+          ],
+          "hex": "#364d48",
+          "colorDesc": "Azul Celeste / Turquesa"
+        },
+        {
+          "src": "/otimizadas/camisa-jogador-brasileirao-palmeiras-26-27/03-800.webp",
+          "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇧🇷 Brasileirão_/Palmeiras 26_27(1).jpg",
+          "ch": [
+            101,
+            104,
+            108
+          ],
+          "r_minus_b": -7,
+          "domRgb": [
+            101,
+            104,
+            108
+          ],
+          "hex": "#65686c",
+          "colorDesc": "Cinza escuro / Grafite"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 16.6,
+          "diffBal": 10
+        }
+      ]
+    },
+    {
+      "slug": "femininas-campeonato-brasileiro-palmeiras-26-27",
+      "nome": "Camisa Palmeiras 26/27 feminino",
+      "clube": "Palmeiras",
+      "liga": "brasileirao-serie-a",
+      "totalImgs": 2,
+      "maxDeltaE": 12,
+      "maxDiffBal": 16,
+      "score": 34,
+      "probabilidade": "MÉDIA (Possível Variação/Intruso)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/femininas-campeonato-brasileiro-palmeiras-26-27/01-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Palmeiras 26_27.jpg",
+          "ch": [
+            61,
+            71,
+            86
+          ],
+          "r_minus_b": -25,
+          "domRgb": [
+            61,
+            71,
+            86
+          ],
+          "hex": "#3d4756",
+          "colorDesc": "Neutro / Misto"
+        },
+        {
+          "src": "/otimizadas/femininas-campeonato-brasileiro-palmeiras-26-27/02-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Palmeiras 26_27(2).jpg",
+          "ch": [
+            67,
+            79,
+            76
+          ],
+          "r_minus_b": -9,
+          "domRgb": [
+            67,
+            79,
+            76
+          ],
+          "hex": "#434f4c",
+          "colorDesc": "Cinza escuro / Grafite"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 12,
+          "diffBal": 16
+        }
+      ]
+    },
+    {
+      "slug": "retro-selecoes-europa-alemanha",
+      "nome": "Camisa Alemanha retro",
+      "clube": "Alemanha",
+      "liga": "selecoes",
+      "totalImgs": 3,
+      "maxDeltaE": 18.6,
+      "maxDiffBal": 6,
+      "score": 33.9,
+      "probabilidade": "ALTA (Possível Uniforme Diferente)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/retro-selecoes-europa-alemanha/01-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Alemanha_.jpg",
+          "ch": [
+            145,
+            142,
+            139
+          ],
+          "r_minus_b": 6,
+          "domRgb": [
+            148,
+            145,
+            142
+          ],
+          "hex": "#94918e",
+          "colorDesc": "Cinza médio"
+        },
+        {
+          "src": "/otimizadas/retro-selecoes-europa-alemanha/02-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Alemanha_(1).jpg",
+          "ch": [
+            201,
+            194,
+            193
+          ],
+          "r_minus_b": 8,
+          "domRgb": [
+            200,
+            194,
+            193
+          ],
+          "hex": "#c8c2c1",
+          "colorDesc": "Branco / Cinza claro"
+        },
+        {
+          "src": "/otimizadas/retro-selecoes-europa-alemanha/03-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Alemanha_(2).jpg",
+          "ch": [
+            161,
+            160,
+            161
+          ],
+          "r_minus_b": 0,
+          "domRgb": [
+            160,
+            160,
+            160
+          ],
+          "hex": "#a0a0a0",
+          "colorDesc": "Cinza médio"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 18.6,
+          "diffBal": 2
+        },
+        {
+          "i": 2,
+          "dE": 5.9,
+          "diffBal": 6
+        }
+      ]
+    },
+    {
+      "slug": "retro-selecoes-europa-franca-1994",
+      "nome": "Camisa França 1994 retro",
+      "clube": "França",
+      "liga": "selecoes",
+      "totalImgs": 2,
+      "maxDeltaE": 9.9,
+      "maxDiffBal": 19,
+      "score": 33.9,
+      "probabilidade": "MÉDIA (Possível Variação/Intruso)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/retro-selecoes-europa-franca-1994/01-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/França 1994.jpg",
+          "ch": [
+            140,
+            140,
+            149
+          ],
+          "r_minus_b": -9,
+          "domRgb": [
+            140,
+            140,
+            149
+          ],
+          "hex": "#8c8c95",
+          "colorDesc": "Cinza médio"
+        },
+        {
+          "src": "/otimizadas/retro-selecoes-europa-franca-1994/02-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/França 1994(1).jpg",
+          "ch": [
+            154,
+            151,
+            144
+          ],
+          "r_minus_b": 10,
+          "domRgb": [
+            154,
+            151,
+            144
+          ],
+          "hex": "#9a9790",
+          "colorDesc": "Cinza médio"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 9.9,
+          "diffBal": 19
+        }
+      ]
+    },
+    {
+      "slug": "camisa-jogador-campeonato-italiano-inter-26-27",
+      "nome": "Camisa Inter 26/27 jogador masculino",
+      "clube": "Inter",
+      "liga": "serie-a",
+      "totalImgs": 3,
+      "maxDeltaE": 11.9,
+      "maxDiffBal": 15,
+      "score": 32.9,
+      "probabilidade": "MÉDIA (Possível Variação/Intruso)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/camisa-jogador-campeonato-italiano-inter-26-27/01-800.webp",
+          "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇮🇹 Campeonato Italiano/Inter de Milão 26_27.jpg",
+          "ch": [
+            66,
+            70,
+            70
+          ],
+          "r_minus_b": -4,
+          "domRgb": [
+            66,
+            71,
+            71
+          ],
+          "hex": "#424747",
+          "colorDesc": "Cinza escuro / Grafite"
+        },
+        {
+          "src": "/otimizadas/camisa-jogador-campeonato-italiano-inter-26-27/02-800.webp",
+          "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇮🇹 Campeonato Italiano/Inter de Milão 26_27(1).jpg",
+          "ch": [
+            94,
+            97,
+            103
+          ],
+          "r_minus_b": -9,
+          "domRgb": [
+            93,
+            97,
+            103
+          ],
+          "hex": "#5d6167",
+          "colorDesc": "Cinza escuro / Grafite"
+        },
+        {
+          "src": "/otimizadas/camisa-jogador-campeonato-italiano-inter-26-27/03-800.webp",
+          "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇮🇹 Campeonato Italiano/Inter de Milão 26_27(2).jpg",
+          "ch": [
+            71,
+            78,
+            90
+          ],
+          "r_minus_b": -19,
+          "domRgb": [
+            72,
+            79,
+            91
+          ],
+          "hex": "#484f5b",
+          "colorDesc": "Cinza escuro / Grafite"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 11.9,
+          "diffBal": 5
+        },
+        {
+          "i": 2,
+          "dE": 8.4,
+          "diffBal": 15
+        }
+      ]
+    },
+    {
+      "slug": "retro-selecoes-africa-senegal",
+      "nome": "Camisa Senegal retro",
+      "clube": "Senegal",
+      "liga": "selecoes",
+      "totalImgs": 2,
+      "maxDeltaE": 16.6,
+      "maxDiffBal": 8,
+      "score": 32.9,
+      "probabilidade": "MÉDIA (Possível Variação/Intruso)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/retro-selecoes-africa-senegal/01-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/ÁFRICA_/Senegal.jpg",
+          "ch": [
+            153,
+            180,
+            158
+          ],
+          "r_minus_b": -5,
+          "domRgb": [
+            152,
+            180,
+            158
+          ],
+          "hex": "#98b49e",
+          "colorDesc": "Verde"
+        },
+        {
+          "src": "/otimizadas/retro-selecoes-africa-senegal/02-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/ÁFRICA_/Senegal(1).jpg",
+          "ch": [
+            185,
+            183,
+            182
+          ],
+          "r_minus_b": 3,
+          "domRgb": [
+            185,
+            183,
+            182
+          ],
+          "hex": "#b9b7b6",
+          "colorDesc": "Cinza médio"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 16.6,
+          "diffBal": 8
+        }
+      ]
+    },
+    {
+      "slug": "camisa-jogador-selecoes-asia-oriente-medio-iraque-26-27-copa-do-mundo-26-27",
+      "nome": "Camisa Iraque Copa do Mundo 26/27 jogador masculino",
+      "clube": "revisar",
+      "liga": "selecoes",
+      "totalImgs": 2,
+      "maxDeltaE": 13.4,
+      "maxDiffBal": 12,
+      "score": 32.1,
+      "probabilidade": "MÉDIA (Possível Variação/Intruso)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/camisa-jogador-selecoes-asia-oriente-medio-iraque-26-27-copa-do-mundo-26-27/01-800.webp",
+          "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🌍 Seleções_/ÁSIA - ORIENTE MÉDIO_/Iraque 26_27 Copa do Mundo_.jpg",
+          "ch": [
+            109,
+            132,
+            124
+          ],
+          "r_minus_b": -15,
+          "domRgb": [
+            110,
+            134,
+            125
+          ],
+          "hex": "#6e867d",
+          "colorDesc": "Neutro / Misto"
+        },
+        {
+          "src": "/otimizadas/camisa-jogador-selecoes-asia-oriente-medio-iraque-26-27-copa-do-mundo-26-27/02-800.webp",
+          "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🌍 Seleções_/ÁSIA - ORIENTE MÉDIO_/Iraque 26_27 Copa do Mundo_(1).jpg",
+          "ch": [
+            144,
+            146,
+            147
+          ],
+          "r_minus_b": -3,
+          "domRgb": [
+            149,
+            151,
+            152
+          ],
+          "hex": "#959798",
+          "colorDesc": "Cinza médio"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 13.4,
+          "diffBal": 12
+        }
+      ]
+    },
+    {
+      "slug": "camisa-jogador-selecoes-america-do-norte-central-mexico-26-27",
+      "nome": "Camisa México 26/27 jogador masculino",
+      "clube": "México",
+      "liga": "selecoes",
+      "totalImgs": 2,
+      "maxDeltaE": 14.3,
+      "maxDiffBal": 10,
+      "score": 31.5,
+      "probabilidade": "MÉDIA (Possível Variação/Intruso)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/camisa-jogador-selecoes-america-do-norte-central-mexico-26-27/01-800.webp",
+          "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🌍 Seleções_/AMÉRICA DO NORTE - CENTRAL/México 26_27 Copa do Mundo.jpg",
+          "ch": [
+            102,
+            103,
+            108
+          ],
+          "r_minus_b": -6,
+          "domRgb": [
+            101,
+            103,
+            108
+          ],
+          "hex": "#65676c",
+          "colorDesc": "Cinza escuro / Grafite"
+        },
+        {
+          "src": "/otimizadas/camisa-jogador-selecoes-america-do-norte-central-mexico-26-27/02-800.webp",
+          "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🌍 Seleções_/AMÉRICA DO NORTE - CENTRAL/México 26_27 Copa do Mundo(1).jpg",
+          "ch": [
+            62,
+            82,
+            78
+          ],
+          "r_minus_b": -16,
+          "domRgb": [
+            61,
+            82,
+            78
+          ],
+          "hex": "#3d524e",
+          "colorDesc": "Azul Celeste / Turquesa"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 14.3,
+          "diffBal": 10
+        }
+      ]
+    },
+    {
+      "slug": "femininas-campeonato-brasileiro-atletico-mineiro-25-26",
+      "nome": "Camisa Atlético Mineiro 25/26 feminino",
+      "clube": "Atlético Mineiro",
+      "liga": "brasileirao-serie-a",
+      "totalImgs": 3,
+      "maxDeltaE": 12.3,
+      "maxDiffBal": 13,
+      "score": 31.5,
+      "probabilidade": "MÉDIA (Possível Variação/Intruso)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/femininas-campeonato-brasileiro-atletico-mineiro-25-26/01-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Atlético Mineiro 25_26.jpg",
+          "ch": [
+            117,
+            119,
+            119
+          ],
+          "r_minus_b": -2,
+          "domRgb": [
+            118,
+            120,
+            119
+          ],
+          "hex": "#767877",
+          "colorDesc": "Cinza escuro / Grafite"
+        },
+        {
+          "src": "/otimizadas/femininas-campeonato-brasileiro-atletico-mineiro-25-26/02-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Atlético Mineiro 25_26(1).jpg",
+          "ch": [
+            146,
+            145,
+            141
+          ],
+          "r_minus_b": 5,
+          "domRgb": [
+            151,
+            150,
+            145
+          ],
+          "hex": "#979691",
+          "colorDesc": "Cinza médio"
+        },
+        {
+          "src": "/otimizadas/femininas-campeonato-brasileiro-atletico-mineiro-25-26/03-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Atlético Mineiro 25_26(2).jpg",
+          "ch": [
+            151,
+            149,
+            140
+          ],
+          "r_minus_b": 11,
+          "domRgb": [
+            151,
+            149,
+            140
+          ],
+          "hex": "#97958c",
+          "colorDesc": "Cinza médio"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 12.1,
+          "diffBal": 7
+        },
+        {
+          "i": 2,
+          "dE": 12.3,
+          "diffBal": 13
+        }
+      ]
+    },
+    {
+      "slug": "camisa-jogador-liga-mexicana-leon-26-27-26-27",
+      "nome": "Camisa León 26/27 jogador masculino",
+      "clube": "revisar",
+      "liga": "revisar",
+      "totalImgs": 2,
+      "maxDeltaE": 14.2,
+      "maxDiffBal": 9,
+      "score": 30.3,
+      "probabilidade": "MÉDIA (Possível Variação/Intruso)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/camisa-jogador-liga-mexicana-leon-26-27-26-27/01-800.webp",
+          "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇲🇽 Liga Mexicana_/León 26_27.jpg",
+          "ch": [
+            108,
+            115,
+            116
+          ],
+          "r_minus_b": -8,
+          "domRgb": [
+            108,
+            115,
+            116
+          ],
+          "hex": "#6c7374",
+          "colorDesc": "Cinza escuro / Grafite"
+        },
+        {
+          "src": "/otimizadas/camisa-jogador-liga-mexicana-leon-26-27-26-27/02-800.webp",
+          "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇲🇽 Liga Mexicana_/León 26_27(1).jpg",
+          "ch": [
+            66,
+            88,
+            83
+          ],
+          "r_minus_b": -17,
+          "domRgb": [
+            66,
+            89,
+            84
+          ],
+          "hex": "#425954",
+          "colorDesc": "Azul Celeste / Turquesa"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 14.2,
+          "diffBal": 9
+        }
+      ]
+    },
+    {
+      "slug": "retro-selecoes-europa-portugal-titular",
+      "nome": "Camisa Portugal retro – Casa",
+      "clube": "Portugal",
+      "liga": "selecoes",
+      "totalImgs": 2,
+      "maxDeltaE": 9.8,
+      "maxDiffBal": 15,
+      "score": 29.7,
+      "probabilidade": "MÉDIA (Possível Variação/Intruso)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/retro-selecoes-europa-portugal/02-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Portugal_(1).jpg",
+          "ch": [
+            183,
+            130,
+            131
+          ],
+          "r_minus_b": 52,
+          "domRgb": [
+            183,
+            130,
+            130
+          ],
+          "hex": "#b78282",
+          "colorDesc": "Vermelho / Vinho"
+        },
+        {
+          "src": "/otimizadas/retro-selecoes-europa-portugal/03-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Portugal_(2).jpg",
+          "ch": [
+            184,
+            149,
+            147
+          ],
+          "r_minus_b": 37,
+          "domRgb": [
+            183,
+            149,
+            146
+          ],
+          "hex": "#b79592",
+          "colorDesc": "Vermelho / Vinho"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 9.8,
+          "diffBal": 15
+        }
+      ]
+    },
+    {
+      "slug": "femininas-campeonato-brasileiro-sport-26-27-26-27",
+      "nome": "Camisa Sport 26/27 feminino",
+      "clube": "revisar",
+      "liga": "brasileirao-serie-a",
+      "totalImgs": 2,
+      "maxDeltaE": 12.4,
+      "maxDiffBal": 10,
+      "score": 28.6,
+      "probabilidade": "MÉDIA (Possível Variação/Intruso)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/femininas-campeonato-brasileiro-sport-26-27-26-27/01-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Sport 26_27.png",
+          "ch": [
+            175,
+            168,
+            147
+          ],
+          "r_minus_b": 28,
+          "domRgb": [
+            175,
+            168,
+            146
+          ],
+          "hex": "#afa892",
+          "colorDesc": "Neutro / Misto"
+        },
+        {
+          "src": "/otimizadas/femininas-campeonato-brasileiro-sport-26-27-26-27/02-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Sport 26_27(1).png",
+          "ch": [
+            160,
+            145,
+            142
+          ],
+          "r_minus_b": 18,
+          "domRgb": [
+            160,
+            146,
+            142
+          ],
+          "hex": "#a0928e",
+          "colorDesc": "Cinza médio"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 12.4,
+          "diffBal": 10
+        }
+      ]
+    },
+    {
+      "slug": "retro-campeonato-brasileiro-corinthians-1997",
+      "nome": "Camisa Corinthians 1997 retro",
+      "clube": "Corinthians",
+      "liga": "brasileirao-serie-a",
+      "totalImgs": 2,
+      "maxDeltaE": 12,
+      "maxDiffBal": 10,
+      "score": 28,
+      "probabilidade": "MÉDIA (Possível Variação/Intruso)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/retro-campeonato-brasileiro-corinthians-1997/01-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Corinthians 1997.jpg",
+          "ch": [
+            149,
+            147,
+            145
+          ],
+          "r_minus_b": 4,
+          "domRgb": [
+            151,
+            150,
+            147
+          ],
+          "hex": "#979693",
+          "colorDesc": "Cinza médio"
+        },
+        {
+          "src": "/otimizadas/retro-campeonato-brasileiro-corinthians-1997/02-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Corinthians 1997(1).jpg",
+          "ch": [
+            125,
+            121,
+            111
+          ],
+          "r_minus_b": 14,
+          "domRgb": [
+            125,
+            121,
+            111
+          ],
+          "hex": "#7d796f",
+          "colorDesc": "Cinza escuro / Grafite"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 12,
+          "diffBal": 10
+        }
+      ]
+    },
+    {
+      "slug": "retro-campeonato-italiano-roma-1991",
+      "nome": "Camisa Roma 1991 retro",
+      "clube": "Roma",
+      "liga": "serie-a",
+      "totalImgs": 2,
+      "maxDeltaE": 16.5,
+      "maxDiffBal": 3,
+      "score": 27.8,
+      "probabilidade": "MÉDIA (Possível Variação/Intruso)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/retro-campeonato-italiano-roma-1991/01-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🇮🇹 Campeonato Italiano_/Roma 1991.jpg",
+          "ch": [
+            146,
+            148,
+            149
+          ],
+          "r_minus_b": -3,
+          "domRgb": [
+            147,
+            149,
+            150
+          ],
+          "hex": "#939596",
+          "colorDesc": "Cinza médio"
+        },
+        {
+          "src": "/otimizadas/retro-campeonato-italiano-roma-1991/02-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🇮🇹 Campeonato Italiano_/Roma 1991(1).jpg",
+          "ch": [
+            106,
+            106,
+            106
+          ],
+          "r_minus_b": 0,
+          "domRgb": [
+            106,
+            107,
+            106
+          ],
+          "hex": "#6a6b6a",
+          "colorDesc": "Cinza escuro / Grafite"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 16.5,
+          "diffBal": 3
+        }
+      ]
+    },
+    {
+      "slug": "femininas-selecoes-europa-holanda-26-27-copa-do-mundo-26-27",
+      "nome": "Camisa Holanda Copa do Mundo 26/27 feminino",
+      "clube": "revisar",
+      "liga": "selecoes",
+      "totalImgs": 2,
+      "maxDeltaE": 7,
+      "maxDiffBal": 17,
+      "score": 27.5,
+      "probabilidade": "MÉDIA (Possível Variação/Intruso)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/femininas-selecoes-europa-holanda-26-27-copa-do-mundo-26-27/01-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🌍 Seleções_/EUROPA/Holanda 26_27 Copa do Mundo_.png",
+          "ch": [
+            163,
+            151,
+            142
+          ],
+          "r_minus_b": 21,
+          "domRgb": [
+            163,
+            151,
+            141
+          ],
+          "hex": "#a3978d",
+          "colorDesc": "Neutro / Misto"
+        },
+        {
+          "src": "/otimizadas/femininas-selecoes-europa-holanda-26-27-copa-do-mundo-26-27/02-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🌍 Seleções_/EUROPA/Holanda 26_27 Copa do Mundo_(1).png",
+          "ch": [
+            175,
+            146,
+            137
+          ],
+          "r_minus_b": 38,
+          "domRgb": [
+            175,
+            146,
+            137
+          ],
+          "hex": "#af9289",
+          "colorDesc": "Vermelho / Vinho"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 7,
+          "diffBal": 17
+        }
+      ]
+    },
+    {
+      "slug": "retro-selecoes-europa-dinamarca",
+      "nome": "Camisa Dinamarca retro",
+      "clube": "revisar",
+      "liga": "selecoes",
+      "totalImgs": 2,
+      "maxDeltaE": 9.2,
+      "maxDiffBal": 13,
+      "score": 26.8,
+      "probabilidade": "MÉDIA (Possível Variação/Intruso)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/retro-selecoes-europa-dinamarca/01-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Dinamarca_.jpg",
+          "ch": [
+            166,
+            129,
+            126
+          ],
+          "r_minus_b": 40,
+          "domRgb": [
+            165,
+            129,
+            126
+          ],
+          "hex": "#a5817e",
+          "colorDesc": "Vermelho / Vinho"
+        },
+        {
+          "src": "/otimizadas/retro-selecoes-europa-dinamarca/02-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Dinamarca_(1).jpg",
+          "ch": [
+            187,
+            131,
+            134
+          ],
+          "r_minus_b": 53,
+          "domRgb": [
+            187,
+            131,
+            134
+          ],
+          "hex": "#bb8386",
+          "colorDesc": "Vermelho / Vinho"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 9.2,
+          "diffBal": 13
+        }
+      ]
+    },
+    {
+      "slug": "retro-selecoes-africa-nigeria",
+      "nome": "Camisa Nigéria retro",
+      "clube": "Nigéria",
+      "liga": "selecoes",
+      "totalImgs": 2,
+      "maxDeltaE": 9.8,
+      "maxDiffBal": 12,
+      "score": 26.7,
+      "probabilidade": "BAIXA (Provável Frente/Verso Legítimo)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/retro-selecoes-africa-nigeria/01-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/ÁFRICA_/Nigéria_.jpg",
+          "ch": [
+            159,
+            185,
+            177
+          ],
+          "r_minus_b": -18,
+          "domRgb": [
+            159,
+            185,
+            177
+          ],
+          "hex": "#9fb9b1",
+          "colorDesc": "Azul Celeste / Turquesa"
+        },
+        {
+          "src": "/otimizadas/retro-selecoes-africa-nigeria/02-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🌍 Seleções_/ÁFRICA_/Nigéria_(1).jpg",
+          "ch": [
+            153,
+            162,
+            159
+          ],
+          "r_minus_b": -6,
+          "domRgb": [
+            153,
+            162,
+            159
+          ],
+          "hex": "#99a29f",
+          "colorDesc": "Cinza médio"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 9.8,
+          "diffBal": 12
+        }
+      ]
+    },
+    {
+      "slug": "camisa-manga-longa-torcedor-selecoes-america-do-norte-mexico-26-27",
+      "nome": "Camisa México 26/27 inverno masculino manga longa",
+      "clube": "México",
+      "liga": "selecoes",
+      "totalImgs": 3,
+      "maxDeltaE": 10.2,
+      "maxDiffBal": 11,
+      "score": 26.3,
+      "probabilidade": "BAIXA (Provável Frente/Verso Legítimo)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/camisa-manga-longa-torcedor-selecoes-america-do-norte-mexico-26-27/01-800.webp",
+          "source": "catalogo/🥼Camisa Manga Longa Torcedor/🌍 Seleções_/AMÉRICA DO NORTE/México 26_27 Copa do Mundo_.jpg",
+          "ch": [
+            90,
+            90,
+            93
+          ],
+          "r_minus_b": -3,
+          "domRgb": [
+            90,
+            90,
+            93
+          ],
+          "hex": "#5a5a5d",
+          "colorDesc": "Cinza escuro / Grafite"
+        },
+        {
+          "src": "/otimizadas/camisa-manga-longa-torcedor-selecoes-america-do-norte-mexico-26-27/02-800.webp",
+          "source": "catalogo/🥼Camisa Manga Longa Torcedor/🌍 Seleções_/AMÉRICA DO NORTE/México 26_27 Copa do Mundo_(1).jpg",
+          "ch": [
+            77,
+            94,
+            91
+          ],
+          "r_minus_b": -14,
+          "domRgb": [
+            76,
+            94,
+            91
+          ],
+          "hex": "#4c5e5b",
+          "colorDesc": "Cinza escuro / Grafite"
+        },
+        {
+          "src": "/otimizadas/camisa-manga-longa-torcedor-selecoes-america-do-norte-mexico-26-27/03-800.webp",
+          "source": "catalogo/🥼Camisa Manga Longa Torcedor/🌍 Seleções_/AMÉRICA DO NORTE/México 26_27 Copa do Mundo.jpg",
+          "ch": [
+            112,
+            115,
+            114
+          ],
+          "r_minus_b": -2,
+          "domRgb": [
+            112,
+            115,
+            114
+          ],
+          "hex": "#707372",
+          "colorDesc": "Cinza escuro / Grafite"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 8.3,
+          "diffBal": 11
+        },
+        {
+          "i": 2,
+          "dE": 10.2,
+          "diffBal": 1
+        }
+      ]
+    },
+    {
+      "slug": "camisa-jogador-selecoes-europa-alemanha-26-27",
+      "nome": "Camisa Alemanha 26/27 jogador masculino",
+      "clube": "Alemanha",
+      "liga": "selecoes",
+      "totalImgs": 2,
+      "maxDeltaE": 10.1,
+      "maxDiffBal": 11,
+      "score": 26.1,
+      "probabilidade": "BAIXA (Provável Frente/Verso Legítimo)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/camisa-jogador-selecoes-europa-alemanha-26-27/01-800.webp",
+          "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🌍 Seleções_/EUROPA/Alemanha 26_27 Copa do Mundo.jpg",
+          "ch": [
+            71,
+            76,
+            83
+          ],
+          "r_minus_b": -12,
+          "domRgb": [
+            71,
+            77,
+            83
+          ],
+          "hex": "#474d53",
+          "colorDesc": "Cinza escuro / Grafite"
+        },
+        {
+          "src": "/otimizadas/camisa-jogador-selecoes-europa-alemanha-26-27/02-800.webp",
+          "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🌍 Seleções_/EUROPA/Alemanha 26_27 Copa do Mundo(1).jpg",
+          "ch": [
+            100,
+            98,
+            101
+          ],
+          "r_minus_b": -1,
+          "domRgb": [
+            100,
+            98,
+            101
+          ],
+          "hex": "#646265",
+          "colorDesc": "Cinza escuro / Grafite"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 10.1,
+          "diffBal": 11
+        }
+      ]
+    },
+    {
+      "slug": "camisa-manga-longa-torcedor-selecoes-europa-portugal-26-27",
+      "nome": "Camisa Portugal 26/27 inverno masculino manga longa",
+      "clube": "Portugal",
+      "liga": "selecoes",
+      "totalImgs": 2,
+      "maxDeltaE": 6,
+      "maxDiffBal": 16,
+      "score": 25,
+      "probabilidade": "MÉDIA (Possível Variação/Intruso)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/camisa-manga-longa-torcedor-selecoes-europa-portugal-26-27/01-800.webp",
+          "source": "catalogo/🥼Camisa Manga Longa Torcedor/🌍 Seleções_/EUROPA/Portugal 26_27 Copa do Mundo.jpg",
+          "ch": [
+            92,
+            92,
+            92
+          ],
+          "r_minus_b": 0,
+          "domRgb": [
+            93,
+            93,
+            93
+          ],
+          "hex": "#5d5d5d",
+          "colorDesc": "Cinza escuro / Grafite"
+        },
+        {
+          "src": "/otimizadas/camisa-manga-longa-torcedor-selecoes-europa-portugal-26-27/03-800.webp",
+          "source": "catalogo/🥼Camisa Manga Longa Torcedor/🌍 Seleções_/EUROPA/Portugal 26_27 Copa Do Mundo(2).jpg",
+          "ch": [
+            76,
+            89,
+            92
+          ],
+          "r_minus_b": -16,
+          "domRgb": [
+            76,
+            89,
+            91
+          ],
+          "hex": "#4c595b",
+          "colorDesc": "Cinza escuro / Grafite"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 6,
+          "diffBal": 16
+        }
+      ]
+    },
+    {
+      "slug": "femininas-la-liga-real-madrid-26-27",
+      "nome": "Camisa Real Madrid 26/27 feminino",
+      "clube": "Real Madrid",
+      "liga": "la-liga",
+      "totalImgs": 3,
+      "maxDeltaE": 8.9,
+      "maxDiffBal": 11,
+      "score": 24.4,
+      "probabilidade": "BAIXA (Provável Frente/Verso Legítimo)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/femininas-la-liga-real-madrid-26-27/01-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🇪🇸 La Liga/Real Madrid 26_27.jpg",
+          "ch": [
+            165,
+            158,
+            147
+          ],
+          "r_minus_b": 18,
+          "domRgb": [
+            164,
+            157,
+            146
+          ],
+          "hex": "#a49d92",
+          "colorDesc": "Cinza médio"
+        },
+        {
+          "src": "/otimizadas/femininas-la-liga-real-madrid-26-27/02-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🇪🇸 La Liga/Real Madrid 26_27.png",
+          "ch": [
+            159,
+            158,
+            152
+          ],
+          "r_minus_b": 7,
+          "domRgb": [
+            159,
+            159,
+            152
+          ],
+          "hex": "#9f9f98",
+          "colorDesc": "Cinza médio"
+        },
+        {
+          "src": "/otimizadas/femininas-la-liga-real-madrid-26-27/03-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🇪🇸 La Liga/Real Madrid 26_27(1).png",
+          "ch": [
+            171,
+            149,
+            150
+          ],
+          "r_minus_b": 21,
+          "domRgb": [
+            171,
+            149,
+            150
+          ],
+          "hex": "#ab9596",
+          "colorDesc": "Neutro / Misto"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 3.6,
+          "diffBal": 11
+        },
+        {
+          "i": 2,
+          "dE": 8.9,
+          "diffBal": 3
+        }
+      ]
+    },
+    {
+      "slug": "retro-campeonato-brasileiro-fluminense",
+      "nome": "Camisa Fluminense retro",
+      "clube": "Fluminense",
+      "liga": "brasileirao-serie-a",
+      "totalImgs": 2,
+      "maxDeltaE": 8.9,
+      "maxDiffBal": 10,
+      "score": 23.4,
+      "probabilidade": "BAIXA (Provável Frente/Verso Legítimo)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/retro-campeonato-brasileiro-fluminense/01-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Fluminense_.jpg",
+          "ch": [
+            155,
+            153,
+            151
+          ],
+          "r_minus_b": 4,
+          "domRgb": [
+            155,
+            154,
+            151
+          ],
+          "hex": "#9b9a97",
+          "colorDesc": "Cinza médio"
+        },
+        {
+          "src": "/otimizadas/retro-campeonato-brasileiro-fluminense/02-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Fluminense_(1).jpg",
+          "ch": [
+            145,
+            132,
+            131
+          ],
+          "r_minus_b": 14,
+          "domRgb": [
+            145,
+            132,
+            131
+          ],
+          "hex": "#918483",
+          "colorDesc": "Cinza médio"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 8.9,
+          "diffBal": 10
+        }
+      ]
+    },
+    {
+      "slug": "retro-campeonato-brasileiro-vasco-da-gama",
+      "nome": "Camisa Vasco da Gama retro",
+      "clube": "Vasco da Gama",
+      "liga": "brasileirao-serie-a",
+      "totalImgs": 2,
+      "maxDeltaE": 15.5,
+      "maxDiffBal": 0,
+      "score": 23.3,
+      "probabilidade": "MÉDIA (Possível Variação/Intruso)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/retro-campeonato-brasileiro-vasco-da-gama/01-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Vasco.jpg",
+          "ch": [
+            201,
+            200,
+            198
+          ],
+          "r_minus_b": 3,
+          "domRgb": [
+            201,
+            200,
+            198
+          ],
+          "hex": "#c9c8c6",
+          "colorDesc": "Branco / Cinza claro"
+        },
+        {
+          "src": "/otimizadas/retro-campeonato-brasileiro-vasco-da-gama/02-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Vasco(1).jpg",
+          "ch": [
+            159,
+            157,
+            156
+          ],
+          "r_minus_b": 3,
+          "domRgb": [
+            159,
+            158,
+            157
+          ],
+          "hex": "#9f9e9d",
+          "colorDesc": "Cinza médio"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 15.5,
+          "diffBal": 0
+        }
+      ]
+    },
+    {
+      "slug": "femininas-campeonato-brasileiro-sport-24-25-24-25",
+      "nome": "Camisa Sport 24/25 feminino",
+      "clube": "revisar",
+      "liga": "brasileirao-serie-a",
+      "totalImgs": 2,
+      "maxDeltaE": 6.5,
+      "maxDiffBal": 13,
+      "score": 22.8,
+      "probabilidade": "MÉDIA (Possível Variação/Intruso)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/femininas-campeonato-brasileiro-sport-24-25-24-25/01-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Sport 24_25.jpg",
+          "ch": [
+            176,
+            147,
+            143
+          ],
+          "r_minus_b": 33,
+          "domRgb": [
+            176,
+            147,
+            143
+          ],
+          "hex": "#b0938f",
+          "colorDesc": "Vermelho / Vinho"
+        },
+        {
+          "src": "/otimizadas/femininas-campeonato-brasileiro-sport-24-25-24-25/02-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Sport 24_25(1).jpg",
+          "ch": [
+            160,
+            145,
+            140
+          ],
+          "r_minus_b": 20,
+          "domRgb": [
+            159,
+            145,
+            139
+          ],
+          "hex": "#9f918b",
+          "colorDesc": "Neutro / Misto"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 6.5,
+          "diffBal": 13
+        }
+      ]
+    },
+    {
+      "slug": "camisa-jogador-la-liga-barcelona-26-27",
+      "nome": "Camisa Barcelona 26/27 jogador masculino",
+      "clube": "Barcelona",
+      "liga": "la-liga",
+      "totalImgs": 2,
+      "maxDeltaE": 7,
+      "maxDiffBal": 12,
+      "score": 22.5,
+      "probabilidade": "BAIXA (Provável Frente/Verso Legítimo)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/camisa-jogador-la-liga-barcelona-26-27/01-800.webp",
+          "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇪🇸 La Liga/Barcelona 26_27.jpg",
+          "ch": [
+            80,
+            71,
+            74
+          ],
+          "r_minus_b": 6,
+          "domRgb": [
+            81,
+            71,
+            74
+          ],
+          "hex": "#51474a",
+          "colorDesc": "Cinza escuro / Grafite"
+        },
+        {
+          "src": "/otimizadas/camisa-jogador-la-liga-barcelona-26-27/03-800.webp",
+          "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇪🇸 La Liga/Barcelona 26_27(1).jpg",
+          "ch": [
+            86,
+            84,
+            92
+          ],
+          "r_minus_b": -6,
+          "domRgb": [
+            86,
+            85,
+            92
+          ],
+          "hex": "#56555c",
+          "colorDesc": "Cinza escuro / Grafite"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 7,
+          "diffBal": 12
+        }
+      ]
+    },
+    {
+      "slug": "retro-campeonato-brasileiro-botafogo-1995",
+      "nome": "Camisa Botafogo 1995 retro",
+      "clube": "Botafogo",
+      "liga": "brasileirao-serie-a",
+      "totalImgs": 3,
+      "maxDeltaE": 9,
+      "maxDiffBal": 8,
+      "score": 21.5,
+      "probabilidade": "BAIXA (Provável Frente/Verso Legítimo)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/retro-campeonato-brasileiro-botafogo-1995/01-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Botafogo 1995.jpg",
+          "ch": [
+            112,
+            120,
+            118
+          ],
+          "r_minus_b": -6,
+          "domRgb": [
+            112,
+            121,
+            118
+          ],
+          "hex": "#707976",
+          "colorDesc": "Cinza escuro / Grafite"
+        },
+        {
+          "src": "/otimizadas/retro-campeonato-brasileiro-botafogo-1995/02-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Botafogo 1995(1).jpg",
+          "ch": [
+            138,
+            139,
+            136
+          ],
+          "r_minus_b": 2,
+          "domRgb": [
+            140,
+            141,
+            137
+          ],
+          "hex": "#8c8d89",
+          "colorDesc": "Cinza médio"
+        },
+        {
+          "src": "/otimizadas/retro-campeonato-brasileiro-botafogo-1995/03-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Botafogo 1995(2).jpg",
+          "ch": [
+            127,
+            130,
+            127
+          ],
+          "r_minus_b": 0,
+          "domRgb": [
+            127,
+            131,
+            127
+          ],
+          "hex": "#7f837f",
+          "colorDesc": "Cinza escuro / Grafite"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 9,
+          "diffBal": 8
+        },
+        {
+          "i": 2,
+          "dE": 4.8,
+          "diffBal": 6
+        }
+      ]
+    },
+    {
+      "slug": "retro-campeonato-brasileiro-corinthians-2011",
+      "nome": "Camisa Corinthians 2011 retro",
+      "clube": "Corinthians",
+      "liga": "brasileirao-serie-a",
+      "totalImgs": 3,
+      "maxDeltaE": 12.7,
+      "maxDiffBal": 2,
+      "score": 21,
+      "probabilidade": "MÉDIA (Possível Variação/Intruso)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/retro-campeonato-brasileiro-corinthians-2011/01-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Corinthians 2011.jpg",
+          "ch": [
+            125,
+            124,
+            123
+          ],
+          "r_minus_b": 2,
+          "domRgb": [
+            126,
+            126,
+            124
+          ],
+          "hex": "#7e7e7c",
+          "colorDesc": "Cinza escuro / Grafite"
+        },
+        {
+          "src": "/otimizadas/retro-campeonato-brasileiro-corinthians-2011/02-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Corinthians 2011(1).jpg",
+          "ch": [
+            152,
+            150,
+            148
+          ],
+          "r_minus_b": 4,
+          "domRgb": [
+            153,
+            152,
+            150
+          ],
+          "hex": "#999896",
+          "colorDesc": "Cinza médio"
+        },
+        {
+          "src": "/otimizadas/retro-campeonato-brasileiro-corinthians-2011/03-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Corinthians 2011(2).jpg",
+          "ch": [
+            157,
+            156,
+            153
+          ],
+          "r_minus_b": 4,
+          "domRgb": [
+            159,
+            159,
+            155
+          ],
+          "hex": "#9f9f9b",
+          "colorDesc": "Cinza médio"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 10.1,
+          "diffBal": 2
+        },
+        {
+          "i": 2,
+          "dE": 12.7,
+          "diffBal": 2
+        }
+      ]
+    },
+    {
+      "slug": "femininas-campeonato-brasileiro-botafogo-25-26",
+      "nome": "Camisa Botafogo 25/26 feminino",
+      "clube": "Botafogo",
+      "liga": "brasileirao-serie-a",
+      "totalImgs": 2,
+      "maxDeltaE": 12.7,
+      "maxDiffBal": 1,
+      "score": 20,
+      "probabilidade": "MÉDIA (Possível Variação/Intruso)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/femininas-campeonato-brasileiro-botafogo-25-26/01-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Botafogo 25_26.jpg",
+          "ch": [
+            174,
+            176,
+            174
+          ],
+          "r_minus_b": 0,
+          "domRgb": [
+            163,
+            164,
+            162
+          ],
+          "hex": "#a3a4a2",
+          "colorDesc": "Cinza médio"
+        },
+        {
+          "src": "/otimizadas/femininas-campeonato-brasileiro-botafogo-25-26/03-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Botafogo 25_26(2).jpg",
+          "ch": [
+            128,
+            129,
+            127
+          ],
+          "r_minus_b": 1,
+          "domRgb": [
+            129,
+            131,
+            128
+          ],
+          "hex": "#818380",
+          "colorDesc": "Cinza escuro / Grafite"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 12.7,
+          "diffBal": 1
+        }
+      ]
+    },
+    {
+      "slug": "femininas-campeonato-brasileiro-botafogo-24-25",
+      "nome": "Camisa Botafogo 24/25 feminino",
+      "clube": "Botafogo",
+      "liga": "brasileirao-serie-a",
+      "totalImgs": 3,
+      "maxDeltaE": 7.9,
+      "maxDiffBal": 8,
+      "score": 19.9,
+      "probabilidade": "BAIXA (Provável Frente/Verso Legítimo)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/femininas-campeonato-brasileiro-botafogo-24-25/01-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Botafogo 24_25.jpg",
+          "ch": [
+            157,
+            155,
+            147
+          ],
+          "r_minus_b": 10,
+          "domRgb": [
+            158,
+            156,
+            147
+          ],
+          "hex": "#9e9c93",
+          "colorDesc": "Cinza médio"
+        },
+        {
+          "src": "/otimizadas/femininas-campeonato-brasileiro-botafogo-24-25/02-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Botafogo 24_25(1).jpg",
+          "ch": [
+            151,
+            149,
+            142
+          ],
+          "r_minus_b": 9,
+          "domRgb": [
+            150,
+            149,
+            142
+          ],
+          "hex": "#96958e",
+          "colorDesc": "Cinza médio"
+        },
+        {
+          "src": "/otimizadas/femininas-campeonato-brasileiro-botafogo-24-25/03-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Botafogo 24_25(2).jpg",
+          "ch": [
+            138,
+            138,
+            136
+          ],
+          "r_minus_b": 2,
+          "domRgb": [
+            138,
+            138,
+            136
+          ],
+          "hex": "#8a8a88",
+          "colorDesc": "Cinza médio"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 2.9,
+          "diffBal": 1
+        },
+        {
+          "i": 2,
+          "dE": 7.9,
+          "diffBal": 8
+        }
+      ]
+    },
+    {
+      "slug": "retro-campeonato-brasileiro-corinthians-2005",
+      "nome": "Camisa Corinthians 2005 retro",
+      "clube": "Corinthians",
+      "liga": "brasileirao-serie-a",
+      "totalImgs": 2,
+      "maxDeltaE": 11.8,
+      "maxDiffBal": 1,
+      "score": 18.7,
+      "probabilidade": "BAIXA (Provável Frente/Verso Legítimo)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/retro-campeonato-brasileiro-corinthians-2005/01-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Corinthians 2005.png",
+          "ch": [
+            176,
+            170,
+            164
+          ],
+          "r_minus_b": 12,
+          "domRgb": [
+            176,
+            170,
+            165
+          ],
+          "hex": "#b0aaa5",
+          "colorDesc": "Cinza médio"
+        },
+        {
+          "src": "/otimizadas/retro-campeonato-brasileiro-corinthians-2005/02-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Corinthians 2005(1).png",
+          "ch": [
+            144,
+            139,
+            133
+          ],
+          "r_minus_b": 11,
+          "domRgb": [
+            144,
+            139,
+            134
+          ],
+          "hex": "#908b86",
+          "colorDesc": "Cinza médio"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 11.8,
+          "diffBal": 1
+        }
+      ]
+    },
+    {
+      "slug": "retro-campeonato-brasileiro-corinthians-1998",
+      "nome": "Camisa Corinthians 1998 retro",
+      "clube": "Corinthians",
+      "liga": "brasileirao-serie-a",
+      "totalImgs": 2,
+      "maxDeltaE": 10,
+      "maxDiffBal": 2,
+      "score": 17,
+      "probabilidade": "BAIXA (Provável Frente/Verso Legítimo)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/retro-campeonato-brasileiro-corinthians-1998/01-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Corinthians 1998.jpg",
+          "ch": [
+            59,
+            60,
+            60
+          ],
+          "r_minus_b": -1,
+          "domRgb": [
+            60,
+            60,
+            61
+          ],
+          "hex": "#3c3c3d",
+          "colorDesc": "Cinza escuro / Grafite"
+        },
+        {
+          "src": "/otimizadas/retro-campeonato-brasileiro-corinthians-1998/02-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Corinthians 1998(1).jpg",
+          "ch": [
+            84,
+            83,
+            83
+          ],
+          "r_minus_b": 1,
+          "domRgb": [
+            83,
+            83,
+            83
+          ],
+          "hex": "#535353",
+          "colorDesc": "Cinza escuro / Grafite"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 10,
+          "diffBal": 2
+        }
+      ]
+    },
+    {
+      "slug": "camisa-jogador-brasileirao-sao-paulo-26-27",
+      "nome": "Camisa São Paulo 26/27 jogador masculino",
+      "clube": "São Paulo",
+      "liga": "brasileirao-serie-a",
+      "totalImgs": 3,
+      "maxDeltaE": 6.6,
+      "maxDiffBal": 7,
+      "score": 16.9,
+      "probabilidade": "BAIXA (Provável Frente/Verso Legítimo)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/camisa-jogador-brasileirao-sao-paulo-26-27/01-800.webp",
+          "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇧🇷 Brasileirão_/São Paulo 26_27.jpg",
+          "ch": [
+            162,
+            153,
+            143
+          ],
+          "r_minus_b": 19,
+          "domRgb": [
+            163,
+            153,
+            143
+          ],
+          "hex": "#a3998f",
+          "colorDesc": "Neutro / Misto"
+        },
+        {
+          "src": "/otimizadas/camisa-jogador-brasileirao-sao-paulo-26-27/02-800.webp",
+          "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇧🇷 Brasileirão_/São Paulo 26_27.png",
+          "ch": [
+            174,
+            168,
+            162
+          ],
+          "r_minus_b": 12,
+          "domRgb": [
+            175,
+            170,
+            163
+          ],
+          "hex": "#afaaa3",
+          "colorDesc": "Cinza médio"
+        },
+        {
+          "src": "/otimizadas/camisa-jogador-brasileirao-sao-paulo-26-27/03-800.webp",
+          "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇧🇷 Brasileirão_/São Paulo 26_27(1).png",
+          "ch": [
+            165,
+            148,
+            143
+          ],
+          "r_minus_b": 22,
+          "domRgb": [
+            166,
+            149,
+            144
+          ],
+          "hex": "#a69590",
+          "colorDesc": "Neutro / Misto"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 6.6,
+          "diffBal": 7
+        },
+        {
+          "i": 2,
+          "dE": 4,
+          "diffBal": 3
+        }
+      ]
+    },
+    {
+      "slug": "femininas-campeonato-brasileiro-vasco-da-gama-24-25",
+      "nome": "Camisa Vasco da Gama 24/25 feminino",
+      "clube": "Vasco da Gama",
+      "liga": "brasileirao-serie-a",
+      "totalImgs": 4,
+      "maxDeltaE": 7.5,
+      "maxDiffBal": 4,
+      "score": 15.3,
+      "probabilidade": "BAIXA (Provável Frente/Verso Legítimo)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/femininas-campeonato-brasileiro-vasco-da-gama-24-25/01-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Vasco 24_25.jpg",
+          "ch": [
+            141,
+            139,
+            134
+          ],
+          "r_minus_b": 7,
+          "domRgb": [
+            140,
+            140,
+            134
+          ],
+          "hex": "#8c8c86",
+          "colorDesc": "Cinza médio"
+        },
+        {
+          "src": "/otimizadas/femininas-campeonato-brasileiro-vasco-da-gama-24-25/02-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Vasco 24_25(1).jpg",
+          "ch": [
+            161,
+            159,
+            150
+          ],
+          "r_minus_b": 11,
+          "domRgb": [
+            161,
+            159,
+            150
+          ],
+          "hex": "#a19f96",
+          "colorDesc": "Cinza médio"
+        },
+        {
+          "src": "/otimizadas/femininas-campeonato-brasileiro-vasco-da-gama-24-25/03-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Vasco 24_25(2).jpg",
+          "ch": [
+            142,
+            140,
+            132
+          ],
+          "r_minus_b": 10,
+          "domRgb": [
+            142,
+            139,
+            132
+          ],
+          "hex": "#8e8b84",
+          "colorDesc": "Cinza médio"
+        },
+        {
+          "src": "/otimizadas/femininas-campeonato-brasileiro-vasco-da-gama-24-25/04-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Vasco 24_25(3).jpg",
+          "ch": [
+            150,
+            148,
+            142
+          ],
+          "r_minus_b": 8,
+          "domRgb": [
+            151,
+            149,
+            143
+          ],
+          "hex": "#97958f",
+          "colorDesc": "Cinza médio"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 7.5,
+          "diffBal": 4
+        },
+        {
+          "i": 2,
+          "dE": 1.3,
+          "diffBal": 3
+        },
+        {
+          "i": 3,
+          "dE": 3.7,
+          "diffBal": 1
+        }
+      ]
+    },
+    {
+      "slug": "femininas-campeonato-da-arabia-saudita-al-nassr-23-24",
+      "nome": "Camisa Al-Nassr 23/24 feminino",
+      "clube": "Al-Nassr",
+      "liga": "saudi-pro-league",
+      "totalImgs": 2,
+      "maxDeltaE": 3.7,
+      "maxDiffBal": 9,
+      "score": 14.6,
+      "probabilidade": "BAIXA (Provável Frente/Verso Legítimo)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/femininas-campeonato-da-arabia-saudita-al-nassr-23-24/01-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🇸🇦 Campeonato da Arábia Saudita/Al Nassr 23_24.jpg",
+          "ch": [
+            158,
+            153,
+            148
+          ],
+          "r_minus_b": 10,
+          "domRgb": [
+            158,
+            153,
+            148
+          ],
+          "hex": "#9e9994",
+          "colorDesc": "Cinza médio"
+        },
+        {
+          "src": "/otimizadas/femininas-campeonato-da-arabia-saudita-al-nassr-23-24/03-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🇸🇦 Campeonato da Arábia Saudita/Al Nassr 23_24(2).jpg",
+          "ch": [
+            152,
+            150,
+            151
+          ],
+          "r_minus_b": 1,
+          "domRgb": [
+            152,
+            150,
+            151
+          ],
+          "hex": "#989697",
+          "colorDesc": "Cinza médio"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 3.7,
+          "diffBal": 9
+        }
+      ]
+    },
+    {
+      "slug": "femininas-campeonato-brasileiro-cruzeiro-25-26",
+      "nome": "Camisa Cruzeiro 25/26 feminino – Casa – Casa",
+      "clube": "Cruzeiro",
+      "liga": "brasileirao-serie-a",
+      "totalImgs": 2,
+      "maxDeltaE": 3.6,
+      "maxDiffBal": 9,
+      "score": 14.4,
+      "probabilidade": "BAIXA (Provável Frente/Verso Legítimo)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/femininas-campeonato-brasileiro-cruzeiro-25-26/01-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Cruzeiro 25_26.jpg",
+          "ch": [
+            148,
+            150,
+            148
+          ],
+          "r_minus_b": 0,
+          "domRgb": [
+            150,
+            152,
+            150
+          ],
+          "hex": "#969896",
+          "colorDesc": "Cinza médio"
+        },
+        {
+          "src": "/otimizadas/femininas-campeonato-brasileiro-cruzeiro-25-26/02-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Cruzeiro 25_26(1).jpg",
+          "ch": [
+            149,
+            147,
+            140
+          ],
+          "r_minus_b": 9,
+          "domRgb": [
+            149,
+            147,
+            140
+          ],
+          "hex": "#95938c",
+          "colorDesc": "Cinza médio"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 3.6,
+          "diffBal": 9
+        }
+      ]
+    },
+    {
+      "slug": "retro-campeonato-italiano-inter",
+      "nome": "Camisa Inter retro",
+      "clube": "Inter",
+      "liga": "serie-a",
+      "totalImgs": 2,
+      "maxDeltaE": 8.6,
+      "maxDiffBal": 1,
+      "score": 13.9,
+      "probabilidade": "BAIXA (Provável Frente/Verso Legítimo)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/retro-campeonato-italiano-inter/01-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🇮🇹 Campeonato Italiano_/Inter de Milão_(4).jpg",
+          "ch": [
+            183,
+            184,
+            184
+          ],
+          "r_minus_b": -1,
+          "domRgb": [
+            183,
+            184,
+            184
+          ],
+          "hex": "#b7b8b8",
+          "colorDesc": "Cinza médio"
+        },
+        {
+          "src": "/otimizadas/retro-campeonato-italiano-inter/02-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🇮🇹 Campeonato Italiano_/Inter de Milão_(5).jpg",
+          "ch": [
+            160,
+            161,
+            160
+          ],
+          "r_minus_b": 0,
+          "domRgb": [
+            160,
+            161,
+            160
+          ],
+          "hex": "#a0a1a0",
+          "colorDesc": "Cinza médio"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 8.6,
+          "diffBal": 1
+        }
+      ]
+    },
+    {
+      "slug": "camisa-jogador-campeonato-italiano-milan-26-27",
+      "nome": "Camisa Milan 26/27 jogador masculino",
+      "clube": "Milan",
+      "liga": "serie-a",
+      "totalImgs": 2,
+      "maxDeltaE": 4.5,
+      "maxDiffBal": 7,
+      "score": 13.8,
+      "probabilidade": "BAIXA (Provável Frente/Verso Legítimo)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/camisa-jogador-campeonato-italiano-milan-26-27/01-800.webp",
+          "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇮🇹 Campeonato Italiano/Milan 26_27.jpg",
+          "ch": [
+            163,
+            156,
+            148
+          ],
+          "r_minus_b": 15,
+          "domRgb": [
+            163,
+            157,
+            148
+          ],
+          "hex": "#a39d94",
+          "colorDesc": "Cinza médio"
+        },
+        {
+          "src": "/otimizadas/camisa-jogador-campeonato-italiano-milan-26-27/02-800.webp",
+          "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇮🇹 Campeonato Italiano/Milan 26_27(1).jpg",
+          "ch": [
+            167,
+            151,
+            145
+          ],
+          "r_minus_b": 22,
+          "domRgb": [
+            167,
+            151,
+            145
+          ],
+          "hex": "#a79791",
+          "colorDesc": "Neutro / Misto"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 4.5,
+          "diffBal": 7
+        }
+      ]
+    },
+    {
+      "slug": "camisa-jogador-liga-mexicana-pumas-26-27-26-27",
+      "nome": "Camisa Pumas 26/27 jogador masculino",
+      "clube": "revisar",
+      "liga": "revisar",
+      "totalImgs": 2,
+      "maxDeltaE": 4.1,
+      "maxDiffBal": 7,
+      "score": 13.1,
+      "probabilidade": "BAIXA (Provável Frente/Verso Legítimo)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/camisa-jogador-liga-mexicana-pumas-26-27-26-27/01-800.webp",
+          "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇲🇽 Liga Mexicana_/Pumas 26_27.jpg",
+          "ch": [
+            85,
+            84,
+            84
+          ],
+          "r_minus_b": 1,
+          "domRgb": [
+            85,
+            84,
+            84
+          ],
+          "hex": "#555454",
+          "colorDesc": "Cinza escuro / Grafite"
+        },
+        {
+          "src": "/otimizadas/camisa-jogador-liga-mexicana-pumas-26-27-26-27/02-800.webp",
+          "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇲🇽 Liga Mexicana_/Pumas 26_27(1).jpg",
+          "ch": [
+            89,
+            90,
+            95
+          ],
+          "r_minus_b": -6,
+          "domRgb": [
+            88,
+            90,
+            95
+          ],
+          "hex": "#585a5f",
+          "colorDesc": "Cinza escuro / Grafite"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 4.1,
+          "diffBal": 7
+        }
+      ]
+    },
+    {
+      "slug": "camisa-jogador-campeonato-frances-paris-saint-germain-26-27",
+      "nome": "Camisa Paris Saint-Germain 26/27 jogador masculino",
+      "clube": "Paris Saint-Germain",
+      "liga": "ligue-1",
+      "totalImgs": 2,
+      "maxDeltaE": 6.6,
+      "maxDiffBal": 2,
+      "score": 11.9,
+      "probabilidade": "BAIXA (Provável Frente/Verso Legítimo)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/camisa-jogador-campeonato-frances-paris-saint-germain-26-27/01-800.webp",
+          "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇫🇷 Campeonato Francês/PSG 26_27.jpg",
+          "ch": [
+            85,
+            81,
+            90
+          ],
+          "r_minus_b": -5,
+          "domRgb": [
+            85,
+            81,
+            90
+          ],
+          "hex": "#55515a",
+          "colorDesc": "Cinza escuro / Grafite"
+        },
+        {
+          "src": "/otimizadas/camisa-jogador-campeonato-frances-paris-saint-germain-26-27/03-800.webp",
+          "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇫🇷 Campeonato Francês/PSG 26_27(1).jpg",
+          "ch": [
+            73,
+            75,
+            76
+          ],
+          "r_minus_b": -3,
+          "domRgb": [
+            73,
+            75,
+            76
+          ],
+          "hex": "#494b4c",
+          "colorDesc": "Cinza escuro / Grafite"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 6.6,
+          "diffBal": 2
+        }
+      ]
+    },
+    {
+      "slug": "retro-campeonato-brasileiro-corinthians-2000",
+      "nome": "Camisa Corinthians 2000 retro",
+      "clube": "Corinthians",
+      "liga": "brasileirao-serie-a",
+      "totalImgs": 2,
+      "maxDeltaE": 6.7,
+      "maxDiffBal": 1,
+      "score": 11.1,
+      "probabilidade": "BAIXA (Provável Frente/Verso Legítimo)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/retro-campeonato-brasileiro-corinthians-2000/01-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Corinthians 2000.jpg",
+          "ch": [
+            129,
+            129,
+            128
+          ],
+          "r_minus_b": 1,
+          "domRgb": [
+            130,
+            131,
+            129
+          ],
+          "hex": "#828381",
+          "colorDesc": "Cinza escuro / Grafite"
+        },
+        {
+          "src": "/otimizadas/retro-campeonato-brasileiro-corinthians-2000/02-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Corinthians 2000(1).jpg",
+          "ch": [
+            146,
+            146,
+            144
+          ],
+          "r_minus_b": 2,
+          "domRgb": [
+            148,
+            148,
+            145
+          ],
+          "hex": "#949491",
+          "colorDesc": "Cinza médio"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 6.7,
+          "diffBal": 1
+        }
+      ]
+    },
+    {
+      "slug": "femininas-campeonato-brasileiro-sao-paulo-26-27",
+      "nome": "Camisa São Paulo 26/27 feminino",
+      "clube": "São Paulo",
+      "liga": "brasileirao-serie-a",
+      "totalImgs": 2,
+      "maxDeltaE": 5.1,
+      "maxDiffBal": 3,
+      "score": 10.6,
+      "probabilidade": "BAIXA (Provável Frente/Verso Legítimo)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/femininas-campeonato-brasileiro-sao-paulo-26-27/01-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/São Paulo 26_27.png",
+          "ch": [
+            169,
+            155,
+            152
+          ],
+          "r_minus_b": 17,
+          "domRgb": [
+            169,
+            155,
+            152
+          ],
+          "hex": "#a99b98",
+          "colorDesc": "Cinza médio"
+        },
+        {
+          "src": "/otimizadas/femininas-campeonato-brasileiro-sao-paulo-26-27/02-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/São Paulo 26_27(1).jpg",
+          "ch": [
+            174,
+            167,
+            160
+          ],
+          "r_minus_b": 14,
+          "domRgb": [
+            173,
+            166,
+            158
+          ],
+          "hex": "#ada69e",
+          "colorDesc": "Cinza médio"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 5.1,
+          "diffBal": 3
+        }
+      ]
+    },
+    {
+      "slug": "femininas-campeonato-brasileiro-flamengo-24-25",
+      "nome": "Camisa Flamengo 24/25 feminino",
+      "clube": "Flamengo",
+      "liga": "brasileirao-serie-a",
+      "totalImgs": 3,
+      "maxDeltaE": 2.9,
+      "maxDiffBal": 6,
+      "score": 10.3,
+      "probabilidade": "BAIXA (Provável Frente/Verso Legítimo)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/femininas-campeonato-brasileiro-flamengo-24-25/01-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Flamengo 24_25 - Consciência Negra.jpg",
+          "ch": [
+            157,
+            151,
+            145
+          ],
+          "r_minus_b": 12,
+          "domRgb": [
+            157,
+            152,
+            144
+          ],
+          "hex": "#9d9890",
+          "colorDesc": "Cinza médio"
+        },
+        {
+          "src": "/otimizadas/femininas-campeonato-brasileiro-flamengo-24-25/03-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Flamengo 24_25(1).jpg",
+          "ch": [
+            153,
+            150,
+            145
+          ],
+          "r_minus_b": 8,
+          "domRgb": [
+            153,
+            151,
+            145
+          ],
+          "hex": "#999791",
+          "colorDesc": "Cinza médio"
+        },
+        {
+          "src": "/otimizadas/femininas-campeonato-brasileiro-flamengo-24-25/04-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Flamengo 24_25(2).jpg",
+          "ch": [
+            154,
+            151,
+            148
+          ],
+          "r_minus_b": 6,
+          "domRgb": [
+            155,
+            152,
+            149
+          ],
+          "hex": "#9b9895",
+          "colorDesc": "Cinza médio"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 1.7,
+          "diffBal": 4
+        },
+        {
+          "i": 2,
+          "dE": 2.9,
+          "diffBal": 6
+        }
+      ]
+    },
+    {
+      "slug": "camisa-manga-longa-torcedor-la-liga-real-betis-26-27",
+      "nome": "Camisa Real Betis 26/27 inverno masculino manga longa",
+      "clube": "Real Betis",
+      "liga": "la-liga",
+      "totalImgs": 2,
+      "maxDeltaE": 2.6,
+      "maxDiffBal": 6,
+      "score": 9.9,
+      "probabilidade": "BAIXA (Provável Frente/Verso Legítimo)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/camisa-manga-longa-torcedor-la-liga-real-betis-26-27/01-800.webp",
+          "source": "catalogo/🥼Camisa Manga Longa Torcedor/🇪🇸 La Liga/Real Betis 26_27.jpg",
+          "ch": [
+            64,
+            85,
+            70
+          ],
+          "r_minus_b": -6,
+          "domRgb": [
+            63,
+            84,
+            70
+          ],
+          "hex": "#3f5446",
+          "colorDesc": "Neutro / Misto"
+        },
+        {
+          "src": "/otimizadas/camisa-manga-longa-torcedor-la-liga-real-betis-26-27/02-800.webp",
+          "source": "catalogo/🥼Camisa Manga Longa Torcedor/🇪🇸 La Liga/Real Betis 26_27(1).jpg",
+          "ch": [
+            62,
+            84,
+            74
+          ],
+          "r_minus_b": -12,
+          "domRgb": [
+            61,
+            84,
+            74
+          ],
+          "hex": "#3d544a",
+          "colorDesc": "Neutro / Misto"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 2.6,
+          "diffBal": 6
+        }
+      ]
+    },
+    {
+      "slug": "femininas-premier-league-liverpool-26-27",
+      "nome": "Camisa Liverpool 26/27 feminino",
+      "clube": "Liverpool",
+      "liga": "premier-league",
+      "totalImgs": 2,
+      "maxDeltaE": 5.7,
+      "maxDiffBal": 1,
+      "score": 9.6,
+      "probabilidade": "BAIXA (Provável Frente/Verso Legítimo)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/femininas-premier-league-liverpool-26-27/01-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League_/Liverpool 26_27.png",
+          "ch": [
+            156,
+            150,
+            145
+          ],
+          "r_minus_b": 11,
+          "domRgb": [
+            156,
+            150,
+            145
+          ],
+          "hex": "#9c9691",
+          "colorDesc": "Cinza médio"
+        },
+        {
+          "src": "/otimizadas/femininas-premier-league-liverpool-26-27/02-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League_/Liverpool 26_27(1).png",
+          "ch": [
+            172,
+            166,
+            162
+          ],
+          "r_minus_b": 10,
+          "domRgb": [
+            171,
+            165,
+            160
+          ],
+          "hex": "#aba5a0",
+          "colorDesc": "Cinza médio"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 5.7,
+          "diffBal": 1
+        }
+      ]
+    },
+    {
+      "slug": "retro-campeonato-brasileiro-botafogo-1996",
+      "nome": "Camisa Botafogo 1996 retro",
+      "clube": "Botafogo",
+      "liga": "brasileirao-serie-a",
+      "totalImgs": 2,
+      "maxDeltaE": 3,
+      "maxDiffBal": 5,
+      "score": 9.5,
+      "probabilidade": "BAIXA (Provável Frente/Verso Legítimo)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/retro-campeonato-brasileiro-botafogo-1996/01-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Botafogo 1996.jpg",
+          "ch": [
+            161,
+            155,
+            145
+          ],
+          "r_minus_b": 16,
+          "domRgb": [
+            161,
+            155,
+            146
+          ],
+          "hex": "#a19b92",
+          "colorDesc": "Cinza médio"
+        },
+        {
+          "src": "/otimizadas/retro-campeonato-brasileiro-botafogo-1996/02-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Botafogo 1996(1).jpg",
+          "ch": [
+            152,
+            150,
+            141
+          ],
+          "r_minus_b": 11,
+          "domRgb": [
+            151,
+            149,
+            140
+          ],
+          "hex": "#97958c",
+          "colorDesc": "Cinza médio"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 3,
+          "diffBal": 5
+        }
+      ]
+    },
+    {
+      "slug": "camisa-jogador-brasileirao-corinthians-24-25",
+      "nome": "Camisa Corinthians 24/25 jogador masculino",
+      "clube": "Corinthians",
+      "liga": "brasileirao-serie-a",
+      "totalImgs": 2,
+      "maxDeltaE": 4.4,
+      "maxDiffBal": 2,
+      "score": 8.6,
+      "probabilidade": "BAIXA (Provável Frente/Verso Legítimo)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/camisa-jogador-brasileirao-corinthians-24-25/01-800.webp",
+          "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇧🇷 Brasileirão_/Corinthians 24_25(1).jpg",
+          "ch": [
+            91,
+            93,
+            94
+          ],
+          "r_minus_b": -3,
+          "domRgb": [
+            98,
+            100,
+            100
+          ],
+          "hex": "#626464",
+          "colorDesc": "Cinza escuro / Grafite"
+        },
+        {
+          "src": "/otimizadas/camisa-jogador-brasileirao-corinthians-24-25/02-800.webp",
+          "source": "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇧🇷 Brasileirão_/Corinthians 24_25(2).jpg",
+          "ch": [
+            107,
+            111,
+            112
+          ],
+          "r_minus_b": -5,
+          "domRgb": [
+            107,
+            111,
+            112
+          ],
+          "hex": "#6b6f70",
+          "colorDesc": "Cinza escuro / Grafite"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 4.4,
+          "diffBal": 2
+        }
+      ]
+    },
+    {
+      "slug": "selecoes-america-do-norte-guatemala-26-27-26-27",
+      "nome": "Camisa Guatemala 26/27",
+      "clube": "revisar",
+      "liga": "selecoes",
+      "totalImgs": 3,
+      "maxDeltaE": 3.3,
+      "maxDiffBal": 3,
+      "score": 7.9,
+      "probabilidade": "BAIXA (Provável Frente/Verso Legítimo)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/selecoes-america-do-norte-guatemala-26-27-26-27/01-800.webp",
+          "source": "catalogo/🌍 Seleções/AMÉRICA DO NORTE/Guatemala 26_27.jpg",
+          "ch": [
+            81,
+            82,
+            85
+          ],
+          "r_minus_b": -4,
+          "domRgb": [
+            81,
+            82,
+            85
+          ],
+          "hex": "#515255",
+          "colorDesc": "Cinza escuro / Grafite"
+        },
+        {
+          "src": "/otimizadas/selecoes-america-do-norte-guatemala-26-27-26-27/02-800.webp",
+          "source": "catalogo/🌍 Seleções/AMÉRICA DO NORTE/Guatemala 26_27(1).jpg",
+          "ch": [
+            87,
+            89,
+            92
+          ],
+          "r_minus_b": -5,
+          "domRgb": [
+            87,
+            90,
+            92
+          ],
+          "hex": "#575a5c",
+          "colorDesc": "Cinza escuro / Grafite"
+        },
+        {
+          "src": "/otimizadas/selecoes-america-do-norte-guatemala-26-27-26-27/03-800.webp",
+          "source": "catalogo/🌍 Seleções/AMÉRICA DO NORTE/Guatemala 26_27(2).jpg",
+          "ch": [
+            82,
+            83,
+            83
+          ],
+          "r_minus_b": -1,
+          "domRgb": [
+            84,
+            85,
+            85
+          ],
+          "hex": "#545555",
+          "colorDesc": "Cinza escuro / Grafite"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 3.3,
+          "diffBal": 1
+        },
+        {
+          "i": 2,
+          "dE": 2.2,
+          "diffBal": 3
+        }
+      ]
+    },
+    {
+      "slug": "femininas-campeonato-brasileiro-flamengo-26-27",
+      "nome": "Camisa Flamengo 26/27 feminino",
+      "clube": "Flamengo",
+      "liga": "brasileirao-serie-a",
+      "totalImgs": 2,
+      "maxDeltaE": 4.3,
+      "maxDiffBal": 1,
+      "score": 7.4,
+      "probabilidade": "BAIXA (Provável Frente/Verso Legítimo)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/femininas-campeonato-brasileiro-flamengo-26-27/01-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Flamengo 26_27 AMARELA.png",
+          "ch": [
+            175,
+            168,
+            134
+          ],
+          "r_minus_b": 41,
+          "domRgb": [
+            175,
+            168,
+            134
+          ],
+          "hex": "#afa886",
+          "colorDesc": "Neutro / Misto"
+        },
+        {
+          "src": "/otimizadas/femininas-campeonato-brasileiro-flamengo-26-27/05-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Flamengo 26_27(1).png",
+          "ch": [
+            182,
+            178,
+            140
+          ],
+          "r_minus_b": 42,
+          "domRgb": [
+            182,
+            178,
+            139
+          ],
+          "hex": "#b6b28b",
+          "colorDesc": "Neutro / Misto"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 4.3,
+          "diffBal": 1
+        }
+      ]
+    },
+    {
+      "slug": "selecoes-europa-portugal-25-26-treino",
+      "nome": "Camisa Portugal 25/26 treino",
+      "clube": "Portugal",
+      "liga": "selecoes",
+      "totalImgs": 2,
+      "maxDeltaE": 3.5,
+      "maxDiffBal": 2,
+      "score": 7.3,
+      "probabilidade": "BAIXA (Provável Frente/Verso Legítimo)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/selecoes-europa-portugal-25-26-treino/01-800.webp",
+          "source": "catalogo/🌍 Seleções/EUROPA/Portugal 25_26 - Treino.png",
+          "ch": [
+            147,
+            146,
+            145
+          ],
+          "r_minus_b": 2,
+          "domRgb": [
+            147,
+            146,
+            145
+          ],
+          "hex": "#939291",
+          "colorDesc": "Cinza médio"
+        },
+        {
+          "src": "/otimizadas/selecoes-europa-portugal-25-26-treino/02-800.webp",
+          "source": "catalogo/🌍 Seleções/EUROPA/Portugal 25_26 - Treino(1).jpg",
+          "ch": [
+            174,
+            176,
+            174
+          ],
+          "r_minus_b": 0,
+          "domRgb": [
+            153,
+            155,
+            152
+          ],
+          "hex": "#999b98",
+          "colorDesc": "Cinza médio"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 3.5,
+          "diffBal": 2
+        }
+      ]
+    },
+    {
+      "slug": "retro-campeonato-brasileiro-santos-2011",
+      "nome": "Camisa Santos 2011 retro",
+      "clube": "Santos",
+      "liga": "brasileirao-serie-a",
+      "totalImgs": 2,
+      "maxDeltaE": 2.5,
+      "maxDiffBal": 3,
+      "score": 6.8,
+      "probabilidade": "BAIXA (Provável Frente/Verso Legítimo)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/retro-campeonato-brasileiro-santos-2011/01-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Santos 2011.jpg",
+          "ch": [
+            155,
+            153,
+            150
+          ],
+          "r_minus_b": 5,
+          "domRgb": [
+            158,
+            156,
+            152
+          ],
+          "hex": "#9e9c98",
+          "colorDesc": "Cinza médio"
+        },
+        {
+          "src": "/otimizadas/retro-campeonato-brasileiro-santos-2011/02-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Santos 2011(1).jpg",
+          "ch": [
+            162,
+            162,
+            160
+          ],
+          "r_minus_b": 2,
+          "domRgb": [
+            162,
+            162,
+            160
+          ],
+          "hex": "#a2a2a0",
+          "colorDesc": "Cinza médio"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 2.5,
+          "diffBal": 3
+        }
+      ]
+    },
+    {
+      "slug": "femininas-campeonato-brasileiro-cruzeiro-24-25",
+      "nome": "Camisa Cruzeiro 24/25 feminino",
+      "clube": "Cruzeiro",
+      "liga": "brasileirao-serie-a",
+      "totalImgs": 2,
+      "maxDeltaE": 2.5,
+      "maxDiffBal": 2,
+      "score": 5.8,
+      "probabilidade": "BAIXA (Provável Frente/Verso Legítimo)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/femininas-campeonato-brasileiro-cruzeiro-24-25/01-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Cruzeiro 24_25.jpg",
+          "ch": [
+            151,
+            152,
+            148
+          ],
+          "r_minus_b": 3,
+          "domRgb": [
+            151,
+            152,
+            148
+          ],
+          "hex": "#979894",
+          "colorDesc": "Cinza médio"
+        },
+        {
+          "src": "/otimizadas/femininas-campeonato-brasileiro-cruzeiro-24-25/02-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Cruzeiro 24_25(1).jpg",
+          "ch": [
+            157,
+            157,
+            152
+          ],
+          "r_minus_b": 5,
+          "domRgb": [
+            157,
+            158,
+            152
+          ],
+          "hex": "#9d9e98",
+          "colorDesc": "Cinza médio"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 2.5,
+          "diffBal": 2
+        }
+      ]
+    },
+    {
+      "slug": "retro-campeonato-brasileiro-corinthians-1999",
+      "nome": "Camisa Corinthians 1999 retro",
+      "clube": "Corinthians",
+      "liga": "brasileirao-serie-a",
+      "totalImgs": 2,
+      "maxDeltaE": 0.9,
+      "maxDiffBal": 2,
+      "score": 3.4,
+      "probabilidade": "BAIXA (Provável Frente/Verso Legítimo)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/retro-campeonato-brasileiro-corinthians-1999/01-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Corinthians 1999.jpg",
+          "ch": [
+            128,
+            125,
+            114
+          ],
+          "r_minus_b": 14,
+          "domRgb": [
+            129,
+            126,
+            115
+          ],
+          "hex": "#817e73",
+          "colorDesc": "Cinza escuro / Grafite"
+        },
+        {
+          "src": "/otimizadas/retro-campeonato-brasileiro-corinthians-1999/02-800.webp",
+          "source": "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Corinthians 1999(1).jpg",
+          "ch": [
+            129,
+            124,
+            113
+          ],
+          "r_minus_b": 16,
+          "domRgb": [
+            130,
+            125,
+            114
+          ],
+          "hex": "#827d72",
+          "colorDesc": "Cinza escuro / Grafite"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 0.9,
+          "diffBal": 2
+        }
+      ]
+    },
+    {
+      "slug": "femininas-campeonato-brasileiro-atletico-mineiro-26-27",
+      "nome": "Camisa Atlético Mineiro 26/27 feminino",
+      "clube": "Atlético Mineiro",
+      "liga": "brasileirao-serie-a",
+      "totalImgs": 2,
+      "maxDeltaE": 0.8,
+      "maxDiffBal": 1,
+      "score": 2.2,
+      "probabilidade": "BAIXA (Provável Frente/Verso Legítimo)",
+      "imgStats": [
+        {
+          "src": "/otimizadas/femininas-campeonato-brasileiro-atletico-mineiro-26-27/01-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Atlético Mineiro 26_27.jpg",
+          "ch": [
+            78,
+            78,
+            80
+          ],
+          "r_minus_b": -2,
+          "domRgb": [
+            78,
+            78,
+            80
+          ],
+          "hex": "#4e4e50",
+          "colorDesc": "Cinza escuro / Grafite"
+        },
+        {
+          "src": "/otimizadas/femininas-campeonato-brasileiro-atletico-mineiro-26-27/02-800.webp",
+          "source": "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Atlético Mineiro 26_27(1).jpg",
+          "ch": [
+            76,
+            76,
+            77
+          ],
+          "r_minus_b": -1,
+          "domRgb": [
+            77,
+            77,
+            78
+          ],
+          "hex": "#4d4d4e",
+          "colorDesc": "Cinza escuro / Grafite"
+        }
+      ],
+      "comparacoes": [
+        {
+          "i": 1,
+          "dE": 0.8,
+          "diffBal": 1
+        }
+      ]
+    }
+  ]
+}

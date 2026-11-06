@@ -1,0 +1,1261 @@
+[
+  {
+    "slug": "femininas-campeonato-brasileiro-bahia-26-27",
+    "nome": "Camisa Bahia 26/27 feminino",
+    "totalAntes": 2,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1
+    ],
+    "mantidasSources": [
+      "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Bahia 26_27.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Bahia 26_27(1).jpg"
+    ],
+    "dists": [
+      0,
+      164
+    ]
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-cruzeiro-26-27",
+    "nome": "Camisa Cruzeiro 26/27 feminino",
+    "totalAntes": 3,
+    "mantidasIndices": [
+      0,
+      2
+    ],
+    "removidasIndices": [
+      1
+    ],
+    "mantidasSources": [
+      "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Cruzeiro 26_27.jpg",
+      "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Cruzeiro 26_27(1).jpg"
+    ],
+    "removidasSources": [
+      "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Cruzeiro 26_27.png"
+    ],
+    "dists": [
+      0,
+      162,
+      21
+    ]
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-gremio-26-27",
+    "nome": "Camisa Grêmio 26/27 feminino",
+    "totalAntes": 3,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1,
+      2
+    ],
+    "mantidasSources": [
+      "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Grêmio 26_27.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Grêmio 26_27(1).jpg",
+      "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Grêmio 26_27(2).jpg"
+    ],
+    "dists": [
+      0,
+      161,
+      159
+    ]
+  },
+  {
+    "slug": "camisa-jogador-brasileirao-flamengo-26-27",
+    "nome": "Camisa Flamengo 26/27 jogador masculino",
+    "totalAntes": 2,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1
+    ],
+    "mantidasSources": [
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇧🇷 Brasileirão_/Flamengo 26_27.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇧🇷 Brasileirão_/Flamengo 26_27.png"
+    ],
+    "dists": [
+      0,
+      156
+    ]
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-palmeiras-1996",
+    "nome": "Camisa Palmeiras 1996 retro",
+    "totalAntes": 3,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1,
+      2
+    ],
+    "mantidasSources": [
+      "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Palmeiras 1996.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Palmeiras 1996(1).jpg",
+      "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Palmeiras 1996(2).jpg"
+    ],
+    "dists": [
+      0,
+      150,
+      155
+    ]
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-remo-26-27",
+    "nome": "Camisa Remo 26/27 feminino",
+    "totalAntes": 2,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1
+    ],
+    "mantidasSources": [
+      "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Remo 26_27.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Remo 26_27.png"
+    ],
+    "dists": [
+      0,
+      147
+    ]
+  },
+  {
+    "slug": "camisa-jogador-liga-mexicana-chivas-26-27-26-27",
+    "nome": "Camisa Chivas 26/27 jogador masculino",
+    "totalAntes": 2,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1
+    ],
+    "mantidasSources": [
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇲🇽 Liga Mexicana_/Chivas 26_27.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇲🇽 Liga Mexicana_/Chivas 26_27.png"
+    ],
+    "dists": [
+      0,
+      150
+    ]
+  },
+  {
+    "slug": "selecoes-europa-grecia-26-27-26-27",
+    "nome": "Camisa Grécia 26/27",
+    "totalAntes": 2,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1
+    ],
+    "mantidasSources": [
+      "catalogo/🌍 Seleções/EUROPA/Grécia 26_27_.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/🌍 Seleções/EUROPA/Grécia 26_27.jpg"
+    ],
+    "dists": [
+      0,
+      113
+    ]
+  },
+  {
+    "slug": "camisa-jogador-campeonato-alemao-bayern-munich-26-27",
+    "nome": "Camisa Bayern Munich 26/27 jogador masculino",
+    "totalAntes": 3,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1,
+      2
+    ],
+    "mantidasSources": [
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇩🇪 Campeonato Alemão_/Bayer de Munique 26_27.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇩🇪 Campeonato Alemão_/Bayer de Munique 26_27.png",
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇩🇪 Campeonato Alemão_/Bayer de Munique 26_27(1).png"
+    ],
+    "dists": [
+      0,
+      143,
+      171
+    ]
+  },
+  {
+    "slug": "camisa-jogador-selecoes-europa-franca-26-27",
+    "nome": "Camisa França 26/27 jogador masculino",
+    "totalAntes": 2,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1
+    ],
+    "mantidasSources": [
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🌍 Seleções_/EUROPA/França 26_27 Copa do Mundo.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🌍 Seleções_/EUROPA/França 26_27 Copa do Mundo(1).jpg"
+    ],
+    "dists": [
+      0,
+      139
+    ]
+  },
+  {
+    "slug": "femininas-premier-league-manchester-united-26-27",
+    "nome": "Camisa Manchester United 26/27 feminino",
+    "totalAntes": 3,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1,
+      2
+    ],
+    "mantidasSources": [
+      "catalogo/👩🏻 Femininas/🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League_/Manchester United 26_27.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/👩🏻 Femininas/🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League_/Manchester United 26_27.png",
+      "catalogo/👩🏻 Femininas/🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League_/Manchester United 26_27(1).png"
+    ],
+    "dists": [
+      0,
+      134,
+      173
+    ]
+  },
+  {
+    "slug": "camisa-jogador-la-liga-barcelona-26-27",
+    "nome": "Camisa Barcelona 26/27 jogador masculino",
+    "totalAntes": 4,
+    "mantidasIndices": [
+      0,
+      2,
+      3
+    ],
+    "removidasIndices": [
+      1
+    ],
+    "mantidasSources": [
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇪🇸 La Liga/Barcelona 26_27.jpg",
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇪🇸 La Liga/Barcelona 26_27(1).jpg",
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇪🇸 La Liga/Barcelona 26_27(2).jpg"
+    ],
+    "removidasSources": [
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇪🇸 La Liga/Barcelona 26_27.png"
+    ],
+    "dists": [
+      0,
+      135,
+      23,
+      40
+    ]
+  },
+  {
+    "slug": "camisa-jogador-selecoes-asia-oriente-medio-japao-26-27",
+    "nome": "Camisa Japão 26/27 jogador masculino",
+    "totalAntes": 2,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1
+    ],
+    "mantidasSources": [
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🌍 Seleções_/ÁSIA - ORIENTE MÉDIO_/Japão 26_27 Copa do Mundo.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🌍 Seleções_/ÁSIA - ORIENTE MÉDIO_/Japão 26_27 Copa do Mundo(1).jpg"
+    ],
+    "dists": [
+      0,
+      135
+    ]
+  },
+  {
+    "slug": "camisa-jogador-campeonato-da-arabia-al-hilal-25-26",
+    "nome": "Camisa Al-Hilal 25/26 jogador masculino",
+    "totalAntes": 2,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1
+    ],
+    "mantidasSources": [
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇸🇦 Campeonato da Arábia_/Al Hillal 25_26.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇸🇦 Campeonato da Arábia_/Al Hillal 25_26(1).jpg"
+    ],
+    "dists": [
+      0,
+      108
+    ]
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-flamengo-2010",
+    "nome": "Camisa Flamengo 2010 retro",
+    "totalAntes": 2,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1
+    ],
+    "mantidasSources": [
+      "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Flamengo 2010.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Flamengo 2010(1).jpg"
+    ],
+    "dists": [
+      0,
+      125
+    ]
+  },
+  {
+    "slug": "retro-selecoes-america-do-norte-estados-unidos-2002",
+    "nome": "Camisa Estados Unidos 2002 retro",
+    "totalAntes": 2,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1
+    ],
+    "mantidasSources": [
+      "catalogo/👴🏻 Retrô_/🌍 Seleções_/AMÉRICA DO NORTE_/Estados Unidos 2002.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/👴🏻 Retrô_/🌍 Seleções_/AMÉRICA DO NORTE_/Estados Unidos 2002(1).jpg"
+    ],
+    "dists": [
+      0,
+      127
+    ]
+  },
+  {
+    "slug": "kits-infantis-selecoes-europa-espanha-26-27",
+    "nome": "Camisa Espanha 26/27 infantil",
+    "totalAntes": 2,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1
+    ],
+    "mantidasSources": [
+      "catalogo/👶🏻 Kits Infantis/🌍 Seleções_/EUROPA/Espanha 26_27 Copa do Mundo_.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/👶🏻 Kits Infantis/🌍 Seleções_/EUROPA/Espanha 26_27 Copa do Mundo.jpg"
+    ],
+    "dists": [
+      0,
+      124
+    ]
+  },
+  {
+    "slug": "kits-infantis-selecoes-europa-franca-26-27",
+    "nome": "Camisa França 26/27 infantil",
+    "totalAntes": 2,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1
+    ],
+    "mantidasSources": [
+      "catalogo/👶🏻 Kits Infantis/🌍 Seleções_/EUROPA/França 26_27 Copa do Mundo_.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/👶🏻 Kits Infantis/🌍 Seleções_/EUROPA/França 26_27 Copa do Mundo_(1).jpg"
+    ],
+    "dists": [
+      0,
+      123
+    ]
+  },
+  {
+    "slug": "camisa-jogador-premier-league-arsenal-26-27",
+    "nome": "Camisa Arsenal 26/27 jogador masculino",
+    "totalAntes": 3,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1,
+      2
+    ],
+    "mantidasSources": [
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League/Arsenal 26_27.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League/Arsenal 26_27.png",
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League/Arsenal 26_27(1).png"
+    ],
+    "dists": [
+      0,
+      125,
+      128
+    ]
+  },
+  {
+    "slug": "camisa-jogador-campeonato-italiano-inter-25-26",
+    "nome": "Camisa Inter 25/26 jogador masculino",
+    "totalAntes": 2,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1
+    ],
+    "mantidasSources": [
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇮🇹 Campeonato Italiano/Inter de Milão 25_26.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇮🇹 Campeonato Italiano/Inter de Milão 25_26(1).jpg"
+    ],
+    "dists": [
+      0,
+      121
+    ]
+  },
+  {
+    "slug": "camisa-jogador-campeonato-argentino-river-plate-26-27",
+    "nome": "Camisa River Plate 26/27 jogador masculino",
+    "totalAntes": 3,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1,
+      2
+    ],
+    "mantidasSources": [
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇦🇷 Campeonato Argentino/River Plate 26_27.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇦🇷 Campeonato Argentino/River Plate 26_27.png",
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇦🇷 Campeonato Argentino/River Plate 26_27(1).jpg"
+    ],
+    "dists": [
+      0,
+      118,
+      106
+    ]
+  },
+  {
+    "slug": "camisa-jogador-campeonato-frances-paris-saint-germain-26-27",
+    "nome": "Camisa Paris Saint-Germain 26/27 jogador masculino",
+    "totalAntes": 3,
+    "mantidasIndices": [
+      0,
+      2
+    ],
+    "removidasIndices": [
+      1
+    ],
+    "mantidasSources": [
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇫🇷 Campeonato Francês/PSG 26_27.jpg",
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇫🇷 Campeonato Francês/PSG 26_27(1).jpg"
+    ],
+    "removidasSources": [
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇫🇷 Campeonato Francês/PSG 26_27.png"
+    ],
+    "dists": [
+      0,
+      112,
+      19
+    ]
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-botafogo-25-26",
+    "nome": "Camisa Botafogo 25/26 feminino",
+    "totalAntes": 3,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1,
+      2
+    ],
+    "mantidasSources": [
+      "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Botafogo 25_26.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Botafogo 25_26(1).jpg",
+      "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/Botafogo 25_26(2).jpg"
+    ],
+    "dists": [
+      0,
+      74,
+      58
+    ]
+  },
+  {
+    "slug": "camisa-jogador-premier-league-manchester-united-26-27",
+    "nome": "Camisa Manchester United 26/27 jogador masculino",
+    "totalAntes": 3,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1,
+      2
+    ],
+    "mantidasSources": [
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League/Manchester United 26_27.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League/Manchester United 26_27.png",
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League/Manchester United 26_27(1).jpg"
+    ],
+    "dists": [
+      0,
+      114,
+      81
+    ]
+  },
+  {
+    "slug": "femininas-selecoes-europa-portugal-26-27",
+    "nome": "Camisa Portugal 26/27 feminino",
+    "totalAntes": 4,
+    "mantidasIndices": [
+      0,
+      2,
+      3
+    ],
+    "removidasIndices": [
+      1
+    ],
+    "mantidasSources": [
+      "catalogo/👩🏻 Femininas/🌍 Seleções_/EUROPA/Croped Portugal 26_27 Copa do Mundo.jpg",
+      "catalogo/👩🏻 Femininas/🌍 Seleções_/EUROPA/Portugal 26_27 Copa do Mundo(1).jpg",
+      "catalogo/👩🏻 Femininas/🌍 Seleções_/EUROPA/Portugal 26_27 Copa do Mundo(2).jpg"
+    ],
+    "removidasSources": [
+      "catalogo/👩🏻 Femininas/🌍 Seleções_/EUROPA/Portugal 26_27 Copa do Mundo.jpg"
+    ],
+    "dists": [
+      0,
+      103,
+      33,
+      31
+    ]
+  },
+  {
+    "slug": "retro-campeonato-espanhol-barcelona-1998",
+    "nome": "Camisa Barcelona 1998 retro",
+    "totalAntes": 2,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1
+    ],
+    "mantidasSources": [
+      "catalogo/👴🏻 Retrô_/🇪🇸 Campeonato Espanhol_/Barcelona 1998.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/👴🏻 Retrô_/🇪🇸 Campeonato Espanhol_/Barcelona 1998(2).jpg"
+    ],
+    "dists": [
+      0,
+      103
+    ]
+  },
+  {
+    "slug": "retro-selecoes-europa-espanha-2000",
+    "nome": "Camisa Espanha 2000 retro",
+    "totalAntes": 2,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1
+    ],
+    "mantidasSources": [
+      "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Espanha 2000.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Espanha 2000.png"
+    ],
+    "dists": [
+      0,
+      100
+    ]
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-selecoes-america-do-sul-colombia-26-27-copa-do-mundo-26-27",
+    "nome": "Camisa Colômbia Copa do Mundo 26/27 inverno masculino manga longa",
+    "totalAntes": 2,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1
+    ],
+    "mantidasSources": [
+      "catalogo/🥼Camisa Manga Longa Torcedor/🌍 Seleções_/AMÉRICA DO SUL/Colômbia 26_27 Copa do Mundo.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/🥼Camisa Manga Longa Torcedor/🌍 Seleções_/AMÉRICA DO SUL/Colômbia 26_27 Copa do Mundo(1).jpg"
+    ],
+    "dists": [
+      0,
+      97
+    ]
+  },
+  {
+    "slug": "retro-selecoes-europa-alemanha",
+    "nome": "Camisa Alemanha retro",
+    "totalAntes": 3,
+    "mantidasIndices": [
+      0,
+      2
+    ],
+    "removidasIndices": [
+      1
+    ],
+    "mantidasSources": [
+      "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Alemanha_.jpg",
+      "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Alemanha_(2).jpg"
+    ],
+    "removidasSources": [
+      "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Alemanha_(1).jpg"
+    ],
+    "dists": [
+      0,
+      88,
+      26
+    ]
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-corinthians-2009",
+    "nome": "Camisa Corinthians 2009 retro",
+    "totalAntes": 3,
+    "mantidasIndices": [
+      0,
+      2
+    ],
+    "removidasIndices": [
+      1
+    ],
+    "mantidasSources": [
+      "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Corinthians 2009_.jpg",
+      "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Corinthians 2009.png"
+    ],
+    "removidasSources": [
+      "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Corinthians 2009.jpg"
+    ],
+    "dists": [
+      0,
+      89,
+      6
+    ]
+  },
+  {
+    "slug": "selecoes-asia-oceania-oriente-medio-coreia-do-sul-25-26",
+    "nome": "Camisa Coreia do Sul 25/26",
+    "totalAntes": 3,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1,
+      2
+    ],
+    "mantidasSources": [
+      "catalogo/🌍 Seleções/ÁSIA - OCEANIA - ORIENTE MÉDIO_/Korea do Sul 25_26.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/🌍 Seleções/ÁSIA - OCEANIA - ORIENTE MÉDIO_/Korea do Sul 25_26(1).jpg",
+      "catalogo/🌍 Seleções/ÁSIA - OCEANIA - ORIENTE MÉDIO_/Koreia do Sul 25_26.jpg"
+    ],
+    "dists": [
+      0,
+      88,
+      70
+    ]
+  },
+  {
+    "slug": "kits-infantis-selecoes-asia-japao-26-27",
+    "nome": "Camisa Japão 26/27 infantil",
+    "totalAntes": 2,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1
+    ],
+    "mantidasSources": [
+      "catalogo/👶🏻 Kits Infantis/🌍 Seleções_/ÁSIA_/Japão 26_27 Copa do Mundo_.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/👶🏻 Kits Infantis/🌍 Seleções_/ÁSIA_/Japão 26_27 Copa do Mundo.jpg"
+    ],
+    "dists": [
+      0,
+      100
+    ]
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-bahia-2013",
+    "nome": "Camisa Bahia 2013 retro",
+    "totalAntes": 2,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1
+    ],
+    "mantidasSources": [
+      "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Bahia 2013.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Bahia 2013(1).jpg"
+    ],
+    "dists": [
+      0,
+      86
+    ]
+  },
+  {
+    "slug": "retro-selecoes-europa-holanda-2014-2014",
+    "nome": "Camisa Holanda 2014 retro",
+    "totalAntes": 2,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1
+    ],
+    "mantidasSources": [
+      "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Holanda 2014.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Holanda 2014(1).jpg"
+    ],
+    "dists": [
+      0,
+      86
+    ]
+  },
+  {
+    "slug": "retro-selecoes-america-do-sul-brasil",
+    "nome": "Camisa Brasil retro",
+    "totalAntes": 5,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "mantidasSources": [
+      "catalogo/👴🏻 Retrô_/🌍 Seleções_/AMÉRICA DO SUL/Brasil_.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/👴🏻 Retrô_/🌍 Seleções_/AMÉRICA DO SUL/Brasil.jpg",
+      "catalogo/👴🏻 Retrô_/🌍 Seleções_/AMÉRICA DO SUL/Brasil(1).jpg",
+      "catalogo/👴🏻 Retrô_/🌍 Seleções_/AMÉRICA DO SUL/Brasil(2).jpg",
+      "catalogo/👴🏻 Retrô_/🌍 Seleções_/AMÉRICA DO SUL/Brasil(3).jpg"
+    ],
+    "dists": [
+      0,
+      84,
+      83,
+      84,
+      98
+    ]
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-vasco-da-gama",
+    "nome": "Camisa Vasco da Gama retro",
+    "totalAntes": 2,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1
+    ],
+    "mantidasSources": [
+      "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Vasco.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Vasco(1).jpg"
+    ],
+    "dists": [
+      0,
+      72
+    ]
+  },
+  {
+    "slug": "retro-campeonato-italiano-roma-1991",
+    "nome": "Camisa Roma 1991 retro",
+    "totalAntes": 2,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1
+    ],
+    "mantidasSources": [
+      "catalogo/👴🏻 Retrô_/🇮🇹 Campeonato Italiano_/Roma 1991.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/👴🏻 Retrô_/🇮🇹 Campeonato Italiano_/Roma 1991(1).jpg"
+    ],
+    "dists": [
+      0,
+      73
+    ]
+  },
+  {
+    "slug": "camisa-jogador-premier-league-arsenal-25-26",
+    "nome": "Camisa Arsenal 25/26 jogador masculino",
+    "totalAntes": 3,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1,
+      2
+    ],
+    "mantidasSources": [
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League/Arsenal 25_26.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League/Arsenal 25_26(1).jpg",
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League/Arsenal 25_26(2).jpg"
+    ],
+    "dists": [
+      0,
+      67,
+      57
+    ]
+  },
+  {
+    "slug": "retro-campeonato-espanhol-real-madrid",
+    "nome": "Camisa Real Madrid retro",
+    "totalAntes": 14,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "mantidasSources": [
+      "catalogo/👴🏻 Retrô_/🇪🇸 Campeonato Espanhol_/Real Madrid_.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/👴🏻 Retrô_/🇪🇸 Campeonato Espanhol_/Real Madrid_(1).jpg",
+      "catalogo/👴🏻 Retrô_/🇪🇸 Campeonato Espanhol_/Real Madrid_(2).jpg",
+      "catalogo/👴🏻 Retrô_/🇪🇸 Campeonato Espanhol_/Real Madrid_(3).jpg",
+      "catalogo/👴🏻 Retrô_/🇪🇸 Campeonato Espanhol_/Real Madrid_(4).jpg",
+      "catalogo/👴🏻 Retrô_/🇪🇸 Campeonato Espanhol_/Real Madrid_(5).jpg",
+      "catalogo/👴🏻 Retrô_/🇪🇸 Campeonato Espanhol_/Real Madrid_(6).jpg",
+      "catalogo/👴🏻 Retrô_/🇪🇸 Campeonato Espanhol_/Real Madrid_(7).jpg",
+      "catalogo/👴🏻 Retrô_/🇪🇸 Campeonato Espanhol_/Real Madrid_(8).jpg",
+      "catalogo/👴🏻 Retrô_/🇪🇸 Campeonato Espanhol_/Real Madrid_(9).jpg",
+      "catalogo/👴🏻 Retrô_/🇪🇸 Campeonato Espanhol_/Real Madrid_(10).jpg",
+      "catalogo/👴🏻 Retrô_/🇪🇸 Campeonato Espanhol_/Real Madrid_(11).jpg",
+      "catalogo/👴🏻 Retrô_/🇪🇸 Campeonato Espanhol_/Real Madrid_(12).jpg",
+      "catalogo/👴🏻 Retrô_/🇪🇸 Campeonato Espanhol_/Real Madrid_(13).jpg"
+    ],
+    "dists": [
+      0,
+      69,
+      68,
+      68,
+      55,
+      65,
+      69,
+      120,
+      58,
+      57,
+      66,
+      78,
+      53,
+      98
+    ]
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-selecoes-europa-inglaterra-26-27",
+    "nome": "Camisa Inglaterra 26/27 inverno masculino manga longa",
+    "totalAntes": 2,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1
+    ],
+    "mantidasSources": [
+      "catalogo/🥼Camisa Manga Longa Torcedor/🌍 Seleções_/EUROPA/Inglaterra 26_27 Copa do Mundo_.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/🥼Camisa Manga Longa Torcedor/🌍 Seleções_/EUROPA/Inglaterra 26_27 Copa do Mundo_(1).jpg"
+    ],
+    "dists": [
+      0,
+      71
+    ]
+  },
+  {
+    "slug": "camisa-jogador-campeonato-portugues-benfica-26-27",
+    "nome": "Camisa Benfica 26/27 jogador masculino",
+    "totalAntes": 2,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1
+    ],
+    "mantidasSources": [
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇵🇹 Campeonato Português_/Benfica 26_27.png"
+    ],
+    "removidasSources": [
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇵🇹 Campeonato Português_/Benfica 26_27(1).jpg"
+    ],
+    "dists": [
+      0,
+      69
+    ]
+  },
+  {
+    "slug": "camisa-manga-longa-torcedor-selecoes-europa-portugal-25-26",
+    "nome": "Camisa Portugal 25/26 inverno masculino manga longa",
+    "totalAntes": 2,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1
+    ],
+    "mantidasSources": [
+      "catalogo/🥼Camisa Manga Longa Torcedor/🌍 Seleções_/EUROPA/Portugal 25_26.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/🥼Camisa Manga Longa Torcedor/🌍 Seleções_/EUROPA/Portugal 25_26(1).jpg"
+    ],
+    "dists": [
+      0,
+      67
+    ]
+  },
+  {
+    "slug": "camisa-jogador-liga-mexicana-leon-26-27-26-27",
+    "nome": "Camisa León 26/27 jogador masculino",
+    "totalAntes": 2,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1
+    ],
+    "mantidasSources": [
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇲🇽 Liga Mexicana_/León 26_27.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇲🇽 Liga Mexicana_/León 26_27(1).jpg"
+    ],
+    "dists": [
+      0,
+      59
+    ]
+  },
+  {
+    "slug": "femininas-campeonato-brasileiro-sao-paulo-25-26",
+    "nome": "Camisa São Paulo 25/26 feminino",
+    "totalAntes": 2,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1
+    ],
+    "mantidasSources": [
+      "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/São Paulo 25_26.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/👩🏻 Femininas/🇧🇷 Campeonato Brasileiro/São Paulo 25_26(1).jpg"
+    ],
+    "dists": [
+      0,
+      61
+    ]
+  },
+  {
+    "slug": "selecoes-europa-holanda-26-27-copa-do-mundo-26-27",
+    "nome": "Camisa Holanda Copa do Mundo 26/27",
+    "totalAntes": 2,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1
+    ],
+    "mantidasSources": [
+      "catalogo/🌍 Seleções/EUROPA/Holanda 26_27 Copa do Mundo.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/🌍 Seleções/EUROPA/Holanda 26_27 Copa do Mundo.png"
+    ],
+    "dists": [
+      0,
+      58
+    ]
+  },
+  {
+    "slug": "retro-selecoes-europa-espanha",
+    "nome": "Camisa Espanha retro",
+    "totalAntes": 4,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1,
+      2,
+      3
+    ],
+    "mantidasSources": [
+      "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Espanha_.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Espanha_(1).jpg",
+      "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Espanha_(2).jpg",
+      "catalogo/👴🏻 Retrô_/🌍 Seleções_/EUROPA_/Espanha_(3).jpg"
+    ],
+    "dists": [
+      0,
+      60,
+      59,
+      67
+    ]
+  },
+  {
+    "slug": "camisa-jogador-campeonato-italiano-roma-26-27",
+    "nome": "Camisa Roma 26/27 jogador masculino",
+    "totalAntes": 2,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1
+    ],
+    "mantidasSources": [
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇮🇹 Campeonato Italiano/Roma 26_27.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇮🇹 Campeonato Italiano/Roma 26_27(1).jpg"
+    ],
+    "dists": [
+      0,
+      58
+    ]
+  },
+  {
+    "slug": "camisa-jogador-liga-mexicana-cruz-azul-26-27-26-27",
+    "nome": "Camisa Cruz Azul 26/27 jogador masculino",
+    "totalAntes": 2,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1
+    ],
+    "mantidasSources": [
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇲🇽 Liga Mexicana_/Cruz Azul 26_27.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇲🇽 Liga Mexicana_/Cruz Azul 26_27(1).jpg"
+    ],
+    "dists": [
+      0,
+      54
+    ]
+  },
+  {
+    "slug": "camisa-jogador-selecoes-america-do-norte-central-mexico-26-27",
+    "nome": "Camisa México 26/27 jogador masculino",
+    "totalAntes": 2,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1
+    ],
+    "mantidasSources": [
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🌍 Seleções_/AMÉRICA DO NORTE - CENTRAL/México 26_27 Copa do Mundo.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🌍 Seleções_/AMÉRICA DO NORTE - CENTRAL/México 26_27 Copa do Mundo(1).jpg"
+    ],
+    "dists": [
+      0,
+      54
+    ]
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-corinthians-2005",
+    "nome": "Camisa Corinthians 2005 retro",
+    "totalAntes": 2,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1
+    ],
+    "mantidasSources": [
+      "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Corinthians 2005.png"
+    ],
+    "removidasSources": [
+      "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Corinthians 2005(1).png"
+    ],
+    "dists": [
+      0,
+      54
+    ]
+  },
+  {
+    "slug": "camisa-jogador-campeonato-turco-galatasaray-26-27-26-27",
+    "nome": "Camisa Galatasaray 26/27 jogador masculino",
+    "totalAntes": 2,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1
+    ],
+    "mantidasSources": [
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇹🇷 Campeonato Turco/Galatasaray 26_27.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇹🇷 Campeonato Turco/Galatasaray 26_27(1).jpg"
+    ],
+    "dists": [
+      0,
+      50
+    ]
+  },
+  {
+    "slug": "selecoes-europa-portugal-25-26-treino",
+    "nome": "Camisa Portugal 25/26 treino",
+    "totalAntes": 2,
+    "mantidasIndices": [
+      0,
+      1
+    ],
+    "removidasIndices": [],
+    "mantidasSources": [
+      "catalogo/🌍 Seleções/EUROPA/Portugal 25_26 - Treino.png",
+      "catalogo/🌍 Seleções/EUROPA/Portugal 25_26 - Treino(1).jpg"
+    ],
+    "removidasSources": [],
+    "dists": [
+      0,
+      13
+    ]
+  },
+  {
+    "slug": "camisa-jogador-campeonato-italiano-inter-26-27",
+    "nome": "Camisa Inter 26/27 jogador masculino",
+    "totalAntes": 3,
+    "mantidasIndices": [
+      0,
+      1,
+      2
+    ],
+    "removidasIndices": [],
+    "mantidasSources": [
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇮🇹 Campeonato Italiano/Inter de Milão 26_27.jpg",
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇮🇹 Campeonato Italiano/Inter de Milão 26_27(1).jpg",
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🇮🇹 Campeonato Italiano/Inter de Milão 26_27(2).jpg"
+    ],
+    "removidasSources": [],
+    "dists": [
+      0,
+      49,
+      22
+    ]
+  },
+  {
+    "slug": "camisa-jogador-selecoes-europa-suica-26-27-copa-do-mundo-26-27",
+    "nome": "Camisa Suíça Copa do Mundo 26/27 jogador masculino",
+    "totalAntes": 2,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1
+    ],
+    "mantidasSources": [
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🌍 Seleções_/EUROPA/Suíça 26_27 Copa do Mundo.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/🏃🏻‍♂️CAMISA JOGADOR/🌍 Seleções_/EUROPA/Suíça 26_27 Copa do Mundo(1).jpg"
+    ],
+    "dists": [
+      0,
+      50
+    ]
+  },
+  {
+    "slug": "retro-campeonato-brasileiro-corinthians-1997",
+    "nome": "Camisa Corinthians 1997 retro",
+    "totalAntes": 2,
+    "mantidasIndices": [
+      0
+    ],
+    "removidasIndices": [
+      1
+    ],
+    "mantidasSources": [
+      "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Corinthians 1997.jpg"
+    ],
+    "removidasSources": [
+      "catalogo/👴🏻 Retrô_/🇧🇷 Campeonato Brasileiro_/Corinthians 1997(1).jpg"
+    ],
+    "dists": [
+      0,
+      53
+    ]
+  }
+]

@@ -165,14 +165,17 @@ export default function AdminProducts() {
   const [orderCount, setOrderCount] = useState<number | null>(null);
   const [checkingOrders, setCheckingOrders] = useState(false);
   const [confirmationText, setConfirmationText] = useState("");
+  const [deleteConfirmedOrders, setDeleteConfirmedOrders] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteActionError, setDeleteActionError] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   async function initiateDelete(product: ManualProduct) {
     setProductToDelete(product);
     setDeleteStep(1);
     setOrderCount(null);
     setConfirmationText("");
+    setDeleteConfirmedOrders(false);
     setDeleteActionError("");
     setCheckingOrders(true);
 
@@ -274,12 +277,14 @@ export default function AdminProducts() {
     }
   }
 
-  async function loadProducts() {
+  async function loadProducts(term?: string) {
     setLoading(true);
     setMessage("");
     setLoadError("");
     try {
-      const response = await adminFetch("/api/admin/products", {
+      const q = typeof term === "string" ? term.trim() : searchTerm.trim();
+      const endpoint = q ? `/api/admin/products?q=${encodeURIComponent(q)}` : "/api/admin/products";
+      const response = await adminFetch(endpoint, {
         cache: "no-store",
       });
       const body = await response.json();
@@ -685,13 +690,39 @@ export default function AdminProducts() {
 
       <section className="mt-8">
         <div className="flex flex-wrap items-end justify-between gap-3">
-          <div><h2 className="text-xl font-black">Produtos cadastrados manualmente</h2><p className="mt-1 text-xs text-muted">{products.length} produto(s) · o catálogo importado continua preservado.</p></div>
+          <div>
+            <h2 className="text-xl font-black">Produtos no Supabase</h2>
+            <p className="mt-1 text-xs text-muted">{products.length} produto(s) exibido(s) · pesquise para localizar produtos já cadastrados no banco.</p>
+          </div>
           {products.length > 0 && <p className="text-xs text-muted">Estoque total registrado: {products.reduce((sum, product) => sum + Object.values(product.stock_by_size ?? {}).reduce((subtotal, count) => subtotal + count, 0), 0)} unidades</p>}
         </div>
+
+        <form onSubmit={(event) => { event.preventDefault(); void loadProducts(searchTerm); }} className="mt-4 flex flex-wrap gap-2 max-w-xl">
+          <input
+            type="search"
+            placeholder="Pesquisar por nome, slug ou ID no Supabase..."
+            value={searchTerm}
+            onChange={(event) => setSearchTerm(event.target.value)}
+            className="flex-1 min-w-[240px] rounded-lg border border-border px-3 py-2 text-sm bg-white"
+          />
+          <button type="submit" className="rounded-lg bg-ink px-4 py-2 text-xs font-bold text-white hover:bg-zinc-800 transition-colors">
+            Buscar no banco
+          </button>
+          {searchTerm && (
+            <button
+              type="button"
+              onClick={() => { setSearchTerm(""); void loadProducts(""); }}
+              className="rounded-lg border border-border px-3 py-2 text-xs font-bold hover:bg-paper transition-colors"
+            >
+              Limpar busca
+            </button>
+          )}
+        </form>
+
         <div className="mt-3 rounded-lg border border-border bg-paper/60 p-3 text-xs text-muted flex items-center gap-2">
-          <span className="font-bold text-ink">Catálogo Geral (Yupoo):</span>
+          <span className="font-bold text-ink">Administração do Catálogo:</span>
           <span>
-            Camisas do catálogo importado são integradas em código. Apenas produtos manuais desta lista podem ser editados ou excluídos diretamente pelo painel.
+            Produtos configurados com preço válido e desmarcados de &quot;Oculto&quot; entram automaticamente na vitrine da loja.
           </span>
         </div>
         {products.length === 0 ? (
@@ -817,10 +848,7 @@ export default function AdminProducts() {
                           Este produto possui {orderCount} pedido(s) registrado(s)
                         </p>
                         <p className="mt-1 text-amber-800 leading-relaxed">
-                          A exclusão definitiva está <strong>bloqueada</strong> para preservar o histórico financeiro e fiscal dos pedidos já realizados.
-                        </p>
-                        <p className="mt-2 text-amber-900 font-semibold">
-                          Recomendação: Oculte o produto para retirá-lo da vitrine e da busca sem comprometer o histórico de vendas.
+                          Os pedidos continuam no histórico (snapshot completo); só o produto some do site. A exclusão definitiva é permitida mediante confirmação reforçada.
                         </p>
                       </div>
                     </div>
@@ -842,23 +870,27 @@ export default function AdminProducts() {
                 <div className="flex flex-col gap-2 pt-2">
                   <button
                     type="button"
-                    disabled={isDeleting || checkingOrders}
+                    disabled={isDeleting || checkingOrders || productToDelete.oculto === undefined}
                     onClick={() => void handleQuickHide()}
                     className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl bg-ink px-4 py-2.5 text-xs font-bold text-white hover:bg-pitch transition-colors disabled:opacity-50"
                   >
                     <EyeOff className="h-4 w-4" />
-                    {productToDelete.oculto ? "Já está oculto no site (manter)" : "Ocultar produto no site agora"}
+                    {productToDelete.oculto === undefined
+                      ? "Ocultar indisponível (migração 20261105000002 não aplicada)"
+                      : productToDelete.oculto
+                        ? "Já está oculto no site (manter)"
+                        : "Ocultar produto no site agora"}
                   </button>
 
                   <button
                     type="button"
-                    disabled={isDeleting || checkingOrders || (orderCount !== null && orderCount > 0)}
+                    disabled={isDeleting || checkingOrders}
                     onClick={() => setDeleteStep(2)}
                     className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl border border-red-300 bg-red-50 px-4 py-2.5 text-xs font-bold text-red-700 hover:bg-red-100 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                   >
                     <Trash2 className="h-4 w-4" />
                     {orderCount && orderCount > 0
-                      ? "Exclusão bloqueada (possui pedidos)"
+                      ? "Continuar para exclusão definitiva →"
                       : "Continuar para exclusão definitiva →"}
                   </button>
 
@@ -903,10 +935,24 @@ export default function AdminProducts() {
                   />
                 </div>
 
+                {orderCount && orderCount > 0 && (
+                  <label className="flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs text-amber-900">
+                    <input
+                      type="checkbox"
+                      checked={deleteConfirmedOrders}
+                      disabled={isDeleting}
+                      onChange={(e) => setDeleteConfirmedOrders(e.target.checked)}
+                      className="mt-0.5 h-4 w-4 shrink-0"
+                    />
+                    <span>Entendo que há {orderCount} pedido(s) vinculado(s) e que o produto será removido definitivamente</span>
+                  </label>
+                )}
+
                 {(() => {
                   const isConfirmed =
-                    confirmationText.trim().toLowerCase() === productToDelete.nome.trim().toLowerCase() ||
-                    confirmationText.trim() === "EXCLUIR";
+                    (confirmationText.trim().toLowerCase() === productToDelete.nome.trim().toLowerCase() ||
+                      confirmationText.trim() === "EXCLUIR") &&
+                    (orderCount === null || orderCount === 0 || deleteConfirmedOrders);
 
                   return (
                     <div className="flex flex-col gap-2 pt-2">
@@ -935,6 +981,7 @@ export default function AdminProducts() {
                         onClick={() => {
                           setDeleteStep(1);
                           setConfirmationText("");
+                          setDeleteConfirmedOrders(false);
                         }}
                         className="flex min-h-[44px] w-full items-center justify-center gap-1.5 rounded-xl border border-border px-4 py-2.5 text-xs font-bold text-muted hover:text-ink hover:bg-paper transition-colors"
                       >

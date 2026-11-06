@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { revalidateTag } from "next/cache";
+import { revalidateTag, revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { manualProductSchema, type ManualProductInput } from "@/lib/admin/product-validation";
@@ -23,8 +23,10 @@ function publicImageRecords(imageUrls: string[], productName: string) {
   const supabaseOrigin = new URL(supabaseUrl).origin;
   return imageUrls.map((imageUrl, index) => {
     const image = new URL(imageUrl);
-    if (image.protocol !== "https:" || image.origin !== supabaseOrigin
-      || !image.pathname.startsWith("/storage/v1/object/public/produtos/manual/")) {
+    const isSupabaseStorage = image.protocol === "https:" && image.origin === supabaseOrigin
+      && image.pathname.startsWith("/storage/v1/object/public/produtos/");
+    const isYupooProxy = image.pathname.startsWith("/api/yupoo-image") || image.hostname.includes("yupoo.com");
+    if (!isSupabaseStorage && !isYupooProxy) {
       throw new Error("As fotos precisam ter sido enviadas pelo painel para o bucket de produtos.");
     }
     return {
@@ -102,7 +104,7 @@ export async function GET(request: Request) {
   const url = new URL(request.url);
   const checkId = url.searchParams.get("check_orders");
   if (checkId) {
-    const parsedId = z.string().uuid().safeParse(checkId);
+    const parsedId = z.string().trim().min(1).max(100).safeParse(checkId);
     if (!parsedId.success) return jsonError("ID de produto inválido.", 400);
     try {
       const supabase = getSupabaseOrdersClient();
@@ -118,11 +120,17 @@ export async function GET(request: Request) {
   }
 
   try {
-    const { data, error } = await getSupabaseOrdersClient().from("products")
-      .select(PRODUCT_COLUMNS)
-      .like("yupoo_id", "manual:%")
-      .order("nome", { ascending: true })
-      .limit(500);
+    const searchQuery = url.searchParams.get("q")?.trim();
+    const supabase = getSupabaseOrdersClient();
+    let query = supabase.from("products").select("*");
+
+    if (searchQuery) {
+      query = query.or(`nome.ilike.%${searchQuery}%,slug.ilike.%${searchQuery}%,id.eq.${searchQuery}`).limit(100);
+    } else {
+      query = query.or("yupoo_id.like.manual:*,preco.gt.0").order("nome", { ascending: true }).limit(500);
+    }
+
+    const { data, error } = await query;
     if (error) throw error;
     const supplierDetails = data?.length
       ? await getSupabaseOrdersClient().from("admin_product_supplier_details")
@@ -188,15 +196,18 @@ export async function PATCH(request: Request) {
       .eq("id", parsed.data.id)
       .maybeSingle();
     if (existing.error) throw existing.error;
-    if (!existing.data || !existing.data.yupoo_id.startsWith("manual:")) {
-      return jsonError("Produto manual não encontrado.", 404);
+    if (!existing.data) {
+      return jsonError("Produto não encontrado.", 404);
     }
     const existingImages = Array.isArray(existing.data.images) ? existing.data.images : [];
-    if (existingImages.length + parsed.data.imageUrls.length > 6) {
+    const addedImages = parsed.data.imageUrls && parsed.data.imageUrls.length > 0
+      ? publicImageRecords(parsed.data.imageUrls, parsed.data.nome)
+      : [];
+    const finalImages = addedImages.length > 0 ? [...existingImages, ...addedImages] : existingImages;
+    if (finalImages.length > 6) {
       return jsonError("Cada produto pode ter no máximo 6 fotos.", 400);
     }
 
-    const addedImages = publicImageRecords(parsed.data.imageUrls, parsed.data.nome);
     const stockBySize = Object.fromEntries(parsed.data.tamanhos.map((size) => [
       size,
       parsed.data.stock_by_size[size] ?? 0,
@@ -217,7 +228,7 @@ export async function PATCH(request: Request) {
         tamanhos: parsed.data.tamanhos,
         cor: parsed.data.cor,
         imageSeed: parsed.data.nome,
-        images: [...existingImages, ...addedImages],
+        images: finalImages,
         description: parsed.data.description,
         stock_by_size: stockBySize,
         brand: parsed.data.brand,
@@ -289,19 +300,22 @@ export async function DELETE(request: Request) {
     }
 
     const orderCount = await checkProductOrders(supabase, existing.data.id, existing.data.slug);
-    if (orderCount > 0) {
-      return NextResponse.json(
-        {
-          error: `Este produto possui ${orderCount} pedido(s) associado(s) e não pode ser apagado para preservar o histórico financeiro. Em vez de excluir, use a opção "Ocultar" para tirá-lo do site sem perder o histórico.`,
-          orderCount,
-          canHide: true,
-        },
-        { status: 409, headers: ADMIN_PRIVATE_HEADERS }
-      );
+
+    // Fotos usadas por outras linhas de products nao podem ser apagadas.
+    const allProductsResult = await supabase.from("products").select("id, images");
+    const usedByOthers = new Set<string>();
+    if (!allProductsResult.error && Array.isArray(allProductsResult.data)) {
+      for (const row of allProductsResult.data) {
+        if (row.id === productId) continue;
+        for (const path of extractStoragePaths(row.images)) usedByOthers.add(path);
+      }
+    } else if (allProductsResult.error) {
+      console.warn("Falha ao verificar reuso de imagens; nenhuma foto sera removida por seguranca.", allProductsResult.error);
     }
+    const candidatePaths = extractStoragePaths(existing.data.images);
+    const storagePaths = candidatePaths.filter((path) => !usedByOthers.has(path));
 
     // 1. Remover fotos do Storage (apenas dentro de manual/ no bucket produtos)
-    const storagePaths = extractStoragePaths(existing.data.images);
     if (storagePaths.length > 0) {
       try {
         await supabase.storage.from("produtos").remove(storagePaths);
@@ -313,11 +327,11 @@ export async function DELETE(request: Request) {
     // 2. Remover fornecedor
     await supabase.from("admin_product_supplier_details").delete().eq("product_id", productId);
 
-    // 3. Remover produto
+    // 3. Remover produto (exclusao real)
     const { error: deleteError } = await supabase.from("products").delete().eq("id", productId);
     if (deleteError) throw deleteError;
 
-    // 4. Log de auditoria
+    // 4. Log de auditoria (opcional: se a tabela nao existir, apenas avisa)
     try {
       await supabase.from("admin_audit_log").insert({
         acao: "produto_excluido",
@@ -327,19 +341,26 @@ export async function DELETE(request: Request) {
           nome: existing.data.nome,
           slug: existing.data.slug,
           preco: existing.data.preco,
+          pedidos_vinculados: orderCount,
           fotos_removidas: storagePaths,
         },
       });
     } catch (auditErr) {
-      console.warn("Falha ao registrar auditoria de exclusão de produto:", auditErr);
+      console.warn("Falha ao registrar auditoria de exclusao de produto:", auditErr);
     }
 
-    // 5. Invalidação de cache
+    // 5. Invalidacao de cache
     revalidateTag("catalog");
+    revalidatePath("/");
+    revalidatePath(`/produto/${existing.data.slug}`);
+    revalidatePath("/ligas");
+    revalidatePath("/ligas/[slug]", "page");
+    revalidatePath("/sitemap.xml");
 
     return NextResponse.json(
       {
         deleted: true,
+        orderCount,
         message: `Produto "${existing.data.nome}" excluído com sucesso.`,
       },
       { headers: ADMIN_PRIVATE_HEADERS }
