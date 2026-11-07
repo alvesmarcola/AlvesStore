@@ -47,6 +47,17 @@ function productValues(input: ManualProductInput, id: string, imageUrls: string[
     size,
     input.stock_by_size[size] ?? 0,
   ]));
+  const images = Array.isArray(input.images) && input.images.length > 0
+    ? input.images.map((img, idx) => ({
+        src: img.src,
+        source: img.source || img.src,
+        alt: img.alt || `${input.nome} · foto ${idx + 1}`,
+        credit: img.credit || SITE_NAME,
+        focalPoint: img.focalPoint || { x: 50, y: 50 },
+        blurDataURL: img.blurDataURL || "",
+      }))
+    : publicImageRecords(imageUrls, input.nome);
+
   return {
     id,
     yupoo_id: `manual:${id}`,
@@ -63,12 +74,12 @@ function productValues(input: ManualProductInput, id: string, imageUrls: string[
     tamanhos: input.tamanhos,
     cor: input.cor,
     imageSeed: input.nome,
-    images: publicImageRecords(imageUrls, input.nome),
+    images,
     description: input.description,
     stock_by_size: stockBySize,
     brand: input.brand,
     tem_variacao_uniforme: Boolean(input.tem_variacao_uniforme),
-    oculto: Boolean(input.oculto),
+    oculto: Boolean(input.oculto) || images.length === 0,
     updated_at: new Date().toISOString(),
   };
 }
@@ -158,7 +169,9 @@ export async function POST(request: Request) {
   if (authFailure) return jsonError(authFailure.message, authFailure.status);
   const parsed = manualProductSchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) return jsonError("Revise os dados do produto e os estoques por tamanho.", 400);
-  if (parsed.data.imageUrls.length === 0) return jsonError("Envie pelo menos uma foto antes de cadastrar o produto.", 400);
+  if (parsed.data.imageUrls.length === 0 && (!parsed.data.images || parsed.data.images.length === 0)) {
+    return jsonError("Envie pelo menos uma foto antes de cadastrar o produto.", 400);
+  }
   if (hasBundledProductSlug(parsed.data.slug)) return jsonError("Esse endereço já pertence a um produto atual da loja. Escolha outro slug.", 409);
 
   try {
@@ -199,14 +212,31 @@ export async function PATCH(request: Request) {
     if (!existing.data) {
       return jsonError("Produto não encontrado.", 404);
     }
-    const existingImages = Array.isArray(existing.data.images) ? existing.data.images : [];
-    const addedImages = parsed.data.imageUrls && parsed.data.imageUrls.length > 0
-      ? publicImageRecords(parsed.data.imageUrls, parsed.data.nome)
-      : [];
-    const finalImages = addedImages.length > 0 ? [...existingImages, ...addedImages] : existingImages;
+    let finalImages: any[] = [];
+    if (Array.isArray(parsed.data.images)) {
+      finalImages = parsed.data.images.map((img, idx) => ({
+        src: img.src,
+        source: img.source || img.src,
+        alt: img.alt || `${parsed.data.nome} · foto ${idx + 1}`,
+        credit: img.credit || SITE_NAME,
+        focalPoint: img.focalPoint || { x: 50, y: 50 },
+        blurDataURL: img.blurDataURL || "",
+      }));
+    } else {
+      finalImages = Array.isArray(existing.data.images) ? existing.data.images : [];
+    }
+
+    if (parsed.data.imageUrls && parsed.data.imageUrls.length > 0) {
+      const addedImages = publicImageRecords(parsed.data.imageUrls, parsed.data.nome);
+      finalImages = [...finalImages, ...addedImages];
+    }
+
     if (finalImages.length > 6) {
       return jsonError("Cada produto pode ter no máximo 6 fotos.", 400);
     }
+
+    // Se o produto ficar sem nenhuma foto limpa, oculte-o em vez de deixar o card vazio
+    const isOculto = Boolean(parsed.data.oculto) || finalImages.length === 0;
 
     const stockBySize = Object.fromEntries(parsed.data.tamanhos.map((size) => [
       size,
@@ -233,7 +263,7 @@ export async function PATCH(request: Request) {
         stock_by_size: stockBySize,
         brand: parsed.data.brand,
         tem_variacao_uniforme: Boolean(parsed.data.tem_variacao_uniforme),
-        oculto: Boolean(parsed.data.oculto),
+        oculto: isOculto,
         updated_at: new Date().toISOString(),
       })
       .eq("id", parsed.data.id)

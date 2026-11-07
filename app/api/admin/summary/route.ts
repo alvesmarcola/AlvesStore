@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { ADMIN_PRIVATE_HEADERS, getAdminAuthFailure } from "@/lib/server/admin-auth";
+import { ADMIN_PRIVATE_HEADERS, getAdminAuthFailure, isPartnerRole } from "@/lib/server/admin-auth";
 import {
   describeSupabaseError,
   getSupabaseOrdersClient,
@@ -34,14 +34,15 @@ export async function GET(request: Request) {
       .or("operational_status.is.null,operational_status.eq.aguardando_pagamento")
       .lt("created_at", cutoff48h);
 
+    const isPartner = isPartnerRole(request);
     const [metrics, orders, orderSuppliers, productSuppliers] = await Promise.all([
       supabase.from("store_order_admin_metrics")
-        .select("order_count,paid_order_count,awaiting_supplier_count,shipped_order_count,revenue_cents,supplier_cost_cents,shipping_cost_cents,other_expenses_cents,promo_order_count,promo_discount_cents,promo_revenue_cents")
+        .select("*")
         .single(),
       supabase.from("store_orders")
-        .select("id,status,mercado_pago_status,operational_status,total_cents,supplier_name,supplier_status,supplier_cost_cents,shipping_cost_cents,other_expenses_cents,created_at")
+        .select("id,status,mercado_pago_status,operational_status,total_cents,supplier_name,supplier_status,supplier_cost_cents,shipping_cost_cents,other_expenses_cents,created_at,is_test,payment_fee_cents,refunded_cents,customer,item_lines,promo,valor_desconto,tracking_code,tracking_url,shipped_at,payment_method_id,payment_type_id")
         .order("created_at", { ascending: false })
-        .limit(300),
+        .limit(2000),
       supabase.from("store_orders")
         .select("supplier_name,supplier_cost_cents")
         .not("supplier_name", "is", null)
@@ -63,7 +64,9 @@ export async function GET(request: Request) {
       const key = name.toLocaleLowerCase("pt-BR");
       const entry = suppliers.get(key) ?? { name, orders: 0, products: 0, supplierSpendCents: 0 };
       entry.orders += 1;
-      entry.supplierSpendCents += Number(row.supplier_cost_cents ?? 0);
+      if (!isPartner) {
+        entry.supplierSpendCents += Number(row.supplier_cost_cents ?? 0);
+      }
       suppliers.set(key, entry);
     }
     for (const row of productSuppliers.data ?? []) {
@@ -74,30 +77,48 @@ export async function GET(request: Request) {
       entry.products += 1;
       suppliers.set(key, entry);
     }
-    const totals = metrics.data;
+    const totals = (metrics.data ?? {}) as Record<string, unknown>;
     const revenueCents = Number(totals.revenue_cents ?? 0);
+    const paymentFeeCents = Number(totals.payment_fee_cents ?? 0);
     const expensesCents = Number(totals.supplier_cost_cents ?? 0)
       + Number(totals.shipping_cost_cents ?? 0)
-      + Number(totals.other_expenses_cents ?? 0);
+      + Number(totals.other_expenses_cents ?? 0)
+      + paymentFeeCents;
+
+    const rawOrders = orders.data ?? [];
+    const sanitizedOrders = rawOrders.map((order) => {
+      if (!isPartner) return order;
+      const {
+        supplier_cost_cents: _sc,
+        shipping_cost_cents: _sh,
+        other_expenses_cents: _oe,
+        payment_fee_cents: _pf,
+        supplier_name: _sn,
+        ...rest
+      } = order;
+      return rest;
+    });
 
     return privateJson({
+      isPartner,
       metrics: {
         orderCount: Number(totals.order_count ?? 0),
         paidOrderCount: Number(totals.paid_order_count ?? 0),
         awaitingSupplierCount: Number(totals.awaiting_supplier_count ?? 0),
         shippedOrderCount: Number(totals.shipped_order_count ?? 0),
-        revenueCents,
-        supplierCostCents: Number(totals.supplier_cost_cents ?? 0),
-        shippingCostCents: Number(totals.shipping_cost_cents ?? 0),
-        otherExpensesCents: Number(totals.other_expenses_cents ?? 0),
-        estimatedProfitCents: revenueCents - expensesCents,
+        revenueCents: isPartner ? 0 : revenueCents,
+        supplierCostCents: isPartner ? 0 : Number(totals.supplier_cost_cents ?? 0),
+        shippingCostCents: isPartner ? 0 : Number(totals.shipping_cost_cents ?? 0),
+        otherExpensesCents: isPartner ? 0 : Number(totals.other_expenses_cents ?? 0),
+        paymentFeeCents: isPartner ? 0 : paymentFeeCents,
+        estimatedProfitCents: isPartner ? 0 : (revenueCents - expensesCents),
         promoOrderCount: Number(totals.promo_order_count ?? 0),
-        promoDiscountCents: Number(totals.promo_discount_cents ?? 0),
-        promoRevenueCents: Number(totals.promo_revenue_cents ?? 0),
+        promoDiscountCents: isPartner ? 0 : Number(totals.promo_discount_cents ?? 0),
+        promoRevenueCents: isPartner ? 0 : Number(totals.promo_revenue_cents ?? 0),
       },
-      orders: orders.data ?? [],
+      orders: sanitizedOrders,
       suppliers: [...suppliers.values()].sort((a, b) => a.name.localeCompare(b.name, "pt-BR")),
-      configuration: {
+      configuration: isPartner ? {} : {
         supabase: configuredAny(process.env.SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_URL)
           && configuredAny(process.env.SUPABASE_SERVICE_ROLE_KEY, process.env.SUPABASE_SECRET_KEY,
             process.env.SUPABASE_SERVICE_KEY, process.env.SUPABASE_ROLE_KEY),

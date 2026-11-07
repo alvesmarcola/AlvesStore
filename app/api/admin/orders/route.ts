@@ -6,7 +6,7 @@ import {
   SupabaseOrdersConfigurationError,
 } from "@/lib/server/supabase-orders";
 import { sendTrackingUpdateEmail, sendWhatsAppOrderNotice, type OrderNotice } from "@/lib/server/order-notifications";
-import { ADMIN_PRIVATE_HEADERS, getAdminAuthFailure } from "@/lib/server/admin-auth";
+import { ADMIN_PRIVATE_HEADERS, getAdminAuthFailure, isPartnerRole } from "@/lib/server/admin-auth";
 import { reconcileMercadoPagoOrder } from "@/lib/server/mercado-pago-payments";
 
 export const runtime = "nodejs";
@@ -33,12 +33,18 @@ const orderPatchSchema = z.discriminatedUnion("action", [
   }).strict(),
   z.object({
     orderId: z.string().uuid(),
+    action: z.literal("toggle_test"),
+    isTest: z.boolean().optional(),
+  }).strict(),
+  z.object({
+    orderId: z.string().uuid(),
     action: z.literal("update_operations"),
     operationalStatus: z.enum(operationalStatuses),
     supplierName: z.string().trim().max(160),
     supplierStatus: z.enum(supplierStatuses),
     supplierOrderedAt: z.string().datetime().nullable(),
     supplierCost: z.number().finite().min(0).max(100000).nullable(),
+    paymentFee: z.number().finite().min(0).max(100000).nullable().optional(),
     shippingCost: z.number().finite().min(0).max(100000).nullable(),
     otherExpenses: z.number().finite().min(0).max(100000).nullable(),
     internalNotes: z.string().max(4000),
@@ -80,7 +86,7 @@ export async function GET(request: Request) {
       .lt("created_at", cutoff48h);
 
     const { data, error } = await supabase.from("store_orders")
-      .select("id,status,item_lines,customer,shipping,shipping_cents,total_cents,promo,valor_desconto,tracking_code,tracking_url,shipped_at,operational_status,supplier_name,supplier_status,supplier_ordered_at,supplier_cost_cents,shipping_cost_cents,other_expenses_cents,internal_notes,payment_method_id,payment_type_id,mercado_pago_status,mercado_pago_id,created_at,updated_at")
+      .select("id,status,item_lines,customer,shipping,shipping_cents,total_cents,promo,valor_desconto,tracking_code,tracking_url,shipped_at,operational_status,supplier_name,supplier_status,supplier_ordered_at,supplier_cost_cents,shipping_cost_cents,other_expenses_cents,internal_notes,payment_method_id,payment_type_id,mercado_pago_status,mercado_pago_id,is_test,payment_fee_cents,refunded_cents,created_at,updated_at")
       .order("created_at", { ascending: false })
       .limit(500);
     if (error) throw error;
@@ -96,7 +102,22 @@ export async function GET(request: Request) {
       // Ignora erro caso a tabela payment_events ainda não tenha sido criada no ambiente atual
     }
 
-    return NextResponse.json({ orders: data, paymentEvents }, { headers: ADMIN_PRIVATE_HEADERS });
+    const isPartner = isPartnerRole(request);
+    const sanitizedOrders = (data ?? []).map((order) => {
+      if (!isPartner) return order;
+      // Perfil de parceiro/sócio não visualiza custos, despesas ou taxas
+      const {
+        supplier_cost_cents: _sc,
+        shipping_cost_cents: _sh,
+        other_expenses_cents: _oe,
+        payment_fee_cents: _pf,
+        supplier_name: _sn,
+        ...safeOrder
+      } = order;
+      return safeOrder;
+    });
+
+    return NextResponse.json({ orders: sanitizedOrders, paymentEvents, isPartner }, { headers: ADMIN_PRIVATE_HEADERS });
   } catch (error) {
     const configurationError = reportFailure("Falha ao carregar pedidos administrativos:", error);
     return jsonError(configurationError ?? "Não foi possível carregar os pedidos. Verifique se a migração de gestão administrativa foi aplicada.", 503);
@@ -112,7 +133,7 @@ export async function PATCH(request: Request) {
   try {
     const supabase = getSupabaseOrdersClient();
     const existing = await supabase.from("store_orders")
-      .select("id,status,operational_status,item_lines,customer,shipping_cents,total_cents,tracking_code,tracking_url,mercado_pago_status")
+      .select("id,status,operational_status,item_lines,customer,shipping_cents,total_cents,tracking_code,tracking_url,mercado_pago_status,is_test")
       .eq("id", parsed.data.orderId)
       .maybeSingle();
     if (existing.error) throw existing.error;
@@ -121,8 +142,24 @@ export async function PATCH(request: Request) {
       tracking_url: string | null;
       mercado_pago_status: string | null;
       operational_status: string | null;
+      is_test?: boolean;
     }) | null;
     if (!order) return jsonError("Pedido não encontrado.", 404);
+
+    if (parsed.data.action === "toggle_test") {
+      const fullAdminFailure = getAdminAuthFailure(request, { requireFullAdmin: true });
+      if (fullAdminFailure) return jsonError(fullAdminFailure.message, fullAdminFailure.status);
+
+      const nextIsTest = typeof parsed.data.isTest === "boolean" ? parsed.data.isTest : !order.is_test;
+      const { data, error } = await supabase.from("store_orders")
+        .update({ is_test: nextIsTest, updated_at: new Date().toISOString() })
+        .eq("id", order.id)
+        .select("id, is_test")
+        .maybeSingle();
+      if (error) throw error;
+      if (!data) return jsonError("Não foi possível atualizar o status de teste do pedido.", 409);
+      return NextResponse.json({ updated: true, isTest: nextIsTest, message: nextIsTest ? "Pedido marcado como teste." : "Pedido removido dos testes." }, { headers: ADMIN_PRIVATE_HEADERS });
+    }
 
     if (parsed.data.action === "save_shipping") {
       if (!paid(order.status, order.mercado_pago_status)) {
@@ -197,18 +234,30 @@ export async function PATCH(request: Request) {
     if (values.operationalStatus === "enviado" && order.operational_status !== "enviado") {
       return jsonError("Use a ação “Marcar como enviado” na seção de rastreamento para registrar a data e notificar o cliente.", 409);
     }
+
+    if (isPartnerRole(request)) {
+      if (values.supplierCost !== null || values.shippingCost !== null || values.otherExpenses !== null || values.paymentFee !== undefined) {
+        return jsonError("Perfil parceiro não possui permissão para editar custos, despesas ou taxas.", 403);
+      }
+    }
+
+    const updatePayload: Record<string, unknown> = {
+      operational_status: values.operationalStatus,
+      supplier_name: values.supplierName || null,
+      supplier_status: values.supplierStatus,
+      supplier_ordered_at: values.supplierOrderedAt,
+      supplier_cost_cents: values.supplierCost === null ? null : Math.round(values.supplierCost * 100),
+      shipping_cost_cents: values.shippingCost === null ? null : Math.round(values.shippingCost * 100),
+      other_expenses_cents: values.otherExpenses === null ? null : Math.round(values.otherExpenses * 100),
+      internal_notes: values.internalNotes || null,
+      updated_at: new Date().toISOString(),
+    };
+    if (values.paymentFee !== undefined) {
+      updatePayload.payment_fee_cents = values.paymentFee === null ? null : Math.round(values.paymentFee * 100);
+    }
+
     const { data, error } = await supabase.from("store_orders")
-      .update({
-        operational_status: values.operationalStatus,
-        supplier_name: values.supplierName || null,
-        supplier_status: values.supplierStatus,
-        supplier_ordered_at: values.supplierOrderedAt,
-        supplier_cost_cents: values.supplierCost === null ? null : Math.round(values.supplierCost * 100),
-        shipping_cost_cents: values.shippingCost === null ? null : Math.round(values.shippingCost * 100),
-        other_expenses_cents: values.otherExpenses === null ? null : Math.round(values.otherExpenses * 100),
-        internal_notes: values.internalNotes || null,
-        updated_at: new Date().toISOString(),
-      })
+      .update(updatePayload)
       .eq("id", order.id)
       .select("id")
       .maybeSingle();

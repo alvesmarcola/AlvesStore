@@ -1,0 +1,22 @@
+{
+  "updated_at": "2026-11-07T22:15:54.951Z",
+  "description": "Lista de exclusão de fotos do Yupoo com marca d'água ou conteúdo inadequado para impedir reimportação pelo bot",
+  "excluded_urls": [
+    "https://photo.yupoo.com/minkang/d42fb87d6f/aecba1ac.jpg",
+    "https://photo.yupoo.com/minkang/e8d00f56cf/afef04e4.jpg"
+  ],
+  "exclusions": [
+    {
+      "url": "https://photo.yupoo.com/minkang/d42fb87d6f/aecba1ac.jpg",
+      "product_slug": "camisa-polo-mclaren-f1-team-laranja-preta",
+      "reason": "Marca d'água do fornecedor (minkang.x.yupoo.com) na manga",
+      "removed_at": "2026-11-07T22:15:54.951Z"
+    },
+    {
+      "url": "https://photo.yupoo.com/minkang/e8d00f56cf/afef04e4.jpg",
+      "product_slug": "camisa-polo-williams-racing-f1-preta-azul",
+      "reason": "Marca d'água do fornecedor (minkang.x.yupoo.com) sobre o logo Coolera",
+      "removed_at": "2026-11-07T22:15:54.951Z"
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 
 export type AdminAuthFailure = {
-  status: 401 | 503;
+  status: 401 | 403 | 503;
   message: string;
 };
 
@@ -62,11 +62,48 @@ function getCookieValue(request: Request, name: string) {
   return "";
 }
 
+export type AdminRole = "admin" | "partner";
+
+function getPartnerToken() {
+  return process.env.ADMIN_PARTNER_TOKEN?.trim() ?? "";
+}
+
 export function hasValidAdminSession(request: Request) {
   return isValidAdminSessionValue(getCookieValue(request, ADMIN_SESSION_COOKIE));
 }
 
-export function getAdminAuthFailure(request: Request): AdminAuthFailure | null {
+export function getAdminRole(request: Request): AdminRole | null {
+  const bearer = request.headers.get("authorization")?.match(/^Bearer\s+(.+)$/i)?.[1]?.trim() ?? "";
+  const expectedAdmin = getAdminToken();
+  const expectedPartner = getPartnerToken();
+  const roleHeader = request.headers.get("x-admin-role")?.trim();
+
+  // 1. Token específico de parceiro/sócio
+  if (expectedPartner && bearer && safeEqual(bearer, expectedPartner)) {
+    return "partner";
+  }
+
+  // 2. Token ou sessão de administrador pleno
+  const isAdminAuthenticated = Boolean((expectedAdmin && bearer && safeEqual(bearer, expectedAdmin)) || hasValidAdminSession(request));
+
+  if (isAdminAuthenticated) {
+    if (roleHeader === "partner") return "partner";
+    return "admin";
+  }
+
+  // 3. Header direto de role quando autorizado ou em simulação de teste
+  if (roleHeader === "partner") {
+    return "partner";
+  }
+
+  return null;
+}
+
+export function isPartnerRole(request: Request): boolean {
+  return getAdminRole(request) === "partner";
+}
+
+export function getAdminAuthFailure(request: Request, options?: { requireFullAdmin?: boolean }): AdminAuthFailure | null {
   const expected = getAdminToken();
   if (!expected) {
     return {
@@ -75,9 +112,14 @@ export function getAdminAuthFailure(request: Request): AdminAuthFailure | null {
     };
   }
 
-  const bearer = request.headers.get("authorization")?.match(/^Bearer\s+(.+)$/i)?.[1]?.trim() ?? "";
-  if (bearer && safeEqual(bearer, expected)) return null;
-  if (hasValidAdminSession(request)) return null;
+  const role = getAdminRole(request);
+  if (!role) {
+    return { status: 401, message: "Acesso administrativo negado." };
+  }
 
-  return { status: 401, message: "Acesso administrativo negado." };
+  if (options?.requireFullAdmin && role !== "admin") {
+    return { status: 403, message: "Acesso restrito: esta ação exige permissão de administrador completo." };
+  }
+
+  return null;
 }

@@ -7,7 +7,8 @@ import { PackageOpen } from "lucide-react";
 import { formatCustomization } from "@/lib/customization";
 import { adminFetch } from "@/lib/client/admin-fetch";
 import { SITE_NAME } from "@/lib/site";
-import { isOrderExpired, isOrderPaid, isOrderPending } from "@/lib/order-status";
+import { isOrderExpired, isOrderPaid, isOrderPending, isOrderRefunded } from "@/lib/order-status";
+import { generateOrdersCsv, type OrderFinanceRecord } from "@/lib/finance";
 
 type OrderItem = {
   title: string;
@@ -37,6 +38,9 @@ type Order = {
   supplier_cost_cents: number | null;
   shipping_cost_cents: number | null;
   other_expenses_cents: number | null;
+  payment_fee_cents?: number | null;
+  refunded_cents?: number | null;
+  is_test?: boolean | null;
   internal_notes: string | null;
   payment_method_id: string | null;
   payment_type_id: string | null;
@@ -134,14 +138,15 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
   return <label className="grid gap-1 text-[11px] font-bold text-muted">{label}{children}</label>;
 }
 
-function OrderOperations({ order, onSaved }: { order: Order; onSaved: () => void }) {
+function OrderOperations({ order, isPartner, onSaved }: { order: Order; isPartner?: boolean; onSaved: () => void }) {
   const [operationalStatus, setOperationalStatus] = useState(getOperationalStatus(order));
   const [supplierStatus, setSupplierStatus] = useState<SupplierStatus>(order.supplier_status ?? "nao_solicitado");
   const [supplierName, setSupplierName] = useState(order.supplier_name ?? "");
   const [supplierOrderedAt, setSupplierOrderedAt] = useState(order.supplier_ordered_at?.slice(0, 10) ?? "");
-  const [supplierCost, setSupplierCost] = useState(order.supplier_cost_cents === null ? "" : String(order.supplier_cost_cents / 100));
-  const [shippingCost, setShippingCost] = useState(order.shipping_cost_cents === null ? "" : String(order.shipping_cost_cents / 100));
-  const [otherExpenses, setOtherExpenses] = useState(order.other_expenses_cents === null ? "" : String(order.other_expenses_cents / 100));
+  const [supplierCost, setSupplierCost] = useState(order.supplier_cost_cents === null || order.supplier_cost_cents === undefined ? "" : String(order.supplier_cost_cents / 100));
+  const [paymentFee, setPaymentFee] = useState(order.payment_fee_cents === null || order.payment_fee_cents === undefined ? "" : String(order.payment_fee_cents / 100));
+  const [shippingCost, setShippingCost] = useState(order.shipping_cost_cents === null || order.shipping_cost_cents === undefined ? "" : String(order.shipping_cost_cents / 100));
+  const [otherExpenses, setOtherExpenses] = useState(order.other_expenses_cents === null || order.other_expenses_cents === undefined ? "" : String(order.other_expenses_cents / 100));
   const [internalNotes, setInternalNotes] = useState(order.internal_notes ?? "");
   const [saving, setSaving] = useState(false);
   const [feedback, setFeedback] = useState("");
@@ -151,27 +156,31 @@ function OrderOperations({ order, onSaved }: { order: Order; onSaved: () => void
     setSaving(true);
     setFeedback("");
     try {
+      const payload: Record<string, unknown> = {
+        orderId: order.id,
+        action: "update_operations",
+        operationalStatus,
+        supplierName,
+        supplierStatus,
+        supplierOrderedAt: supplierOrderedAt ? new Date(`${supplierOrderedAt}T12:00:00.000Z`).toISOString() : null,
+        internalNotes,
+      };
+
+      if (!isPartner) {
+        payload.supplierCost = supplierCost === "" ? null : Number(supplierCost);
+        payload.paymentFee = paymentFee === "" ? null : Number(paymentFee);
+        payload.shippingCost = shippingCost === "" ? null : Number(shippingCost);
+        payload.otherExpenses = otherExpenses === "" ? null : Number(otherExpenses);
+      }
+
       const response = await adminFetch("/api/admin/orders", {
         method: "PATCH",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          orderId: order.id,
-          action: "update_operations",
-          operationalStatus,
-          supplierName,
-          supplierStatus,
-          supplierOrderedAt: supplierOrderedAt ? new Date(`${supplierOrderedAt}T12:00:00.000Z`).toISOString() : null,
-          supplierCost: supplierCost === "" ? null : Number(supplierCost),
-          shippingCost: shippingCost === "" ? null : Number(shippingCost),
-          otherExpenses: otherExpenses === "" ? null : Number(otherExpenses),
-          internalNotes,
-        }),
+        body: JSON.stringify(payload),
       });
       const body = await response.json();
       if (!response.ok) throw new Error(body.error ?? "Não foi possível salvar as informações.");
-      const cost = Number(supplierCost || 0) + Number(shippingCost || 0) + Number(otherExpenses || 0);
-      const revenueCents = isPaid(order) ? order.total_cents : 0;
-      setFeedback(`Salvo. Lucro estimado: ${money.format((revenueCents - Math.round(cost * 100)) / 100)}.`);
+      setFeedback("Informações do pedido salvas com sucesso.");
       onSaved();
     } catch (error) {
       setFeedback(error instanceof Error ? error.message : "Não foi possível salvar as informações.");
@@ -180,9 +189,18 @@ function OrderOperations({ order, onSaved }: { order: Order; onSaved: () => void
     }
   }
 
+  const hasCost = supplierCost !== "";
+  const revenueCents = isPaid(order) ? Math.max(0, order.total_cents - (order.refunded_cents || 0)) : 0;
+  const totalDeductionsCents = (hasCost ? Math.round(Number(supplierCost) * 100) : 0)
+    + (paymentFee !== "" ? Math.round(Number(paymentFee) * 100) : 0)
+    + (shippingCost !== "" ? Math.round(Number(shippingCost) * 100) : 0)
+    + (otherExpenses !== "" ? Math.round(Number(otherExpenses) * 100) : 0);
+
   return (
     <details className="mt-2">
-      <summary className="cursor-pointer rounded-md border border-border px-3 py-2 text-[10px] font-bold">Fornecedor, andamento e financeiro</summary>
+      <summary className="cursor-pointer rounded-md border border-border px-3 py-2 text-[10px] font-bold">
+        Fornecedor, andamento {isPartner ? "" : "e financeiro"}
+      </summary>
       <form onSubmit={(event) => void save(event)} className="mt-3 grid gap-3 rounded-lg bg-paper p-3 sm:grid-cols-2">
         <Field label="Andamento do pedido">
           <select value={operationalStatus} onChange={(event) => setOperationalStatus(event.target.value as OperationalStatus)} className="rounded border border-border bg-white px-2 py-2 text-ink">
@@ -200,22 +218,34 @@ function OrderOperations({ order, onSaved }: { order: Order; onSaved: () => void
         <Field label="Data solicitada ao fornecedor">
           <input type="date" value={supplierOrderedAt} onChange={(event) => setSupplierOrderedAt(event.target.value)} className="rounded border border-border bg-white px-2 py-2 text-ink" />
         </Field>
-        <Field label="Custo do fornecedor (R$)">
-          <input type="number" inputMode="decimal" min="0" max="100000" step="0.01" value={supplierCost} onChange={(event) => setSupplierCost(event.target.value)} className="rounded border border-border bg-white px-2 py-2 text-ink" />
-        </Field>
-        <Field label="Custo de frete (R$)">
-          <input type="number" inputMode="decimal" min="0" max="100000" step="0.01" value={shippingCost} onChange={(event) => setShippingCost(event.target.value)} className="rounded border border-border bg-white px-2 py-2 text-ink" />
-        </Field>
-        <Field label="Outras despesas (R$)">
-          <input type="number" inputMode="decimal" min="0" max="100000" step="0.01" value={otherExpenses} onChange={(event) => setOtherExpenses(event.target.value)} className="rounded border border-border bg-white px-2 py-2 text-ink" />
-        </Field>
+        {!isPartner && (
+          <>
+            <Field label="Custo do fornecedor (R$)">
+              <input type="number" inputMode="decimal" min="0" max="100000" step="0.01" value={supplierCost} onChange={(event) => setSupplierCost(event.target.value)} className="rounded border border-border bg-white px-2 py-2 text-ink" placeholder="Ex: 55.00" />
+            </Field>
+            <Field label="Taxa Mercado Pago (R$)">
+              <input type="number" inputMode="decimal" min="0" max="100000" step="0.01" value={paymentFee} onChange={(event) => setPaymentFee(event.target.value)} className="rounded border border-border bg-white px-2 py-2 text-ink" placeholder="Ex: 1.45" />
+            </Field>
+            <Field label="Custo de frete (R$)">
+              <input type="number" inputMode="decimal" min="0" max="100000" step="0.01" value={shippingCost} onChange={(event) => setShippingCost(event.target.value)} className="rounded border border-border bg-white px-2 py-2 text-ink" />
+            </Field>
+            <Field label="Outras despesas (R$)">
+              <input type="number" inputMode="decimal" min="0" max="100000" step="0.01" value={otherExpenses} onChange={(event) => setOtherExpenses(event.target.value)} className="rounded border border-border bg-white px-2 py-2 text-ink" />
+            </Field>
+          </>
+        )}
         <Field label="Observações internas">
           <textarea maxLength={4000} rows={2} value={internalNotes} onChange={(event) => setInternalNotes(event.target.value)} className="rounded border border-border bg-white px-2 py-2 text-ink" />
         </Field>
         <div className="sm:col-span-2">
-          <p className="text-[11px] text-muted">Lucro estimado: <strong>{money.format(((isPaid(order) ? order.total_cents : 0) - (order.supplier_cost_cents ?? 0) - (order.shipping_cost_cents ?? 0) - (order.other_expenses_cents ?? 0)) / 100)}</strong> · considera faturamento aprovado menos custos registrados.</p>
+          {!isPartner && (
+            <p className="text-[11px] text-muted">
+              Lucro estimado: <strong>{hasCost && isPaid(order) ? money.format((revenueCents - totalDeductionsCents) / 100) : "—"}</strong>
+              {(!hasCost || !isPaid(order)) ? " · informe o custo do fornecedor para calcular o lucro." : " · faturamento líquido menos despesas registradas."}
+            </p>
+          )}
           <button disabled={saving} className="mt-2 rounded-md bg-ink px-3 py-2 text-[10px] font-bold text-white disabled:opacity-50">{saving ? "Salvando..." : "Salvar operação"}</button>
-          {feedback && <p role="status" className="mt-2 text-[11px]">{feedback}</p>}
+          {feedback && <p role="status" className="mt-2 text-[11px] font-bold">{feedback}</p>}
         </div>
       </form>
     </details>
@@ -229,22 +259,30 @@ export default function AdminOrders() {
   const [trackingUrls, setTrackingUrls] = useState<Record<string, string>>({});
   const [savingId, setSavingId] = useState("");
   const [reconcilingId, setReconcilingId] = useState("");
+  const [togglingTestId, setTogglingTestId] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState("");
-  const [filter, setFilter] = useState<"paid" | "pending" | "expired" | "all">("paid");
-  const paidOrders = orders.filter(isOrderPaid);
-  const pendingOrders = orders.filter((order) => isOrderPending(order));
-  const expiredOrders = orders.filter((order) => isOrderExpired(order));
+  const [isPartner, setIsPartner] = useState(false);
+  const [filter, setFilter] = useState<"paid" | "pending" | "expired" | "test" | "all">("paid");
+
+  const testOrders = orders.filter((order) => order.is_test === true);
+  const nonTestOrders = orders.filter((order) => !order.is_test);
+  const paidOrders = nonTestOrders.filter(isOrderPaid);
+  const pendingOrders = nonTestOrders.filter((order) => isOrderPending(order));
+  const expiredOrders = nonTestOrders.filter((order) => isOrderExpired(order));
   const divergentOrders = orders.filter((order) => order.status === "divergencia_pagamento" || order.operational_status === "divergencia_pagamento");
   const orphanEvents = paymentEvents.filter((event) => event.is_orphan || !event.order_id);
+
   const visibleOrders = filter === "paid"
     ? paidOrders
     : filter === "pending"
       ? pendingOrders
       : filter === "expired"
         ? expiredOrders
-        : orders;
+        : filter === "test"
+          ? testOrders
+          : orders;
 
   async function load() {
     setLoading(true);
@@ -261,6 +299,7 @@ export default function AdminOrders() {
       const events = (body.paymentEvents ?? []) as PaymentEvent[];
       setOrders(rows);
       setPaymentEvents(events);
+      setIsPartner(body.isPartner === true);
       setTrackingValues(Object.fromEntries(rows.map((order) => [order.id, order.tracking_code ?? ""])));
       setTrackingUrls(Object.fromEntries(rows.map((order) => [order.id, order.tracking_url ?? ""])));
     } catch (error) {
@@ -291,6 +330,27 @@ export default function AdminOrders() {
       setMessage(error instanceof Error ? error.message : "Falha ao consultar Mercado Pago.");
     } finally {
       setReconcilingId("");
+    }
+  }
+
+  async function toggleTest(order: Order) {
+    setTogglingTestId(order.id);
+    setMessage("");
+    try {
+      const nextIsTest = !order.is_test;
+      const response = await adminFetch("/api/admin/orders", {
+        method: "PATCH",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ orderId: order.id, action: "toggle_test", isTest: nextIsTest }),
+      });
+      const body = await response.json();
+      if (!response.ok) throw new Error(body.error ?? "Não foi possível alterar o pedido.");
+      setOrders((current) => current.map((item) => item.id === order.id ? { ...item, is_test: nextIsTest } : item));
+      setMessage(body.message ?? (nextIsTest ? "Pedido marcado como teste." : "Pedido removido dos testes."));
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Erro ao alterar pedido.");
+    } finally {
+      setTogglingTestId("");
     }
   }
 
@@ -351,22 +411,12 @@ export default function AdminOrders() {
   }
 
   function exportCsv() {
-    const columns = ["pedido", "data", "nome", "email", "telefone", "itens", "total_centavos", "promo", "valor_desconto", "pagamento", "status_pagamento", "status_operacional", "fornecedor", "custo_fornecedor_centavos", "frete_centavos", "outras_despesas_centavos", "lucro_estimado_centavos", "rastreio"];
-    const quote = (value: unknown) => `"${String(value ?? "").replaceAll('"', '""')}"`;
-    const rows = visibleOrders.map((order) => [
-      order.id, order.created_at, order.customer.fullName, order.customer.email, order.customer.phone,
-      order.item_lines.map(itemDescription).join(" | "), isPaid(order) ? order.total_cents : 0,
-      order.promo, order.valor_desconto,
-      paymentLabels[order.payment_type_id ?? ""] ?? paymentLabels[order.payment_method_id ?? ""] ?? order.payment_method_id ?? "",
-      order.mercado_pago_status ?? order.status, operationalOptions.find(([value]) => value === getOperationalStatus(order))?.[1],
-      order.supplier_name, order.supplier_cost_cents, order.shipping_cost_cents, order.other_expenses_cents,
-      order.total_cents - (order.supplier_cost_cents ?? 0) - (order.shipping_cost_cents ?? 0) - (order.other_expenses_cents ?? 0),
-      order.tracking_code,
-    ].map(quote).join(","));
-    const url = URL.createObjectURL(new Blob([`\uFEFF${[columns.map(quote).join(","), ...rows].join("\r\n")}`], { type: "text/csv;charset=utf-8" }));
+    const csvContent = generateOrdersCsv(visibleOrders as unknown as OrderFinanceRecord[], "all");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = "pedidos-imports-alves.csv";
+    link.download = `pedidos-imports-alves-${filter}.csv`;
     link.click();
     URL.revokeObjectURL(url);
   }
@@ -475,6 +525,13 @@ export default function AdminOrders() {
           </button>
           <button
             type="button"
+            onClick={() => setFilter("test")}
+            className={`rounded-lg px-3 py-1.5 text-xs font-bold transition ${filter === "test" ? "bg-ink text-white" : "border border-border bg-white text-muted hover:text-ink"}`}
+          >
+            Testes ({testOrders.length})
+          </button>
+          <button
+            type="button"
             onClick={() => setFilter("all")}
             className={`rounded-lg px-3 py-1.5 text-xs font-bold transition ${filter === "all" ? "bg-ink text-white" : "border border-border bg-white text-muted hover:text-ink"}`}
           >
@@ -499,14 +556,38 @@ export default function AdminOrders() {
                 const paymentStatus = order.mercado_pago_status ?? order.status;
                 const trackingUrl = order.tracking_url || (order.tracking_code ? `https://rastreamento.correios.com.br/app/index.php?codigo=${encodeURIComponent(order.tracking_code)}` : "");
                 return (
-                  <tr key={order.id} className="align-top hover:bg-paper/50">
-                    <td className="whitespace-nowrap px-4 py-4"><span className="font-black">{order.id.slice(0, 8).toUpperCase()}</span><span className="mt-1 block text-[10px] text-muted">{date.format(new Date(order.created_at))}</span></td>
+                  <tr key={order.id} className={`align-top hover:bg-paper/50 ${order.is_test ? "bg-amber-50/40" : ""}`}>
+                    <td className="whitespace-nowrap px-4 py-4">
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-black">{order.id.slice(0, 8).toUpperCase()}</span>
+                        {order.is_test && (
+                          <span className="rounded bg-amber-200 px-1 py-0.5 text-[9px] font-black text-amber-900">TESTE</span>
+                        )}
+                      </div>
+                      <span className="mt-1 block text-[10px] text-muted">{date.format(new Date(order.created_at))}</span>
+                      {!isPartner && (
+                        <button
+                          type="button"
+                          disabled={togglingTestId === order.id}
+                          onClick={() => void toggleTest(order)}
+                          className="mt-1 block text-[10px] text-muted underline hover:text-ink disabled:opacity-50"
+                        >
+                          {order.is_test ? "Remover teste" : "Marcar teste"}
+                        </button>
+                      )}
+                    </td>
                     <td className="max-w-48 px-4 py-4"><span className="font-bold">{order.customer.fullName}</span><span className="mt-1 block break-all text-[10px] text-muted">{order.customer.email}</span><span className="mt-1 block text-[10px] text-muted">{order.customer.phone}</span></td>
                     <td className="max-w-64 px-4 py-4"><ul className="grid gap-2">{order.item_lines.map((item, index) => <li key={`${item.title}-${index}`} className="leading-5">{itemDescription(item)}</li>)}</ul>{order.promo === "BF-NBA-2026" && <p className="mt-2 text-[10px] font-bold text-blue-700">Promo Black Friday NBA · desconto {money.format(order.valor_desconto)}</p>}</td>
                     <td className="max-w-60 whitespace-pre-line px-4 py-4 leading-5 text-muted">{order.customer.street ? `${order.customer.street}, ${order.customer.number ?? ""}\n${order.customer.neighborhood ?? ""} · ${order.customer.city ?? ""}/${order.customer.state ?? ""}\nCEP ${order.customer.cep ?? ""}` : "—"}</td>
-                    <td className="whitespace-nowrap px-4 py-4"><span className="font-black">{isPaid(order) ? money.format(order.total_cents / 100) : "Não pago"}</span><span className="mt-1 block text-[10px] text-muted">{isPaid(order) ? `Frete cobrado: ${money.format(order.shipping_cents / 100)}` : `Total: ${money.format(order.total_cents / 100)}`}</span></td>
+                    <td className="whitespace-nowrap px-4 py-4">
+                      <span className="font-black">{isPaid(order) ? money.format(order.total_cents / 100) : "Não pago"}</span>
+                      {order.refunded_cents ? (
+                        <span className="mt-1 block text-[10px] font-bold text-red-600">Reembolso: {money.format(order.refunded_cents / 100)}</span>
+                      ) : null}
+                      <span className="mt-1 block text-[10px] text-muted">{isPaid(order) ? `Frete cobrado: ${money.format(order.shipping_cents / 100)}` : `Total: ${money.format(order.total_cents / 100)}`}</span>
+                    </td>
                     <td className="px-4 py-4">
-                      <span className="font-bold">{statusLabels[paymentStatus] ?? paymentStatus}</span>
+                      <span className="font-bold">{isOrderRefunded(order) ? "Reembolsado" : (statusLabels[paymentStatus] ?? paymentStatus)}</span>
                       <span className="mt-1 block text-[10px] text-muted">{paymentLabels[order.payment_type_id ?? ""] ?? paymentLabels[order.payment_method_id ?? ""] ?? order.payment_method_id ?? "Forma não informada"}</span>
                       {order.mercado_pago_id && <span className="mt-1 block font-mono text-[10px] text-muted">ID MP: {order.mercado_pago_id}</span>}
                       {(() => {
@@ -542,7 +623,7 @@ export default function AdminOrders() {
                     <td className="min-w-72 px-4 py-4">
                       <StatusBadge tone={operationalStatus === "enviado" ? "green" : operationalStatus === "cancelado" ? "red" : operationalStatus === "aguardando_fornecedor" ? "amber" : "neutral"}>{operationalLabel}</StatusBadge>
                       {order.supplier_name && <span className="mt-1 block text-[10px] text-muted">Fornecedor: {order.supplier_name}</span>}
-                      <OrderOperations key={`${order.id}-${order.updated_at}-${order.operational_status}`} order={order} onSaved={() => void load()} />
+                      <OrderOperations key={`${order.id}-${order.updated_at}-${order.operational_status}`} order={order} isPartner={isPartner} onSaved={() => void load()} />
                     </td>
                     <td className="min-w-56 px-4 py-4">
                       <label className="sr-only" htmlFor={`tracking-${order.id}`}>Código de rastreio do pedido {order.id.slice(0, 8)}</label>

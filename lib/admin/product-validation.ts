@@ -4,6 +4,15 @@ const productSize = z.string().trim().min(1).max(12).refine((size) => size !== "
   message: "O tamanho 3GG ainda não está disponível na vitrine.",
 });
 
+export const manualProductImageSchema = z.object({
+  src: z.string().trim().min(1),
+  alt: z.string().optional(),
+  credit: z.string().optional(),
+  source: z.string().optional(),
+  focalPoint: z.object({ x: z.number(), y: z.number() }).optional(),
+  blurDataURL: z.string().optional(),
+});
+
 export const manualProductSchema = z.object({
   id: z.string().trim().min(1).max(100).optional(),
   slug: z.string().trim().min(2).max(100).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
@@ -26,7 +35,8 @@ export const manualProductSchema = z.object({
   stock_by_size: z.record(z.string(), z.number().int().min(0).max(10000)),
   tem_variacao_uniforme: z.boolean().default(false),
   oculto: z.boolean().default(false),
-  imageUrls: z.array(z.string().url()).max(6),
+  imageUrls: z.array(z.string().url()).max(6).default([]),
+  images: z.array(manualProductImageSchema).max(6).optional(),
 }).strict().superRefine((product, context) => {
   for (const size of Object.keys(product.stock_by_size)) {
     if (!product.tamanhos.includes(size)) {

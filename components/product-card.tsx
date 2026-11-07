@@ -27,7 +27,6 @@ export function ProductCard({ product }: { product: Product }) {
   const [added, setAdded] = useState(false);
   const addItem = useCart((state) => state.addItem);
   const primaryImage = productImageAsset(product);
-  const alternateImage = productImageAsset(product, true);
   const classification = classifyProduct(product);
   const offerBadge = getCardOfferBadge(product);
 
@@ -51,9 +50,18 @@ export function ProductCard({ product }: { product: Product }) {
     event.currentTarget.style.transform = "";
   }}>
     <div className="product-image relative aspect-[4/5] overflow-hidden rounded-lg bg-paper shrink-0">
-      <Link href={`/produto/${product.slug}`} aria-label={`Ver ${product.nome}`} className="relative block h-full w-full">
-        <SafeProductImage src={primaryImage.src} fallbackSrc={primaryImage.fallbackSrc} alt={primaryImage.alt} fill sizes="(max-width: 640px) 48vw, (max-width: 1024px) 30vw, 240px" placeholder="blur" blurDataURL={primaryImage.blurDataURL} className="product-photo object-cover transition-opacity duration-500 group-hover:opacity-0" style={{ objectPosition: `${primaryImage.focalPoint.x}% ${primaryImage.focalPoint.y}%` }} />
-        {alternateImage.src !== primaryImage.src && <SafeProductImage src={alternateImage.src} fallbackSrc={alternateImage.fallbackSrc} alt="" aria-hidden="true" fill sizes="(max-width: 640px) 48vw, (max-width: 1024px) 30vw, 240px" placeholder="blur" blurDataURL={alternateImage.blurDataURL} className="product-photo absolute inset-0 object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100" style={{ objectPosition: `${alternateImage.focalPoint.x}% ${alternateImage.focalPoint.y}%` }} />}
+      <Link href={`/produto/${product.slug}`} aria-label={`Ver ${product.nome}`} className="relative block h-full w-full overflow-hidden">
+        <SafeProductImage
+          src={primaryImage.src}
+          fallbackSrc={primaryImage.fallbackSrc || "/product-placeholder.svg"}
+          alt={primaryImage.alt}
+          fill
+          sizes="(max-width: 640px) 48vw, (max-width: 1024px) 30vw, 240px"
+          placeholder="blur"
+          blurDataURL={primaryImage.blurDataURL}
+          className="product-photo object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+          style={{ objectPosition: `${primaryImage.focalPoint.x}% ${primaryImage.focalPoint.y}%` }}
+        />
       </Link>
     </div>
     <div className="flex flex-1 flex-col justify-between pt-3 min-w-0 w-full">

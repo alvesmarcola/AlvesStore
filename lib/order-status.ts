@@ -3,11 +3,23 @@ export type OrderLike = {
   created_at: string;
   mercado_pago_status?: string | null;
   operational_status?: string | null;
+  is_test?: boolean | null;
 };
 
 const FORTY_EIGHT_HOURS_MS = 48 * 60 * 60 * 1000;
 
+export function isOrderRefunded(order: OrderLike): boolean {
+  return (
+    order.status === "refunded" ||
+    order.status === "reembolsado" ||
+    order.status === "charged_back" ||
+    order.mercado_pago_status === "refunded" ||
+    order.mercado_pago_status === "charged_back"
+  );
+}
+
 export function isOrderPaid(order: OrderLike): boolean {
+  if (isOrderRefunded(order)) return false;
   return ["pago", "enviado", "approved"].includes(order.status) || order.mercado_pago_status === "approved";
 }
 

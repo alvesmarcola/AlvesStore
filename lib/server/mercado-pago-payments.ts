@@ -55,6 +55,106 @@ export type ApplyPaymentOptions = {
   rawEvent?: unknown;
 };
 
+export function calculatePaymentFee(payment: any, amountCents: number, paymentMethodId?: string | null): number | null {
+  if (Array.isArray(payment?.fee_details) && payment.fee_details.length > 0) {
+    const feeSum = payment.fee_details.reduce((sum: number, f: any) => sum + Number(f?.amount || 0), 0);
+    if (feeSum > 0) return Math.round(feeSum * 100);
+  }
+  const net = Number(payment?.net_received_amount ?? payment?.transaction_details?.net_received_amount);
+  const total = Number(payment?.transaction_amount);
+  if (Number.isFinite(net) && Number.isFinite(total) && total > net && net > 0) {
+    return Math.round((total - net) * 100);
+  }
+  // Reserva / Fallback se não informado pela API do provedor
+  if (amountCents > 0) {
+    const rate = paymentMethodId === "pix" ? 0.0099 : 0.0399;
+    return Math.round(amountCents * rate);
+  }
+  return null;
+}
+
+export function calculateRefundAmount(payment: any, orderTotalCents: number): { isTotalRefund: boolean; refundedCents: number } {
+  const isRefundedStatus = payment?.status === "refunded" || payment?.status === "charged_back";
+  const refundedAmount = Number(payment?.transaction_amount_refunded || 0);
+  const refundedCents = Math.round(refundedAmount * 100);
+
+  if (isRefundedStatus || (refundedCents > 0 && refundedCents >= orderTotalCents)) {
+    return { isTotalRefund: true, refundedCents: orderTotalCents };
+  }
+  return { isTotalRefund: false, refundedCents: Math.max(0, refundedCents) };
+}
+
+export async function snapshotOrderCostsOnFirstApproval(
+  supabase: ReturnType<typeof getSupabaseOrdersClient>,
+  orderId: string,
+  existingCost: number | null | undefined,
+  existingSupplier: string | null | undefined,
+  rawLines: unknown
+) {
+  // Regra 1: SÓ grava se o custo for nulo. Webhooks repetidos ou ajustes manuais NÃO são sobrescritos!
+  if (existingCost !== null && existingCost !== undefined) {
+    return;
+  }
+
+  const lines = Array.isArray(rawLines) ? rawLines : [];
+  if (lines.length === 0) return;
+
+  const productIds = lines.map((l: any) => l.productId || l.product_id).filter(Boolean);
+  if (productIds.length === 0) return;
+
+  try {
+    const { data: supplierDetails } = await supabase
+      .from("admin_product_supplier_details")
+      .select("product_id,supplier_name,supplier_cost")
+      .in("product_id", productIds);
+
+    const costMap = new Map<string, { costCents: number; supplierName: string }>();
+    for (const row of supplierDetails ?? []) {
+      costMap.set(row.product_id, {
+        costCents: Math.round(Number(row.supplier_cost || 0) * 100),
+        supplierName: (row.supplier_name || "").trim(),
+      });
+    }
+
+    let totalCostCents = 0;
+    let detectedSupplier = existingSupplier || "";
+    let hasAnyCost = false;
+
+    const updatedLines = lines.map((line: any) => {
+      const pId = line.productId || line.product_id;
+      const match = costMap.get(pId);
+      const unitCostCents = line.unit_cost_cents !== undefined ? line.unit_cost_cents : (match?.costCents ?? null);
+      const supplier = line.supplier_name !== undefined ? line.supplier_name : (match?.supplierName || null);
+      if (!detectedSupplier && supplier) detectedSupplier = supplier;
+      if (unitCostCents !== null && unitCostCents > 0) {
+        hasAnyCost = true;
+        totalCostCents += unitCostCents * (Number(line.quantity) || 1);
+      }
+      return {
+        ...line,
+        unit_cost_cents: unitCostCents,
+        supplier_name: supplier,
+      };
+    });
+
+    const updateData: Record<string, unknown> = {
+      item_lines: updatedLines,
+      updated_at: new Date().toISOString(),
+    };
+
+    if (hasAnyCost && totalCostCents > 0) {
+      updateData.supplier_cost_cents = totalCostCents;
+    }
+    if (detectedSupplier && !existingSupplier) {
+      updateData.supplier_name = detectedSupplier;
+    }
+
+    await supabase.from("store_orders").update(updateData).eq("id", orderId);
+  } catch (err) {
+    console.warn("[snapshotOrderCostsOnFirstApproval] Falha ao gravar snapshot de custo do pedido:", err);
+  }
+}
+
 export async function applyMercadoPagoPayment(paymentId: string, options: ApplyPaymentOptions = {}) {
   const environment = getPaymentEnvironment();
   console.log(`[applyMercadoPagoPayment] Consultando API Mercado Pago para pagamento ${paymentId} (ambiente: ${environment})...`);
@@ -86,11 +186,22 @@ export async function applyMercadoPagoPayment(paymentId: string, options: ApplyP
 
   // 1. Checa se o external_reference é um UUID válido e busca o pedido em store_orders
   const isValidUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(orderId);
-  let orderData: { id: string; total_cents: number; status: string; operational_status: string | null } | null = null;
+  let orderData: {
+    id: string;
+    total_cents: number;
+    status: string;
+    operational_status: string | null;
+    supplier_cost_cents?: number | null;
+    supplier_name?: string | null;
+    item_lines?: unknown;
+    payment_fee_cents?: number | null;
+    refunded_cents?: number | null;
+    is_test?: boolean | null;
+  } | null = null;
 
   if (isValidUuid) {
     const { data } = await supabase.from("store_orders")
-      .select("id,total_cents,status,operational_status")
+      .select("id,total_cents,status,operational_status,supplier_cost_cents,supplier_name,item_lines,payment_fee_cents,refunded_cents,is_test")
       .eq("id", orderId)
       .maybeSingle();
     orderData = data;
@@ -203,32 +314,55 @@ export async function applyMercadoPagoPayment(paymentId: string, options: ApplyP
 
   const order = Array.isArray(result.data) ? result.data[0] : null;
 
-  // Atualiza detalhes do Mercado Pago no pedido
-  await supabase.from("store_orders")
-    .update({
-      mercado_pago_status: verified.providerStatus,
-      mercado_pago_id: verified.paymentId,
-      payment_method_id: verified.paymentMethodId,
-      payment_type_id: verified.paymentTypeId,
-      updated_at: new Date().toISOString(),
-    })
-    .eq("id", verified.orderId);
+  const feeCents = calculatePaymentFee(payment, verified.amountCents, verified.paymentMethodId);
+  const { isTotalRefund, refundedCents } = calculateRefundAmount(payment, orderData.total_cents);
+
+  // Atualiza detalhes do Mercado Pago, taxa e estorno no pedido
+  const orderUpdate: Record<string, unknown> = {
+    mercado_pago_status: isTotalRefund ? "refunded" : verified.providerStatus,
+    mercado_pago_id: verified.paymentId,
+    payment_method_id: verified.paymentMethodId,
+    payment_type_id: verified.paymentTypeId,
+    updated_at: new Date().toISOString(),
+  };
+
+  if (feeCents !== null) {
+    orderUpdate.payment_fee_cents = feeCents;
+  }
+  if (refundedCents > 0) {
+    orderUpdate.refunded_cents = refundedCents;
+  }
+  if (isTotalRefund) {
+    orderUpdate.status = "refunded";
+    orderUpdate.operational_status = "cancelado";
+  }
+
+  await supabase.from("store_orders").update(orderUpdate).eq("id", verified.orderId);
 
   // Mapeamento operacional
-  if (verified.status === "approved") {
+  if (verified.status === "approved" && !isTotalRefund) {
     await supabase.from("store_orders")
       .update({ operational_status: "aguardando_fornecedor", updated_at: new Date().toISOString() })
       .eq("id", verified.orderId)
       .or("operational_status.is.null,operational_status.eq.aguardando_pagamento,operational_status.eq.pagamento_aprovado");
 
+    // Snapshot automático de custo na PRIMEIRA aprovação (não sobrescreve se já existir)
+    await snapshotOrderCostsOnFirstApproval(
+      supabase,
+      verified.orderId,
+      orderData.supplier_cost_cents,
+      orderData.supplier_name,
+      orderData.item_lines
+    );
+
     if (order?.customer) {
       await enqueuePaidOrderNotifications(supabase, verified.orderId, order.customer);
     }
-  } else if (verified.status === "rejected" || verified.status === "cancelled") {
+  } else if (verified.status === "rejected" || verified.status === "cancelled" || isTotalRefund) {
     await supabase.from("store_orders")
       .update({ operational_status: "cancelado", updated_at: new Date().toISOString() })
       .eq("id", verified.orderId)
-      .eq("status", "pending");
+      .neq("operational_status", "enviado");
   }
 
   // Grava auditoria em payment_events com sucesso

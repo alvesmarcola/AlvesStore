@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { AdminNavigation } from "@/components/admin-navigation";
 import { AdminSkeleton, EmptyState, ErrorState, StatCard, StatusBadge } from "@/components/admin-states";
-import { PackageOpen, Trash2, AlertTriangle, EyeOff, X, ArrowLeft, Loader2, CheckCircle2 } from "lucide-react";
+import { PackageOpen, Trash2, AlertTriangle, EyeOff, X, ArrowLeft, Loader2, CheckCircle2, ChevronLeft, ChevronRight, Star } from "lucide-react";
 import type { Audience, ProductType, Uniform } from "@/lib/types";
 import { adminFetch } from "@/lib/client/admin-fetch";
 import { SITE_NAME } from "@/lib/site";
@@ -151,7 +151,7 @@ function Field({ label, children, className = "" }: { label: string; children: R
 export default function AdminProducts() {
   const [products, setProducts] = useState<ManualProduct[]>([]);
   const [draft, setDraft] = useState<ProductDraft>(emptyDraft);
-  const [existingPhotos, setExistingPhotos] = useState<ProductPhoto[]>([]);
+  const [currentPhotos, setCurrentPhotos] = useState<ProductPhoto[]>([]);
   const [sizeInput, setSizeInput] = useState("P, M, G, GG");
   const [slugTouched, setSlugTouched] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -328,7 +328,7 @@ export default function AdminProducts() {
       oculto: Boolean(product.oculto),
     });
     setSizeInput(sizes.join(", "));
-    setExistingPhotos(product.images ?? []);
+    setCurrentPhotos(product.images ? [...product.images] : []);
     setSlugTouched(true);
     setMessage(`Editando ${product.nome}.`);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -337,7 +337,7 @@ export default function AdminProducts() {
   function resetForm() {
     setDraft(emptyDraft);
     setSizeInput("P, M, G, GG");
-    setExistingPhotos([]);
+    setCurrentPhotos([]);
     setSlugTouched(false);
   }
 
@@ -415,7 +415,7 @@ export default function AdminProducts() {
     const files = Array.from(event.target.files ?? []);
     event.target.value = "";
     if (!files.length) return;
-    if (files.length + existingPhotos.length + draft.imageUrls.length > 6) {
+    if (files.length + currentPhotos.length > 6) {
       setMessage("Cada produto pode ter no máximo 6 fotos.");
       return;
     }
@@ -435,13 +435,41 @@ export default function AdminProducts() {
         return;
       }
       if (!response.ok) throw new Error(body.error ?? "Não foi possível enviar as fotos.");
-      setDraft((current) => ({ ...current, imageUrls: [...current.imageUrls, ...body.images.map((image: { url: string }) => image.url)] }));
-      setMessage(`${body.images.length} foto(s) enviadas. Salve o produto para publicá-las na vitrine.`);
+      const newPhotos: ProductPhoto[] = body.images.map((image: { url: string }) => ({
+        src: image.url,
+        alt: draft.nome,
+      }));
+      setCurrentPhotos((current) => [...current, ...newPhotos]);
+      setMessage(`${body.images.length} foto(s) enviadas. Organize a ordem e clique em salvar para publicá-las.`);
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Não foi possível enviar as fotos.");
     } finally {
       setUploading(false);
     }
+  }
+
+  function removePhoto(index: number) {
+    setCurrentPhotos((current) => current.filter((_, i) => i !== index));
+  }
+
+  function movePhoto(fromIndex: number, toIndex: number) {
+    setCurrentPhotos((current) => {
+      if (toIndex < 0 || toIndex >= current.length) return current;
+      const next = [...current];
+      const [moved] = next.splice(fromIndex, 1);
+      next.splice(toIndex, 0, moved);
+      return next;
+    });
+  }
+
+  function makeCoverPhoto(index: number) {
+    setCurrentPhotos((current) => {
+      if (index <= 0 || index >= current.length) return current;
+      const next = [...current];
+      const [moved] = next.splice(index, 1);
+      next.unshift(moved);
+      return next;
+    });
   }
 
   async function saveProduct(event: React.FormEvent<HTMLFormElement>) {
@@ -451,6 +479,8 @@ export default function AdminProducts() {
     try {
       const payload = {
         ...draft,
+        images: currentPhotos,
+        imageUrls: [],
         slug: draft.slug || slugify(draft.nome),
         liga: slugify(draft.liga) || draft.liga.trim().toLowerCase() || "revisar",
       };
@@ -657,17 +687,103 @@ export default function AdminProducts() {
             <p className="mt-2 text-[11px] leading-5 text-muted">O cadastro do estoque não altera disponibilidade nem bloqueia compras; atualize manualmente quando necessário. O tamanho 3GG ainda não é aceito pelo checkout atual.</p>
           </div>
           <div className="md:col-span-2">
-            <label className="grid gap-1.5 text-xs font-bold">Fotos do produto (JPG, PNG ou WebP; até 10 MB por foto)
-              <input type="file" accept="image/jpeg,image/png,image/webp" multiple disabled={uploading || existingPhotos.length + draft.imageUrls.length >= 6} onChange={(event) => void uploadPhotos(event)} className="rounded-lg border border-border px-3 py-2.5 font-normal disabled:opacity-50" />
-            </label>
-            <div className="mt-3 flex flex-wrap gap-3">
-              {[...existingPhotos.map((photo) => ({ ...photo, saved: true })), ...draft.imageUrls.map((src) => ({ src, alt: draft.nome, saved: false }))].map((photo, index) => (
-                <div key={`${photo.src}-${index}`} className="relative h-24 w-20 overflow-hidden rounded border border-border bg-paper">
-                  <Image src={photo.src} alt={photo.alt ?? draft.nome} fill sizes="80px" unoptimized className="object-cover" />
-                  <span className="absolute inset-x-0 bottom-0 bg-black/70 px-1 py-0.5 text-center text-[9px] font-bold text-white">{photo.saved ? "Salva" : "Nova"}</span>
-                </div>
-              ))}
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <label className="text-xs font-bold">
+                Fotos do produto ({currentPhotos.length}/6)
+                <span className="block text-[11px] font-normal text-muted">A foto #1 é a capa da vitrine. Use as setas para reordenar ou o botão de lixeira para remover.</span>
+              </label>
+              <label className={`cursor-pointer inline-flex items-center gap-1.5 rounded-lg border border-border bg-paper px-3 py-1.5 text-xs font-bold transition hover:bg-zinc-200 ${uploading || currentPhotos.length >= 6 ? "opacity-50 pointer-events-none" : ""}`}>
+                <span>+ Adicionar fotos</span>
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  multiple
+                  disabled={uploading || currentPhotos.length >= 6}
+                  onChange={(event) => void uploadPhotos(event)}
+                  className="sr-only"
+                />
+              </label>
             </div>
+
+            {currentPhotos.length === 0 ? (
+              <div className="mt-3 rounded-lg border border-dashed border-border p-6 text-center text-xs text-muted">
+                Nenhuma foto cadastrada. Produtos salvos sem fotos serão marcados automaticamente como ocultos.
+              </div>
+            ) : (
+              <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-6">
+                {currentPhotos.map((photo, index) => (
+                  <div
+                    key={`${photo.src}-${index}`}
+                    className={`group relative flex flex-col overflow-hidden rounded-lg border bg-paper p-1.5 transition ${
+                      index === 0 ? "border-action ring-2 ring-action/20" : "border-border"
+                    }`}
+                  >
+                    <div className="relative aspect-[4/5] w-full overflow-hidden rounded bg-black/5">
+                      <Image
+                        src={photo.src}
+                        alt={photo.alt ?? draft.nome}
+                        fill
+                        sizes="160px"
+                        unoptimized
+                        className="object-cover"
+                      />
+                      <span
+                        className={`absolute left-1 top-1 rounded px-1.5 py-0.5 text-[9px] font-black text-white shadow ${
+                          index === 0 ? "bg-action" : "bg-black/70"
+                        }`}
+                      >
+                        {index === 0 ? "1 · Capa" : `#${index + 1}`}
+                      </span>
+                    </div>
+
+                    <div className="mt-1 flex items-center justify-between gap-1 border-t border-border/50 pt-1 text-[10px]">
+                      <div className="flex items-center gap-0.5">
+                        <button
+                          type="button"
+                          disabled={index === 0}
+                          onClick={() => movePhoto(index, index - 1)}
+                          title="Mover para esquerda / antes"
+                          aria-label={`Mover foto ${index + 1} para esquerda`}
+                          className="rounded p-1 text-muted hover:bg-zinc-200 hover:text-ink disabled:opacity-20"
+                        >
+                          <ChevronLeft className="h-3.5 w-3.5" />
+                        </button>
+                        <button
+                          type="button"
+                          disabled={index === currentPhotos.length - 1}
+                          onClick={() => movePhoto(index, index + 1)}
+                          title="Mover para direita / depois"
+                          aria-label={`Mover foto ${index + 1} para direita`}
+                          className="rounded p-1 text-muted hover:bg-zinc-200 hover:text-ink disabled:opacity-20"
+                        >
+                          <ChevronRight className="h-3.5 w-3.5" />
+                        </button>
+                        {index > 0 && (
+                          <button
+                            type="button"
+                            onClick={() => makeCoverPhoto(index)}
+                            title="Definir como foto de capa (principal)"
+                            aria-label={`Definir foto ${index + 1} como capa`}
+                            className="rounded p-1 text-amber-600 hover:bg-amber-100"
+                          >
+                            <Star className="h-3.5 w-3.5 fill-amber-500" />
+                          </button>
+                        )}
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => removePhoto(index)}
+                        title="Remover foto"
+                        aria-label={`Remover foto ${index + 1}`}
+                        className="rounded p-1 text-red-600 hover:bg-red-50 hover:text-red-700"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
           <div className="sticky bottom-0 z-10 -mx-3 flex flex-wrap items-center gap-2 bg-white/95 p-3 backdrop-blur md:static md:mx-0 md:col-span-2 md:bg-transparent md:p-0 md:backdrop-blur-0">
             <button type="submit" disabled={saving || uploading} className="min-h-[44px] rounded-lg bg-ink px-5 py-3 text-xs font-black uppercase text-white disabled:opacity-50">{saving ? "Salvando…" : draft.id ? "Salvar alterações" : "Cadastrar e publicar"}</button>

@@ -5,6 +5,7 @@ import { SITE_NAME } from "@/lib/site";
 const neutralBlur = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxIDEiPjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiNmNWY1ZjUiLz48L3N2Zz4=";
 const missingProductImage: ImageAsset = {
   src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 800'%3E%3Crect width='640' height='800' fill='%23f5f5f5'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23666' font-family='Arial,sans-serif' font-size='32'%3EFoto em breve%3C/text%3E%3C/svg%3E",
+  fallbackSrc: "/product-placeholder.svg",
   alt: "Imagem do produto indisponível",
   credit: SITE_NAME,
   focalPoint: { x: 50, y: 50 },
@@ -16,17 +17,17 @@ export function formatCurrency(value: number) {
 }
 
 export function productImageAsset(product: Pick<Product, "images" | "imageSeed" | "tipo" | "nome">, alternate = false): ImageAsset {
-  const primary = product.images?.[0];
+  const primary = product.images?.find((img) => Boolean(img?.src && typeof img.src === "string" && img.src.trim())) ?? product.images?.[0];
   const image = alternate
-    ? product.images?.find((candidate) => candidate.src !== primary?.src) ?? primary
+    ? product.images?.find((candidate) => candidate.src !== primary?.src && Boolean(candidate?.src && typeof candidate.src === "string" && candidate.src.trim())) ?? primary
     : primary;
-  if (!image) return { ...missingProductImage, alt: product.nome };
+  if (!image || !image.src || !image.src.trim()) return { ...missingProductImage, alt: product.nome };
   return {
     src: image.src,
-    fallbackSrc: image.fallbackSrc,
+    fallbackSrc: image.fallbackSrc || "/product-placeholder.svg",
     alt: image.alt || product.nome,
-    credit: image.credit,
-    focalPoint: image.focalPoint,
+    credit: image.credit || SITE_NAME,
+    focalPoint: image.focalPoint || { x: 50, y: 50 },
     blurDataURL: image.blurDataURL || neutralBlur,
   };
 }
@@ -36,7 +37,7 @@ export function productImage(product: Pick<Product, "images" | "imageSeed" | "ti
 }
 
 export function toCatalogPreview(product: Product): Product {
-  const publicProduct = { ...product, id: product.slug, images: product.images?.slice(0, 2) ?? [] };
+  const publicProduct = { ...product, id: product.slug, images: product.images?.slice(0, 1) ?? [] };
   delete publicProduct.stock_by_size;
   delete publicProduct.supplier_name;
   delete publicProduct.supplier_cost;
