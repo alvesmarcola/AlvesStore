@@ -10,6 +10,8 @@ import {
 import { validateReviewImage } from "@/lib/server/image-upload-validation";
 
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 const PAGE_SIZE = 6;
 const MAX_PAGE = 100;
@@ -17,6 +19,7 @@ const SUBMISSION_LIMIT = 3;
 const SUBMISSION_WINDOW_MS = 10 * 60 * 1000;
 
 interface ReviewRow {
+  id?: string | null;
   created_at: string | null;
   nome: string | null;
   cidade: string | null;
@@ -126,7 +129,7 @@ export async function GET(request: Request) {
     const supabase = getSupabaseOrdersClient();
     const [{ data, error, count }, summaryRes] = await Promise.all([
       supabase.from("avaliacoes")
-        .select("created_at,nome,cidade,produto,nota,comentario,status,imagem_path", { count: "exact" })
+        .select("id,created_at,nome,cidade,produto,nota,comentario,status,imagem_path", { count: "exact" })
         .eq("status", "approved")
         .order("created_at", { ascending: false })
         .range(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE - 1),
@@ -163,7 +166,8 @@ export async function GET(request: Request) {
     );
     return NextResponse.json({
       ...payload,
-      reviews: payload.reviews.map(({ created_at, nome, cidade, produto, nota, comentario, imagem_path }: ReviewRow) => ({
+      reviews: payload.reviews.map(({ id, created_at, nome, cidade, produto, nota, comentario, imagem_path }: ReviewRow) => ({
+        id: id || `${nome}-${created_at}`,
         created_at,
         nome,
         cidade,
@@ -173,7 +177,13 @@ export async function GET(request: Request) {
         imagem_path: imagem_path || null,
         imagem_url: imagem_path ? `/api/reviews/image?path=${encodeURIComponent(imagem_path)}` : null,
       })),
-    }, { headers: { "Cache-Control": "no-store" } });
+    }, {
+      headers: {
+        "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+        Pragma: "no-cache",
+        Expires: "0",
+      },
+    });
   } catch (error) {
     const errorDetails = describeSupabaseError(error);
     const reason = error instanceof Error ? error.message : String(error);

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 import { ADMIN_PRIVATE_HEADERS, getAdminAuthFailure } from "@/lib/server/admin-auth";
 import {
@@ -9,6 +10,8 @@ import {
 import { reviewStatusSchema } from "@/lib/reviews";
 
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 const updateSchema = z.object({
   id: z.string().uuid(),
@@ -112,6 +115,14 @@ export async function PATCH(request: Request) {
       .maybeSingle();
     if (error) throw error;
     if (!data) return jsonError("Avaliação não encontrada.", 404);
+
+    try {
+      revalidatePath("/");
+      revalidatePath("/api/reviews");
+    } catch (revalidateErr) {
+      console.warn("Aviso ao invalidar cache da home/avaliações:", revalidateErr);
+    }
+
     return NextResponse.json({ review: data }, { headers: ADMIN_PRIVATE_HEADERS });
   } catch (error) {
     const configurationError = reportFailure("Falha ao moderar avaliação:", error);
@@ -148,6 +159,14 @@ export async function DELETE(request: Request) {
       .maybeSingle();
     if (error) throw error;
     if (!data) return jsonError("Avaliação não encontrada.", 404);
+
+    try {
+      revalidatePath("/");
+      revalidatePath("/api/reviews");
+    } catch (revalidateErr) {
+      console.warn("Aviso ao invalidar cache da home/avaliações:", revalidateErr);
+    }
+
     return NextResponse.json({ deleted: true }, { headers: ADMIN_PRIVATE_HEADERS });
   } catch (error) {
     const configurationError = reportFailure("Falha ao excluir avaliação:", error);

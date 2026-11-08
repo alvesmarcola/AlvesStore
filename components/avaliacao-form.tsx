@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from "react";
+import React, { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from "react";
 import { Star, Send, CheckCircle2, AlertCircle, Camera, Trash2 } from "lucide-react";
 import { compressReviewImage, MAX_ORIGINAL_FILE_SIZE } from "@/lib/client/image-compression";
 

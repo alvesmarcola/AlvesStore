@@ -3,6 +3,8 @@ import { describeSupabaseError, getSupabaseOrdersClient } from "@/lib/server/sup
 import { ADMIN_PRIVATE_HEADERS, getAdminRole } from "@/lib/server/admin-auth";
 
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 const SAFE_FILENAME_REGEX = /^[a-f0-9-]+\.(webp|jpg|jpeg|png)$/i;
 
