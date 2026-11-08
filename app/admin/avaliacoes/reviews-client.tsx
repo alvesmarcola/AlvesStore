@@ -213,10 +213,12 @@ export default function AdminReviews() {
                           loading="lazy"
                         />
                       </button>
-                      <div className="min-w-0 text-xs">
-                        <span className="font-bold text-ink">Foto anexada pelo cliente</span>
-                        <p className="text-muted">Clique na miniatura para inspecionar em tamanho completo antes de aprovar.</p>
-                      </div>
+                      {review.status === "pending" && (
+                        <div className="min-w-0 text-xs">
+                          <span className="font-bold text-ink">Foto anexada pelo cliente</span>
+                          <p className="text-muted">Clique na miniatura para inspecionar em tamanho completo antes de aprovar.</p>
+                        </div>
+                      )}
                     </div>
                   )}
                   <div className="mt-5 flex flex-wrap gap-2 border-t border-border pt-4">

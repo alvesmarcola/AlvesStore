@@ -6,6 +6,7 @@ import {
   SupabaseOrdersConfigurationError,
 } from "@/lib/server/supabase-orders";
 import { sendTrackingUpdateEmail, sendWhatsAppOrderNotice, type OrderNotice } from "@/lib/server/order-notifications";
+import { enqueuePaidOrderNotifications, dispatchOrderNotificationOutbox } from "@/lib/server/order-notification-outbox";
 import { ADMIN_PRIVATE_HEADERS, getAdminAuthFailure, isPartnerRole } from "@/lib/server/admin-auth";
 import { reconcileMercadoPagoOrder } from "@/lib/server/mercado-pago-payments";
 
@@ -30,6 +31,10 @@ const orderPatchSchema = z.discriminatedUnion("action", [
   z.object({
     orderId: z.string().uuid(),
     action: z.literal("reconcile"),
+  }).strict(),
+  z.object({
+    orderId: z.string().uuid(),
+    action: z.literal("resend_notification"),
   }).strict(),
   z.object({
     orderId: z.string().uuid(),
@@ -86,7 +91,7 @@ export async function GET(request: Request) {
       .lt("created_at", cutoff48h);
 
     const { data, error } = await supabase.from("store_orders")
-      .select("id,status,item_lines,customer,shipping,shipping_cents,total_cents,promo,valor_desconto,tracking_code,tracking_url,shipped_at,operational_status,supplier_name,supplier_status,supplier_ordered_at,supplier_cost_cents,shipping_cost_cents,other_expenses_cents,internal_notes,payment_method_id,payment_type_id,mercado_pago_status,mercado_pago_id,is_test,payment_fee_cents,refunded_cents,created_at,updated_at")
+      .select("id,status,item_lines,customer,shipping,shipping_cents,total_cents,promo,valor_desconto,tracking_code,tracking_url,shipped_at,operational_status,supplier_name,supplier_status,supplier_ordered_at,supplier_cost_cents,shipping_cost_cents,other_expenses_cents,internal_notes,payment_method_id,payment_type_id,mercado_pago_status,mercado_pago_id,is_test,paid_notified_at,payment_fee_cents,refunded_cents,created_at,updated_at")
       .order("created_at", { ascending: false })
       .limit(500);
     if (error) throw error;
@@ -228,6 +233,26 @@ export async function PATCH(request: Request) {
       } catch (reconcileError) {
         console.error("Erro ao reconciliar pedido com Mercado Pago:", reconcileError);
         return jsonError(reconcileError instanceof Error ? reconcileError.message : "Falha ao consultar Mercado Pago.", 500);
+      }
+    }
+
+    if (parsed.data.action === "resend_notification") {
+      if (!paid(order.status, order.mercado_pago_status)) {
+        return jsonError("Só é possível reenviar o aviso após a confirmação do pagamento.", 409);
+      }
+      try {
+        await enqueuePaidOrderNotifications(supabase, order.id, order.customer, { force: true });
+        const result = await dispatchOrderNotificationOutbox({ orderId: order.id, force: true });
+        return NextResponse.json({
+          updated: true,
+          delivered: result.delivered > 0,
+          message: result.delivered > 0
+            ? "Aviso de pagamento reenviado com sucesso!"
+            : "Tentativa de envio realizada, mas os serviços de aviso não confirmaram a entrega. Verifique as configurações na Vercel.",
+        }, { headers: ADMIN_PRIVATE_HEADERS });
+      } catch (notifyError) {
+        console.error("[AdminOrders] Erro ao reenviar aviso do pedido:", describeSupabaseError(notifyError));
+        return jsonError(notifyError instanceof Error ? notifyError.message : "Falha ao reenviar aviso.", 500);
       }
     }
 

@@ -445,6 +445,10 @@ export function AvaliacaoForm({ onSuccess, className = "" }: AvaliacaoFormProps)
                 {photoError}
               </p>
             )}
+
+            <p className="mt-2.5 text-[11px] text-zinc-500 leading-relaxed">
+              Ao enviar a foto, você autoriza a exibição dela no site da Imports Alves. Você pode pedir a remoção a qualquer momento pelo WhatsApp.
+            </p>
           </div>
 
           {/* Mensagem de Erro Geral */}

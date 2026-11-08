@@ -4,7 +4,6 @@ import { InvalidOrderError, paymentRequestSchema, validateOrderLinesFromCatalog,
 import { createMercadoPagoPreference, getCheckoutUrl, getPaymentEnvironment, getSiteUrl, MercadoPagoApiError, PaymentConfigurationError, validateMercadoPagoAccessToken } from "@/lib/server/mercado-pago";
 import { SupabaseOrdersConfigurationError, describeSupabaseError, getSupabaseOrdersClient } from "@/lib/server/supabase-orders";
 import { buildPreferenceItems } from "@/lib/payment/preference-items";
-import { buildOrderReceivedEmail, sendOrderEmail } from "@/lib/server/order-emails";
 import { SITE_NAME } from "@/lib/site";
 
 export const runtime = "nodejs";
@@ -172,21 +171,6 @@ export async function POST(request: Request) {
     if (savedPreference.error || !savedPreference.data) {
       throw savedPreference.error ?? new Error("Não foi possível vincular a preferência ao pedido.");
     }
-
-    await sendOrderEmail(requestData.customer.email, buildOrderReceivedEmail({
-      orderId,
-      customerName: requestData.customer.fullName,
-      items: lines.map((line) => ({
-        title: line.product.nome,
-        size: line.size,
-        quantity: line.quantity,
-        customization: line.customization ?? null,
-        patches: line.patchOptions.map((patch, index) => ({ name: patch.name, position: line.patches?.[index]?.position })),
-      })),
-      shippingCents: finalShippingCents,
-      totalCents,
-      siteUrl,
-    }));
 
     return NextResponse.json({ checkoutUrl }, { headers: { "Cache-Control": "no-store" } });
   } catch (error) {

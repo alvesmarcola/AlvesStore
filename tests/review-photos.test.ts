@@ -369,4 +369,33 @@ describe("6. Diagnóstico detalhado de erros no servidor e ausência de service_
     const resEmptyUrl = testCheck("", "sb_secret_test");
     assert.equal(resEmptyUrl.ok, false);
   });
+
+  it("exibe aviso de autorização de imagem no formulário de avaliação sem checkbox obrigatório", () => {
+    const formPath = path.join(process.cwd(), "components", "avaliacao-form.tsx");
+    const formContent = fs.readFileSync(formPath, "utf8");
+
+    const expectedText = "Ao enviar a foto, você autoriza a exibição dela no site da Imports Alves. Você pode pedir a remoção a qualquer momento pelo WhatsApp.";
+    assert.ok(
+      formContent.includes(expectedText),
+      "Formulário deve conter o texto de autorização de imagem"
+    );
+    assert.ok(
+      !formContent.includes('required') || !formContent.includes('type="checkbox" required'),
+      "Não deve conter checkbox obrigatório para autorização"
+    );
+  });
+
+  it("exibe orientação de inspeção antes de aprovar apenas para avaliações pendentes no painel admin", () => {
+    const adminPath = path.join(process.cwd(), "app", "admin", "avaliacoes", "reviews-client.tsx");
+    const adminContent = fs.readFileSync(adminPath, "utf8");
+
+    assert.ok(
+      adminContent.includes('review.status === "pending" && ('),
+      "Orientação de inspeção prévia deve ser condicionada a review.status === 'pending'"
+    );
+    assert.ok(
+      adminContent.includes("Clique na miniatura para inspecionar em tamanho completo antes de aprovar."),
+      "Deve conter a mensagem de instrução para status pendente"
+    );
+  });
 });

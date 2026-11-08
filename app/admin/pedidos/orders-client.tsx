@@ -41,6 +41,7 @@ type Order = {
   payment_fee_cents?: number | null;
   refunded_cents?: number | null;
   is_test?: boolean | null;
+  paid_notified_at?: string | null;
   internal_notes: string | null;
   payment_method_id: string | null;
   payment_type_id: string | null;
@@ -260,6 +261,7 @@ export default function AdminOrders() {
   const [savingId, setSavingId] = useState("");
   const [reconcilingId, setReconcilingId] = useState("");
   const [togglingTestId, setTogglingTestId] = useState("");
+  const [resendingNoticeId, setResendingNoticeId] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState("");
@@ -351,6 +353,26 @@ export default function AdminOrders() {
       setMessage(error instanceof Error ? error.message : "Erro ao alterar pedido.");
     } finally {
       setTogglingTestId("");
+    }
+  }
+
+  async function resendNotice(orderId: string) {
+    setResendingNoticeId(orderId);
+    setMessage("");
+    try {
+      const response = await adminFetch("/api/admin/orders", {
+        method: "PATCH",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ orderId, action: "resend_notification" }),
+      });
+      const body = await response.json();
+      if (!response.ok) throw new Error(body.error ?? "Não foi possível reenviar o aviso.");
+      setMessage(body.message ?? "Aviso reenviado!");
+      await load();
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Falha ao reenviar aviso.");
+    } finally {
+      setResendingNoticeId("");
     }
   }
 
@@ -565,6 +587,29 @@ export default function AdminOrders() {
                         )}
                       </div>
                       <span className="mt-1 block text-[10px] text-muted">{date.format(new Date(order.created_at))}</span>
+                      {isPaid(order) && !order.is_test && (
+                        <div className="mt-1.5">
+                          {order.paid_notified_at ? (
+                            <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700">
+                              ✓ Aviso enviado
+                            </span>
+                          ) : (
+                            <div className="flex flex-col items-start gap-1">
+                              <span className="inline-flex items-center rounded border border-amber-300 bg-amber-100 px-1.5 py-0.5 text-[10px] font-black text-amber-900">
+                                Aviso pendente
+                              </span>
+                              <button
+                                type="button"
+                                disabled={resendingNoticeId === order.id}
+                                onClick={() => void resendNotice(order.id)}
+                                className="text-[10px] font-bold text-blue-700 underline hover:text-blue-900 disabled:opacity-50"
+                              >
+                                {resendingNoticeId === order.id ? "Enviando..." : "Reenviar aviso"}
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      )}
                       {!isPartner && (
                         <button
                           type="button"
