@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { Star, Quote, MessageSquarePlus } from "lucide-react";
+import { Star, Quote, MessageSquarePlus, X } from "lucide-react";
 import type { Avaliacao } from "@/lib/types";
 import { AvaliacaoForm } from "@/components/avaliacao-form";
 import { SITE_NAME } from "@/lib/site";
@@ -47,6 +47,16 @@ export function CustomerReviews() {
   const [totalCount, setTotalCount] = useState<number | null>(null);
   const [averageRating, setAverageRating] = useState<number | null>(null);
   const [loadError, setLoadError] = useState("");
+  const [expandedPhoto, setExpandedPhoto] = useState<{ url: string; name: string } | null>(null);
+
+  useEffect(() => {
+    if (!expandedPhoto) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setExpandedPhoto(null);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [expandedPhoto]);
 
   useEffect(() => {
     let isMounted = true;
@@ -265,6 +275,32 @@ export function CustomerReviews() {
                   <p className="text-sm leading-6 text-zinc-800">
                     &ldquo;{testimonial.comentario}&rdquo;
                   </p>
+
+                  {/* Foto enviada pelo cliente (opcional) */}
+                  {testimonial.imagem_url && (
+                    <div className="mt-3.5">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setExpandedPhoto({
+                            url: testimonial.imagem_url!,
+                            name: testimonial.nome,
+                          })
+                        }
+                        className="group relative block h-16 w-16 overflow-hidden rounded-lg border border-zinc-200 transition hover:border-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-900"
+                        aria-label={`Ampliar foto enviada por ${testimonial.nome}`}
+                      >
+                        <img
+                          src={testimonial.imagem_url}
+                          alt={`Foto enviada por ${testimonial.nome}`}
+                          loading="lazy"
+                          width={64}
+                          height={64}
+                          className="h-16 w-16 object-cover transition duration-200 group-hover:scale-105"
+                        />
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 {/* Autor: Avatar + Nome + Cidade + Badge */}
@@ -310,6 +346,39 @@ export function CustomerReviews() {
           </div>
         </div>
       </div>
+
+      {/* Lightbox / Modal de ampliação de foto de cliente */}
+      {expandedPhoto && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Foto enviada por ${expandedPhoto.name}`}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm"
+          onClick={() => setExpandedPhoto(null)}
+        >
+          <div
+            className="relative max-h-[90vh] max-w-[90vw] overflow-hidden rounded-2xl bg-zinc-950 p-2 shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={() => setExpandedPhoto(null)}
+              className="absolute right-3 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-zinc-900/90 text-white transition hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-white"
+              aria-label="Fechar ampliação"
+            >
+              <X size={18} />
+            </button>
+            <img
+              src={expandedPhoto.url}
+              alt={`Foto enviada por ${expandedPhoto.name}`}
+              className="max-h-[82vh] max-w-[85vw] rounded-xl object-contain"
+            />
+            <p className="mt-2 text-center text-xs text-zinc-300">
+              Foto enviada por <strong className="text-white">{expandedPhoto.name}</strong>
+            </p>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

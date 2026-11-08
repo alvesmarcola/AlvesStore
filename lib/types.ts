@@ -97,4 +97,6 @@ export interface Avaliacao {
   comentario: string;
   status: "pending" | "approved" | "rejected";
   aprovado?: boolean;
+  imagem_path?: string | null;
+  imagem_url?: string | null;
 }

@@ -10,6 +10,7 @@ export const reviewSubmissionSchema = z.object({
   nota: z.number().int().min(1).max(5),
   comentario: z.string().trim().min(8).max(500),
   website: z.string().max(200).optional().default(""),
+  imagem_path: z.string().trim().max(250).optional().nullable(),
 }).strict();
 
 export type ReviewSubmission = z.infer<typeof reviewSubmissionSchema>;

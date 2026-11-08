@@ -18,7 +18,11 @@ export function describeSupabaseError(error: unknown) {
 }
 
 function isPublicSupabaseKey(key: string) {
+  // Novo formato de chave pública
   if (key.startsWith("sb_publishable_")) return true;
+  // Novo formato de chave secreta/service_role: NUNCA é pública
+  if (key.startsWith("sb_secret_")) return false;
+  // Formato legado JWT: verifica se o payload contém a role 'anon'
   try {
     const payload = key.split(".")[1];
     return Boolean(payload && JSON.parse(Buffer.from(payload, "base64url").toString("utf8")).role === "anon");

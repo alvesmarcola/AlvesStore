@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
-import { Star, Send, CheckCircle2, AlertCircle } from "lucide-react";
+import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from "react";
+import { Star, Send, CheckCircle2, AlertCircle, Camera, Trash2 } from "lucide-react";
+import { compressReviewImage, MAX_ORIGINAL_FILE_SIZE } from "@/lib/client/image-compression";
 
 const STORAGE_KEY = "imports_alves_review_last_sent";
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
@@ -20,10 +21,25 @@ export function AvaliacaoForm({ onSuccess, className = "" }: AvaliacaoFormProps)
   const [hoverNota, setHoverNota] = useState(0);
   const [honeypot, setHoneypot] = useState("");
 
+  // Estado da foto opcional
+  const [selectedPhoto, setSelectedPhoto] = useState<File | null>(null);
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const [photoSizeInfo, setPhotoSizeInfo] = useState<string | null>(null);
+  const [photoError, setPhotoError] = useState<string | null>(null);
+  const [isCompressing, setIsCompressing] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [alreadySubmitted, setAlreadySubmitted] = useState(false);
+
+  // Limpeza de URLs temporárias de prévia ao desmontar
+  useEffect(() => {
+    return () => {
+      if (photoPreview) URL.revokeObjectURL(photoPreview);
+    };
+  }, [photoPreview]);
 
   // Trava anti-spam via localStorage: 1 envio por dia por navegador
   useEffect(() => {
@@ -40,6 +56,60 @@ export function AvaliacaoForm({ onSuccess, className = "" }: AvaliacaoFormProps)
     }
   }, []);
 
+  async function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
+    setPhotoError(null);
+    setErrorMessage(null);
+    const files = event.target.files;
+    if (!files || files.length === 0) return;
+
+    const file = files[0];
+
+    // Validação de tipo de arquivo
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+    if (!allowedTypes.includes(file.type)) {
+      setPhotoError("Formato inválido. Selecione uma imagem em JPG, PNG ou WebP.");
+      if (fileInputRef.current) fileInputRef.current.value = "";
+      return;
+    }
+
+    // Validação de limite máximo original (8 MB)
+    if (file.size > MAX_ORIGINAL_FILE_SIZE) {
+      setPhotoError("A imagem selecionada excede o limite máximo de 8 MB.");
+      if (fileInputRef.current) fileInputRef.current.value = "";
+      return;
+    }
+
+    setIsCompressing(true);
+    try {
+      // Comprime no navegador: redimensiona para no máx 1200px, WebP ~0.8, meta < 300 KB, descarta EXIF/GPS
+      const compressed = await compressReviewImage(file);
+      if (photoPreview) URL.revokeObjectURL(photoPreview);
+      const previewUrl = URL.createObjectURL(compressed);
+
+      setSelectedPhoto(compressed);
+      setPhotoPreview(previewUrl);
+      setPhotoSizeInfo(`${(compressed.size / 1024).toFixed(0)} KB · WebP (privacidade protegida)`);
+    } catch (err) {
+      console.warn("Falha na compressão da imagem:", err);
+      setPhotoError(err instanceof Error ? err.message : "Não foi possível processar a imagem selecionada.");
+      setSelectedPhoto(null);
+      setPhotoPreview(null);
+      setPhotoSizeInfo(null);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    } finally {
+      setIsCompressing(false);
+    }
+  }
+
+  function handleRemovePhoto() {
+    if (photoPreview) URL.revokeObjectURL(photoPreview);
+    setSelectedPhoto(null);
+    setPhotoPreview(null);
+    setPhotoSizeInfo(null);
+    setPhotoError(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  }
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setErrorMessage(null);
@@ -52,6 +122,7 @@ export function AvaliacaoForm({ onSuccess, className = "" }: AvaliacaoFormProps)
       setCidade("");
       setComentario("");
       setNota(5);
+      handleRemovePhoto();
       return;
     }
 
@@ -103,20 +174,25 @@ export function AvaliacaoForm({ onSuccess, className = "" }: AvaliacaoFormProps)
     setLoading(true);
 
     try {
+      const formData = new FormData();
+      formData.append("nome", cleanNome);
+      formData.append("cidade", cleanCidade);
+      if (produto.trim()) formData.append("produto", produto.trim());
+      formData.append("nota", String(nota));
+      formData.append("comentario", cleanComentario);
+      formData.append("website", honeypot);
+      if (selectedPhoto) {
+        formData.append("foto", selectedPhoto);
+      }
+
       const response = await fetch("/api/reviews", {
         method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          nome: cleanNome,
-          cidade: cleanCidade,
-          produto,
-          nota,
-          comentario: cleanComentario,
-          website: honeypot,
-        }),
+        body: formData,
       });
       const result = await response.json();
-      if (!response.ok) throw new Error(result.error ?? "Não foi possível enviar sua avaliação no momento.");
+      if (!response.ok) {
+        throw new Error(result.error ?? "Não foi possível enviar sua avaliação no momento.");
+      }
 
       // Gravando trava de 1 envio por dia por navegador no localStorage
       try {
@@ -126,7 +202,7 @@ export function AvaliacaoForm({ onSuccess, className = "" }: AvaliacaoFormProps)
         // Ignora erro de localStorage
       }
 
-      // Feedback exato de sucesso e limpeza completa do formulário
+      // Feedback de sucesso e limpeza completa do formulário
       setSuccessMessage("Sua avaliação foi enviada e aparecerá após aprovação");
       setNome("");
       setCidade("");
@@ -134,11 +210,16 @@ export function AvaliacaoForm({ onSuccess, className = "" }: AvaliacaoFormProps)
       setComentario("");
       setNota(5);
       setHoverNota(0);
+      handleRemovePhoto();
 
       onSuccess?.();
     } catch (err) {
-      console.warn("Erro inesperado ao enviar avaliação:", err);
-      setErrorMessage(err instanceof Error ? err.message : "Ocorreu um erro ao enviar. Verifique sua conexão e tente novamente.");
+      console.warn("Erro ao enviar avaliação:", err);
+      setErrorMessage(
+        err instanceof Error
+          ? err.message
+          : "Ocorreu um erro ao enviar. Verifique sua conexão e tente novamente."
+      );
     } finally {
       setLoading(false);
     }
@@ -300,7 +381,73 @@ export function AvaliacaoForm({ onSuccess, className = "" }: AvaliacaoFormProps)
             />
           </div>
 
-          {/* Mensagem de Erro */}
+          {/* Campo Foto (opcional) */}
+          <div className="rounded-xl border border-dashed border-zinc-200 bg-zinc-50/60 p-4">
+            <div className="flex items-center justify-between">
+              <label className="block text-xs font-bold uppercase tracking-wider text-zinc-900">
+                Foto (opcional)
+              </label>
+              <span className="text-[11px] text-zinc-500">Máx. 1 foto (JPG, PNG, WebP)</span>
+            </div>
+            <p className="mt-1 text-xs text-zinc-500">
+              Mostre a sua camisa ou pacote recebido. A foto é comprimida automaticamente e seus dados de localização são removidos.
+            </p>
+
+            <input
+              ref={fileInputRef}
+              id="avaliacao-foto"
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              onChange={handleFileChange}
+              className="sr-only"
+              aria-label="Escolher foto da avaliação"
+              disabled={loading || isCompressing}
+            />
+
+            {!photoPreview ? (
+              <div className="mt-3">
+                <label
+                  htmlFor="avaliacao-foto"
+                  className={`inline-flex min-h-[44px] cursor-pointer items-center justify-center gap-2 rounded-lg border border-zinc-300 bg-white px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-zinc-800 transition hover:bg-zinc-100 hover:border-zinc-400 focus-within:ring-2 focus-within:ring-zinc-900 shadow-sm ${
+                    isCompressing ? "opacity-60 cursor-wait" : ""
+                  }`}
+                >
+                  <Camera size={16} className="text-zinc-700" />
+                  <span>{isCompressing ? "Otimizando foto..." : "Tirar foto ou escolher da galeria"}</span>
+                </label>
+              </div>
+            ) : (
+              <div className="mt-3 flex items-center gap-3 rounded-lg border border-zinc-200 bg-white p-3 shadow-sm">
+                <img
+                  src={photoPreview}
+                  alt="Prévia da foto selecionada"
+                  className="h-14 w-14 rounded-md object-cover border border-zinc-200"
+                />
+                <div className="min-w-0 flex-1 text-xs">
+                  <p className="font-bold text-zinc-900 truncate">Foto anexada com sucesso</p>
+                  <p className="text-[11px] text-zinc-500">{photoSizeInfo || "Pronta para envio"}</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleRemovePhoto}
+                  disabled={loading}
+                  className="inline-flex min-h-[36px] items-center gap-1.5 rounded-lg border border-red-200 bg-red-50/50 px-3 py-1.5 text-xs font-bold text-red-700 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-600 transition"
+                  aria-label="Remover foto selecionada"
+                >
+                  <Trash2 size={14} />
+                  <span>Remover</span>
+                </button>
+              </div>
+            )}
+
+            {photoError && (
+              <p className="mt-2 text-xs font-medium text-red-600">
+                {photoError}
+              </p>
+            )}
+          </div>
+
+          {/* Mensagem de Erro Geral */}
           {errorMessage && (
             <div className="flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 p-3 text-xs font-medium text-red-800">
               <AlertCircle size={16} className="shrink-0 text-red-600" />
@@ -311,7 +458,7 @@ export function AvaliacaoForm({ onSuccess, className = "" }: AvaliacaoFormProps)
           {/* Botão de Envio no padrão dark/zinc da loja */}
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || isCompressing}
             className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg border border-zinc-800 bg-zinc-950 py-3 text-xs font-bold uppercase tracking-wider text-white transition hover:bg-zinc-800 hover:border-zinc-700 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto sm:px-8 shadow-sm"
           >
             {loading ? (

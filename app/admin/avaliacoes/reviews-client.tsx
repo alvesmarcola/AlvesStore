@@ -25,6 +25,7 @@ type Review = {
   status: ReviewStatus;
   moderated_at: string | null;
   moderated_by: string | null;
+  imagem_path: string | null;
 };
 type Counts = Record<ReviewStatus, number>;
 
@@ -47,6 +48,7 @@ export default function AdminReviews() {
   const [busyId, setBusyId] = useState("");
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
+  const [expandedImage, setExpandedImage] = useState<string | null>(null);
 
   const load = useCallback(async (nextStatus = status) => {
     setLoading(true);
@@ -196,6 +198,27 @@ export default function AdminReviews() {
                     <time dateTime={review.created_at} className="text-muted">{date.format(new Date(review.created_at))}</time>
                   </div>
                   <p className="mt-4 whitespace-pre-wrap break-words text-sm leading-6 text-ink">{review.comentario}</p>
+                  {review.imagem_path && (
+                    <div className="mt-4 flex items-center gap-3 rounded-lg border border-border bg-paper p-3">
+                      <button
+                        type="button"
+                        onClick={() => setExpandedImage(`/api/reviews/image?path=${encodeURIComponent(review.imagem_path!)}`)}
+                        className="group relative h-16 w-16 shrink-0 overflow-hidden rounded-md border border-border bg-white transition hover:border-ink focus:outline-none focus:ring-2 focus:ring-ink"
+                        title="Clique para ampliar a foto do cliente"
+                      >
+                        <img
+                          src={`/api/reviews/image?path=${encodeURIComponent(review.imagem_path)}`}
+                          alt={`Foto enviada por ${review.nome}`}
+                          className="h-full w-full object-cover transition group-hover:scale-105"
+                          loading="lazy"
+                        />
+                      </button>
+                      <div className="min-w-0 text-xs">
+                        <span className="font-bold text-ink">Foto anexada pelo cliente</span>
+                        <p className="text-muted">Clique na miniatura para inspecionar em tamanho completo antes de aprovar.</p>
+                      </div>
+                    </div>
+                  )}
                   <div className="mt-5 flex flex-wrap gap-2 border-t border-border pt-4">
                     {review.status !== "approved" && <button type="button" disabled={Boolean(busyId)} onClick={() => void moderate(review, "approved")} className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-green-700 px-4 py-2 text-xs font-bold text-white disabled:opacity-50"><Check size={15} />Aprovar</button>}
                     {review.status !== "rejected" && <button type="button" disabled={Boolean(busyId)} onClick={() => void moderate(review, "rejected")} className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-amber-300 bg-amber-50 px-4 py-2 text-xs font-bold text-amber-900 disabled:opacity-50"><X size={15} />Rejeitar</button>}
@@ -207,6 +230,26 @@ export default function AdminReviews() {
             </section>
           )}
         </>
+      )}
+      {expandedImage && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm"
+          onClick={() => setExpandedImage(null)}
+        >
+          <div className="relative max-h-[90vh] max-w-[90vw] overflow-hidden rounded-xl bg-white p-2 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            <button
+              type="button"
+              onClick={() => setExpandedImage(null)}
+              className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-zinc-950/80 text-white transition hover:bg-zinc-900"
+              aria-label="Fechar ampliação"
+            >
+              <X size={18} />
+            </button>
+            <img src={expandedImage} alt="Foto da avaliação em tamanho real" className="max-h-[85vh] max-w-[85vw] object-contain rounded-lg" />
+          </div>
+        </div>
       )}
     </main>
   );

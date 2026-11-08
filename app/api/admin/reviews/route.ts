@@ -43,7 +43,7 @@ export async function GET(request: Request) {
     const supabase = getSupabaseOrdersClient();
     const [reviewsResult, ...countResults] = await Promise.all([
       supabase.from("avaliacoes")
-        .select("id,created_at,nome,cidade,produto,nota,comentario,status,moderated_at,moderated_by")
+        .select("id,created_at,nome,cidade,produto,nota,comentario,status,moderated_at,moderated_by,imagem_path")
         .eq("status", parsedStatus.data)
         .order("created_at", { ascending: false })
         .limit(200),
@@ -70,15 +70,45 @@ export async function PATCH(request: Request) {
   const input = updateSchema.safeParse(await request.json().catch(() => null));
   if (!input.success) return jsonError("Informe uma avaliação e um status válido.", 400);
   try {
-    const { data, error } = await getSupabaseOrdersClient().from("avaliacoes")
-      .update({
-        status: input.data.status,
-        aprovado: input.data.status === "approved",
-        moderated_at: new Date().toISOString(),
-        moderated_by: "admin",
-      })
+    const supabase = getSupabaseOrdersClient();
+
+    // Se estiver rejeitando, remove foto associada do Storage
+    if (input.data.status === "rejected") {
+      const { data: existing } = await supabase.from("avaliacoes")
+        .select("id,imagem_path")
+        .eq("id", input.data.id)
+        .maybeSingle();
+
+      if (existing?.imagem_path) {
+        try {
+          await supabase.storage.from("avaliacoes").remove([existing.imagem_path]);
+        } catch (storageErr) {
+          console.error("Falha ao remover foto de avaliação rejeitada do Storage:", describeSupabaseError(storageErr));
+        }
+      }
+    }
+
+    const updatePayload: {
+      status: "pending" | "approved" | "rejected";
+      aprovado: boolean;
+      moderated_at: string;
+      moderated_by: string;
+      imagem_path?: null;
+    } = {
+      status: input.data.status,
+      aprovado: input.data.status === "approved",
+      moderated_at: new Date().toISOString(),
+      moderated_by: "admin",
+    };
+
+    if (input.data.status === "rejected") {
+      updatePayload.imagem_path = null;
+    }
+
+    const { data, error } = await supabase.from("avaliacoes")
+      .update(updatePayload)
       .eq("id", input.data.id)
-      .select("id,status,moderated_at,moderated_by")
+      .select("id,status,moderated_at,moderated_by,imagem_path")
       .maybeSingle();
     if (error) throw error;
     if (!data) return jsonError("Avaliação não encontrada.", 404);
@@ -95,7 +125,23 @@ export async function DELETE(request: Request) {
   const input = deleteSchema.safeParse(await request.json().catch(() => null));
   if (!input.success) return jsonError("Informe uma avaliação válida para excluir.", 400);
   try {
-    const { data, error } = await getSupabaseOrdersClient().from("avaliacoes")
+    const supabase = getSupabaseOrdersClient();
+
+    // Remover foto associada do Storage antes de excluir o registro
+    const { data: existing } = await supabase.from("avaliacoes")
+      .select("id,imagem_path")
+      .eq("id", input.data.id)
+      .maybeSingle();
+
+    if (existing?.imagem_path) {
+      try {
+        await supabase.storage.from("avaliacoes").remove([existing.imagem_path]);
+      } catch (storageErr) {
+        console.error("Falha ao remover foto de avaliação excluída do Storage:", describeSupabaseError(storageErr));
+      }
+    }
+
+    const { data, error } = await supabase.from("avaliacoes")
       .delete()
       .eq("id", input.data.id)
       .select("id")
