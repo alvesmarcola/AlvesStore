@@ -16,6 +16,16 @@ const MAX_PAGE = 100;
 const SUBMISSION_LIMIT = 3;
 const SUBMISSION_WINDOW_MS = 10 * 60 * 1000;
 
+interface ReviewRow {
+  created_at: string | null;
+  nome: string | null;
+  cidade: string | null;
+  produto: string | null;
+  nota: number | null;
+  comentario: string | null;
+  imagem_path: string | null;
+}
+
 function jsonError(message: string, status: number) {
   return NextResponse.json({ error: message }, {
     status,
@@ -153,7 +163,7 @@ export async function GET(request: Request) {
     );
     return NextResponse.json({
       ...payload,
-      reviews: payload.reviews.map(({ created_at, nome, cidade, produto, nota, comentario, imagem_path }: any) => ({
+      reviews: payload.reviews.map(({ created_at, nome, cidade, produto, nota, comentario, imagem_path }: ReviewRow) => ({
         created_at,
         nome,
         cidade,

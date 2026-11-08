@@ -55,9 +55,40 @@ export type ApplyPaymentOptions = {
   rawEvent?: unknown;
 };
 
-export function calculatePaymentFee(payment: any, amountCents: number, paymentMethodId?: string | null): number | null {
+export interface MercadoPagoFeeDetail {
+  type?: string;
+  amount?: number;
+  fee_payer?: string;
+}
+
+export interface MercadoPagoTransactionDetails {
+  net_received_amount?: number;
+  [key: string]: unknown;
+}
+
+export interface MercadoPagoPayment {
+  status?: string;
+  transaction_amount?: number;
+  transaction_amount_refunded?: number;
+  net_received_amount?: number;
+  transaction_details?: MercadoPagoTransactionDetails;
+  fee_details?: MercadoPagoFeeDetail[];
+  payment_method_id?: string | null;
+  [key: string]: unknown;
+}
+
+export interface OrderItemLine {
+  productId?: string;
+  product_id?: string;
+  unit_cost_cents?: number;
+  supplier_name?: string | null;
+  quantity?: number;
+  [key: string]: unknown;
+}
+
+export function calculatePaymentFee(payment: MercadoPagoPayment, amountCents: number, paymentMethodId?: string | null): number | null {
   if (Array.isArray(payment?.fee_details) && payment.fee_details.length > 0) {
-    const feeSum = payment.fee_details.reduce((sum: number, f: any) => sum + Number(f?.amount || 0), 0);
+    const feeSum = payment.fee_details.reduce((sum: number, f: MercadoPagoFeeDetail) => sum + Number(f?.amount || 0), 0);
     if (feeSum > 0) return Math.round(feeSum * 100);
   }
   const net = Number(payment?.net_received_amount ?? payment?.transaction_details?.net_received_amount);
@@ -73,7 +104,7 @@ export function calculatePaymentFee(payment: any, amountCents: number, paymentMe
   return null;
 }
 
-export function calculateRefundAmount(payment: any, orderTotalCents: number): { isTotalRefund: boolean; refundedCents: number } {
+export function calculateRefundAmount(payment: MercadoPagoPayment, orderTotalCents: number): { isTotalRefund: boolean; refundedCents: number } {
   const isRefundedStatus = payment?.status === "refunded" || payment?.status === "charged_back";
   const refundedAmount = Number(payment?.transaction_amount_refunded || 0);
   const refundedCents = Math.round(refundedAmount * 100);
@@ -99,7 +130,12 @@ export async function snapshotOrderCostsOnFirstApproval(
   const lines = Array.isArray(rawLines) ? rawLines : [];
   if (lines.length === 0) return;
 
-  const productIds = lines.map((l: any) => l.productId || l.product_id).filter(Boolean);
+  const productIds = lines
+    .map((l) => {
+      const line = l as OrderItemLine;
+      return line.productId || line.product_id;
+    })
+    .filter((id): id is string => Boolean(id));
   if (productIds.length === 0) return;
 
   try {
@@ -120,9 +156,10 @@ export async function snapshotOrderCostsOnFirstApproval(
     let detectedSupplier = existingSupplier || "";
     let hasAnyCost = false;
 
-    const updatedLines = lines.map((line: any) => {
+    const updatedLines = lines.map((rawLine) => {
+      const line = rawLine as OrderItemLine;
       const pId = line.productId || line.product_id;
-      const match = costMap.get(pId);
+      const match = pId ? costMap.get(pId) : undefined;
       const unitCostCents = line.unit_cost_cents !== undefined ? line.unit_cost_cents : (match?.costCents ?? null);
       const supplier = line.supplier_name !== undefined ? line.supplier_name : (match?.supplierName || null);
       if (!detectedSupplier && supplier) detectedSupplier = supplier;
@@ -314,8 +351,8 @@ export async function applyMercadoPagoPayment(paymentId: string, options: ApplyP
 
   const order = Array.isArray(result.data) ? result.data[0] : null;
 
-  const feeCents = calculatePaymentFee(payment, verified.amountCents, verified.paymentMethodId);
-  const { isTotalRefund, refundedCents } = calculateRefundAmount(payment, orderData.total_cents);
+  const feeCents = calculatePaymentFee(payment as unknown as MercadoPagoPayment, verified.amountCents, verified.paymentMethodId);
+  const { isTotalRefund, refundedCents } = calculateRefundAmount(payment as unknown as MercadoPagoPayment, orderData.total_cents);
 
   // Atualiza detalhes do Mercado Pago, taxa e estorno no pedido
   const orderUpdate: Record<string, unknown> = {

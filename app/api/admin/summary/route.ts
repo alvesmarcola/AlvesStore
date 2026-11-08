@@ -96,6 +96,7 @@ export async function GET(request: Request) {
         supplier_name: _sn,
         ...rest
       } = order;
+      void _sc; void _sh; void _oe; void _pf; void _sn;
       return rest;
     });
 

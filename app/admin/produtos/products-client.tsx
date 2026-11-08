@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { AdminNavigation } from "@/components/admin-navigation";
 import { AdminSkeleton, EmptyState, ErrorState, StatCard, StatusBadge } from "@/components/admin-states";
 import { PackageOpen, Trash2, AlertTriangle, EyeOff, X, ArrowLeft, Loader2, CheckCircle2, ChevronLeft, ChevronRight, Star } from "lucide-react";
@@ -277,7 +277,7 @@ export default function AdminProducts() {
     }
   }
 
-  async function loadProducts(term?: string) {
+  const loadProducts = useCallback(async (term?: string) => {
     setLoading(true);
     setMessage("");
     setLoadError("");
@@ -299,9 +299,9 @@ export default function AdminProducts() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [searchTerm]);
 
-  useEffect(() => { void loadProducts(); }, []);
+  useEffect(() => { void loadProducts(); }, [loadProducts]);
 
   function editProduct(product: ManualProduct) {
     const sizes = product.tamanhos.filter((size) => size !== "3GG");

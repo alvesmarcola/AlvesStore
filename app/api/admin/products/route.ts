@@ -17,6 +17,16 @@ export const runtime = "nodejs";
 
 const PRODUCT_COLUMNS = "id,yupoo_id,slug,clube,clubeSlug,liga,publico,tipo,temporada,uniforme,nome,preco,tamanhos,cor,imageSeed,images,description,stock_by_size,brand,tem_variacao_uniforme,oculto";
 
+interface ProductImage {
+  src: string;
+  source?: string;
+  alt?: string;
+  credit?: string;
+  focalPoint?: { x: number; y: number };
+  blurDataURL?: string;
+  [key: string]: unknown;
+}
+
 function publicImageRecords(imageUrls: string[], productName: string) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim() || process.env.SUPABASE_URL?.trim();
   if (!supabaseUrl) throw new Error("SUPABASE_URL não está configurada.");
@@ -212,7 +222,7 @@ export async function PATCH(request: Request) {
     if (!existing.data) {
       return jsonError("Produto não encontrado.", 404);
     }
-    let finalImages: any[] = [];
+    let finalImages: ProductImage[] = [];
     if (Array.isArray(parsed.data.images)) {
       finalImages = parsed.data.images.map((img, idx) => ({
         src: img.src,
