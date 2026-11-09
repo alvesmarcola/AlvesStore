@@ -165,7 +165,7 @@ export default async function HomePage() {
         <Link
           href="/masculino?tipo=regata-nba"
           aria-label="Explorar a coleção de Regatas NBA"
-          className="group mx-auto grid max-w-7xl grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] items-stretch overflow-hidden rounded-xl border border-white/10 bg-[#0a0a0a] text-white shadow-xl transition hover:border-blue-500/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-400"
+          className="group mx-auto grid max-w-7xl grid-cols-1 sm:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] items-stretch overflow-hidden rounded-xl border border-white/10 bg-[#0a0a0a] text-white shadow-xl transition hover:border-blue-500/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-400"
         >
           <span className="flex min-w-0 flex-col justify-center p-4 sm:p-8 lg:p-12">
             <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-300">Coleção de regatas NBA</span>

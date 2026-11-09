@@ -341,7 +341,7 @@ export function CustomerReviews(props: CustomerReviewsProps = {}) {
             <button
               type="button"
               onClick={() => setExpandedPhoto(null)}
-              className="absolute right-3 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-zinc-900/90 text-white transition hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-white"
+              className="absolute right-3 top-3 z-10 flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-zinc-900/90 text-white transition hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-white"
               aria-label="Fechar ampliação"
             >
               <X size={18} />

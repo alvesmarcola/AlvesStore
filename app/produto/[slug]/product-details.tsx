@@ -225,8 +225,8 @@ export function ProductDetails({ product, relatedProducts = [] }: { product: Pro
                     />
                   );
                 })}
-                <span className="absolute bottom-3 right-3 flex items-center gap-1.5 rounded-full bg-white/95 px-3 py-1.5 text-[11px] font-bold text-ink shadow-md transition group-hover:bg-white">
-                  <ZoomIn size={14} /> Toque para ampliar · {activeImage + 1}/{gallery.length}
+                <span className="absolute bottom-3 right-3 flex max-w-[calc(100%-1.5rem)] truncate items-center gap-1.5 rounded-full bg-white/95 px-3 py-1.5 text-[11px] font-bold text-ink shadow-md transition group-hover:bg-white">
+                  <ZoomIn size={14} className="shrink-0" /> <span className="truncate">Toque para ampliar · {activeImage + 1}/{gallery.length}</span>
                 </span>
               </button>
 
@@ -482,7 +482,7 @@ export function ProductDetails({ product, relatedProducts = [] }: { product: Pro
             {/* 3. INFORMAÇÕES E CAMPOS DE PERSONALIZAÇÃO */}
             {canPersonalize && (
               <div className="mt-6 rounded-xl border border-zinc-200 bg-zinc-50/60 p-4">
-                <label className="flex cursor-pointer items-center gap-2 text-sm font-bold text-zinc-900">
+                <label className="flex min-h-[44px] cursor-pointer items-center gap-2.5 text-sm font-bold text-zinc-900 select-none">
                   <input
                     type="checkbox"
                     checked={personalize}
@@ -493,13 +493,13 @@ export function ProductDetails({ product, relatedProducts = [] }: { product: Pro
                         setNumber("");
                       }
                     }}
-                    className="h-4 w-4 rounded border-zinc-300 text-pitch focus:ring-pitch"
+                    className="h-5 w-5 rounded border-zinc-300 text-pitch focus:ring-pitch shrink-0"
                   />
-                  Quero personalizar com nome e número (+{formatCurrency(storeConfig.customizationPrice)})
+                  <span>Quero personalizar com nome e número (+{formatCurrency(storeConfig.customizationPrice)})</span>
                 </label>
 
                 {personalize && (
-                  <div className="mt-4 grid grid-cols-2 gap-3">
+                  <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <label className="text-xs font-semibold text-zinc-700">
                       Nome na camisa (opcional)
                       <input
@@ -507,7 +507,7 @@ export function ProductDetails({ product, relatedProducts = [] }: { product: Pro
                         value={name}
                         onChange={(event) => setName(sanitizeCustomizationName(event.target.value).slice(0, CUSTOMIZATION_NAME_MAX_LENGTH))}
                         placeholder="Ex.: ALEX"
-                        className="mt-1 w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm uppercase shadow-sm focus:border-pitch focus:outline-none"
+                        className="mt-1.5 w-full min-h-[44px] rounded-lg border border-zinc-300 bg-white px-3.5 py-2.5 text-base sm:text-sm uppercase shadow-sm focus:border-pitch focus:outline-none"
                       />
                     </label>
                     <label className="text-xs font-semibold text-zinc-700">
@@ -518,11 +518,11 @@ export function ProductDetails({ product, relatedProducts = [] }: { product: Pro
                         value={number}
                         onChange={(event) => setNumber(filterCustomizationNumber(event.target.value))}
                         placeholder="10"
-                        className="mt-1 w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-pitch focus:outline-none"
+                        className="mt-1.5 w-full min-h-[44px] rounded-lg border border-zinc-300 bg-white px-3.5 py-2.5 text-base sm:text-sm shadow-sm focus:border-pitch focus:outline-none"
                       />
                     </label>
                     {personalizationError && (
-                      <p role="status" className="col-span-2 text-xs font-bold text-red-600">
+                      <p role="status" className="col-span-1 sm:col-span-2 text-xs font-bold text-red-600">
                         {personalizationError}
                       </p>
                     )}
@@ -712,12 +712,12 @@ export function ProductDetails({ product, relatedProducts = [] }: { product: Pro
       )}
 
       {/* BARRA FIXA MOBILE NO RODAPÉ */}
-      <div className="fixed bottom-0 left-0 right-0 z-30 border-t border-border bg-white/95 p-3 backdrop-blur shadow-lg sm:hidden">
+      <div className="fixed bottom-0 left-0 right-0 z-30 border-t border-border bg-white/95 p-3 pb-[calc(env(safe-area-inset-bottom,0px)+0.75rem)] backdrop-blur shadow-lg sm:hidden">
         <button
           type="button"
           disabled={classification.reviewRequired || classification.price === null}
           onClick={handleBuyClick}
-          className="flex w-full items-center justify-center gap-2 rounded-xl bg-action py-3.5 text-xs font-bold uppercase tracking-wider text-black shadow-sm transition hover:bg-action-hover disabled:bg-gray-200 disabled:text-gray-500"
+          className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl bg-action py-3.5 text-xs font-bold uppercase tracking-wider text-black shadow-sm transition hover:bg-action-hover disabled:bg-gray-200 disabled:text-gray-500"
         >
           {added ? (
             <><Check size={18} /> Adicionado à sacola!</>

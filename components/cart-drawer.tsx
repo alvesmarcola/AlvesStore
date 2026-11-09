@@ -28,7 +28,14 @@ export function CartDrawer() {
             {items.map(({ lineId, product, size, quantity, uniformVariation, customization, patches }) => { const customizationText = formatCustomization(customization); return <div key={lineId} className="flex gap-3 border-b py-4">
               <div className="relative h-24 w-20 shrink-0 overflow-hidden rounded bg-paper"><SafeProductImage src={productImageAsset(product).src} alt={product.nome} fill sizes="80px" className="object-cover" /></div>
               <div className="min-w-0 flex-1"><p className="line-clamp-2 text-xs font-bold">{product.nome}</p><p className="mt-1 text-xs text-muted">Tamanho: {size}{uniformVariation ? ` · Uniforme: ${uniformVariation}` : ""}{customizationText ? ` · ${customizationText}` : ""}</p><p className="mt-1 text-sm font-bold">{classifyProduct(product).reviewRequired ? classifyProduct(product).priceLabel : formatCurrency(getProductUnitPrice(product, size)!)} / camisa{customizationText ? ` + ${formatCurrency(storeConfig.customizationPrice)} de personalização` : ""}</p>{patches?.map((selected) => { const option = patchOptions.find((patch) => patch.id === selected.id); return <p key={selected.id} className="mt-1 text-[10px] text-muted">Patch {option?.name ?? ""} · {selected.position.replaceAll("-", " ")}{option ? ` · +${formatCurrency(option.priceCents / 100)}` : ""}</p>; })}
-                <div className="mt-2 flex items-center gap-3"><button aria-label="Diminuir quantidade" onClick={() => updateQuantity(lineId, quantity - 1)}><Minus size={14} /></button><span className="text-sm">{quantity}</span><button aria-label="Aumentar quantidade" onClick={() => updateQuantity(lineId, quantity + 1)}><Plus size={14} /></button><button className="ml-auto text-muted" aria-label="Remover produto" onClick={() => removeItem(lineId)}><Trash2 size={15} /></button></div>
+                <div className="mt-2.5 flex items-center gap-2">
+                  <div className="flex items-center rounded-lg border border-border">
+                    <button aria-label="Diminuir quantidade" className="grid h-8 w-8 place-items-center text-ink transition hover:bg-paper" onClick={() => updateQuantity(lineId, quantity - 1)}><Minus size={14} /></button>
+                    <span className="min-w-8 text-center text-xs font-bold">{quantity}</span>
+                    <button aria-label="Aumentar quantidade" className="grid h-8 w-8 place-items-center text-ink transition hover:bg-paper" onClick={() => updateQuantity(lineId, quantity + 1)}><Plus size={14} /></button>
+                  </div>
+                  <button className="ml-auto flex min-h-[36px] min-w-[36px] items-center justify-center text-muted transition hover:text-red-600" aria-label="Remover produto" onClick={() => removeItem(lineId)}><Trash2 size={16} /></button>
+                </div>
               </div>
             </div>; })}
           </div>

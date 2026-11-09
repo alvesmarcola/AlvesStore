@@ -91,9 +91,20 @@ export function SiteHeader({ leagues, hasNbaRegatas }: { leagues: Pick<CatalogLe
         </div>
 
         <form onSubmit={search} role="search" className="flex items-center gap-2 border-t border-white/10 bg-graphite px-4 py-2 md:hidden">
-          <Search size={17} className="text-white/60" />
-          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="O que você procura?" className="min-w-0 flex-1 bg-transparent text-sm text-white outline-none placeholder:text-white/50" aria-label="Buscar produtos" />
-          <button className="text-[10px] font-bold uppercase text-blue-200">Buscar</button>
+          <Search size={18} className="shrink-0 text-white/60" />
+          <input
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="O que você procura?"
+            className="min-h-[44px] min-w-0 flex-1 bg-transparent text-base md:text-sm text-white outline-none placeholder:text-white/50"
+            aria-label="Buscar produtos"
+          />
+          <button
+            type="submit"
+            className="flex min-h-[44px] items-center justify-center px-2.5 text-xs font-bold uppercase tracking-wider text-blue-200 transition hover:text-white"
+          >
+            Buscar
+          </button>
         </form>
 
         <nav className="hidden border-t border-white/10 lg:block" aria-label="Menu principal">

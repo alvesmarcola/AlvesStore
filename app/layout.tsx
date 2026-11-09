@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { StoreShell } from "@/components/store-shell";
 import { SITE_NAME } from "@/lib/site";
 import { getSupabaseProducts } from "@/lib/server/supabase-catalog";
@@ -6,6 +6,12 @@ import { isNbaTankTop } from "@/lib/product-classification";
 import "./globals.css";
 
 export const revalidate = 300;
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+};
 
 export const metadata: Metadata = {
   title: { default: `${SITE_NAME} | Camisas de Futebol e Artigos Esportivos`, template: `%s | ${SITE_NAME}` },

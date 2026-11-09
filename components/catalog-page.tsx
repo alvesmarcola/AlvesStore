@@ -141,12 +141,18 @@ export function CatalogPage({ title, description, products, breadcrumb, initialT
     <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-y py-3">
       <span className="text-xs text-muted">{filtered.length} produtos encontrados</span>
       <div className="flex flex-wrap items-center gap-3">
-        <label className="flex items-center gap-2 rounded-lg border border-border bg-white px-3 py-2 text-xs text-muted">
-          <span className="font-bold text-ink">Buscar camisa</span>
-          <input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Ex.: Flamengo, retro, 26/27..." className="w-44 bg-transparent text-xs text-ink outline-none placeholder:text-muted" aria-label="Buscar camisa" />
+        <label className="flex w-full sm:w-auto items-center gap-2 rounded-lg border border-border bg-white px-3 py-2 text-xs text-muted">
+          <span className="shrink-0 font-bold text-ink">Buscar camisa</span>
+          <input
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            placeholder="Ex.: Flamengo, retro, 26/27..."
+            className="min-w-0 flex-1 sm:w-44 bg-transparent text-base sm:text-xs text-ink outline-none placeholder:text-muted"
+            aria-label="Buscar camisa"
+          />
         </label>
-        <button className="flex items-center gap-1 text-xs font-bold lg:hidden" onClick={() => setFiltersOpen(true)}><SlidersHorizontal size={15} />Filtros</button>
-        <label className="flex items-center gap-2 text-xs">Ordenar por <select value={sort} onChange={(event) => setSort(event.target.value)} className="rounded-lg border border-border bg-white px-2 py-2 text-xs"><option value="relevancia">Relevância</option><option value="menor">Menor preço</option><option value="maior">Maior preço</option></select></label>
+        <button className="flex min-h-[38px] items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-bold lg:hidden" onClick={() => setFiltersOpen(true)}><SlidersHorizontal size={15} />Filtros</button>
+        <label className="flex items-center gap-2 text-xs">Ordenar por <select value={sort} onChange={(event) => setSort(event.target.value)} className="min-h-[38px] rounded-lg border border-border bg-white px-2 py-1 text-base sm:text-xs"><option value="relevancia">Relevância</option><option value="menor">Menor preço</option><option value="maior">Maior preço</option></select></label>
       </div>
     </div>
     <div className="grid gap-6 lg:grid-cols-[205px_1fr]">

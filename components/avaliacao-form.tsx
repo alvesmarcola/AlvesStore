@@ -283,7 +283,7 @@ export function AvaliacaoForm({ onSuccess, className = "" }: AvaliacaoFormProps)
               placeholder="Ex.: camisa do seu time"
               value={produto}
               onChange={(e) => setProduto(e.target.value)}
-              className="mt-1.5 block w-full rounded-lg border border-zinc-300 bg-zinc-50/50 px-3.5 py-2.5 text-sm text-zinc-900 placeholder:text-zinc-400 transition focus:border-zinc-900 focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900"
+              className="mt-1.5 block w-full min-h-[44px] rounded-lg border border-zinc-300 bg-zinc-50/50 px-3.5 py-2.5 text-base sm:text-sm text-zinc-900 placeholder:text-zinc-400 transition focus:border-zinc-900 focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900"
             />
           </div>
 
@@ -334,7 +334,7 @@ export function AvaliacaoForm({ onSuccess, className = "" }: AvaliacaoFormProps)
                 placeholder="Ex: João Silva"
                 value={nome}
                 onChange={(e) => setNome(e.target.value)}
-                className="mt-1.5 block w-full rounded-lg border border-zinc-300 bg-zinc-50/50 px-3.5 py-2.5 text-sm text-zinc-900 placeholder:text-zinc-400 transition focus:border-zinc-900 focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900"
+                className="mt-1.5 block w-full min-h-[44px] rounded-lg border border-zinc-300 bg-zinc-50/50 px-3.5 py-2.5 text-base sm:text-sm text-zinc-900 placeholder:text-zinc-400 transition focus:border-zinc-900 focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900"
               />
             </div>
 
@@ -350,7 +350,7 @@ export function AvaliacaoForm({ onSuccess, className = "" }: AvaliacaoFormProps)
                 placeholder="Ex: São Paulo, SP"
                 value={cidade}
                 onChange={(e) => setCidade(e.target.value)}
-                className="mt-1.5 block w-full rounded-lg border border-zinc-300 bg-zinc-50/50 px-3.5 py-2.5 text-sm text-zinc-900 placeholder:text-zinc-400 transition focus:border-zinc-900 focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900"
+                className="mt-1.5 block w-full min-h-[44px] rounded-lg border border-zinc-300 bg-zinc-50/50 px-3.5 py-2.5 text-base sm:text-sm text-zinc-900 placeholder:text-zinc-400 transition focus:border-zinc-900 focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900"
               />
             </div>
           </div>
@@ -377,7 +377,7 @@ export function AvaliacaoForm({ onSuccess, className = "" }: AvaliacaoFormProps)
               placeholder="Conte como foi sua experiência com o produto e a entrega..."
               value={comentario}
               onChange={(e) => setComentario(e.target.value)}
-              className="mt-1.5 block w-full rounded-lg border border-zinc-300 bg-zinc-50/50 p-3 text-sm text-zinc-900 placeholder:text-zinc-400 transition focus:border-zinc-900 focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900"
+              className="mt-1.5 block w-full min-h-[88px] rounded-lg border border-zinc-300 bg-zinc-50/50 p-3 text-base sm:text-sm text-zinc-900 placeholder:text-zinc-400 transition focus:border-zinc-900 focus:bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900"
             />
           </div>
 
