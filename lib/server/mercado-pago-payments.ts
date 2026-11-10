@@ -392,8 +392,10 @@ export async function applyMercadoPagoPayment(paymentId: string, options: ApplyP
       orderData.item_lines
     );
 
+    if (order?.customer) {
+      await enqueuePaidOrderNotifications(supabase, verified.orderId, order.customer);
     if (order?.customer && !orderData.is_test) {
-      await enqueuePaidOrderNotifications(supabase, verified.orderId, order.customer, { isTest: Boolean(orderData.is_test) });
+      await enqueuePaidOrderNotifications(supabase, verified.orderId, order.customer, { isTest: orderData.is_test });
     }
   } else if (verified.status === "rejected" || verified.status === "cancelled" || isTotalRefund) {
     await supabase.from("store_orders")
